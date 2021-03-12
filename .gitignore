@@ -1,4 +1,4 @@
-  
+
 # Created by https://www.gitignore.io
 
 ### OSX ###
@@ -88,3 +88,19 @@ local_settings.py
 
 .env
 db.sqlite3
+
+# PYANYWHERE
+.cache
+/cache
+.local
+/local
+.virtualenvs
+/virtualenvs
+
+.bashrc
+.gitconfig
+.my.cnf
+.profile
+.pythonstartup.py
+.vimrc
+README.txt
