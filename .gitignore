@@ -103,4 +103,5 @@ db.sqlite3
 .profile
 .pythonstartup.py
 .vimrc
+.viminfo
 README.txt
