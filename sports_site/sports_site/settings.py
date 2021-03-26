@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'stats',
+    'news',
 ]
 
 MIDDLEWARE = [
@@ -115,9 +116,16 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+TIME_ZONE = 'America/Winnipeg'
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_URL = '/static/'
+
+# default static files settings for PythonAnywhere.
+MEDIA_ROOT = '/home/sport/sports_site/media'
+MEDIA_URL = '/media/'
+STATIC_ROOT = '/home/sport/sports_site/static'
 STATIC_URL = '/static/'
