@@ -1,0 +1,20 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+        <h2>{{ roster }}</h2><br>
+
+
+        {% for player in players %}
+        <h6>{{ player.player }}</h6>
+        {% endfor %}
+
+        <br>
+        <h6>
+            <a href="{% url 'roster-edit' roster.team.team.name roster.team.season.season.year roster.pk %}">Edit</a>
+        </h6>
+    </div>
+</div>
+
+{% endblock content %}

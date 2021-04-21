@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'core',
     'stats',
     'news',
+    'league',
+    'user',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +133,14 @@ MEDIA_ROOT = '/home/sport/sports_site/media'
 MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/sport/sports_site/static'
 STATIC_URL = '/static/'
+
+# Smart Selects
+JQUERY_URL = None
+USE_DJANGO_JQUERY = True
+
+#CRISPY FORMS
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Login
+LOGIN_REDIRECT_URL = 'news-home'
