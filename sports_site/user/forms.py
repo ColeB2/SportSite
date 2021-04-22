@@ -52,11 +52,30 @@ class PlayerSelectForm(forms.Form):
         self.fields['players'].widget.attrs.update(style='max-width: 24em')
 
 
-class CreatePlayerForm(forms.Form):
+class PlayerCreateForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        super(CreatePlayerForm, self).__init__(*args, **kwargs)
+        super(PlayerCreateForm, self).__init__(*args, **kwargs)
         self.fields['first_name'] = forms.CharField(max_length=35)
         self.fields['last_name'] = forms.CharField(max_length=35)
+
+
+class PlayerDeleteForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(PlayerDeleteForm, self).__init__(*args, **kwargs)
+
+
+class PlayerSeasonDeleteForm(forms.ModelForm):
+    class Meta:
+        model = PlayerSeason
+        fields = ['player',]
+
+
+    def __init__(self, user, *args, **kwargs):
+        super(RosterForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['team'].queryset = TeamSeason.objects.filter(team__owner=user)
+
+
 
 
 
