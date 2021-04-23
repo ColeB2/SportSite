@@ -92,12 +92,6 @@ class PlayerSeason(models.Model):
     team = models.ForeignKey(Roster, on_delete=models.CASCADE, null=True)
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True, blank=True)
 
-
-
-    class Meta:
-        unique_together = [['player', 'season'],]
-
-
     def __str__(self):
         return f"{self.player} {self.season}"
 

@@ -1,13 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import RosterForm, PlayerSelectForm, PlayerCreateForm
+from .forms import PlayerSelectForm, PlayerCreateForm, PlayerSeasonForm, PlayerDeleteForm
 
-from django.forms import inlineformset_factory, formset_factory
+from django.forms import formset_factory, modelformset_factory
 from league.models import Roster, PlayerSeason, Player
-
-from django.http import HttpResponseRedirect
-from django.views.generic import CreateView, UpdateView
-from django.urls import reverse
 
 
 
@@ -114,31 +110,33 @@ def roster_edit_create(request, team, season, pk):
 
 @login_required
 def roster_edit_remove(request, team, season, pk):
+    """Creates PlayerSeason object based on existing Player"""
     roster = Roster.objects.get(team__team__name=team, team__season__season__year=season, pk=pk)
     players = roster.playerseason_set.all()
 
-    exclude_list = []
-    for player in players:
-        exclude_list.append(player.player)
 
-    PlayerFormset = formset_factory(PlayerSelectForm, extra=(21-len(exclude_list)) )
+    PlayerFormset = formset_factory(PlayerDeleteForm, extra=5)
 
 
     if request.method == 'POST':
-        formset = PlayerFormset(request.POST, form_kwargs={'exclude_list':exclude_list})
+        formset = PlayerFormset(request.POST, form_kwargs={'roster_queryset':players})
         if formset.is_valid():
             for form in formset:
+                pass
                 data = form.cleaned_data.get('players')
-                # Create player season
+                # # Create player season
                 if data is not None:
-                    playerseason, created = PlayerSeason.objects.get_or_create(player=data, team=roster, season=roster.team.season)
-                    playerseason.save()
+                    if type(PlayerSeason()) == type(data):
+                        data.delete()
 
-            return redirect('roster-view', team=team, season=season, pk=pk)
+            if 'remove' in request.POST:
+                return redirect('roster-view', team=team, season=season, pk=pk)
+            elif 'remove_and_continue' in request.POST:
+                return redirect('roster-edit-remove', team=team, season=season, pk=pk)
         else:
             print('Something went wrong with formset')
     else:
-        formset = PlayerFormset(form_kwargs={'exclude_list':exclude_list})
+        formset = PlayerFormset(form_kwargs={'roster_queryset':players})
 
     context = {
         'roster': roster,
@@ -146,13 +144,4 @@ def roster_edit_remove(request, team, season, pk):
         'formset':formset
         }
     return render(request, 'user/roster_edit_remove.html', context)
-
-
-
-class RosterView(UpdateView):
-    template_name = 'user/roster1.html'
-    model = Roster
-
-    success_url = '/'
-    fields = '__all__'
 

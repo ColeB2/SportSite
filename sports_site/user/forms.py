@@ -5,29 +5,6 @@ from django.forms.models import inlineformset_factory, formset_factory #test
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset
 
-class RosterTestForm(forms.ModelForm):
-    class Meta:
-        model = Roster
-        fields = ['team',]
-
-    @property
-    def helper(self):
-        helper = FormHelper()
-        helper.form_tag = False #crucial?
-        helper.layout = Layout(Fieldset('Create New Roster', 'team'),)
-
-        return helper
-
-class PlayerFormHelper(FormHelper):
-    def __init__(self, *args, **kwargs):
-        super(PlayerFormHelper, self).__init__(*args, **kwargs)
-        self.form_tag = False
-        self.layout = Layout(
-            Fieldset('Add Player','player','season'),
-            )
-
-PlayerTestFormset = inlineformset_factory(Roster, PlayerSeason, fields=('player','season',),extra=2, can_delete=False,)
-
 
 class RosterForm(forms.ModelForm):
     class Meta:
@@ -60,20 +37,29 @@ class PlayerCreateForm(forms.Form):
 
 
 class PlayerDeleteForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-        super(PlayerDeleteForm, self).__init__(*args, **kwargs)
+    def __init__(self, roster_queryset, *args, **kwargs):
+        super(PlayerDeleteForm,self).__init__(*args, **kwargs)
+        self.fields['players'] = forms.ModelChoiceField(
+            # queryset=Player.objects.all(),
+            queryset=roster_queryset,
+            label=False,
+            required=False,
+            )
+
+        self.fields['players'].widget.attrs.update(style='max-width: 24em')
 
 
-class PlayerSeasonDeleteForm(forms.ModelForm):
+class PlayerSeasonForm(forms.ModelForm):
+
     class Meta:
         model = PlayerSeason
-        fields = ['player',]
+        fields = ['player', 'team']
 
 
-    def __init__(self, user, *args, **kwargs):
-        super(RosterForm, self).__init__(*args, **kwargs)
-        if user:
-            self.fields['team'].queryset = TeamSeason.objects.filter(team__owner=user)
+    # def __init__(self, *args, **kwargs):
+    #     super(PlayerSeasonDeleteForm, self).__init__(*args, **kwargs)
+    #     # if user:
+    #     #     self.fields['player'].queryset = PlayerSeason.objects.filter(team__team__team__owner=user)
 
 
 

@@ -8,10 +8,9 @@
         <h6>{{player}}</h6>
         {% endfor %}
         <br>
-        <div class="row">
-        <div class="col-6">
-        <h2>Add Players</h2><br>
-        <!--<form>{{formset|crispy}}</form>-->
+
+        <h2>Remove Players</h2><br>
+        <legend><small>Select Players you want to remove from the roster.</small></legend>
         <form method="post">
             {% csrf_token %}
             {{formset.management_form}}
@@ -19,14 +18,11 @@
                 {{ form|crispy }}
             {% endfor %}
 
-            <input type="submit" value="Submit Roster">
+            <input type="submit" name="remove"value="Remove Players" class="btn btn-danger">
+            <input type="submit" name="remove_and_continue" value="Remove Players2" class="btn btn-danger">
+            <button class="btn btn-primary">Button</button>
+            <br><br>
         </form>
-        </div>
-        <div class="col-6">
-            <legend><small>Can't find player? Create Player Here:</small></legend>
-
-        </div>
-        </div>
     </div>
 </div>
 
