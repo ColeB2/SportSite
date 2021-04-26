@@ -9,24 +9,29 @@
         {% endfor %}
         <br>
         <div class="row">
-        <div class="col-6">
-        <h2>Add Players</h2><br>
-        <!--<form>{{formset|crispy}}</form>-->
-        <form method="post">
-            {% csrf_token %}
-            {{formset.management_form}}
-            {% for form in formset %}
-                {{ form|crispy }}
-            {% endfor %}
+            <div class="col">
+                <h2>Add Player(s)</h2><br>
 
-            <input type="submit" value="Submit Roster">
-        </form>
-        </div>
-        <div class="col-6">
-            <legend><small>Can't find player? Create Player Here:</small></legend>
+                <form method="post">
+                    {% csrf_token %}
+                    {{formset.management_form}}
+                    {% for form in formset %}
+                    <legend><small>Player</small></legend>
+                    <div class="row">
+                        <div class="col-6">{{ form.first_name|as_crispy_field }}</div>
+                        <div class="col-6">{{ form.last_name|as_crispy_field }}</div>
+                    </div>
+                    {% endfor %}
 
+                    <input type="submit" value="Submit Roster">
+                </form>
+            </div>
         </div>
-        </div>
+
+
+
+
+
     </div>
 </div>
 

@@ -73,7 +73,7 @@ def roster_edit_create(request, team, season, pk):
     players = roster.playerseason_set.all()
     PlayerFormset = formset_factory(PlayerSelectForm)
     player_formset = PlayerFormset()
-    CreatePlayerFormset = formset_factory(PlayerCreateForm)
+    CreatePlayerFormset = formset_factory(PlayerCreateForm, extra=(21-len(players)) )
 
 
     if request.method == 'POST':
@@ -122,9 +122,8 @@ def roster_edit_remove(request, team, season, pk):
         formset = PlayerFormset(request.POST, form_kwargs={'roster_queryset':players})
         if formset.is_valid():
             for form in formset:
-                pass
                 data = form.cleaned_data.get('players')
-                # # Create player season
+                # Delete Player Season
                 if data is not None:
                     if type(PlayerSeason()) == type(data):
                         data.delete()
