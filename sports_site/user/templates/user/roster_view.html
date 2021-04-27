@@ -11,9 +11,13 @@
         {% endfor %}
 
         <br>
+        {% if roster.team.team.owner == user %}
         <h6><a href="{% url 'roster-edit-add' roster.team.team.name roster.team.season.season.year roster.pk %}">Add Existing Players</a></h6>
         <h6><a href="{% url 'roster-edit-create' roster.team.team.name roster.team.season.season.year roster.pk %}">Add New Players</a></h6>
         <h6><a href="{% url 'roster-edit-remove' roster.team.team.name roster.team.season.season.year roster.pk %}">Remove Player</a></h6>
+        {% else %}
+        <h1></h1>
+        {% endif %}
     </div>
 </div>
 

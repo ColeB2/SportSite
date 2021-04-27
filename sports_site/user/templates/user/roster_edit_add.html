@@ -8,25 +8,28 @@
         <h6>{{player}}</h6>
         {% endfor %}
         <br>
+
+        {% if roster.team.team.owner == user %}
         <div class="row">
-        <div class="col-6">
-        <h2>Add Players</h2><br>
-        <!--<form>{{formset|crispy}}</form>-->
-        <form method="post">
-            {% csrf_token %}
-            {{formset.management_form}}
-            {% for form in formset %}
-                {{ form|crispy }}
-            {% endfor %}
+            <div class="col-6">
+                <h2>Add Players</h2><br>
 
-            <input type="submit" value="Submit Roster">
-        </form>
-        </div>
-        <div class="col-6">
-            <legend><small>Can't find player? Create Player Here:</small></legend>
+                <form method="post">
+                    {% csrf_token %}
+                    {{formset.management_form}}
+                    {% for form in formset %}
+                        {{ form|crispy }}
+                    {% endfor %}
 
+                    <input type="submit" value="Submit Roster">
+                </form>
+            </div>
+
+            <div class="col-6">
+                <legend><small>Can't find player? Create Player Here:</small></legend>
+            </div>
         </div>
-        </div>
+        {% endif %}
     </div>
 </div>
 

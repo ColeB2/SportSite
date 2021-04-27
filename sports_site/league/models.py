@@ -2,12 +2,18 @@ from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
 
-from smart_selects.db_fields import ChainedForeignKey
 import datetime
 
 # Create your models here.
 class League(models.Model):
     name = models.CharField(max_length=100, null=False, default="League Name Here")
+
+
+    class Meta:
+        permissions = (
+            ("league_admin", "Has league admin permissions"),
+
+            )
 
     def __str__(self):
         return f"{self.name}"

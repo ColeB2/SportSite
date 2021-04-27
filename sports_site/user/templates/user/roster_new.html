@@ -1,0 +1,20 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+        <h2>Existing Rosters</h2>
+        {% for roster in rosters %}
+        {{roster}}
+        {% endfor %}
+        <h2>Create a Roster:</h2>
+
+
+
+
+        <h2>Roster</h2>
+        {{form|crispy}}
+    </div>
+</div>
+
+{% endblock content %}

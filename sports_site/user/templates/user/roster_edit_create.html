@@ -8,6 +8,8 @@
         <h6>{{player}}</h6>
         {% endfor %}
         <br>
+
+        {% if roster.team.team.owner == user %}
         <div class="row">
             <div class="col">
                 <h2>Add Player(s)</h2><br>
@@ -24,9 +26,11 @@
                     {% endfor %}
 
                     <input type="submit" value="Submit Roster">
+                    <br><br>
                 </form>
             </div>
         </div>
+        {% endif %}
 
 
 

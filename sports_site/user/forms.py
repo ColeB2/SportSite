@@ -56,10 +56,15 @@ class PlayerSeasonForm(forms.ModelForm):
         fields = ['player', 'team']
 
 
-    # def __init__(self, *args, **kwargs):
-    #     super(PlayerSeasonDeleteForm, self).__init__(*args, **kwargs)
-    #     # if user:
-    #     #     self.fields['player'].queryset = PlayerSeason.objects.filter(team__team__team__owner=user)
+
+class RosterCreateForm(forms.Form):
+    def __init__(self, season_queryset, *args, **kwargs):
+        super(RosterCreateForm, self).__init__(*args, **kwargs)
+        self.fields['seasons'] = forms.ModelChoiceField(
+            queryset=season_queryset,
+            label=False,
+            required=False,
+            )
 
 
 
