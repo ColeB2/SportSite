@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 import datetime
 
+
 # Create your models here.
 class League(models.Model):
     name = models.CharField(max_length=100, null=False, default="League Name Here")

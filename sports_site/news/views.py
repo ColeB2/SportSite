@@ -13,8 +13,8 @@ def home(request):
 
     return render(request, 'news/home.html', context)
 
-def news_detail(request, pk):
-    article = Article.objects.get(pk=pk)
+def news_detail(request, slug):
+    article = Article.objects.get(slug=slug)
     context = {
         "article": article
         }

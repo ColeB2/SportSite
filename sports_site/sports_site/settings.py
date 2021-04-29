@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'user',
     'crispy_forms',
     'crispy_bootstrap5',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Login
 LOGIN_REDIRECT_URL = 'news-home'
+
+# Taggit options
+TAGGIT_CASE_INSENSITIVE = True
+
+
