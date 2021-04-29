@@ -10,7 +10,7 @@
         {% endfor %}
 
         <h6>
-            <a href="{% url 'roster-create' user %}">New Roster</a>
+            <a href="{% url 'roster-create' user.team_set.all.0.name %}">New Roster</a>
         </h6>
     </div>
 </div>

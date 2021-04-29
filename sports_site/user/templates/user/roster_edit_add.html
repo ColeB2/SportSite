@@ -26,7 +26,7 @@
             </div>
 
             <div class="col-6">
-                <legend><small>Can't find player? Create Player Here:</small></legend>
+                <legend><small><a href="{% url 'roster-edit-create' roster.team.team.name roster.team.season.season.year roster.pk %}">Can't find player?</a></small></legend>
             </div>
         </div>
         {% endif %}

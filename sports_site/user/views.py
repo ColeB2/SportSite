@@ -4,7 +4,7 @@ from .forms import (PlayerSelectForm, PlayerCreateForm, PlayerSeasonForm, Player
     RosterCreateForm)
 
 from django.forms import formset_factory, modelformset_factory
-from league.models import Roster, PlayerSeason, Player, Team, SeasonStage
+from league.models import Roster, PlayerSeason, Player, Team, TeamSeason, SeasonStage
 
 
 
@@ -150,22 +150,40 @@ def roster_edit_remove(request, team_name, season, pk):
 def roster_create(request, team_name):
     user_team = Team.objects.get(owner=request.user)
     rosters = Roster.objects.all().filter(team__team__owner=request.user)
-    seasons = user_team.teamseason_set.all()
     seasons = SeasonStage.objects.all()
 
-    form = RosterCreateForm(season_queryset=seasons)
 
     if request.method == 'POST':
-        pass
-        # formset = None
-        # if formset.is_valid():
-        #     roster = Roster(team=team)
-        #     roster.save()
+        form = RosterCreateForm(season_queryset=seasons, roster_queryset=rosters, data=request.POST)
+        if form.is_valid():
+            season_data = form.cleaned_data.get("seasons")
+            roster_data = form.cleaned_data.get("roster")
+
+            if roster_data:
+                new_teamseason, teamseason_created = TeamSeason.objects.get_or_create(season=season_data, team=user_team)
+                new_teamseason.save()
+                new_roster = Roster.objects.get(team=new_teamseason)
+
+                roster = roster_data.playerseason_set.all()
+                for player in roster:
+                    new_playerseason = PlayerSeason(player=player.player, team=new_roster, season=season_data)
+                    new_playerseason.save()
+
+
+            else:
+                print('not postseason R')
+                new_teamseason, teamseason_created = TeamSeason.objects.get_or_create(season=season_data, team=user_team)
+                new_teamseason.save()
+
+
+            return redirect("roster-select")
+
+        else:
+            print(f"Form not valid, roster_create {form}")
     else:
-        print('something went wrong')
+        form = RosterCreateForm(season_queryset=seasons, roster_queryset=rosters)
 
     context = {
-        "team_name": team_name,
         "rosters":rosters,
         "form": form,
         }

@@ -23,31 +23,38 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item text-white drop-item" href="#">Teams</a>
-                    <a class="dropdown-item text-white drop-item" href="#">Stats</a>
-                    <a class="dropdown-item text-white drop-item" href="#}">Standings</a>
-                    <a class="dropdown-item text-white drop-item" href="#">Schedule</a>
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'news-page' %}">News</a>
+                    <a class="dropdown-item text-white drop-item header-link" href="#">Teams</a>
+                    <a class="dropdown-item text-white drop-item header-link" href="#">Stats</a>
+                    <a class="dropdown-item text-white drop-item header-link" href="#}">Standings</a>
+                    <a class="dropdown-item text-white drop-item header-link" href="#">Schedule</a>
                 </div>
             </div>
         </div>
 
-        <!--Navbar options-->
+        <!--Navbar Logo-->
         <div class="d-flex flex-row justify-content-center">
             <a class="navbar-text header-link p-2" href="{% url 'news-home' %}" title="Home">League Name</a>
-            <a class="navbar-text header-link p-2" href="#">Teams</a>
-            <a class="navbar-text header-link p-2" href="#">Stats</a>
-            <a class="navbar-text header-link p-2" href="#">Standings</a>
-            <a class="navbar-text header-link p-2" href="#">Schedule</a>
         </div>
 
-        <!--Right Side Nav Options-->
         <div class="d-flex flex-row justify-content-end ms-auto p-2">
             {% if user.is_authenticated %}
-            <a class="navbar-text header-link p-2" href="{% url 'roster-select' %}">Roster</a>
-            <a class="navbar-text header-link p-2" href="{% url 'logout' %}">Logout</a>
+        <!-- Dropdown hamburger menu -->
+            <div class="dropdown">
+                <button class="btn navbar_dropdown_btn_colour dropdown" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="{% url 'roster-select' %}">Roster Edit</a>
+                    <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="#">Add Stats</a>
+                </div>
+            </div>
+            <a class="navbar-text header-link p-2" href="{% url 'logout' %}">Logout</a>-->
+
             {% else %}
             <a class="navbar-text header-link" href="{% url 'login' %}">Login</a>
             {% endif %}
+
         </div>
 
 

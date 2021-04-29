@@ -1,10 +1,6 @@
 from django import forms
 from league.models import Roster, TeamSeason, PlayerSeason, Player
 
-from django.forms.models import inlineformset_factory, formset_factory #test
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset
-
 
 class RosterForm(forms.ModelForm):
     class Meta:
@@ -58,11 +54,16 @@ class PlayerSeasonForm(forms.ModelForm):
 
 
 class RosterCreateForm(forms.Form):
-    def __init__(self, season_queryset, *args, **kwargs):
+    def __init__(self, season_queryset, roster_queryset, *args, **kwargs):
         super(RosterCreateForm, self).__init__(*args, **kwargs)
         self.fields['seasons'] = forms.ModelChoiceField(
             queryset=season_queryset,
-            label=False,
+            label="Select a season to create your roster for:",
+            required=True,
+            )
+        self.fields['roster'] = forms.ModelChoiceField(
+            queryset=roster_queryset,
+            label="Select a roster you want to copy over(optional):",
             required=False,
             )
 
