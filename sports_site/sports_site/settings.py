@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'stats',
     'news',
     'league',
+    'league_admin',
     'user',
     'crispy_forms',
     'crispy_bootstrap5',

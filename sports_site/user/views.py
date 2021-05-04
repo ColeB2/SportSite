@@ -53,7 +53,7 @@ def roster_edit_add(request, team_name, season, pk):
                     playerseason, created = PlayerSeason.objects.get_or_create(player=data, team=roster, season=roster.team.season)
                     playerseason.save()
 
-            return redirect('roster-view', team=team_name, season=season, pk=pk)
+            return redirect('roster-view', team_name=team_name, season=season, pk=pk)
         else:
             print('Something went wrong with formset')
     else:
@@ -94,7 +94,7 @@ def roster_edit_create(request, team_name, season, pk):
                     playerseason, created = PlayerSeason.objects.get_or_create(player=player, team=roster, season=roster.team.season)
                     playerseason.save()
 
-            return redirect('roster-view', team=team_name, season=season, pk=pk)
+            return redirect('roster-view', team_name=team_name, season=season, pk=pk)
         else:
             print('Something went wrong with formset')
     else:
@@ -116,7 +116,7 @@ def roster_edit_remove(request, team_name, season, pk):
     players = roster.playerseason_set.all()
 
 
-    PlayerFormset = formset_factory(PlayerDeleteForm, extra=5)
+    PlayerFormset = formset_factory(PlayerDeleteForm, extra=21)
 
 
     if request.method == 'POST':
@@ -130,9 +130,9 @@ def roster_edit_remove(request, team_name, season, pk):
                         data.delete()
 
             if 'remove' in request.POST:
-                return redirect('roster-view', team=team_name, season=season, pk=pk)
+                return redirect('roster-view', team_name=team_name, season=season, pk=pk)
             elif 'remove_and_continue' in request.POST:
-                return redirect('roster-edit-remove', team=team_name, season=season, pk=pk)
+                return redirect('roster-edit-remove', team_name=team_name, season=season, pk=pk)
         else:
             print('Something went wrong with formset')
     else:
@@ -160,14 +160,16 @@ def roster_create(request, team_name):
             roster_data = form.cleaned_data.get("roster")
 
             if roster_data:
+                #If roster_data exists, ie. User wants to copy a previous roster.
                 new_teamseason, teamseason_created = TeamSeason.objects.get_or_create(season=season_data, team=user_team)
                 new_teamseason.save()
-                new_roster = Roster.objects.get(team=new_teamseason)
+                if teamseason_created:
+                    new_roster = Roster.objects.get(team=new_teamseason)
 
-                roster = roster_data.playerseason_set.all()
-                for player in roster:
-                    new_playerseason = PlayerSeason(player=player.player, team=new_roster, season=season_data)
-                    new_playerseason.save()
+                    roster = roster_data.playerseason_set.all()
+                    for player in roster:
+                        new_playerseason = PlayerSeason(player=player.player, team=new_roster, season=season_data)
+                        new_playerseason.save()
 
 
             else:

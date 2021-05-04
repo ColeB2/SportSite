@@ -13,7 +13,6 @@ class League(models.Model):
     class Meta:
         permissions = (
             ("league_admin", "Has league admin permissions"),
-
             )
 
     def __str__(self):
@@ -69,7 +68,7 @@ class TeamSeason(models.Model):
         created = not self.pk
         super().save(*args, **kwargs)
         if created:
-            Roster.objects.create(team=self)
+            Roster.objects.get_or_create(team=self)
 
 
 class Roster(models.Model):

@@ -38,18 +38,33 @@
         </div>
 
         <div class="d-flex flex-row justify-content-end ms-auto p-2">
-            {% if user.is_authenticated %}
-        <!-- Dropdown hamburger menu -->
+            <!--LeagueAdminOptions-->
+            {% if perms.league.league_admin %}
             <div class="dropdown">
-                <button class="btn navbar_dropdown_btn_colour dropdown" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="btn navbar_dropdown_btn_colour dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="navbar-text header-link">{{user}}</span>
                 </button>
+                <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="{% url 'league-admin-roster-select' %}">Roster Edit</a>
+                    <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="#">Add Stats</a>
+                </div>
+            </div>
+            <a class="navbar-text header-link p-2" href="{% url 'logout' %}">Logout</a>
+
+
+            {% elif user.is_authenticated %}
+        <!-- Team Admin User Options -->
+            <div class="dropdown">
+                <button class="btn navbar_dropdown_btn_colour dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="navbar-text header-link">{{user}}</span>
+                </button>
+
                 <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="{% url 'roster-select' %}">Roster Edit</a>
                     <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="#">Add Stats</a>
                 </div>
             </div>
-            <a class="navbar-text header-link p-2" href="{% url 'logout' %}">Logout</a>-->
+            <a class="navbar-text header-link p-2" href="{% url 'logout' %}">Logout</a>
 
             {% else %}
             <a class="navbar-text header-link" href="{% url 'login' %}">Login</a>

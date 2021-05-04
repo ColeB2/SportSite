@@ -12,6 +12,7 @@
         {% if roster.team.team.owner == user %}
         <h2>Remove Players</h2><br>
         <legend><small>Select Players you want to remove from the roster.</small></legend>
+        <legend><small>WARNING: Removing a player will delete all stats tied to that player for that particular season.</small></legend>
         <form method="post">
             {% csrf_token %}
             {{formset.management_form}}

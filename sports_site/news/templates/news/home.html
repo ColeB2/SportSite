@@ -11,7 +11,7 @@
                     <img class="img-fluid" height="300" width="300" src="{{ articles.0.image.url  }}">
                     <h1>
                         <a href="{% url 'news-detail' articles.0.slug %}" class="article-headline">
-                            {{articles.0.headline}}
+                            {{articles.0.title}}
                         </a>
                     </h1>
                     <h6>{{articles.0.date_posted}}</h6>
@@ -28,7 +28,7 @@
             {% for article in articles %}
                 <li>
                     <a href="{% url 'news-detail' article.slug %}" class="article-headline">
-                        {{article.headline}}
+                        {{article.title}}
                     </a>
                 </li>
             {% endfor %}
