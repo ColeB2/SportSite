@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import (PlayerSelectForm, PlayerCreateForm, PlayerSeasonForm, PlayerDeleteForm,
+from .forms import (PlayerSelectForm, PlayerCreateForm, PlayerDeleteForm,
     RosterCreateForm)
 
-from django.forms import formset_factory, modelformset_factory
+from django.forms import formset_factory
 from league.models import Roster, PlayerSeason, Player, Team, TeamSeason, SeasonStage
 
 

@@ -9,7 +9,7 @@
         {% endfor %}
         <br>
 
-        {% if roster.team.team.owner == user %}
+        {% if roster.team.team.owner == user or perms.league.league_admin %}
         <div class="row">
             <div class="col-6">
                 <h2>Add Players</h2><br>
@@ -21,7 +21,7 @@
                         {{ form|crispy }}
                     {% endfor %}
 
-                    <input type="submit" value="Submit Roster">
+                    <input type="submit" value="Submit Roster" class="btn btn-primary">
                 </form>
             </div>
 

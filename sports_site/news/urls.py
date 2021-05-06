@@ -8,4 +8,5 @@ urlpatterns = [
     path('news/<slug:slug>', views.news_detail, name='news-detail'),
     # path('news/', views.news_page, name='news-page'),
     path('news/', ArticlesView.as_view(), name='news-page'),
+    path('news/create/article', views.news_create, name='news-create')
 ]

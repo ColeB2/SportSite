@@ -1,7 +1,9 @@
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from .models import Article
+from .forms import ArticleCreateForm
 
 # Create your views here.
 def home(request):
@@ -33,6 +35,28 @@ def news_page(request):
         }
 
     return render(request, 'news/news_page.html', context)
+
+
+@login_required
+def news_create(request):
+
+    if request.method == 'POST':
+        form = ArticleCreateForm(data=request.POST)
+        if form.is_valid():
+            new_article = form.save()
+        return redirect('news-home')
+    else:
+        form = ArticleCreateForm()
+
+
+    context = {
+        "form": form
+        }
+
+    return render(request, 'news/new_article.html', context)
+
+
+
 
 
 class ArticlesView(ListView):
