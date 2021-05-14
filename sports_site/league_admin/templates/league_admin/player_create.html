@@ -3,13 +3,8 @@
 {% block content %}
 <div class="container">
     <div class="content-section">
-
-        <h2>Existing Seasons:</h2>
-        {% for season in seasons %}
-        <h4>{{season}}</h4>
-        {% endfor %}
-        <br><br>
-        <h2>Create a Season:</h2>
+        <h2>Create a Player:</h2>
+        <legend><small>To add player to a team/roster, use roster menu.</small></legend>
 
 
 
@@ -18,7 +13,7 @@
             {% csrf_token %}
             {{form|crispy}}
 
-            <input type="submit" value="Create Season" class="btn btn-primary">
+            <input type="submit" value="Create Player" class="btn btn-primary">
         </form>
 
     </div>

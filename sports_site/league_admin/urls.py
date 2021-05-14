@@ -6,6 +6,18 @@ urlpatterns = [
     path('roster/',views.league_admin_roster_select, name='league-admin-roster-select'),
     path('season/',views.league_admin_season_view, name='league-admin-season'),
     path('season/add/new', views.league_admin_create_season_view, name='league-admin-season-create'),
-    path('season/<int:season_year>', views.league_admin_season_stage_view, name='league-admin-season-stage'),
+    path('season/<int:season_year>', views.league_admin_season_stage_select_view, name='league-admin-season-stage'),
     path('season/<int:season_year>/add/new', views.league_admin_create_season_stage_view, name='league-admin-season-stage-create'),
+    path('season/<int:season_year>/<season_stage>', views.league_admin_season_stage_info_view, name='league-admin-season-stage-info'),
+
+
+    path('players/', views.league_admin_player_select_view, name='league-admin-player-select'),
+    path('players/<player_pk>/edit', views.league_admin_player_edit_view, name='league-admin-player-edit'),
+    path('players/add', views.league_admin_player_create_view, name='league-admin-player-create'),
+
+    path('schedule/', views.league_admin_schedule_select_view, name='league-admin-schedule-select'),
+    path('schedule/<int:season_year>/<season_stage_pk>', views.league_admin_schedule_view, name='league-admin-schedule'),
+    path('schedule/<int:season_year>/<season_stage_pk>/edit', views.league_admin_schedule_create_view, name='league-admin-schedule-create'),
+    path('schedule/<int:season_year>/<season_stage_pk>/<game_pk>/edit', views.league_admin_edit_game_view, name='league-admin-game-edit')
+
     ]

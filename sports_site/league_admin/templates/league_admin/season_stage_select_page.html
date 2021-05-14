@@ -1,0 +1,41 @@
+{% extends "news/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+        <h2>{{season_year}} Season</h2>
+        <h4>Season Stages:</h4>
+
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+
+        {% for stage in stages %}
+        <h6>
+            <a href="{% url 'league-admin-season-stage-info' season_year stage.stage %}">{{stage}}</a>
+        </h6>
+        {% endfor %}
+
+        <br><br>
+
+        <a class="btn btn-primary" href="{% url 'league-admin-season-stage-create' season_year %}">
+            New Season Stage
+        </a>
+
+        <a class="btn btn-danger" href="{% url 'league-admin-season-stage-create' season_year %}">
+            Delete {{season_year }} Season
+        </a>
+
+
+
+
+
+
+    </div>
+</div>
+
+{% endblock content %}

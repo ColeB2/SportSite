@@ -5,6 +5,7 @@ from django.urls import reverse
 
 from taggit.managers import TaggableManager
 from random import randint
+from league.models import League
 
 
 # Create your models here.
@@ -34,6 +35,7 @@ def unique_slug(obj_instance, obj_slug=None):
     return slug
 
 class Article(models.Model):
+    league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=200)
     body = models.TextField()
     image = models.ImageField(upload_to='article_images', default='article_images/baseballplaceholder2.png')

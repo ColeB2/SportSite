@@ -1,7 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import (PlayerSelectForm, PlayerCreateForm, PlayerDeleteForm,
-    RosterCreateForm)
+    RosterCreateForm, RosterSelectForm)
 
 from django.forms import formset_factory
 from league.models import Roster, PlayerSeason, Player, Team, TeamSeason, SeasonStage
@@ -28,6 +29,42 @@ def roster_view(request, team_name, season, pk):
         'players': players
         }
     return render(request, 'user/roster_view.html', context)
+
+
+@login_required
+def roster_edit_copy(request, team_name, season, pk):
+    # team_season = TeamSeason.objects.get(season=season__season__year, pk=pk)
+    roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=pk)
+    team_pk = roster.team.team.pk
+    rosters = Roster.objects.all().filter(team__team__pk=team_pk)
+
+    if request.method == 'POST':
+        form = RosterSelectForm(data=request.POST, roster_queryset=rosters)
+        if form.is_valid():
+            roster_data = form.cleaned_data.get("roster")
+            if roster_data:
+                #If roster_data exists, ie. User wants to copy a previous roster.
+                season_data = roster.team.season
+
+                roster_copy = roster_data.playerseason_set.all()
+                for player in roster_copy:
+                    new_playerseason, playerseason_created = PlayerSeason.objects.get_or_create(player=player.player, team=roster, season=season_data)
+                    if playerseason_created:
+                        new_playerseason.save()
+                        messages.success(request, f"{new_playerseason} created and added to {roster}")
+
+            return redirect('roster-view', team_name=team_name, season=season, pk=pk)
+    else:
+        form = RosterSelectForm(roster_queryset=rosters)
+
+
+    context = {
+        'roster': roster,
+        'rosters': rosters,
+        'form':form
+        }
+    return render(request, 'user/roster_edit_copy.html', context)
+
 
 
 @login_required
@@ -86,7 +123,7 @@ def roster_edit_create(request, team_name, season, pk):
 
                 # Create player object
                 if first is not None and last is not None:
-                    player = Player(first_name=first, last_name=last)
+                    player = Player(first_name=first, last_name=last, league=roster.team.team.league)
                     player.save()
 
                 # Create player season
@@ -144,6 +181,10 @@ def roster_edit_remove(request, team_name, season, pk):
         'formset':formset
         }
     return render(request, 'user/roster_edit_remove.html', context)
+
+
+
+
 
 
 @login_required

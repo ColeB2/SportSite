@@ -17,6 +17,10 @@
             {% csrf_token %}
             {{form|crispy}}
 
+            <h2>Teams:</h2>
+            <legend><small>Select teams to add/teams that qualify for the season stage.</small></legend>
+            {{formset|crispy}}
+
             <input type="submit" value="Create Season Stage" class="btn btn-primary">
         </form>
 

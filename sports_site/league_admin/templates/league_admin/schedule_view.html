@@ -11,17 +11,20 @@
         </ul>
         {% endif %}
 
-        <h2>Seasons:</h2>
+        <h2>Schedule:</h2>
         <legend><small>Click on an existing season to add a new stage.</small></legend>
-        {% for season in seasons %}
+        {% for game in schedule %}
         <h6>
-            <a href="{% url 'league-admin-season-stage' season.year  %}">{{season}}</a>
+            <a href="{% url 'league-admin-game-edit' season_year season_stage_pk game.pk %}">{{game}}</a>
         </h6>
         {% endfor %}
 
         <br><br>
-        <a class="btn btn-primary" href="{% url 'league-admin-season-create' %}">New Season</a>
-
+        <h6>
+            <small>
+            <a href="{% url 'league-admin-schedule-create' season_year season_stage_pk %}">Add Games</a>
+            </small>
+        </h6>
 
 
 

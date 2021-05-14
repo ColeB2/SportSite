@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('',views.roster_select, name='roster-select'),
     path('<team_name>/<int:season>/<int:pk>/', views.roster_view, name='roster-view'),
+    path('<team_name>/<int:season>/<int:pk>/edit/copy', views.roster_edit_copy, name='roster-edit-copy'),
     path('<team_name>/<int:season>/<int:pk>/edit/add/existing', views.roster_edit_add, name='roster-edit-add'),
     path('<team_name>/<int:season>/<int:pk>/edit/add/new', views.roster_edit_create, name='roster-edit-create'),
     path('<team_name>/<int:season>/<int:pk>/edit/remove', views.roster_edit_remove, name='roster-edit-remove'),

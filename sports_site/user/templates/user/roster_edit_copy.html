@@ -1,0 +1,22 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+        <h2>{{ roster }}</h2>
+        {% for player in players %}
+        <h6>{{player}}</h6>
+        {% endfor %}
+        <br>
+
+        <h2>Select an existing roster to copy.</h2>
+        {% if roster.team.team.owner == user or perms.league.league_admin %}
+        <form method="post">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <input type="submit" value="Submit Roster" class="btn btn-primary">
+                    <br><br>
+        </form>
+        {% endif %}
+
+{% endblock content %}

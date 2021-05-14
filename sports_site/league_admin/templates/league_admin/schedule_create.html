@@ -1,0 +1,25 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+
+        <h2>Create Schedule for: {{current_stage}}:</h2>
+        <br><br>
+
+        <h2>Games:</h2>
+        <legend><small>Add games using forms below, only add 10 at a time.</small></legend>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+                {% crispy form %}
+            {% endfor %}
+
+            <input type="submit" value="Create Games" class="btn btn-primary">
+        </form>
+
+    </div>
+</div>
+
+{% endblock content %}

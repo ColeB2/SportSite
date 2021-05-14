@@ -1,0 +1,22 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+
+        <form method="get">
+            {{filter.form|crispy}}
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </form>
+        <br><br>
+        {% for obj in filter.qs %}
+        <h6>
+        <a href="{% url 'league-admin-player-edit' obj.pk %}">{{obj}}</a>
+        </h6>
+        {% endfor %}
+
+
+    </div>
+</div>
+
+{% endblock content %}

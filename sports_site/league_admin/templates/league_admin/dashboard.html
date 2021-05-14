@@ -3,9 +3,19 @@
 {% block content %}
 <div class="container">
     <div class="row">
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
         <h1>League Dashboard</h1>
         <h2><a href="{% url 'league-admin-season' %}">Seasons</a></h2>
         <h2><a href="{% url 'league-admin-roster-select' %}">Rosters</a></h2>
+        <h2><a href="{% url 'league-admin-schedule-select' %}">Schedules</a></h2>
+        <h2><a href="{% url 'league-admin-player-select' %}">Players</a></h2>
 
 
 

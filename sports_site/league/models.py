@@ -49,6 +49,7 @@ class SeasonStage(models.Model):
 """Team Related Models"""
 class Team(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=30, null=True, blank=True)
     place = models.CharField(max_length=30, null=True, blank=True)
 
@@ -85,6 +86,7 @@ class Roster(models.Model):
 
 """Player Related Models"""
 class Player(models.Model):
+    league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     first_name = models.CharField(max_length=35, null=True, blank=True)
     last_name = models.CharField(max_length=35, null=True, blank=True)
 

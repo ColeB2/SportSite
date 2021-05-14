@@ -36,7 +36,8 @@ class PlayerSeasonInline(admin.TabularInline):
 class PlayerAdmin(admin.ModelAdmin):
     inlines = [PlayerSeasonInline,]
     list_display = ('last_name','first_name',)
-    search_fields = ('first_name', 'last_name')
+    list_filter = ('league', 'last_name')
+    search_fields = ('first_name', 'last_name', 'league')
 
 @admin.register(PlayerSeason)
 class PlayerSeasonAdmin(admin.ModelAdmin):
@@ -52,6 +53,8 @@ class TeamSeasonInline(admin.TabularInline):
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('place','name',)
+    list_filter = ('league',)
+    search_fields = ('league',)
     inlines = [TeamSeasonInline,]
 
 
