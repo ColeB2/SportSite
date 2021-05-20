@@ -3,17 +3,42 @@
 {% block content %}
 <div class="container">
     <div class="content-section">
+        <legend><small>Use form below to search for a Player in your league.</small></legend>
 
         <form method="get">
             {{filter.form|crispy}}
             <input type="submit" value="Submit" class="btn btn-primary">
         </form>
-        <br><br>
-        {% for obj in filter.qs %}
-        <h6>
-        <a href="{% url 'league-admin-player-edit' obj.pk %}">{{obj}}</a>
-        </h6>
+
+
+
+        {% for player in all_players %}
+        <h6><a href="{% url 'league-admin-player-edit' player.pk %}">{{player}}</a></h6>
         {% endfor %}
+
+{% if all_players.has_other_pages %}
+        <ul class="pagination">
+        {% if all_players.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ all_players.previous_page_number }}">&laquo;</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+        {% endif %}
+
+        {% for i in all_players.paginator.page_range %}
+            {% if all_players.number == i %}
+                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if all_players.has_next %}
+            <li class="page-item"><a class="page-link "href="?page={{ all_players.next_page_number }}">&raquo;</a></li>
+        {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% endif %}
+        </ul>
+{% endif %}
 
 
     </div>

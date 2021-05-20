@@ -4,19 +4,29 @@
 <div class="container">
     <div class="content-section">
 
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
         <h2>Create Schedule for: {{current_stage}}:</h2>
         <br><br>
 
         <h2>Games:</h2>
-        <legend><small>Add games using forms below, only add 10 at a time.</small></legend>
+        <legend><small>Add games using forms below, 5 at a time.</small></legend>
         <form method="post">
             {% csrf_token %}
             {{ formset.management_form }}
             {% for form in formset %}
+            <h5>Game:</h5>
                 {% crispy form %}
             {% endfor %}
 
-            <input type="submit" value="Create Games" class="btn btn-primary">
+            <input type="submit" name="create" value="Create Games" class="btn btn-primary">
+            <input type="submit" name="create-and-continue" value="Create Games and Continue" class="btn btn-primary">
         </form>
 
     </div>

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib import messages
 import datetime
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, MultiWidgetField
@@ -55,6 +56,11 @@ class EditGameForm(forms.ModelForm):
     class Meta:
         model = Game
         fields = ['home_team', 'away_team', 'date' , 'start_time', 'stats_entered', 'final_score']
+        cur_date = datetime.datetime.today()
+        year_range = tuple([i for i in range(cur_date.year - 5, cur_date.year + 5)])
+        widgets = {
+            'date': forms.SelectDateWidget(empty_label=('Year', 'Month', 'Day'), years=(year_range) )
+            }
 
 
 class CreateGameForm(forms.Form):
@@ -76,7 +82,7 @@ class CreateGameForm(forms.Form):
             ))
         self.fields['date'].required = False
 
-        self.fields['start_time'] = forms.TimeField(label='Start Time (24:00)', required=False)
+        self.fields['start_time'] = forms.TimeField(label='Start Time (24:00 clock)', required=False)
         self.fields['location'] = forms.CharField(max_length=20, required=False, label='Location (default: Home)')
 
         #crispylayout
@@ -106,6 +112,7 @@ class CreateGameForm(forms.Form):
         date_data = self.cleaned_data.get('date')
         time_data = self.cleaned_data.get('start_time')
         location_data = self.cleaned_data.get('location')
+        new_game = None
 
         if home_data is not None and away_data is not None:
 
@@ -118,6 +125,8 @@ class CreateGameForm(forms.Form):
                 new_game.location = location_data
 
             new_game.save()
+
+        return new_game
 
 
 

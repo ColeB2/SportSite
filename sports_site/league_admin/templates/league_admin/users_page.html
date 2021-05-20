@@ -11,16 +11,14 @@
         </ul>
         {% endif %}
 
-        <h2>Seasons:</h2>
-        <legend><small>Click on an existing season to add a new stage or delete an existing season.</small></legend>
-        {% for season in seasons %}
+        <h2>Team User Accounts:</h2>
+        <legend><small>Click on a user to set their permissions</small></legend>
+        {% for team in teams %}
         <h6>
-            <a href="{% url 'league-admin-season-stage' season.year season.pk %}">{{season}}</a>
+            <a href="#">{{team.owner}}</a>
         </h6>
         {% endfor %}
 
-        <br><br>
-        <a class="btn btn-primary" href="{% url 'league-admin-season-create' %}">New Season</a>
 
 
 

@@ -3,16 +3,24 @@
 {% block content %}
 <div class="container">
     <div class="content-section">
+
         <h2>{{ roster }}</h2>
         {% for player in players %}
         <h6>{{player}}</h6>
         {% endfor %}
         <br>
-
+        {{perms.league}}
         {% if roster.team.team.owner == user or perms.league.league_admin %}
         <h2>Remove Players</h2><br>
-        <legend><small>Select Players you want to remove from the roster.</small></legend>
-        <legend><small>WARNING: Removing a player will delete all stats tied to that player for that particular season.</small></legend>
+
+        <legend><small>
+            Select Players you want to remove from the roster.
+        </small></legend>
+        <legend><small>
+            WARNING: Removing a player will delete all stats tied to that player
+            for that particular season stage.
+        </small></legend>
+
         <form method="post">
             {% csrf_token %}
             {{formset.management_form}}
