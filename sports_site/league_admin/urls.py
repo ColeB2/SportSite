@@ -16,6 +16,7 @@ urlpatterns = [
     path('players/', views.league_admin_player_select_view, name='league-admin-player-select'),
     path('players/<player_pk>/edit', views.league_admin_player_edit_view, name='league-admin-player-edit'),
     path('players/add', views.league_admin_player_create_view, name='league-admin-player-create'),
+    path('players/<player_pk>/delete', views.league_admin_player_delete_info_view, name='league-admin-player-delete'),
 
     path('schedule/', views.league_admin_schedule_select_view, name='league-admin-schedule-select'),
     path('schedule/<int:season_year>/stages/<season_stage_pk>', views.league_admin_schedule_view, name='league-admin-schedule'),

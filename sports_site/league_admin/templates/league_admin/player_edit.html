@@ -13,6 +13,11 @@
             <input type="submit" value="Save" class="btn btn-primary">
         </form>
 
+        <a class="btn btn-danger" href="{% url 'league-admin-player-delete' player_instance.pk %}">
+            Delete {{player_instance}}
+        </a>
+
+
     </div>
 </div>
 

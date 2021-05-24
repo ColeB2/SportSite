@@ -53,7 +53,7 @@ def league_admin_create_season_view(request):
     return render(request, "league_admin/season_create.html", context)
 
 
-@login_required
+
 @permission_required('league.league_admin')
 def league_admin_season_delete_info_view(request, season_year, season_pk):
     season = Season.objects.get(pk=season_pk)
