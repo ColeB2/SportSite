@@ -11,7 +11,6 @@
         <div class="row">
         <div class="col-6">
         <h2>Add Players</h2><br>
-        <!--<form>{{formset|crispy}}</form>-->
         <form method="post">
             {% csrf_token %}
             {{formset.management_form}}

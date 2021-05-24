@@ -9,8 +9,7 @@
         <h6>{{player}}</h6>
         {% endfor %}
         <br>
-        {{perms.league}}
-        {% if roster.team.team.owner == user or perms.league.league_admin %}
+        {% if perms.league.user_roster_remove or perms.league.league_admin %}
         <h2>Remove Players</h2><br>
 
         <legend><small>

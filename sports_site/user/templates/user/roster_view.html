@@ -21,10 +21,19 @@
 
         <br>
         {% if roster.team.team.owner == user or perms.league.league_admin %}
-        <h6><a href="{% url 'roster-edit-copy' roster.team.team.name roster.team.season.season.year roster.pk %}">Copy Players from Existing Roster</a></h6>
-        <h6><a href="{% url 'roster-edit-add' roster.team.team.name roster.team.season.season.year roster.pk %}">Add Existing Players</a></h6>
-        <h6><a href="{% url 'roster-edit-create' roster.team.team.name roster.team.season.season.year roster.pk %}">Add New Players</a></h6>
-        <h6><a href="{% url 'roster-edit-remove' roster.team.team.name roster.team.season.season.year roster.pk %}">Remove Player</a></h6>
+
+            {% if perms.league.user_roster_add or perms.league.league_admin %}
+                <h6><a href="{% url 'roster-edit-copy' roster.team.team.name roster.team.season.season.year roster.pk %}">Copy Players from Existing Roster</a></h6>
+                <h6><a href="{% url 'roster-edit-add' roster.team.team.name roster.team.season.season.year roster.pk %}">Add Existing Players</a></h6>
+            {% endif %}
+            {% if perms.league.user_roster_create_players or perms.league.league_admin %}
+                <h6><a href="{% url 'roster-edit-create' roster.team.team.name roster.team.season.season.year roster.pk %}">Add New Players</a></h6>
+            {% endif %}
+
+            {% if perms.league.user_roster_remove or perms.league.league_admin %}
+                <h6><a href="{% url 'roster-edit-remove' roster.team.team.name roster.team.season.season.year roster.pk %}">Remove Player</a></h6>
+            {% endif %}
+
         {% else %}
         <h1></h1>
         {% endif %}

@@ -76,6 +76,15 @@ class TeamSeason(models.Model):
 class Roster(models.Model):
     team = models.ForeignKey(TeamSeason, on_delete=models.CASCADE, null=True)
 
+    class Meta:
+        permissions = (
+            ("user_roster_add", "User can add existing players to rosters"),
+            ("user_roster_delete", "User can delete rosters"),
+            ("user_roster_remove", "User can remove players from roster"),
+            ("user_roster_create", "User can create new rosters"),
+            ("user_roster_create_players", "User can create new players to add to roster"),
+            )
+
     def __str__(self):
         return f"{self.team}"
 

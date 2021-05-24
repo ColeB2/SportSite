@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import messages
+from django.contrib.auth.models import Permission
 import datetime
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, MultiWidgetField
@@ -127,6 +128,53 @@ class CreateGameForm(forms.Form):
             new_game.save()
 
         return new_game
+
+
+class EditUserRosterPermissionsForm(forms.Form):
+    def __init__(self, selected_user, *args, **kwargs):
+        self.selected_user = selected_user
+        super(EditUserRosterPermissionsForm, self).__init__(*args, **kwargs)
+
+        self.fields['roster_add'] = forms.BooleanField(
+            label="Add existing players to team roster",
+            required=False,
+            initial=selected_user.has_perm('league.user_roster_add'))
+
+        self.fields['roster_create_players'] = forms.BooleanField(
+            label="Create new players to add to team roster",
+            required=False,
+            initial=selected_user.has_perm('league.user_roster_create_players'))
+
+        self.fields['roster_remove'] = forms.BooleanField(
+            label="Remove players from team roster",
+            required=False,
+            initial=selected_user.has_perm('league.user_roster_remove'))
+
+        self.fields['roster_create'] = forms.BooleanField(
+            label="Create new roster for own team",
+            required=False,
+            initial=selected_user.has_perm('league.user_roster_create'))
+
+        self.fields['roster_delete'] = forms.BooleanField(
+            label="Delete own team's existing rosters",
+            required=False,
+            initial=selected_user.has_perm('league.user_roster_delete'))
+
+    def process(self):
+        for field in self.changed_data:
+
+            updated_perm_name = f"user_{field}"
+            updated_perm = Permission.objects.get(codename=updated_perm_name)
+
+
+            if self.cleaned_data.get(field) == True:
+                self.selected_user.user_permissions.add(updated_perm)
+            else:
+                self.selected_user.user_permissions.remove(updated_perm)
+
+        self.selected_user.save()
+
+
 
 
 

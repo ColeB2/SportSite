@@ -153,7 +153,7 @@ def roster_edit_remove(request, team_name, season, pk):
     players = roster.playerseason_set.all()
 
 
-    PlayerFormset = formset_factory(PlayerDeleteForm, extra=21)
+    PlayerFormset = formset_factory(PlayerDeleteForm, extra=len(players))
 
 
     if request.method == 'POST':

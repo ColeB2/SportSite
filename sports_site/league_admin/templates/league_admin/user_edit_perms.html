@@ -1,0 +1,29 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+        <h2>{{user_viewed}}'s Permissions:</h2>
+        <legend><small>Select Permissions you want to add/remove</small></legend>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <input type="submit" value="Save" class="btn btn-primary">
+            <br><br>
+        </form>
+
+    </div>
+</div>
+
+{% endblock content %}

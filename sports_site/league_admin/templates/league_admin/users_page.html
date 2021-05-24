@@ -13,16 +13,19 @@
 
         <h2>Team User Accounts:</h2>
         <legend><small>Click on a user to set their permissions</small></legend>
+
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Team</th>
+            </tr>
         {% for team in teams %}
-        <h6>
-            <a href="#">{{team.owner}}</a>
-        </h6>
+            <tr>
+                <td><h6><a href="{% url 'league-admin-user-info' team.owner team.owner.pk %}">{{team.owner}}</a></h6></td>
+                <td>{{team}}</td>
+            </tr>
         {% endfor %}
-
-
-
-
-
+        </table>
 
     </div>
 </div>

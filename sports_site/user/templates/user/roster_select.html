@@ -9,9 +9,11 @@
         </h4>
         {% endfor %}
 
+        {% if perms.league.user_roster_create or perms.league.league_admin %}
         <h6>
             <a href="{% url 'roster-create' user.team_set.all.0.name %}">New Roster</a>
         </h6>
+        {% endif %}
     </div>
 </div>
 
