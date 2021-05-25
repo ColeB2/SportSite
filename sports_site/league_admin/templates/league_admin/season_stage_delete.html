@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <div class="content-section">
-        <h2>{{season}} Season</h2>
+        <h2>{{stage}}</h2>
 
         {% if messages %}
         <ul class="messages">
@@ -14,7 +14,7 @@
         {% endif %}
 
 
-        <legend>Warning: Deleting {{season}} will delete all object related to it.</legend>
+        <legend>Warning: Deleting {{stage}} will delete all object related to it.</legend>
 
         {{nested_object.nested|unordered_list }}
         <form method="POST">
@@ -23,7 +23,7 @@
             <legend>Are You Sure you want to delete this item, and all related items?</legend>
 
             <input class="btn btn-danger"type="submit" value="Delete"/>
-            <a class="btn btn-primary" href="{% url 'league-admin-season' %}">Cancel</a>
+            <a class="btn btn-primary" href="{% url 'league-admin-season-stage' stage.season.year stage.season.pk %}">Cancel</a>
         </form>
 
     </div>

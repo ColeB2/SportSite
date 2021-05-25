@@ -21,7 +21,7 @@
         <br><br>
         <a class="btn btn-primary" href="#">Add Existing Teams</a>
         <a class="btn btn-primary" href="#">Create a Team</a>
-        <a class="btn btn-danger" href="{% url 'roster-select' %}">Delete {{season_year}}{{season_stage}} Stage</a>
+        <a class="btn btn-danger" href="{% url 'league-admin-season-stage-delete' stage.season.year stage.season.pk stage.pk %}">Delete {{stage}} Stage</a>
 
 
 

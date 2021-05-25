@@ -152,4 +152,25 @@ def league_admin_season_stage_info_view(request, season_year, season_pk, season_
         }
     return render(request, "league_admin/season_stage_page.html", context)
 
+@permission_required('league.league_admin')
+def league_admin_season_stage_delete_info_view(request, season_year, season_pk, season_stage_pk):
+    stage = SeasonStage.objects.get(pk=season_stage_pk)
+
+    using = router.db_for_write(stage._meta.model)
+    nested_object = NestedObjects(using)
+    nested_object.collect([stage])
+
+    if request.method == 'POST':
+        stage.delete()
+        messages.success(request, f"{stage} and all releated object were deleted")
+        return redirect('league-admin-season-stage', season_year, season_pk)
+    else:
+        pass
+
+    context = {
+        'stage':stage,
+        'nested_object':nested_object,
+    }
+    return render(request, "league_admin/season_stage_delete.html", context)
+
 
