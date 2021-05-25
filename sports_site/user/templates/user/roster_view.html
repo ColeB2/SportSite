@@ -34,6 +34,12 @@
                 <h6><a href="{% url 'roster-edit-remove' roster.team.team.name roster.team.season.season.year roster.pk %}">Remove Player</a></h6>
             {% endif %}
 
+            {% if perms.league.user_roster_delete or perms.league.league_admin %}
+                <a class="btn btn-danger" href="{% url 'roster-delete' roster.team.team.name roster.team.season.season.year roster.pk  %}">
+            Delete {{roster}}
+                </a>
+            {% endif %}
+
         {% else %}
         <h1></h1>
         {% endif %}

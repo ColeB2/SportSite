@@ -8,7 +8,7 @@ from ..forms import (CreateGameForm, EditGameForm)
 from league.models import (SeasonStage, Game, TeamSeason)
 
 
-@login_required
+
 @permission_required('league.league_admin')
 def league_admin_schedule_select_view(request):
     stages = SeasonStage.objects.all().filter(season__league__admin=request.user)
@@ -18,7 +18,7 @@ def league_admin_schedule_select_view(request):
         }
     return render(request, "league_admin/schedule_select.html", context)
 
-@login_required
+
 @permission_required('league.league_admin')
 def league_admin_schedule_view(request, season_year, season_stage_pk):
     schedule = Game.objects.all().filter(season__season__league__admin=request.user, season__season=season_stage_pk )
@@ -30,7 +30,7 @@ def league_admin_schedule_view(request, season_year, season_stage_pk):
 
     return render(request, "league_admin/schedule_view.html", context)
 
-@login_required
+
 @permission_required('league.league_admin')
 def league_admin_schedule_create_view(request, season_year, season_stage_pk):
 
@@ -63,6 +63,37 @@ def league_admin_schedule_create_view(request, season_year, season_stage_pk):
         }
     return render(request, "league_admin/schedule_create.html", context)
 
+
+@permission_required('league.league_admin')
+def league_admin_schedule_delete_info_view(request, season_year, season_stage_pk):
+    """ To Do: Delete schedule. Different from other deletes, as schedule isn't
+    and object/model. So will need to delete all games in a given season stage."""
+    pass
+    # game = Game.objects.get(pk=game_pk)
+
+    # using = router.db_for_write(game._meta.model)
+    # nested_object = NestedObjects(using)
+    # nested_object.collect([game])
+
+    # if request.method == 'POST':
+    #     game.delete()
+    #     messages.success(request, f"{game} and all releated object were deleted")
+    #     return redirect('league-admin-schedule', season_year, season_stage_pk)
+    # else:
+    #     pass
+
+    # context = {
+    #     'game':game,
+    #     'nested_object':nested_object,
+    # }
+    # return render(request, "league_admin/schedule_delete.html", context)
+
+
+
+
+
+
+"""League Admin Game Views"""
 @permission_required('league.league_admin')
 def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
     game_instance = Game.objects.get(pk=game_pk)

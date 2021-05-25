@@ -11,7 +11,7 @@
         </ul>
         {% endif %}
 
-        <h3>Teams:</h3>
+        <h3>{{stage}}</h3>
         {% for team in teams %}
         <h6>
             <a href="{% url 'roster-view' team.team.name team.season.season.year team.roster_set.all.0.pk %}">{{team}}</a>
@@ -19,8 +19,9 @@
         {% endfor %}
 
         <br><br>
-        <h6><small><a href="#">Add Existing Teams</a></small></h6>
-        <h6><small><a href="#">Create Team</a></small></h6>
+        <a class="btn btn-primary" href="#">Add Existing Teams</a>
+        <a class="btn btn-primary" href="#">Create a Team</a>
+        <a class="btn btn-danger" href="{% url 'roster-select' %}">Delete {{season_year}}{{season_stage}} Stage</a>
 
 
 

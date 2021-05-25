@@ -140,17 +140,15 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
     }
     return render(request, "league_admin/season_stage_create.html", context)
 
-@login_required
+
 @permission_required('league.league_admin')
-def league_admin_season_stage_info_view(request, season_year, season_pk, season_stage):
+def league_admin_season_stage_info_view(request, season_year, season_pk, season_stage_pk):
     league = League.objects.get(admin=request.user)
-    teams = TeamSeason.objects.all().filter(team__league=league, season__season__year=season_year, season__stage=season_stage)
-    teams2 = TeamSeason.objects.all()
+    stage = SeasonStage.objects.get(pk=season_stage_pk)
+    teams = TeamSeason.objects.all().filter(team__league=league, season__pk=season_stage_pk)
     context = {
-        'season_year': season_year,
-        'season_stage': season_stage,
+        'stage': stage,
         'teams': teams,
-        'teams2': teams2,
         }
     return render(request, "league_admin/season_stage_page.html", context)
 

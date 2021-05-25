@@ -1,5 +1,7 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.admin.utils import NestedObjects
+from django.contrib.auth.decorators import login_required, permission_required
+from django.db import router
 from django.shortcuts import render, redirect
 from .forms import (PlayerSelectForm, PlayerCreateForm, PlayerDeleteForm,
     RosterCreateForm, RosterSelectForm)
@@ -33,7 +35,6 @@ def roster_view(request, team_name, season, pk):
 
 @login_required
 def roster_edit_copy(request, team_name, season, pk):
-    # team_season = TeamSeason.objects.get(season=season__season__year, pk=pk)
     roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=pk)
     team_pk = roster.team.team.pk
     rosters = Roster.objects.all().filter(team__team__pk=team_pk)
@@ -43,7 +44,6 @@ def roster_edit_copy(request, team_name, season, pk):
         if form.is_valid():
             roster_data = form.cleaned_data.get("roster")
             if roster_data:
-                #If roster_data exists, ie. User wants to copy a previous roster.
                 season_data = roster.team.season
 
                 roster_copy = roster_data.playerseason_set.all()
@@ -231,4 +231,26 @@ def roster_create(request, team_name):
         "form": form,
         }
     return render(request, 'user/roster_new.html', context)
+
+
+@login_required
+def roster_delete_info_view(request, team_name, season_year, roster_pk):
+    roster = Roster.objects.get(pk=roster_pk)
+
+    using = router.db_for_write(roster._meta.model)
+    nested_object = NestedObjects(using)
+    nested_object.collect([roster])
+
+    if request.method == 'POST':
+        roster.delete()
+        messages.success(request, f"{roster} and all releated object were deleted")
+        return redirect('roster-select')
+    else:
+        pass
+
+    context = {
+        'roster':roster,
+        'nested_object':nested_object,
+    }
+    return render(request, "user/roster_delete.html", context)
 
