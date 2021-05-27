@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.league_admin_dashboard_view, name='league-admin-dashboard'),
     path('roster/',views.league_admin_roster_select, name='league-admin-roster-select'),
+    path('news/',views.league_admin_news_select, name='league-admin-news-select'),
     path('season/',views.league_admin_season_view, name='league-admin-season'),
     path('season/add/new', views.league_admin_create_season_view, name='league-admin-season-create'),
 
