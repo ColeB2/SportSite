@@ -26,6 +26,12 @@
 <div class="mt-5 ms-2">
     <a class="btn btn-primary" href="{{request.META.HTTP_REFERER|escape}}">Back</a>
     <a class="btn btn-primary" href="{% url 'news-home' %}" title="Home">Home</a>
+    {% if perms.league.league_admin %}
+    <a class="btn btn-primary" href="{% url 'news-edit' article.slug %}">Edit</a>
+    <a class="btn btn-danger" href="{% url 'news-delete' article.slug %}">Delete</a>
+    {% endif %}
+
+
 </div>
 
 

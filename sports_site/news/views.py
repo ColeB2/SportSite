@@ -1,7 +1,7 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
 from .forms import ArticleCreateForm
 
@@ -23,21 +23,9 @@ def news_detail(request, slug):
     return render(request, 'news/news_detail.html', context)
 
 
-def news_page(request):
-    article_list = Article.objects.all().order_by('-id')
-    paginator = Paginator(article_list, 10)
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    context = {
-        "page_obj": page_obj
-        }
-
-    return render(request, 'news/news_page.html', context)
-
-
+#ToDo, change permissions to leagueadmin/ new creator
 @login_required
+@permission_required('league.league_admin')
 def news_create(request):
 
     if request.method == 'POST':
@@ -52,11 +40,25 @@ def news_create(request):
     context = {
         "form": form
         }
-
     return render(request, 'news/new_article.html', context)
 
+class ArticleCreateView(CreateView):
+    template_name = 'news/new_article.html'
+    model = Article
+    form_class = ArticleCreateForm
+    success_url = "/news"
+
+class ArticleEditView(UpdateView):
+    template_name = 'news/article_edit.html'
+    model = Article
+    form_class = ArticleCreateForm
+    success_url = "/news"
 
 
+class ArticleDeleteView(DeleteView):
+    template_name = 'news/confirm_delete.html'
+    model = Article
+    success_url = "/news"
 
 
 class ArticlesView(ListView):
@@ -65,3 +67,6 @@ class ArticlesView(ListView):
     model = Article
     context_object_name= 'articles'
     queryset = Article.objects.all().order_by('-id')
+
+
+

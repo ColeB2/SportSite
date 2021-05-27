@@ -174,3 +174,48 @@ def league_admin_season_stage_delete_info_view(request, season_year, season_pk, 
     return render(request, "league_admin/season_stage_delete.html", context)
 
 
+"""Team Season"""
+@permission_required('league.league_admin')
+def league_admin_team_season_info_view(request, season_year, season_pk, season_stage_pk, team_name, team_season_pk):
+    team = TeamSeason.objects.get(pk=team_season_pk)
+    roster = team.roster_set.get(team__pk=team_season_pk)
+    players = roster.playerseason_set.all()
+
+    context = {
+        'season_year':season_year,
+        'season_pk': season_pk,
+        'season_stage_pk': season_stage_pk,
+        'team_name': team_name,
+        'team':team,
+        'roster':roster,
+        'players': players,
+        }
+    return render(request, "league_admin/team_season_info.html", context)
+
+
+@permission_required('league.league_admin')
+def league_admin_team_season_delete_info_view(request, season_year, season_pk, season_stage_pk, team_name, team_season_pk):
+    teamseason = TeamSeason.objects.get(pk=team_season_pk)
+
+    using = router.db_for_write(teamseason._meta.model)
+    nested_object = NestedObjects(using)
+    nested_object.collect([teamseason])
+
+    if request.method == 'POST':
+        teamseason.delete()
+        messages.success(request, f"{teamseason} and all releated object were deleted")
+        return redirect('league-admin-season-stage', season_year, season_pk)
+    else:
+        pass
+
+    context = {
+        'season_year':season_year,
+        'season_pk': season_pk,
+        'season_stage_pk': season_stage_pk,
+        'team_name': team_name,
+        'teamseason':teamseason,
+        'nested_object':nested_object,
+    }
+    return render(request, "league_admin/team_season_delete.html", context)
+
+

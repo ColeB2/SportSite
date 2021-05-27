@@ -1,0 +1,27 @@
+{% extends "news/base.html" %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+        <h2>{{team}}</h2>
+        <br><br>
+        <h4>Roster: {{roster}}</h4>
+        <ul>
+        {% for player in players %}
+            <li><h6>{{player}}</h6></li>
+        {% endfor %}
+        </ul>
+        <br><br>
+        <a class="btn btn-danger" href="{% url 'league-admin-team-season-delete' season_year season_pk season_stage_pk team_name team.pk %}">Delete {{team}}</a>
+    </div>
+</div>
+
+{% endblock content %}

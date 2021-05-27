@@ -14,7 +14,7 @@
         <h3>{{stage}}</h3>
         {% for team in teams %}
         <h6>
-            <a href="{% url 'roster-view' team.team.name team.season.season.year team.roster_set.all.0.pk %}">{{team}}</a>
+            <a href="{% url 'league-admin-team-season-info' stage.season.year stage.season.pk stage.pk team.team.name team.pk%}">{{team}}</a>
         </h6>
         {% endfor %}
 
