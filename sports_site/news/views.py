@@ -1,13 +1,16 @@
-from django.contrib.auth.decorators import login_required, permission_required
-from django.core.paginator import Paginator
-from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.shortcuts import render#, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
+# from league.models import League
 from .forms import ArticleCreateForm
 
 # Create your views here.
 def home(request):
-    Article_data = Article.objects.all().order_by('-id')[:10]
+    ##TODO add league urls
+    # league = League.objects.get(admin = request.user)
+    # Article_data = Article.objects.all().filter(league=league).order_by('-id')[:10]
+    Article_data = Article.objects.all().filter().order_by('-id')[:10]
 
     context = {
         "articles": Article_data,
@@ -23,39 +26,24 @@ def news_detail(request, slug):
     return render(request, 'news/news_detail.html', context)
 
 
-#ToDo, change permissions to leagueadmin/ new creator
-@login_required
-@permission_required('league.league_admin')
-def news_create(request):
-
-    if request.method == 'POST':
-        form = ArticleCreateForm(data=request.POST)
-        if form.is_valid():
-            new_article = form.save()
-        return redirect('news-home')
-    else:
-        form = ArticleCreateForm()
-
-
-    context = {
-        "form": form
-        }
-    return render(request, 'news/new_article.html', context)
-
-class ArticleCreateView(CreateView):
+class ArticleCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = 'league.league_admin'
     template_name = 'news/new_article.html'
     model = Article
     form_class = ArticleCreateForm
     success_url = "/news"
 
-class ArticleEditView(UpdateView):
+
+class ArticleEditView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'league.league_admin'
     template_name = 'news/article_edit.html'
     model = Article
     form_class = ArticleCreateForm
     success_url = "/news"
 
 
-class ArticleDeleteView(DeleteView):
+class ArticleDeleteView(PermissionRequiredMixin, DeleteView):
+    permission_required = 'league.league_admin'
     template_name = 'news/confirm_delete.html'
     model = Article
     success_url = "/news"

@@ -1,10 +1,8 @@
-from django import forms
-from django.contrib import messages
-from django.contrib.auth.models import Permission
-import datetime
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, MultiWidgetField
-
+from crispy_forms.layout import Layout, Row, Column, MultiWidgetField
+from django import forms
+from django.contrib.auth.models import Permission
+from datetime import datetime
 from league.models import Season, SeasonStage, Game, Player
 
 class SeasonSelectForm(forms.ModelForm):
@@ -57,7 +55,7 @@ class EditGameForm(forms.ModelForm):
     class Meta:
         model = Game
         fields = ['home_team', 'away_team', 'date' , 'start_time', 'stats_entered', 'final_score']
-        cur_date = datetime.datetime.today()
+        cur_date = datetime.today()
         year_range = tuple([i for i in range(cur_date.year - 5, cur_date.year + 5)])
         widgets = {
             'date': forms.SelectDateWidget(empty_label=('Year', 'Month', 'Day'), years=(year_range) )
@@ -76,7 +74,7 @@ class CreateGameForm(forms.Form):
             queryset=team_queryset,
             required = False)
 
-        cur_date = datetime.datetime.today()
+        cur_date = datetime.today()
         year_range = tuple([i for i in range(cur_date.year - 5, cur_date.year + 5)])
         self.fields['date'] = forms.DateField(initial=cur_date, widget=forms.SelectDateWidget(
             empty_label=("Year", "Month", "Day"), years=(year_range)
