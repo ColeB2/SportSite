@@ -9,6 +9,7 @@ import datetime
 class League(models.Model):
     name = models.CharField(max_length=100, null=False, default="League Name Here")
     admin = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    url = models.SlugField(max_length=25, null=False, default=None, unique=True)
 
 
     class Meta:

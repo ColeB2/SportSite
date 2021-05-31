@@ -6,7 +6,7 @@ from .models import (League, Season, SeasonStage, Team, TeamSeason, Roster, Play
 """Admin Models"""
 @admin.register(League)
 class LeagueAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "url",)
 
 
 """Season Admin Models"""

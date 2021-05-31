@@ -3,14 +3,15 @@
 {% block content %}
 <div class="container-lg mt-5">
   <div class="row">
-      
+
     <h2>Are you sure you want to delete "{{object}}"?</h2>
-      
+
     <form method="post">
         {% csrf_token %}
-        
+
         <input class="btn btn-danger "type="submit" value="Delete" class="btn btn-primary">
-        <a class="btn btn-primary" href="{% url 'news-page' %}">Cancel</a>
+        <!--todo: change from news-home to news page once url configured properly-->
+        <a class="btn btn-primary" href="{% url 'news-home' %}?league={{request.GET.league}}">Cancel</a>
         <br><br>
     </form>
   </div>

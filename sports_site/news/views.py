@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render#, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
-# from league.models import League
+from league.models import League
 from .forms import ArticleCreateForm
 
 # Create your views here.
@@ -10,7 +10,8 @@ def home(request):
     ##TODO add league urls
     # league = League.objects.get(admin = request.user)
     # Article_data = Article.objects.all().filter(league=league).order_by('-id')[:10]
-    Article_data = Article.objects.all().filter().order_by('-id')[:10]
+    league_slug = request.GET.get('league', None)
+    Article_data = Article.objects.all().filter(league__url=league_slug).order_by('-id')[:10]
 
     context = {
         "articles": Article_data,
@@ -31,7 +32,10 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'news/new_article.html'
     model = Article
     form_class = ArticleCreateForm
-    success_url = "/news"
+
+    def get_success_url(self):
+        url = f"/league/?league={self.request.GET.get('league')}"
+        return url
 
 
 class ArticleEditView(PermissionRequiredMixin, UpdateView):
@@ -39,14 +43,23 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
     template_name = 'news/article_edit.html'
     model = Article
     form_class = ArticleCreateForm
-    success_url = "/news"
+
+
+    def get_success_url(self):
+        url = f"/league/?league={self.request.GET.get('league')}"
+        return url
+
+
 
 
 class ArticleDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'league.league_admin'
     template_name = 'news/confirm_delete.html'
     model = Article
-    success_url = "/news"
+
+    def get_success_url(self):
+        url = f"/league/?league={self.request.GET.get('league')}"
+        return url
 
 
 class ArticlesView(ListView):
