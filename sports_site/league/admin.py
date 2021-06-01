@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import (League, Season, SeasonStage, Team, TeamSeason, Roster, Player, PlayerSeason, Game)
+from .models import (League, Season, SeasonStage, Team, TeamSeason, Roster,
+    Player, PlayerSeason, Game)
 
 # Register your models here.
 
