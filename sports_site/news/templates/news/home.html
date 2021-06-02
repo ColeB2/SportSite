@@ -27,7 +27,7 @@
         <!--Latest News Column-->
         <div class="col-12 col-md-3 bg-light">
             <h6 class="border-bottom"><a class="article-headline"
-                href="{% url 'news-page' %}">LATEST NEWS</a></h6>
+                href="{% url 'news-page' %}?league={{request.GET.league}}">LATEST NEWS</a></h6>
             <ul>
             {% for article in articles %}
                 <li>

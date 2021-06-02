@@ -10,7 +10,7 @@
     <div class="row justify-content-center">
         <div class="">
             <h1>
-                <a href="{% url 'news-detail' article.slug %}" class="article-headline">
+                <a href="{% url 'news-detail' article.slug %}?league={{request.GET.league}}" class="article-headline">
                     {{article.title}}
                 </a>
             </h1>
@@ -26,7 +26,7 @@
 <nav aria-label="news article navigation">
     <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="?league={{request.GET.league}}&page={{ page_obj.previous_page_number }}">&laquo;</a></li>
         {% else %}
             <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
         {% endif %}
@@ -35,12 +35,12 @@
         {% if page_obj.number == i %}
             <li class="page-item active"><span class="page-link">{{ i }}</span></li>
         {% else %}
-            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            <li class="page-item"><a class="page-link" href="?league={{request.GET.league}}&page={{ i }}">{{ i }}</a></li>
         {% endif %}
     {% endfor %}
 
     {% if page_obj.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+        <li class="page-item"><a class="page-link" href="?league={{request.GET.league}}&page={{ page_obj.next_page_number }}">&raquo;</a></li>
     {% else %}
         <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
     {% endif %}

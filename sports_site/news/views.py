@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render#, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
@@ -29,8 +30,23 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
     form_class = ArticleCreateForm
 
     def get_success_url(self):
-        url = f"/league/?league={self.request.GET.get('league')}"
+        league_slug = self.request.GET.get('league', None)
+        if league_slug:
+            url = f"/league/?league={league_slug}"
+        else:
+            print("league slug not")
+            url = f"/league/?league={self.request.user.userprofile.league.url}"
+
         return url
+
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.league = self.request.user.userprofile.league
+        self.object.save()
+        print('test works')
+
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ArticleEditView(PermissionRequiredMixin, UpdateView):
@@ -41,7 +57,13 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
 
 
     def get_success_url(self):
-        url = f"/league/?league={self.request.GET.get('league')}"
+        league_slug = self.request.GET.get('league', None)
+        if league_slug:
+            url = f"/league/?league={league_slug}"
+        else:
+            print("league slug not")
+            url = f"/league/?league={self.request.user.userprofile.league.url}"
+
         return url
 
 
@@ -51,7 +73,13 @@ class ArticleDeleteView(PermissionRequiredMixin, DeleteView):
     model = Article
 
     def get_success_url(self):
-        url = f"/league/?league={self.request.GET.get('league')}"
+        league_slug = self.request.GET.get('league', None)
+        if league_slug:
+            url = f"/league/?league={league_slug}"
+        else:
+            print("league slug not")
+            url = f"/league/?league={self.request.user.userprofile.league.url}"
+
         return url
 
 
