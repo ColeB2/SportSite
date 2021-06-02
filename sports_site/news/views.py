@@ -19,6 +19,7 @@ def home(request):
 
     return render(request, 'news/home.html', context)
 
+
 def news_detail(request, slug):
     article = Article.objects.get(slug=slug)
     context = {
@@ -32,6 +33,7 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'news/new_article.html'
     model = Article
     form_class = ArticleCreateForm
+
 
     def get_success_url(self):
         url = f"/league/?league={self.request.GET.get('league')}"
@@ -50,8 +52,6 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
         return url
 
 
-
-
 class ArticleDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'league.league_admin'
     template_name = 'news/confirm_delete.html'
@@ -67,7 +67,14 @@ class ArticlesView(ListView):
     paginate_by=5
     model = Article
     context_object_name= 'articles'
-    queryset = Article.objects.all().order_by('-id')
+    # context['league_slug'] = self.request.GET.get('league',None)
+    # league_slug = self.request.GET.get('league', None)
+    # queryset = Article.objects.all().filter(league__url=league_slug).order_by('-id')
+
+    def get_queryset(self):
+        league_slug = self.request.GET.get('league', None)
+        queryset = Article.objects.all().filter(league__url=league_slug).order_by('-id')
+        return queryset
 
 
 

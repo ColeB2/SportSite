@@ -23,7 +23,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'news-page' %}">News</a>
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'news-page' %}?league={{request.GET.league}}">News</a>
                     <a class="dropdown-item text-white drop-item header-link" href="#">Teams</a>
                     <a class="dropdown-item text-white drop-item header-link" href="#">Stats</a>
                     <a class="dropdown-item text-white drop-item header-link" href="#}">Standings</a>
