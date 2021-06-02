@@ -2,21 +2,15 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import render#, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
-from league.models import League
 from .forms import ArticleCreateForm
 
 # Create your views here.
 def home(request):
-    ##TODO add league urls
-    # league = League.objects.get(admin = request.user)
-    # Article_data = Article.objects.all().filter(league=league).order_by('-id')[:10]
     league_slug = request.GET.get('league', None)
     Article_data = Article.objects.all().filter(league__url=league_slug).order_by('-id')[:10]
-
     context = {
         "articles": Article_data,
         }
-
     return render(request, 'news/home.html', context)
 
 
@@ -33,7 +27,6 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
     template_name = 'news/new_article.html'
     model = Article
     form_class = ArticleCreateForm
-
 
     def get_success_url(self):
         url = f"/league/?league={self.request.GET.get('league')}"
@@ -67,9 +60,6 @@ class ArticlesView(ListView):
     paginate_by=5
     model = Article
     context_object_name= 'articles'
-    # context['league_slug'] = self.request.GET.get('league',None)
-    # league_slug = self.request.GET.get('league', None)
-    # queryset = Article.objects.all().filter(league__url=league_slug).order_by('-id')
 
     def get_queryset(self):
         league_slug = self.request.GET.get('league', None)

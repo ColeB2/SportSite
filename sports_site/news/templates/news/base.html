@@ -36,9 +36,6 @@
         <div class="d-flex flex-row justify-content-center">
             <a class="navbar-text header-link p-2" href="{% url 'news-home' %}" title="Home">League Name</a>
         </div>
-        {% if user.league_set.all %}
-            {{user.league_set.all.0.url}}
-        {% endif %}
 
         <div class="d-flex flex-row justify-content-end ms-auto p-2">
             <!--LeagueAdminOptions-->
