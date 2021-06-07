@@ -146,7 +146,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Login
-LOGIN_REDIRECT_URL = 'news-home'
+LOGIN_REDIRECT_URL = 'login-redirect'
 
 # Taggit options
 TAGGIT_CASE_INSENSITIVE = True
