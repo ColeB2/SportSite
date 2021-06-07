@@ -1,9 +1,12 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render#, redirect
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
 from .forms import ArticleCreateForm
+from .decorators import user_owns_article
+
 
 # Create your views here.
 def home(request):
@@ -54,6 +57,11 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
     form_class = ArticleCreateForm
 
 
+    @method_decorator(user_owns_article)
+    def dispatch(self, *args, **kwargs):
+        return super(ArticleEditView, self).dispatch(*args, **kwargs)
+
+
     def get_success_url(self):
         league_slug = self.request.GET.get('league', None)
         if league_slug:
@@ -69,6 +77,10 @@ class ArticleDeleteView(PermissionRequiredMixin, DeleteView):
     permission_required = 'league.league_admin'
     template_name = 'news/confirm_delete.html'
     model = Article
+
+    @method_decorator(user_owns_article)
+    def dispatch(self, *args, **kwargs):
+        return super(ArticleDeleteView, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
         league_slug = self.request.GET.get('league', None)
