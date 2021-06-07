@@ -11,6 +11,12 @@
         </ul>
         {% endif %}
 
+
+
+        {% if perms.league.league_admin and stage.season.league == request.user.userprofile.league %}
+
+
+
         <h2>Schedule:</h2>
         <legend><small>Click on an existing game to edit.</small></legend>
         {% for game in schedule %}
@@ -20,11 +26,25 @@
         {% endfor %}
 
         <br><br>
-        <h6>
-            <small>
-            <a href="{% url 'league-admin-schedule-create' season_year season_stage_pk %}">Add Games</a>
-            </small>
-        </h6>
+
+        <a class="btn btn-primary"
+            href="{% url 'league-admin-schedule-create' season_year season_stage_pk %}">
+            Add Games
+        </a>
+
+        <a class="btn btn-danger"
+            href="{% url 'league-admin-schedule-delete-info' season_year season_stage_pk %}">
+            Delete
+        </a>
+
+        {% else %}
+        <h2>Access Denied</h2>
+        <h3>You Don't Own <b>{{stage.season.league}}</b>'s <b>{{stage}}</b></h3>
+
+
+        {% endif %}
+
+
 
 
 

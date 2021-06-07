@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from ..forms import (CreateGameForm, EditGameForm)
 from league.models import (SeasonStage, Game, TeamSeason)
+from ..decorators import user_owns_season_stage
 
 
 
@@ -20,18 +21,22 @@ def league_admin_schedule_select_view(request):
 
 
 @permission_required('league.league_admin')
+@user_owns_season_stage
 def league_admin_schedule_view(request, season_year, season_stage_pk):
-    schedule = Game.objects.all().filter(season__season__league__admin=request.user, season__season=season_stage_pk )
+    stage = SeasonStage.objects.get(pk=season_stage_pk)
+    schedule = Game.objects.all().filter(season__pk=season_stage_pk )
     context = {
         "schedule": schedule,
         "season_year": season_year,
-        "season_stage_pk":season_stage_pk
+        "season_stage_pk":season_stage_pk,
+        "stage":stage,
         }
 
     return render(request, "league_admin/schedule_view.html", context)
 
 
 @permission_required('league.league_admin')
+@user_owns_season_stage
 def league_admin_schedule_create_view(request, season_year, season_stage_pk):
 
     GameFormset = formset_factory(CreateGameForm, extra=5)
@@ -65,28 +70,36 @@ def league_admin_schedule_create_view(request, season_year, season_stage_pk):
 
 
 @permission_required('league.league_admin')
+@user_owns_season_stage
 def league_admin_schedule_delete_info_view(request, season_year, season_stage_pk):
     """ To Do: Delete schedule. Different from other deletes, as schedule isn't
     and object/model. So will need to delete all games in a given season stage."""
-    pass
-    # game = Game.objects.get(pk=game_pk)
+    stage = SeasonStage.objects.get(pk=season_stage_pk)
+    nested_games = []
+    games = stage.game_set.all()
 
-    # using = router.db_for_write(game._meta.model)
-    # nested_object = NestedObjects(using)
-    # nested_object.collect([game])
+    for game in games:
+        using = router.db_for_write(game._meta.model)
+        nested_object = NestedObjects(using)
+        nested_object.collect([game])
+        nested_games.append(nested_object)
 
-    # if request.method == 'POST':
-    #     game.delete()
-    #     messages.success(request, f"{game} and all releated object were deleted")
-    #     return redirect('league-admin-schedule', season_year, season_stage_pk)
-    # else:
-    #     pass
+    if request.method == 'POST':
+        for game in games:
+            game.delete()
+            messages.success(request, f"{game} and all releated object were deleted")
+        return redirect('league-admin-schedule', season_year, season_stage_pk)
+    else:
+        pass
 
-    # context = {
-    #     'game':game,
-    #     'nested_object':nested_object,
-    # }
-    # return render(request, "league_admin/schedule_delete.html", context)
+    context = {
+        'season_year': season_year,
+        'season_stage_pk': season_stage_pk,
+        'games':games,
+        'stage':stage,
+        'nested_games':nested_games,
+    }
+    return render(request, "league_admin/schedule_delete.html", context)
 
 
 
@@ -95,6 +108,7 @@ def league_admin_schedule_delete_info_view(request, season_year, season_stage_pk
 
 """League Admin Game Views"""
 @permission_required('league.league_admin')
+@user_owns_season_stage
 def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
     game_instance = Game.objects.get(pk=game_pk)
 
@@ -121,6 +135,7 @@ def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
 
 
 @permission_required('league.league_admin')
+@user_owns_season_stage
 def league_admin_delete_game_info_view(request, season_year, season_stage_pk, game_pk):
     game = Game.objects.get(pk=game_pk)
 
