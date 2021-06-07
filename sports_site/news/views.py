@@ -34,7 +34,6 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
         if league_slug:
             url = f"/league/?league={league_slug}"
         else:
-            print("league slug not")
             url = f"/league/?league={self.request.user.userprofile.league.url}"
 
         return url
@@ -44,7 +43,6 @@ class ArticleCreateView(PermissionRequiredMixin, CreateView):
         self.object = form.save()
         self.object.league = self.request.user.userprofile.league
         self.object.save()
-        print('test works')
 
         return HttpResponseRedirect(self.get_success_url())
 

@@ -4,6 +4,7 @@
 <div class="container-lg mt-5">
   <div class="row">
 
+    {% if perms.league.league_admin and user.userprofile.league == article.league %}
     <h2>Are you sure you want to delete "{{object}}"?</h2>
 
     <form method="post">
@@ -14,6 +15,11 @@
         <a class="btn btn-primary" href="{% url 'news-home' %}?league={{request.GET.league}}">Cancel</a>
         <br><br>
     </form>
+    {% else%}
+        <h2>Access Denied</h2>
+    {% endif %}
+
+
   </div>
 </div>
 {% endblock content %}
