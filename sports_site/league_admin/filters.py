@@ -2,14 +2,24 @@ import django_filters
 from league.models import Roster, Player
 from news.models import Article
 
+
+
 class RosterFilter(django_filters.FilterSet):
     class Meta:
         model = Roster
         fields = ["team__season",]
 
+
     def __init__(self, *args, **kwargs):
         super(RosterFilter, self).__init__(*args, **kwargs)
         self.filters['team__season'].label="Season"
+
+    # @property
+    # def qs(self):
+    #     parent = super().qs
+    #     league = getattr(self.request, 'user.userprofile.league', None)
+
+    #     return parent.filter(team__team__league=league)
 
 
 class PlayerFilter(django_filters.FilterSet):

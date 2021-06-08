@@ -198,7 +198,7 @@ def roster_edit_remove(request, team_name, season, roster_pk):
 @login_required
 def roster_create(request, team_name):
     user_team = Team.objects.get(owner=request.user)
-    rosters = Roster.objects.all().filter(team__team= user_team)
+    rosters = Roster.objects.all().filter(team__team=user_team)
     seasons = SeasonStage.objects.all()
 
 
