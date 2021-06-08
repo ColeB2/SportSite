@@ -16,8 +16,7 @@ from league.models import Roster, PlayerSeason, Player, Team, TeamSeason, Season
 # Create your views here.
 @login_required
 def roster_select(request):
-    league_slug = request.GET.get('league', None)
-    roster = Roster.objects.all().filter(team__team__league = league_slug, team__team__owner=request.user)
+    roster = Roster.objects.all().filter(team__team__league=request.user.userprofile.league, team__team__owner=request.user)
     context = {
         'rosters': roster,
         }
@@ -77,7 +76,9 @@ def roster_edit_copy(request, team_name, season, roster_pk):
 def roster_edit_add(request, team_name, season, roster_pk):
     """Creates PlayerSeason object based on existing Player"""
     roster = Roster.objects.get(pk=roster_pk)
-    players = roster.playerseason_set.all()
+    league = roster.team.team.league
+    players = roster.playerseason_set.all().filter(player__league=league)
+    player_qs = Player.objects.all().filter(league=league)
 
     exclude_list = []
     for player in players:
@@ -87,7 +88,9 @@ def roster_edit_add(request, team_name, season, roster_pk):
 
 
     if request.method == 'POST':
-        formset = PlayerFormset(request.POST, form_kwargs={'exclude_list':exclude_list})
+        formset = PlayerFormset(request.POST, form_kwargs={
+            'player_qs':player_qs,
+            'exclude_list':exclude_list})
         if formset.is_valid():
             for form in formset:
                 data = form.cleaned_data.get('players')
@@ -100,7 +103,9 @@ def roster_edit_add(request, team_name, season, roster_pk):
         else:
             print('Something went wrong with formset')
     else:
-        formset = PlayerFormset(form_kwargs={'exclude_list':exclude_list})
+        formset = PlayerFormset(form_kwargs={
+            'player_qs':player_qs,
+            'exclude_list':exclude_list})
 
     context = {
         'roster': roster,
@@ -199,7 +204,7 @@ def roster_edit_remove(request, team_name, season, roster_pk):
 def roster_create(request, team_name):
     user_team = Team.objects.get(owner=request.user)
     rosters = Roster.objects.all().filter(team__team=user_team)
-    seasons = SeasonStage.objects.all()
+    seasons = SeasonStage.objects.all().filter(season__league=request.user.userprofile.league)
 
 
     if request.method == 'POST':

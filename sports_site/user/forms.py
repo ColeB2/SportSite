@@ -14,10 +14,10 @@ class RosterForm(forms.ModelForm):
 
 
 class PlayerSelectForm(forms.Form):
-    def __init__(self, exclude_list=[], *args, **kwargs):
+    def __init__(self, player_qs, exclude_list=[], *args, **kwargs):
         super(PlayerSelectForm,self).__init__(*args, **kwargs)
         self.fields['players'] = forms.ModelChoiceField(
-            queryset=Player.objects.all().exclude(id__in=[o.id for o in exclude_list]),
+            queryset=player_qs.exclude(id__in=[o.id for o in exclude_list]),
             label=False,
             required=False,
             )
