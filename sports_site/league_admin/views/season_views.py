@@ -126,7 +126,7 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
                 messages.info(request, f"{new_stage} already exists.")
 
 
-        return redirect('league-admin-season-stage', season_year)
+        return redirect('league-admin-season-stage', season_year, season_pk)
     else:
         form = SeasonStageCreateForm()
         formset = TeamFormset(form_kwargs={'team_queryset':teams})

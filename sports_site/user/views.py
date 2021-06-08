@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect
 from .forms import (PlayerSelectForm, PlayerCreateForm, PlayerDeleteForm,
     RosterCreateForm, RosterSelectForm)
 
+from .decorators import user_owns_roster
+
 from django.forms import formset_factory
 from league.models import Roster, PlayerSeason, Player, Team, TeamSeason, SeasonStage
 
@@ -14,7 +16,8 @@ from league.models import Roster, PlayerSeason, Player, Team, TeamSeason, Season
 # Create your views here.
 @login_required
 def roster_select(request):
-    roster = Roster.objects.all().filter(team__team__owner=request.user)
+    league_slug = request.GET.get('league', None)
+    roster = Roster.objects.all().filter(team__team__league = league_slug, team__team__owner=request.user)
     context = {
         'rosters': roster,
         }
@@ -22,8 +25,9 @@ def roster_select(request):
 
 
 @login_required
+@user_owns_roster
 def roster_view(request, team_name, season, roster_pk):
-    roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=roster_pk)
+    roster = Roster.objects.get(pk=roster_pk)
 
     players = roster.playerseason_set.all()
     context = {
@@ -34,6 +38,7 @@ def roster_view(request, team_name, season, roster_pk):
 
 
 @login_required
+@user_owns_roster
 def roster_edit_copy(request, team_name, season, roster_pk):
     roster = Roster.objects.get(pk=roster_pk)
     team_pk = roster.team.team.pk
@@ -68,6 +73,7 @@ def roster_edit_copy(request, team_name, season, roster_pk):
 
 
 @login_required
+@user_owns_roster
 def roster_edit_add(request, team_name, season, roster_pk):
     """Creates PlayerSeason object based on existing Player"""
     roster = Roster.objects.get(pk=roster_pk)
@@ -105,6 +111,7 @@ def roster_edit_add(request, team_name, season, roster_pk):
 
 
 @login_required
+@user_owns_roster
 def roster_edit_create(request, team_name, season, roster_pk):
     """Create New Player Object, and Player Season."""
     roster = Roster.objects.get(pk=roster_pk)
@@ -147,6 +154,7 @@ def roster_edit_create(request, team_name, season, roster_pk):
 
 
 @login_required
+@user_owns_roster
 def roster_edit_remove(request, team_name, season, roster_pk):
     """Creates PlayerSeason object based on existing Player"""
     roster = Roster.objects.get(pk=roster_pk)
@@ -190,7 +198,7 @@ def roster_edit_remove(request, team_name, season, roster_pk):
 @login_required
 def roster_create(request, team_name):
     user_team = Team.objects.get(owner=request.user)
-    rosters = Roster.objects.all().filter(team__team__owner=request.user)
+    rosters = Roster.objects.all().filter(team__team= user_team)
     seasons = SeasonStage.objects.all()
 
 
@@ -234,6 +242,7 @@ def roster_create(request, team_name):
 
 
 @login_required
+@user_owns_roster
 def roster_delete_info_view(request, team_name, season_year, roster_pk):
     roster = Roster.objects.get(pk=roster_pk)
 
