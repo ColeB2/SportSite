@@ -22,8 +22,8 @@ def roster_select(request):
 
 
 @login_required
-def roster_view(request, team_name, season, pk):
-    roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=pk)
+def roster_view(request, team_name, season, roster_pk):
+    roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=roster_pk)
 
     players = roster.playerseason_set.all()
     context = {
@@ -34,8 +34,8 @@ def roster_view(request, team_name, season, pk):
 
 
 @login_required
-def roster_edit_copy(request, team_name, season, pk):
-    roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=pk)
+def roster_edit_copy(request, team_name, season, roster_pk):
+    roster = Roster.objects.get(pk=roster_pk)
     team_pk = roster.team.team.pk
     rosters = Roster.objects.all().filter(team__team__pk=team_pk)
 
@@ -53,7 +53,7 @@ def roster_edit_copy(request, team_name, season, pk):
                         new_playerseason.save()
                         messages.success(request, f"{new_playerseason} created and added to {roster}")
 
-            return redirect('roster-view', team_name=team_name, season=season, pk=pk)
+            return redirect('roster-view', team_name=team_name, season=season, pk=roster_pk)
     else:
         form = RosterSelectForm(roster_queryset=rosters)
 
@@ -68,9 +68,9 @@ def roster_edit_copy(request, team_name, season, pk):
 
 
 @login_required
-def roster_edit_add(request, team_name, season, pk):
+def roster_edit_add(request, team_name, season, roster_pk):
     """Creates PlayerSeason object based on existing Player"""
-    roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=pk)
+    roster = Roster.objects.get(pk=roster_pk)
     players = roster.playerseason_set.all()
 
     exclude_list = []
@@ -90,7 +90,7 @@ def roster_edit_add(request, team_name, season, pk):
                     playerseason, created = PlayerSeason.objects.get_or_create(player=data, team=roster, season=roster.team.season)
                     playerseason.save()
 
-            return redirect('roster-view', team_name=team_name, season=season, pk=pk)
+            return redirect('roster-view', team_name=team_name, season=season, pk=roster_pk)
         else:
             print('Something went wrong with formset')
     else:
@@ -105,9 +105,9 @@ def roster_edit_add(request, team_name, season, pk):
 
 
 @login_required
-def roster_edit_create(request, team_name, season, pk):
+def roster_edit_create(request, team_name, season, roster_pk):
     """Create New Player Object, and Player Season."""
-    roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=pk)
+    roster = Roster.objects.get(pk=roster_pk)
     players = roster.playerseason_set.all()
     PlayerFormset = formset_factory(PlayerSelectForm)
     player_formset = PlayerFormset()
@@ -131,7 +131,7 @@ def roster_edit_create(request, team_name, season, pk):
                     playerseason, created = PlayerSeason.objects.get_or_create(player=player, team=roster, season=roster.team.season)
                     playerseason.save()
 
-            return redirect('roster-view', team_name=team_name, season=season, pk=pk)
+            return redirect('roster-view', team_name=team_name, season=season, pk=roster_pk)
         else:
             print('Something went wrong with formset')
     else:
@@ -147,9 +147,9 @@ def roster_edit_create(request, team_name, season, pk):
 
 
 @login_required
-def roster_edit_remove(request, team_name, season, pk):
+def roster_edit_remove(request, team_name, season, roster_pk):
     """Creates PlayerSeason object based on existing Player"""
-    roster = Roster.objects.get(team__team__name=team_name, team__season__season__year=season, pk=pk)
+    roster = Roster.objects.get(pk=roster_pk)
     players = roster.playerseason_set.all()
 
 
@@ -167,9 +167,9 @@ def roster_edit_remove(request, team_name, season, pk):
                         data.delete()
 
             if 'remove' in request.POST:
-                return redirect('roster-view', team_name=team_name, season=season, pk=pk)
+                return redirect('roster-view', team_name=team_name, season=season, pk=roster_pk)
             elif 'remove_and_continue' in request.POST:
-                return redirect('roster-edit-remove', team_name=team_name, season=season, pk=pk)
+                return redirect('roster-edit-remove', team_name=team_name, season=season, pk=roster_pk)
         else:
             print('Something went wrong with formset')
     else:
