@@ -11,13 +11,11 @@
             {{ form| crispy }}
 
             <input type="submit" value="Save" class="btn btn-primary">
+
+            <a class="btn btn-danger" href="{% url 'league-admin-player-delete' player_instance.pk %}">
+                Delete {{player_instance}}
+            </a>
         </form>
-
-        <a class="btn btn-danger" href="{% url 'league-admin-player-delete' player_instance.pk %}">
-            Delete {{player_instance}}
-        </a>
-
-
     </div>
 </div>
 

@@ -11,10 +11,17 @@
         <form method="get">
             {{filter.form|crispy}}
             <input type="submit" value="Submit" class="btn btn-primary">
+
+            <a class="btn btn-primary"
+                href="{% url 'league-admin-player-create' %}">Create Player
+            </a>
         </form>
 
 
         <br><br>
+
+
+        <h1>Players:</h1>
 
 
         {% for player in all_players %}

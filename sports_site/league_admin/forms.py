@@ -5,6 +5,8 @@ from django.contrib.auth.models import Permission
 from datetime import datetime
 from league.models import Game, Player, Season, SeasonStage, TeamSeason
 
+
+
 class SeasonSelectForm(forms.ModelForm):
     class Meta:
         model = SeasonStage
@@ -76,16 +78,31 @@ class TeamSelectForm(forms.Form):
             return None, None
 
 
-
 class PlayerCreateForm(forms.ModelForm):
     class Meta:
         model = Player
         fields = ['first_name', 'last_name',]
 
+    def process(self, league):
+        first_name = self.cleaned_data.get('first_name')
+        last_name = self.cleaned_data.get('last_name')
+
+        new_player = Player(league=league, first_name=first_name, last_name=last_name)
+        new_player.save()
+
+        return new_player
+
+
 class EditPlayerForm(forms.ModelForm):
     class Meta:
         model = Player
         fields = ['first_name', 'last_name',]
+
+
+    def process(self):
+        player = self.save(commit=False)
+        player.save()
+
 
 class EditGameForm(forms.ModelForm):
     class Meta:

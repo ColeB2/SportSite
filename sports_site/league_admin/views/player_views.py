@@ -11,23 +11,15 @@ from ..decorators import user_owns_player
 
 
 
-@login_required
 @permission_required('league.league_admin')
 def league_admin_player_create_view(request):
-    league = League.objects.get(admin=request.user)
+    league = request.user.userprofile.league
 
     if request.method == 'POST':
         form = PlayerCreateForm(data=request.POST)
         if form.is_valid():
-            first_name = form.cleaned_data.get('first_name')
-            last_name = form.cleaned_data.get('last_name')
-
-            new_player = Player(league=league, first_name=first_name, last_name=last_name)
-            new_player.save()
+            new_player = form.process(league=league)
             messages.success(request, f"{new_player} created.")
-
-
-
 
         return redirect('league-admin-dashboard')
     else:
@@ -38,7 +30,7 @@ def league_admin_player_create_view(request):
     }
     return render(request, "league_admin/player_create.html", context)
 
-@login_required
+
 @permission_required('league.league_admin')
 def league_admin_player_select_view(request):
     league = League.objects.get(admin=request.user)
@@ -73,8 +65,7 @@ def league_admin_player_edit_view(request, player_pk):
     if request.method == "POST":
         form = EditPlayerForm(data=request.POST, instance=player_instance)
         if form.is_valid():
-            player = form.save(commit=False)
-            player.save()
+            form.process()
 
         return redirect('league-admin-player-select')
     else:

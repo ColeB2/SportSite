@@ -144,6 +144,7 @@ def league_admin_season_stage_info_view(request, season_year, season_pk, season_
         }
     return render(request, "league_admin/season_stage_page.html", context)
 
+
 @permission_required('league.league_admin')
 @user_owns_season_stage
 def league_admin_season_stage_delete_info_view(request, season_year, season_pk, season_stage_pk):
