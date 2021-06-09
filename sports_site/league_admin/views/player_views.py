@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from ..filters import PlayerFilter
 from ..forms import (PlayerCreateForm, EditPlayerForm)
 from league.models import (League, Player)
+from ..decorators import user_owns_player
 
 
 
@@ -65,6 +66,7 @@ def league_admin_player_select_view(request):
 
 
 @permission_required('league.league_admin')
+@user_owns_player
 def league_admin_player_edit_view(request, player_pk):
     player_instance = Player.objects.get(pk=player_pk)
 
@@ -86,6 +88,7 @@ def league_admin_player_edit_view(request, player_pk):
 
 
 @permission_required('league.league_admin')
+@user_owns_player
 def league_admin_player_delete_info_view(request, player_pk):
     player = Player.objects.get(pk=player_pk)
 
