@@ -3,7 +3,7 @@ from crispy_forms.layout import Layout, Row, Column, MultiWidgetField
 from django import forms
 from django.contrib.auth.models import Permission
 from datetime import datetime
-from league.models import Season, SeasonStage, Game, Player
+from league.models import Game, Player, Season, SeasonStage, TeamSeason
 
 class SeasonSelectForm(forms.ModelForm):
     class Meta:
@@ -21,11 +21,32 @@ class SeasonCreateForm(forms.ModelForm):
         model = Season
         fields = ['year',]
 
+    def process(self, league):
+        year_data = self.cleaned_data.get('year')
+
+        new_season, created = Season.objects.get_or_create(year=year_data, league=league)
+
+        if created:
+            new_season.save()
+
+        return new_season, created
+
 
 class SeasonStageCreateForm(forms.ModelForm):
     class Meta:
         model = SeasonStage
         fields = ['stage']
+
+
+    def process(self, season):
+        stage_data = self.cleaned_data.get('stage')
+
+        new_stage, created = SeasonStage.objects.get_or_create(stage=stage_data, season=season)
+
+        if created:
+            new_stage.save()
+
+        return new_stage, created
 
 
 class TeamSelectForm(forms.Form):
@@ -38,6 +59,21 @@ class TeamSelectForm(forms.Form):
             )
 
         self.fields['teams'].widget.attrs.update(style='max-width: 24em')
+
+
+    def process(self, season):
+        team_data = self.cleaned_data.get('teams')
+
+        if team_data:
+            new_teamseason, created = TeamSeason.objects.get_or_create(season=season, team=team_data)
+
+            if created:
+                new_teamseason.save()
+
+            return new_teamseason, created
+
+        else:
+            return None, None
 
 
 

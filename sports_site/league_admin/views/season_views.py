@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.admin.utils import NestedObjects
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import permission_required
 from django.db import router
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
@@ -12,7 +12,6 @@ from ..decorators import (user_owns_season, user_owns_season_stage,
 
 
 """Season Views"""
-@login_required
 @permission_required('league.league_admin')
 def league_admin_season_view(request):
     seasons = Season.objects.all().filter(league__admin=request.user)
@@ -25,24 +24,19 @@ def league_admin_season_view(request):
     return render(request, "league_admin/season_page.html", context)
 
 
-@login_required
 @permission_required('league.league_admin')
 def league_admin_create_season_view(request):
-    league = League.objects.get(admin=request.user)
     seasons = Season.objects.all().filter(league__admin=request.user)
 
     if request.method == 'POST':
         form = SeasonCreateForm(data = request.POST)
         if form.is_valid():
-            year_data = form.cleaned_data.get('year')
+            new_season, created = form.process(league=request.user.userprofile.league)
 
-            new_season, created = Season.objects.get_or_create(year=year_data, league=league)
             if created:
-                new_season.save()
                 messages.success(request, f"{new_season} created.")
             else:
                 messages.info(request, f"{new_season} already exists.")
-
 
         return redirect('league-admin-season')
     else:
@@ -53,7 +47,6 @@ def league_admin_create_season_view(request):
         "form": form
     }
     return render(request, "league_admin/season_create.html", context)
-
 
 
 @permission_required('league.league_admin')
@@ -69,8 +62,6 @@ def league_admin_season_delete_info_view(request, season_year, season_pk):
         season.delete()
         messages.success(request, f"{season} and all releated object were deleted")
         return redirect('league-admin-season')
-    else:
-        pass
 
     context = {
         'season':season,
@@ -79,8 +70,8 @@ def league_admin_season_delete_info_view(request, season_year, season_pk):
     return render(request, "league_admin/season_delete.html", context)
 
 
+
 """SeasonStage Views"""
-@login_required
 @permission_required('league.league_admin')
 @user_owns_season
 def league_admin_season_stage_select_view(request, season_year, season_pk):
@@ -95,7 +86,6 @@ def league_admin_season_stage_select_view(request, season_year, season_pk):
     return render(request, "league_admin/season_stage_select_page.html", context)
 
 
-@login_required
 @permission_required('league.league_admin')
 @user_owns_season
 def league_admin_create_season_stage_view(request, season_year, season_pk):
@@ -109,24 +99,20 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
         formset = TeamFormset(data=request.POST, form_kwargs={'team_queryset':teams})
         form = SeasonStageCreateForm(data = request.POST)
         if form.is_valid():
-            stage_data = form.cleaned_data.get('stage')
-            new_stage, created = SeasonStage.objects.get_or_create(stage=stage_data, season=season)
+            new_stage, created = form.process(season=season)
             if created:
                 new_stage.save()
                 messages.success(request, f"{new_stage} created.")
 
                 if formset.is_valid():
                     for form in formset:
-                        team_data = form.cleaned_data.get('teams')
+                        new_teamseason, created = form.process(season=new_stage)
 
-                        if team_data:
-                            new_teamseason, created = TeamSeason.objects.get_or_create(season=new_stage, team=team_data)
+                        if new_teamseason:
                             if created:
-                                new_teamseason.save()
                                 messages.success(request, f"{new_teamseason} created")
                             else:
                                 messages.info(request, f"{new_teamseason} already exists")
-
             else:
                 messages.info(request, f"{new_stage} already exists.")
 
