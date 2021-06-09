@@ -117,6 +117,13 @@ class EditGameForm(forms.ModelForm):
             }
 
 
+    def process(self):
+        game = self.save(commit=False)
+        game.save()
+
+        return game
+
+
 class CreateGameForm(forms.Form):
     def __init__(self, team_queryset=None, *args, **kwargs):
         super(CreateGameForm, self).__init__(*args, **kwargs)

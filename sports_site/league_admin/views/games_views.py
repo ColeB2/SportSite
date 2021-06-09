@@ -116,9 +116,8 @@ def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
     if request.method == "POST":
         form = EditGameForm(data=request.POST, instance=game_instance)
         if form.is_valid():
-            game = form.save(commit=False)
-            game.save()
-            messages.success(request, f"changes made to {game}")
+            game = form.process()
+            messages.success(request, f"{game} changed.")
 
         return redirect('league-admin-schedule', season_year, season_stage_pk)
     else:
