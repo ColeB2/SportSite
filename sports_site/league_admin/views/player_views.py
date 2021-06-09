@@ -65,7 +65,8 @@ def league_admin_player_edit_view(request, player_pk):
     if request.method == "POST":
         form = EditPlayerForm(data=request.POST, instance=player_instance)
         if form.is_valid():
-            form.process()
+            player = form.process()
+            messages.success(request, f"{player} changed.")
 
         return redirect('league-admin-player-select')
     else:

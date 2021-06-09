@@ -103,6 +103,8 @@ class EditPlayerForm(forms.ModelForm):
         player = self.save(commit=False)
         player.save()
 
+        return player
+
 
 class EditGameForm(forms.ModelForm):
     class Meta:
