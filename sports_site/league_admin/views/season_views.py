@@ -6,6 +6,8 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from ..forms import (SeasonCreateForm, SeasonStageCreateForm, TeamSelectForm)
 from league.models import (League, Season, SeasonStage, Team, TeamSeason)
+from ..decorators import (user_owns_season, user_owns_season_stage,
+    user_owns_team_season)
 
 
 
@@ -55,6 +57,7 @@ def league_admin_create_season_view(request):
 
 
 @permission_required('league.league_admin')
+@user_owns_season
 def league_admin_season_delete_info_view(request, season_year, season_pk):
     season = Season.objects.get(pk=season_pk)
 
@@ -79,6 +82,7 @@ def league_admin_season_delete_info_view(request, season_year, season_pk):
 """SeasonStage Views"""
 @login_required
 @permission_required('league.league_admin')
+@user_owns_season
 def league_admin_season_stage_select_view(request, season_year, season_pk):
     season = Season.objects.get(pk=season_pk)
     stages = SeasonStage.objects.all().filter(season=season)
@@ -93,6 +97,7 @@ def league_admin_season_stage_select_view(request, season_year, season_pk):
 
 @login_required
 @permission_required('league.league_admin')
+@user_owns_season
 def league_admin_create_season_stage_view(request, season_year, season_pk):
     season = Season.objects.get(pk=season_pk)
     league = League.objects.get(admin=request.user)
@@ -142,6 +147,7 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
 
 
 @permission_required('league.league_admin')
+@user_owns_season_stage
 def league_admin_season_stage_info_view(request, season_year, season_pk, season_stage_pk):
     league = League.objects.get(admin=request.user)
     stage = SeasonStage.objects.get(pk=season_stage_pk)
@@ -153,6 +159,7 @@ def league_admin_season_stage_info_view(request, season_year, season_pk, season_
     return render(request, "league_admin/season_stage_page.html", context)
 
 @permission_required('league.league_admin')
+@user_owns_season_stage
 def league_admin_season_stage_delete_info_view(request, season_year, season_pk, season_stage_pk):
     stage = SeasonStage.objects.get(pk=season_stage_pk)
 
@@ -176,6 +183,7 @@ def league_admin_season_stage_delete_info_view(request, season_year, season_pk, 
 
 """Team Season"""
 @permission_required('league.league_admin')
+@user_owns_team_season
 def league_admin_team_season_info_view(request, season_year, season_pk, season_stage_pk, team_name, team_season_pk):
     team = TeamSeason.objects.get(pk=team_season_pk)
     roster = team.roster_set.get(team__pk=team_season_pk)
@@ -194,6 +202,7 @@ def league_admin_team_season_info_view(request, season_year, season_pk, season_s
 
 
 @permission_required('league.league_admin')
+@user_owns_season_stage
 def league_admin_team_season_delete_info_view(request, season_year, season_pk, season_stage_pk, team_name, team_season_pk):
     teamseason = TeamSeason.objects.get(pk=team_season_pk)
 
