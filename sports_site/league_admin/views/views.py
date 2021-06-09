@@ -17,7 +17,7 @@ def league_admin_dashboard_view(request):
 @permission_required('league.league_admin')
 def league_admin_roster_select(request):
     roster_qs = Roster.objects.all().filter(team__team__league=request.user.userprofile.league)
-    f = RosterFilter(request.GET, queryset=roster_qs)
+    f = RosterFilter(request.GET, request=request, queryset=roster_qs)
     roster_list = f.qs
 
     paginator = Paginator(roster_list, 10)
