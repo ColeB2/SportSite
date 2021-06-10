@@ -115,6 +115,10 @@ def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
 
     if request.method == "POST":
         form = EditGameForm(data=request.POST, instance=game_instance)
+
+        form.fields["home_team"].queryset = TeamSeason.objects.all().filter(season__pk=season_stage_pk)
+        form.fields["away_team"].queryset = TeamSeason.objects.all().filter(season__pk=season_stage_pk)
+
         if form.is_valid():
             game = form.process()
             messages.success(request, f"{game} changed.")
@@ -122,6 +126,8 @@ def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
         return redirect('league-admin-schedule', season_year, season_stage_pk)
     else:
         form = EditGameForm(instance=game_instance)
+        form.fields["home_team"].queryset = TeamSeason.objects.all().filter(season__pk=season_stage_pk)
+        form.fields["away_team"].queryset = TeamSeason.objects.all().filter(season__pk=season_stage_pk)
 
 
     context = {
@@ -150,8 +156,10 @@ def league_admin_delete_game_info_view(request, season_year, season_stage_pk, ga
         pass
 
     context = {
-        'game':game,
-        'nested_object':nested_object,
+        "season_year":season_year,
+        "season_stage_pk":season_stage_pk,
+        "game":game,
+        "nested_object":nested_object,
     }
     return render(request, "league_admin/game_delete.html", context)
 

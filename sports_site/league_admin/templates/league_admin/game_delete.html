@@ -23,7 +23,10 @@
             <legend>Are You Sure you want to delete this item, and all related items?</legend>
 
             <input class="btn btn-danger"type="submit" value="Delete"/>
-            <a class="btn btn-primary" href="{% url 'league-admin-player-select' %}">Cancel</a>
+            <a class="btn btn-primary"
+                href="{% url 'league-admin-game-edit' season_year season_stage_pk game.pk %}">
+                Cancel
+            </a>
         </form>
 
         <br><br>

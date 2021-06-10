@@ -1,5 +1,6 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, MultiWidgetField
+from crispy_forms.layout import (Layout, Row, Column, MultiWidgetField, Div,
+    Submit, Field, HTML)
 from django import forms
 from django.contrib.auth.models import Permission
 from datetime import datetime
@@ -109,12 +110,50 @@ class EditPlayerForm(forms.ModelForm):
 class EditGameForm(forms.ModelForm):
     class Meta:
         model = Game
-        fields = ['home_team', 'away_team', 'date' , 'start_time', 'stats_entered', 'final_score']
+        fields = ['home_team', 'away_team','location', 'date' , 'start_time',
+            'stats_entered', 'home_score', 'away_score',]
         cur_date = datetime.today()
         year_range = tuple([i for i in range(cur_date.year - 5, cur_date.year + 5)])
         widgets = {
             'date': forms.SelectDateWidget(empty_label=('Year', 'Month', 'Day'), years=(year_range) )
             }
+
+    def __init__(self, *args, **kwargs):
+        super(EditGameForm, self).__init__(*args, **kwargs)
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column("home_team", css_class="form-group col-md-4"),
+                Column("away_team", css_class="form-group col-md-4"),
+                Column("location", css_class="form-group col-md-4"),
+                css_class='form-row'
+                ),
+            Row(
+                Column(
+                    MultiWidgetField('date', attrs=({'style': 'width: 33%; display: inline-block; '})),
+                    css_class='form-group col-md-8'
+                    ),
+                Column('start_time', css_class='form-group col-md-4'),
+                css_class='form-row'
+                ),
+            Row(
+                Column("home_score", css_class="form-group col-md-4"),
+                Column("away_score", css_class="form-group col-md-4"),
+                Column("stats_enetered", css_class="form-group col-md-4"),
+                css_class='form-row'
+                ),
+            )
+
+        self.helper.form_method = 'post'
+        # self.helper.add_input(Submit('submit', 'Save'))
+        self.helper.layout.append(HTML("""
+            <input type="submit" value="Save" class="btn btn-primary">
+
+            <a class="btn btn-danger"
+                href="{% url 'league-admin-game-delete' season_year season_stage_pk game_instance.pk  %}">
+                Delete {{game_instance}}
+            </a>"""))
 
 
 

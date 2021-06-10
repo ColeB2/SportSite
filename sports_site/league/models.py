@@ -128,7 +128,8 @@ class Game(models.Model):
     start_time = models.TimeField(default=datetime.time(hour=19,minute=00), null=True, blank=True, verbose_name="Time")
     location = models.CharField(max_length=20, null=True, blank=True, help_text="Defaults to home team.")
     stats_entered = models.BooleanField(null=True, default=False, verbose_name="Stats Entered")
-    final_score = models.CharField(max_length=20, null=True, blank=True, default='---')
+    home_score = models.IntegerField(null=True, blank=True, default=0)
+    away_score = models.IntegerField(null=True, blank=True, default=0)
 
     def __str__(self):
         return f"{self.date} - {self.away_team.team.name} @ {self.home_team.team.name}"
