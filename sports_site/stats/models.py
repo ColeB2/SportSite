@@ -1,13 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
-
-from smart_selects.db_fields import ChainedForeignKey
-
 from league.models import PlayerSeason, TeamSeason, SeasonStage, Game
-
-
-
 import datetime
 from .stat_calc import _calc_average, _calc_obp, _calc_slugging, _calc_ops, _calc_win_pct
 
@@ -22,22 +16,14 @@ class PlayerPitchingStats(models.Model):
 
 """Game Related Models"""
 class TeamGameStats(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True)
     team = models.ForeignKey(TeamSeason, on_delete=models.CASCADE, null=True)
-    game = ChainedForeignKey(
-        Game,
-        chained_field = "season",
-        chained_model_field="season",
-        show_all = False,
-        auto_choose=False,
-        sort=True,
-        null=True)
-
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
 
 
     def __str__(self):
-        return f"{self.game} - {self.owner} Game Stats"
+        return f"{self.game} Game Stats"
 
 
     def save(self, *args, **kwargs):
@@ -48,16 +34,8 @@ class TeamGameStats(models.Model):
 class PlayerHittingGameStats(models.Model):
     team_stats = models.ForeignKey(TeamGameStats, on_delete=models.CASCADE, null=True)
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True)
-    # player = ChainedForeignKey(
-    #     PlayerSeason,
-    #     chained_field = "season",
-    #     chained_model_field = "season",
-    #     show_all=False,
-    #     auto_choose=True,
-    #     sort=True,
-    #     null=True,
-    #     )
     player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True)
+
     at_bats = models.IntegerField(null=True, blank=True, default=0, verbose_name="AB")
     plate_appearances = models.IntegerField(null=True, blank=True, default=0, verbose_name="PA")
     hits = models.IntegerField(null=True, blank=True, default=0, verbose_name="H")
@@ -77,8 +55,7 @@ class PlayerHittingGameStats(models.Model):
     average = models.CharField(max_length=10, null=False, default='---', verbose_name='AVG')
     on_base_percentage = models.CharField(max_length=10, null=False, default='---', verbose_name='OBP')
     slugging_percentage = models.CharField(max_length=10, null=False, default='---', verbose_name='SLG')
-    on_base_plus_slugging = models.CharField(max_length=10, null=False, default='---', verbose_name='OPS', help_text=f"On-Base Plus Slugging\nCombined rate of OBP and SLG."
-        f"\nOBP+SLG")
+    on_base_plus_slugging = models.CharField(max_length=10, null=False, default='---', verbose_name='OPS', help_text=f"On-Base Plus Slugging\nCombined rate of OBP and SLG.\nOBP+SLG")
     reached_on_error = models.IntegerField(null=True, blank=True, default=0)
     fielders_choice = models.IntegerField(null=True, blank=True, default=0)
 
@@ -87,8 +64,8 @@ class PlayerHittingGameStats(models.Model):
         verbose_name_plural = "Hitter's Game Stats"
 
 
-    # def __str__(self):
-    #     return f"{self.player}"
+    def __str__(self):
+        return f"{self.player}"
 
 
     def save(self, *args, **kwargs):
