@@ -15,41 +15,79 @@
 
         {% if perms.league.league_admin and stage.season.league == request.user.userprofile.league %}
 
+        <div class="row">
+            <h2>Schedule:</h2>
+            <div class="col-md-12">
+            <legend><small>Click on the date to edit game details, click on a team to add stats for game.</small></legend>
+            </div>
+
+            <table class="table table-sm table-responsive">
+                <tr>
+                    <th>Date</th>
+                    <th>Home Team</th>
+                    <th>Away Team</th>
+                    <th>Stats Entered</th>
+                </tr>
+            {% for game in schedule %}
+            <tr>
+
+            <td>
+                <h6>
+                    <a href="{% url 'league-admin-game-edit' season_year season_stage_pk game.pk %}">{{game.date}}</a>
+                </h6>
+            </td>
+
+            <td>
+                <h6>
+                     <a href="{% url 'stats-add-game-stats' game.pk game.home_team.pk %}">{{game.home_team.team}}</a>
+                </h6>
+            </td>
+
+            <td>
+                <h6>
+                     <a href="{% url 'stats-add-game-stats' game.pk game.away_team.pk %}">{{game.away_team.team}}</a>
+                </h6>
+            </td>
+
+            <td>
+                {% if game.stats_entered %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check" viewBox="0 0 16 16">
+                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                </svg>
+                {% else %}
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+                {% endif %}
+
+            </td>
+
+            </tr>
+
+            {% endfor %}
+            </table>
+
+            <br><br>
+        </div>
+
+            <a class="btn btn-primary"
+                href="{% url 'league-admin-schedule-create' season_year season_stage_pk %}">
+                Add Games
+            </a>
+
+            <a class="btn btn-danger"
+                href="{% url 'league-admin-schedule-delete-info' season_year season_stage_pk %}">
+                Delete
+            </a>
 
 
-        <h2>Schedule:</h2>
-        <legend><small>Click on an existing game to edit.</small></legend>
-        {% for game in schedule %}
-        <h6>
-            <a href="{% url 'league-admin-game-edit' season_year season_stage_pk game.pk %}">{{game}}</a>
-        </h6>
-        {% endfor %}
-
-        <br><br>
-
-        <a class="btn btn-primary"
-            href="{% url 'league-admin-schedule-create' season_year season_stage_pk %}">
-            Add Games
-        </a>
-
-        <a class="btn btn-danger"
-            href="{% url 'league-admin-schedule-delete-info' season_year season_stage_pk %}">
-            Delete
-        </a>
-
-        {% else %}
-        <h2>Access Denied</h2>
-        <h3>You Don't Own <b>{{stage.season.league}}</b>'s <b>{{stage}}</b></h3>
-
-
-        {% endif %}
 
 
 
-
-
-
+            {% else %}
+                <h2>Access Denied</h2>
+                <h3>You Don't Own <b>{{stage.season.league}}</b>'s <b>{{stage}}</b></h3>
+            {% endif %}
     </div>
 </div>
-
 {% endblock content %}

@@ -34,3 +34,7 @@ def add_game_stats_view(request, game_pk, team_season_pk):
         "formset": formset,
         }
     return render(request, "stats/add_game_stats.html", context)
+
+
+def select_games_view(request, season_stage_pk):
+    pass
