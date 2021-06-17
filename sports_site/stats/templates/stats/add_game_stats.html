@@ -14,23 +14,24 @@
 
 
         {% if perms.league.league_admin %}
-        <h2>Adds Stats for:</h2>
+        <h2>Adds Stats for: {{game.date}} {{team_season.team}}</h2>
         <br><br>
-
-        <h2>Games:</h2>
-        <legend><small>Add games using forms below</small></legend>
+        <legend><small>Add hitting stats using forms below</small></legend>
         <form method="post">
             {% csrf_token %}
             {{ formset.management_form }}
             {% for form in formset %}
-            <h5>Game:</h5>
+            <h6>Player: </h6>
                 {% crispy form %}
             {% endfor %}
 
-            <input type="submit" name="create" value="Add Stats" class="btn btn-primary">
+
+
+            <br><br>
+
+            <input type="submit" value="Submit" class="btn btn-primary">
 
         </form>
-
         {% else %}
         <h2>Access Denied</h2>
         <!--<h3>You Don't Own <b>{{current_stage.season.league}}</b>'s <b>{{current_stage}}</b></h3>-->

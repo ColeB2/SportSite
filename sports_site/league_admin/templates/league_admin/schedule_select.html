@@ -12,7 +12,7 @@
         {% endif %}
 
         <h2>Schedules:</h2>
-        <legend><small>Click on an existing season to add a new stage.</small></legend>
+        <legend><small>Click on an existing season to add Games, or Stats.</small></legend>
         {% for stage in stages %}
         <h6>
             <a href="{% url 'league-admin-schedule' stage.season.year stage.pk %}">{{stage}}</a>

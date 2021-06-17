@@ -16,7 +16,6 @@ class PlayerPitchingStats(models.Model):
 
 """Game Related Models"""
 class TeamGameStats(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True)
     team = models.ForeignKey(TeamSeason, on_delete=models.CASCADE, null=True)
     game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)

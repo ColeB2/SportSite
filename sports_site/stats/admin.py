@@ -43,7 +43,7 @@ class PlayerHittingGameStatsInline(admin.TabularInline):
 class TeamGameStatsAdmin(admin.ModelAdmin):
     # inlines = [PlayerHittingGameStatsInline, PlayerHittingGameStatsInline2(None)]
     inlines = [PlayerHittingGameStatsInline,]
-    list_display = ('game', 'owner',)
+    list_display = ('game',)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Sets it so a teamadmin can only select his only player for stat
