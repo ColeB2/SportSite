@@ -5,6 +5,38 @@ from .models import PlayerHittingGameStats
 from league.models import PlayerSeason
 
 
+class PlayerStatsCreateForm(forms.Form):
+    """Creates all player stats objects to be edited later"""
+    def __init__(self, *args, **kwargs):
+        self._team_season = kwargs.pop('team_season')
+        self._team_game_stats = kwargs.pop('team_game_stats')
+        super(PlayerStatsCreateForm, self).__init__(*args, **kwargs)
+        self.player_queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+
+        self.fields["player"] = forms.ModelChoiceField(
+            queryset=self.player_queryset,
+            label=None,
+            required=False,
+            )
+
+        self.fields["pitched"] = forms.BooleanField()
+
+        #crispy layout
+        self.helper = FormHelper()
+        self.helper_layout = Layout(
+            Row(
+                Column("player", css_class="form-group col-md-6"),
+                Column("pitched", css_class="form-group col-md-2"),
+                css_class="form-row"
+                ),
+            )
+        self.helper.form_tag = False
+
+    def process(self):
+        pass
+
+
+
 
 class PlayerHittingGameStatsForm(forms.ModelForm):
     class Meta:
@@ -46,25 +78,16 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
                 Column("reached_on_error"),
                 Column("fielders_choice"),
                 css_class="form-row"),
-            # Row(
-            #     css_class="form-row"
-            #     )
             )
         self.helper.form_tag = False
-        # self.helper.form_method='post'
-        # self.helper.add_input(Submit('submit', "Submit", css_class="btn btn-primary"))
-        # self.helper.layout.append(HTML("""
-        # <input type="submit" value="Submit" class="btn btn-primary">
-        # """))
+
 
     def process(self):
-        print("PROCESS-----------------")
-        print(self.cleaned_data.get("player"))
-        print(self.fields["player"])
         if self.cleaned_data.get("player"):
+            # Player selector is not none: create player, team game to current game.
             playerhittinggamestats = self.save(commit=False)
-            playerhittinggamestats.team_stats = self._team_game_stats
-            playerhittinggamestats.season = self._team_season.season
+            if playerhittinggamestats.team_stats is None:
+                playerhittinggamestats.team_stats = self._team_game_stats
             playerhittinggamestats.save()
             return playerhittinggamestats
 

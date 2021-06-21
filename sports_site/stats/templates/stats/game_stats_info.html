@@ -1,0 +1,41 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+
+        {% if perms.league.league_admin %}
+        <h3>{{game_stats}}</h3>
+        <br><br>
+        <h4>Offensive Stats</h4>
+        <br>
+        {% for player in player_stats %}
+            <h6>{{player.player.player}}</h6>
+        {% endfor %}
+        <a class="btn btn-primary "href="#">Edit Stats</a>
+        <br>
+        <h4>Pitching Stats</h4>
+        <a class="btn btn-primary "href="#">Edit Stats</a>
+        <br>
+
+
+        {% else %}
+        <h2>Access Denied</h2>
+        <!--<h3>You Don't Own <b>{{current_stage.season.league}}</b>'s <b>{{current_stage}}</b></h3>-->
+
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock content %}
