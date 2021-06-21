@@ -15,22 +15,26 @@ class PlayerStatsCreateForm(forms.Form):
 
         self.fields["player"] = forms.ModelChoiceField(
             queryset=self.player_queryset,
-            label=None,
+            label=False,
             required=False,
             )
 
-        self.fields["pitched"] = forms.BooleanField()
+        self.fields["pitched"] = forms.BooleanField(
+            required=False,
+            )
 
         #crispy layout
         self.helper = FormHelper()
-        self.helper_layout = Layout(
+        self.helper.layout = Layout(
             Row(
-                Column("player", css_class="form-group col-md-6"),
-                Column("pitched", css_class="form-group col-md-2"),
+                Column("player", css_class="form-group col-md-5"),
+                Column("pitched", css_class="form-group col-md-4"),
                 css_class="form-row"
                 ),
             )
         self.helper.form_tag = False
+
+
 
     def process(self):
         pass

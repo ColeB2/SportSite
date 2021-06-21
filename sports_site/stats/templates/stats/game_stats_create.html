@@ -14,9 +14,9 @@
 
 
         {% if perms.league.league_admin %}
-        <h2>Adds Stats for: {{game.date}} {{team_season.team}}</h2>
+        <h2>Game: {{game.date}} {{team_season.team}}</h2>
         <br><br>
-        <legend><small>Add hitting stats using forms below</small></legend>
+        <legend><small>Select all players who participated in listed game.</small></legend>
         <form method="post">
             {% csrf_token %}
             {{ formset.management_form }}
@@ -33,7 +33,7 @@
         </form>
         {% else %}
         <h2>Access Denied</h2>
-        <!--<h3>You Don't Own <b>{{current_stage.season.league}}</b>'s <b>{{current_stage}}</b></h3>-->
+        <h3>You Don't Own <b>{{game.season.season.league}}</b>'s <b>{{game}}</b></h3>
 
 
         {% endif %}
