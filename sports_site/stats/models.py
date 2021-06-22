@@ -107,7 +107,7 @@ class PlayerPitchingGameStats(models.Model):
 
 
     class Meta:
-        verbose_name = "Pitchers's Game Stats"
+        verbose_name = "Pitching's Game Stats"
         verbose_name_plural = "Pitcher's Game Stats"
 
 

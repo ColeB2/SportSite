@@ -33,9 +33,16 @@ def create_team_game_stats_view(request, game_pk, team_season_pk):
             if form.is_valid():
                 hitting_stats, h_created, pitching_stats, p_created = form.process()
                 if h_created:
-                    messages.success(request, f"{hitting_stats} created for {game}")
+                    messages.success(request, f"{hitting_stats.player.player} hitting stats created for {game}")
+                else:
+                    if hitting_stats:
+                        messages.info(request, f"{hitting_stats.player.player} already has stats for {game}.")
                 if p_created:
-                    messages.success(request, f"{pitching_stats} created for {game}")
+                    messages.success(request, f"{pitching_stats.player.player} pitching stats created for {game}")
+                else:
+                    if hitting_stats:
+                        messages.info(request, f"{pitching_stats.player.player} already has pitching stats for {game}.")
+
 
         if 'create' in request.POST:
             return redirect('league-admin-schedule', team_season.season.season.year, team_season.season.pk)
