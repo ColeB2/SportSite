@@ -37,7 +37,23 @@ class PlayerStatsCreateForm(forms.Form):
 
 
     def process(self):
-        pass
+        _player = self.cleaned_data.get("player")
+        hitting_stats, hit_created, pitching_stats, pitch_created = None, None, None, None
+        if _player:
+            hitting_stats, hit_created = PlayerHittingGameStats.objects.get_or_create(
+                team_stats=self._team_game_stats,
+                season=self._team_season.season,
+                player=_player)
+            hitting_stats.save()
+        if self.cleaned_data.get("pitched") == True:
+            pitching_stats, pitch_created = PlayerPitchingGameStats.objects.get_or_create(
+                team_stats=self._team_game_stats,
+                season=self._team_season.season,
+                player=_player)
+
+            pitching_stats.save()
+
+        return (hitting_stats, hit_created, pitching_stats, pitch_created)
 
 
 

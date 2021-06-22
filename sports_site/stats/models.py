@@ -3,7 +3,8 @@ from django.utils.timezone import now
 from django.contrib.auth.models import User
 from league.models import PlayerSeason, TeamSeason, SeasonStage, Game
 import datetime
-from .stat_calc import _calc_average, _calc_obp, _calc_slugging, _calc_ops, _calc_win_pct
+from .stat_calc import (_calc_average, _calc_obp, _calc_slugging, _calc_ops,
+    _calc_win_pct, _calc_whip, _calc_era)
 
 
 class PlayerHittingStats(models.Model):
@@ -100,9 +101,14 @@ class PlayerPitchingGameStats(models.Model):
     hit_batters = models.IntegerField(null=True, blank=True, default=0, verbose_name="HB")
     walks_allowed = models.IntegerField(null=True, blank=True, default=0, verbose_name="BB")
     strikeouts = models.IntegerField(null=True, blank=True, default=0, verbose_name="K")
-    average = models.FloatField(null=True, blank=True, verbose_name='AVG')
+    # average = models.FloatField(null=True, blank=True, verbose_name='AVG')
     whip = models.FloatField(null=True, blank=True, verbose_name='WHIP')
     era = models.FloatField(null=True, blank=True, verbose_name='ERA')
+
+
+    class Meta:
+        verbose_name = "Pitchers's Game Stats"
+        verbose_name_plural = "Pitcher's Game Stats"
 
 
     def __str__(self):
@@ -110,9 +116,9 @@ class PlayerPitchingGameStats(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.whip = float((self.walks_allowed+self.hits_allowed)/(self.innings_pitched))
-        self.era = float((self.earned_runs * 7) / self.innings_pitched)
-        self.average = float(self.hits_allowed/self.at_bats)
+        self.whip = _calc_whip(self.walks_allowed, self.hits_allowed, self.innings_pitched)
+        self.era = _calc_era(self.earned_runs, self.innings_pitched)
+        # self.average = _calc_average(self.hits_allowed, self.at_bats)
         super(PlayerPitchingGameStats, self).save(*args, **kwargs)
 
 

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from .models import (PlayerHittingStats, PlayerPitchingStats,
-    TeamGameStats, PlayerHittingGameStats,)
+    TeamGameStats, PlayerHittingGameStats, PlayerPitchingGameStats)
 
 
 
@@ -34,9 +34,6 @@ class PlayerHittingGameStatsInline(admin.TabularInline):
             roster = PlayerSeason.objects.filter(team__team__team__owner=request.user)
             kwargs["queryset"] = roster
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-
-
 
 
 @admin.register(TeamGameStats)
@@ -72,5 +69,8 @@ class TeamGameStatsAdmin(admin.ModelAdmin):
 class PlayerHittingGameStatsAdmin(admin.ModelAdmin):
     list_display = ('player', 'team_stats')
 
+@admin.register(PlayerPitchingGameStats)
+class PlayerPitchingGameStatsAdmin(admin.ModelAdmin):
+    list_display = ('player', 'team_stats')
 
 

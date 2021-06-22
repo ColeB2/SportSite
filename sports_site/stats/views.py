@@ -31,12 +31,16 @@ def create_team_game_stats_view(request, game_pk, team_season_pk):
     if request.method == "POST":
         for form in formset:
             if form.is_valid():
-                new_stats = form.process()
-                if new_stats:
-                    messages.success(request, f"{new_stats} created for {game}")
+                hitting_stats, h_created, pitching_stats, p_created = form.process()
+                if h_created:
+                    messages.success(request, f"{hitting_stats} created for {game}")
+                if p_created:
+                    messages.success(request, f"{pitching_stats} created for {game}")
 
-        return redirect('league-admin-schedule', team_season.season.season.year, team_season.season.pk)
-
+        if 'create' in request.POST:
+            return redirect('league-admin-schedule', team_season.season.season.year, team_season.season.pk)
+        elif 'create-and-continue' in request.POST:
+            return redirect('stats-add-game-stats', game_pk, team_season_pk)
 
     context = {
         "game":game,
