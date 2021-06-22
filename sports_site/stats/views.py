@@ -7,9 +7,11 @@ from django.shortcuts import render, redirect
 from league.models import Game, TeamSeason, Roster
 from .models import PlayerHittingGameStats, TeamGameStats
 from .forms import (PlayerHittingGameStatsForm, PlayerStatsCreateForm)
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from .decorators import user_owns_game
 
 # Create your views here.
+@permission_required('league.league_admin')
+@user_owns_game
 def create_team_game_stats_view(request, game_pk, team_season_pk):
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
@@ -44,6 +46,7 @@ def create_team_game_stats_view(request, game_pk, team_season_pk):
         "formset": formset,
         }
     return render(request, "stats/game_stats_create.html", context)
+
 
 def add_game_stats_view(request, game_pk, team_season_pk):
     game = Game.objects.get(pk=game_pk)
@@ -82,6 +85,7 @@ def add_game_stats_view(request, game_pk, team_season_pk):
         }
     return render(request, "stats/game_stats_add.html", context)
 
+
 def game_stats_info_view(request, game_pk, team_season_pk, team_game_pk):
     game_stats = TeamGameStats.objects.get(pk=team_game_pk)
     player_stats = game_stats.playerhittinggamestats_set.all()
@@ -92,12 +96,6 @@ def game_stats_info_view(request, game_pk, team_season_pk, team_game_pk):
         }
 
     return render(request, "stats/game_stats_info.html", context)
-
-
-class PlayerHittingStatsCreateView(CreateView):
-    template_name = 'stats/add_game_stats.html'
-    model = PlayerHittingGameStats
-    form_class = PlayerHittingGameStatsForm
 
 
 def select_games_view(request, season_stage_pk):

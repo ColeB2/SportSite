@@ -9,56 +9,21 @@ def _convert_to_int(string_value):
         return int(string_value[1:])
 
 def _calc_average(hits, at_bats):
-    """Calcuates batting average and returns its as a string in .### format"""
-    if at_bats == 0:
-        return f".000"
 
-    average = int(1000*round((hits / at_bats), 3))
-
-    if average == 1000:
-        return f"{str(average)[0:1]}.{str(average)[1:]}"
-    else:
-        return f".{average}"
+    return float(hits/at_bats)
 
 def _calc_obp(hits, walks, hit_by_pitch, at_bats, sacrifice_flies):
-    if at_bats == 0:
-        return f".000"
     top = hits + walks + hit_by_pitch
     bot = at_bats + walks + hit_by_pitch + sacrifice_flies
-
-    obp = int(1000*round((top / bot),3))
-
-    if obp == 1000:
-        return f"{str(obp)[0:1]}.{str(obp)[1:]}"
-    else:
-        return f".{obp}"
+    return float(top/bot)
 
 def _calc_slugging(singles, doubles, triples, homeruns, at_bats):
-    if at_bats == 0:
-        return f".000"
-
     top = singles + (doubles*2) + (triples*3) + (homeruns*4)
     bot = at_bats
-
-    slg = int(1000*round((top / bot),3))
-
-    if slg >= 1000:
-        return f"{str(slg)[0:1]}.{str(slg)[1:]}"
-    else:
-        return f".{slg}"
+    return float(top/bot)
 
 def _calc_ops(on_base_percentage, slugging_percentage):
-    obp = _convert_to_int(on_base_percentage)
-    slg = _convert_to_int(slugging_percentage)
-    try:
-        ops = obp+slg
-    except:
-        return f".000"
-
-    if ops >= 1000:
-        return f"{str(ops)[0:1]}.{str(ops)[1:]}"
-    else:
-        return f".{ops}"
+    return float(on_base_percentage + slugging_percentage)
 
 def _calc_win_pct(wins, losses, ties):
     if wins == 0 and losses == 0:
