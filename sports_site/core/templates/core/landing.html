@@ -1,12 +1,32 @@
 {% extends "core/base.html" %}
 {% block content %}
 
-<div class="container-lg">
-    <div class="row gy-3 justify-content-around">
+<div class="container-fluid">
 
-        <h1>Landing Page</h1>
+    <div class="container container-one">
+        <div class="row justify-content-center">
+            <h1 class=text-center>The Best Sports Website Creator <b>You</b> Will Ever Use</h1>
+            <br><br><br><br>
+
+            <div class= "col-6">
+                <p class="text-center"><legend>Create Your <u><b>League</b></u></legend></p>
+                <p class="text-center"><legend>Design Your <u><b>Website</b></u></legend></p>
+                <p class="text-center"><legend>Do It All Your <u><b>Way</b></u></legend></p>
+                <div class="text-center">
+                    <a class="btn btn-lg btn-outline-success"><b>GET STARTED NOW</b></a>
+                </div>
+                <p class="text-center">
+                    <small>Already on Sports League?
+                    <a href="{% url 'login' %}">Log In</a>
+                    </small>
+                </p>
+            </div>
+    </div>
 
 
+    <div class="contained container-two">
+        <h3>Text</h3>
+        <img src="img/bbhomepage1.png">
     </div>
 </div>
 

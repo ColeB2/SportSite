@@ -1,35 +1,20 @@
-/*.average, .walks, .stolen-bases, .runs, .at_bats {*/
-/*  border-left: 2px solid #BEBEBE;*/
-/*}*/
-
-
-/*.player_name {*/
-/*  position -webkit-sticky;*/
-/*  position: sticky;*/
-/*  left: 0;*/
-/*  z-index: 1;*/
-/*  background-color: #fff;*/
-/*}*/
-/*.even td:first-child {*/
-/*  position: sticky;*/
-/*  left: 0;*/
-/*  z-index: 1;*/
-/*  background-color: #fff;*/
-/*}*/
-/*.odd td:first-child {*/
-/*  position: sticky;*/
-/*  left: 0;*/
-/*  z-index: 1;*/
-/*  background-color: #fff;*/
-/*}*/
-
 html {
-    background-color: rgb(230,230,250);
+    background-color: rgb(255,255,255);
 }
 
 body {
-    padding-top: 90px;
-    background-color: rgb(230,230,250);
+    background-color: rgb(255,255,255);
+}
+
+/*LANDING CONTAINERS*/
+.container-one {
+    padding-top: 150px;
+    background-color: rgb(255,255,255);
+}
+
+.container-two {
+    padding-top: 150px;
+    background-color: rgb(255,255,255);
 }
 
 .navbar {
@@ -81,14 +66,4 @@ background-color: #425766;
 
 .header-link:hover {
     color: #fff;
-}
-
-/*NEWS ARTICLE*/
-.article-headline {
-    text-decoration: none;
-    color: rgb(0,0,0);
-}
-
-.article-headline:hover {
-    color: #1a4ea6;
 }

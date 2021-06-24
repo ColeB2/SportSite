@@ -70,6 +70,8 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
         self._team_game_stats = kwargs.pop('team_game_stats')
         super(PlayerHittingGameStatsForm, self).__init__(*args, **kwargs)
         self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+        self.fields['player'].widget.attrs['readonly'] = True
+        self.fields['player'].label = False
 
         self.helper = FormHelper()
         self.helper.layout = Layout(
@@ -103,11 +105,7 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
 
 
     def process(self):
-        if self.cleaned_data.get("player"):
-            # Player selector is not none: create player, team game to current game.
-            playerhittinggamestats = self.save(commit=False)
-            if playerhittinggamestats.team_stats is None:
-                playerhittinggamestats.team_stats = self._team_game_stats
-            playerhittinggamestats.save()
-            return playerhittinggamestats
+        player_stats = self.save(commit=False)
+        player_stats.save()
+        return player_stats
 

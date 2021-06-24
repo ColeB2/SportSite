@@ -16,12 +16,11 @@
         {% if perms.league.league_admin %}
         <h2>Adds Stats for: {{game.date}} {{team_season.team}}</h2>
         <br><br>
-        <legend><small>Add hitting stats using forms below</small></legend>
+        <legend><small>Edit stats below</small></legend>
         <form method="post">
             {% csrf_token %}
             {{ formset.management_form }}
             {% for form in formset %}
-            <h6>Player: </h6>
                 {% crispy form %}
             {% endfor %}
 

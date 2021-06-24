@@ -7,14 +7,14 @@
 
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/landing.css' %}">
 
     <title>Sports Site</title>
   </head>
   <body>
 
       <!-- NAVIGATION BAR -->
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark navbar_custom">
+    <nav class="navbar fixed-top navbar-expand-lg bg-dark bg-gradient">
 
         <!--Navbar Logo-->
         {% if user.is_authenticated %}
@@ -27,7 +27,7 @@
 
         <div class="d-flex flex-row justify-content-start">
             <div class="dropdown">'
-                    <a class="navbar-text header-link p-2" href="#">Home</a>
+                    <a class="navbar-text header-link p-2" href="#">SportLeague</a>
                     <a class="navbar-text header-link p-2" href="#">Sports</a>
                     <a class="navbar-text header-link p-2" href="#">Websites</a>
                     <a class="navbar-text header-link p-2" href="#">Pricing</a>
@@ -71,8 +71,8 @@
             <a class="navbar-text header-link p-2" href="{% url 'logout' %}">Logout</a>
 
             {% else %}
-            <a class="navbar-text header-link p-2" href="{% url 'login' %}">Register</a>
             <a class="navbar-text header-link p-2" href="{% url 'login' %}">Login</a>
+            <a class="navbar-text header-link p-2" href="{% url 'login' %}">SIGN UP</a>
             {% endif %}
 
         </div>
