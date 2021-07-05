@@ -1,49 +1,114 @@
 {% extends "news/base.html" %}
 {% block content %}
-<div class="container-fluid">
-    <!--<div class="row justify-content-evenly">-->
-    <div class="d-md-flex justify-content-center">
-        <!--<div class="col-12 col-md-8 bg-light">-->
-        <div class="p-2 me-2 align-self-start bg-light">
-                {% if articles%}
-                    <img class="img-fluid" height="300" width="300" src="{{ articles.0.image.url }}">
-                    <h1>
-                        <a href="{% url 'news-detail' articles.0.slug %}?league={{request.GET.league}}" class="article-headline">
-                            {{articles.0.title}}
-                        </a>
-                    </h1>
-                    <h6>{{articles.0.date_posted}}</h6>
-                    <p>{{articles.0.body|truncatewords:20}}</p>
-                {% endif %}
-        </div>
+<!--TEST TEST TEST-->
+<div class="container-lg">
+    <div class="row justify-content-center">
+        <!--CENTER COLUMN: Main News Column-->
+        <div class="align-self-start me-2 col-12 col-md-8 bg-light">
 
+            {% if articles %}
+            <div class="border-bottom">
+                <img class="img-fluid" height="300" width="300" src="{{articles.0.image.url}}">
+                <h1>
+                    <a href="{% url 'news-detail' articles.0.slug %}?league={{request.GET.league}}" class="article-headline">
+                        {{articles.0.title}}
+                    </a>
+                </h1>
+                <h6>{{article.0.date_posted}}</h6>
+                <p>{{article.0.body|truncatewords:20}}</p>
+            </div>
+            {% endif %}
 
-        <!--Latest News Column-->
-        <!--<div class="col-12 col-md-4 bg-light">-->
-        <div class="align-self-start ms-2 bg-light">
-            <h6 class="border-bottom"><a class="article-headline"
-                href="{% url 'news-page' %}?league={{request.GET.league}}">LATEST NEWS</a></h6>
-            <ul>
-            {% for article in articles %}
-                <li>
+            {% for article in articles|slice:"1:6" %}
+            <div class="border-bottom">
+                <img class="img-fluid" height="300" width="300" src="{{article.image.url}}">
+                <h1>
                     <a href="{% url 'news-detail' article.slug %}?league={{request.GET.league}}" class="article-headline">
                         {{article.title}}
                     </a>
-                </li>
+                </h1>
+                <h6>{{article.date_posted}}</h6>
+                <p>{{article.body|truncatewords:20}}</p>
+            </div>
             {% endfor %}
-            <ul>
+        </div>
+
+
+        <!--RIGHT COLUMN: Latest News Column-->
+        <div class="align-self-start border ms-2 mb-2 col-12 col-md-3 bg-light ">
+            <div id="NEWS-COLUMN">
+                <h6 class="border-bottom"><a class="article-headline"
+                    href="{% url 'news-page' %}?league={{request.GET.league}}">LATEST NEWS</a></h6>
+                <ul>
+                {% for article in articles %}
+                    <li>
+                        <a href="{% url 'news-detail' article.slug %}?league={{request.GET.league}}" class="article-headline">
+                            {{article.title}}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+
+            <div id="LEADERS-COLUMN">
+                <h6 class="border-bottom"><a class="article-headline"
+                    href="{% url 'news-page' %}?league={{request.GET.league}}">LEAGUE LEADERS</a></h6>
+
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Batting Average</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8">
+                            <h6>Dorian Duckworth</h6>
+                        </div>
+                        <div class="col-4">
+                            <h3>1.000</h3>
+                        </div>
+                    </div>
+
+                    <div class="row  border-bottom">
+                        <div class="col-12">
+                            <p>TeamOne</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Home Runs</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-8">
+                            <h6>Dorian Duckworth</h6>
+                        </div>
+                        <div class="col-4">
+                            <h3>50</h3>
+                        </div>
+                    </div>
+                    <div class="row  border-bottom">
+                        <div class="col-12">
+                            <p>TeamOne</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>
-    <br><br><br><br>
-
-
+<br><br><br><br>
 <!--DIV ROW COL-->
 <div class="container-lg">
     <div class="row justify-content-center">
 
-        <!--Main News Column-->
-        <div class="align-self-start border me-2 col-12 col-md-8 bg-light">
+        <!--CENTER COLUMN: Main News Column-->
+        <div class="align-self-start border me-md-2 mb-2 col-12 col-md-8 bg-light">
                 {% if articles%}
                     <img class="img-fluid" height="300" width="300" src="{{ articles.0.image.url }}">
                     <h1>
@@ -57,8 +122,8 @@
         </div>
 
 
-        <!--Latest News Column-->
-        <div class="align-self-start border ms-2 mb-2 col-12 col-md-3 bg-light">
+        <!--RIGHT COLUMN: Latest News Column-->
+        <div class="align-self-start border ms-md-2 mb-2 col-12 col-md-3 bg-light">
             <h6 class="border-bottom"><a class="article-headline"
                 href="{% url 'news-page' %}?league={{request.GET.league}}">LATEST NEWS</a></h6>
             <ul>
@@ -73,7 +138,7 @@
         </div>
 
         <!--Rest of the News Column Articles-->
-        <div class="me-2 col-12 col-md-8 bg-light">
+        <div class="align-self-start border me-md-2 mb-2 col-12 col-md-8 bg-light">
             {% for article in articles|slice:"1:6" %}
             <div class="border-bottom">
                 <img class="img-fluid" height="300" width="300" src="{{article.image.url}}">
@@ -89,13 +154,13 @@
         </div>
 
         <!--Spacing Purposes right side///LEAGUE LEADERS-->
-        <div class="align-self-start border ms-2 my-2 col-12 col-md-3 bg-light">
+        <div class="align-self-start border ms-md-2 my-md-2 col-12 col-md-3 bg-light">
             <h6 class="border-bottom"><a class="article-headline"
                 href="{% url 'news-page' %}?league={{request.GET.league}}">LEAGUE LEADERS</a></h6>
 
-            <div class="container">
+            <div class="">
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-12">
                         <p>Batting Average</p>
                     </div>
 
@@ -105,17 +170,17 @@
                         <h6>Dorian Duckworth</h6>
                     </div>
                     <div class="col-4">
-                        <h3>1.000</h3>
+                        <h3>.427</h3>
                     </div>
                 </div>
                 <div class="row  border-bottom">
-                    <div class="col-8">
+                    <div class="col-12">
                         <p>TeamOne</p>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-12">
                         <p>Home Runs</p>
                     </div>
 
@@ -125,11 +190,71 @@
                         <h6>Dorian Duckworth</h6>
                     </div>
                     <div class="col-4">
-                        <h3>50</h3>
+                        <h3>74</h3>
                     </div>
                 </div>
                 <div class="row  border-bottom">
+                    <div class="col-12">
+                        <p>TeamOne</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <p>Runs Batted In</p>
+                    </div>
+
+                </div>
+                <div class="row">
                     <div class="col-8">
+                        <h6>Dorian Duckworth</h6>
+                    </div>
+                    <div class="col-4">
+                        <h3>192</h3>
+                    </div>
+                </div>
+                <div class="row  border-bottom">
+                    <div class="col-12">
+                        <p>TeamOne</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <p>Stolen Bases</p>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <h6>Dorian Duckworth</h6>
+                    </div>
+                    <div class="col-4">
+                        <h3>139</h3>
+                    </div>
+                </div>
+                <div class="row  border-bottom">
+                    <div class="col-12">
+                        <p>TeamOne</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <p>Runs</p>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <h6>Dorian Duckworth</h6>
+                    </div>
+                    <div class="col-4">
+                        <h3>166</h3>
+                    </div>
+                </div>
+                <div class="row  border-bottom">
+                    <div class="col-12">
                         <p>TeamOne</p>
                     </div>
                 </div>
@@ -140,4 +265,6 @@
 
     </div>
 </div>
+<br><br><br><br>
+
 {% endblock content %}
