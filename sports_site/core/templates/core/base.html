@@ -45,13 +45,13 @@
         <div class="d-flex flex-row justify-content-end ms-auto p-2">
             <!--LeagueAdminOptions-->
             {% if perms.league.league_admin %}
-            <div class="dropdown">
-                <button class="btn navbar_dropdown_btn_colour dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="dropdown bg-dark bg-gradient">
+                <button class="btn bg-dark bg-gradient dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="navbar-text header-link">{{user}}</span>
                 </button>
-                <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="{% url 'league-admin-dashboard'%}">GoTo Website</a>
-                    <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="{% url 'league-admin-dashboard'%}">Dashboard</a>
+                <div class="dropdown-menu bg-dark bg-gradient" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-white navbar-text p-2 fw-bolder" href="{% url 'league-admin-dashboard'%}">GoTo Website</a>
+                    <a class="dropdown-item text-white navbar-text p-2 fw-bolder" href="{% url 'league-admin-dashboard'%}">Dashboard</a>
                 </div>
             </div>
             <a class="navbar-text header-link p-2" href="{% url 'logout' %}">Logout</a>
@@ -60,11 +60,11 @@
             {% elif user.is_authenticated %}
         <!-- Team Admin User Options -->
             <div class="dropdown">
-                <button class="btn navbar_dropdown_btn_colour dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn bg-dark bg-gradient dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="navbar-text header-link">{{user}}</span>
                 </button>
 
-                <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-menu bg-dark bg-gradient" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="{% url 'league-admin-dashboard'%}">GoTo Website</a>
                 </div>
             </div>

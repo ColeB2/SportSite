@@ -32,9 +32,9 @@ class TeamGameStats(models.Model):
 
 
 class PlayerHittingGameStats(models.Model):
-    team_stats = models.ForeignKey(TeamGameStats, on_delete=models.CASCADE, null=True)
-    season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True)
-    player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True)
+    team_stats = models.ForeignKey(TeamGameStats, on_delete=models.CASCADE, null=True, blank=True)
+    season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True, blank=True)
+    player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True, blank=True)
 
     at_bats = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="AB")
     plate_appearances = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="PA")
@@ -68,7 +68,6 @@ class PlayerHittingGameStats(models.Model):
     def __str__(self):
         return f"{self.player}"
 
-
     def save(self, *args, **kwargs):
         self.game = self.team_stats.game
         self.season = self.team_stats.season
@@ -78,6 +77,9 @@ class PlayerHittingGameStats(models.Model):
         self.slugging_percentage = _calc_slugging(self.singles, self.doubles, self.triples, self.homeruns, self.at_bats)
         self.on_base_plus_slugging = _calc_ops(self.on_base_percentage, self.slugging_percentage)
         super(PlayerHittingGameStats, self).save(*args , **kwargs)
+
+
+
 
 
 class PlayerPitchingGameStats(models.Model):

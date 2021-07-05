@@ -1,7 +1,8 @@
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (Layout, Row, Column)
 from django import forms
-from .models import PlayerHittingGameStats, PlayerPitchingGameStats
+from django.forms.models import inlineformset_factory
+from .models import PlayerHittingGameStats, PlayerPitchingGameStats, TeamGameStats
 from league.models import PlayerSeason
 
 
@@ -38,7 +39,8 @@ class PlayerStatsCreateForm(forms.Form):
 
     def process(self):
         _player = self.cleaned_data.get("player")
-        hitting_stats, hit_created, pitching_stats, pitch_created = _player, None, _player, None
+        hitting_stats, hit_created, pitching_stats, pitch_created, pitched =(
+            _player, False, _player, False, None)
         if _player:
             hitting_stats, hit_created = PlayerHittingGameStats.objects.get_or_create(
                 team_stats=self._team_game_stats,
@@ -51,12 +53,45 @@ class PlayerStatsCreateForm(forms.Form):
                     season=self._team_season.season,
                     player=_player)
 
+                pitched=True
+
                 pitching_stats.save()
 
-        return (hitting_stats, hit_created, pitching_stats, pitch_created)
+        return (hitting_stats, hit_created, pitching_stats, pitch_created, pitched)
 
 
-
+class PHGSFHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.form_method = 'post'
+        self.form_tag = False
+        self.layout = Layout(
+            Row(
+                Column("player", css_class="form-group col-md-6"),
+                css_class="form-row"
+                ),
+            Row(
+                Column("plate_appearances"),
+                Column("at_bats"),
+                Column("singles"),
+                Column("doubles"),
+                Column("triples"),
+                Column("homeruns"),
+                Column("strikeouts"),
+                Column("walks"),
+                Column("hit_by_pitch"),
+                css_class="form-row"),
+            Row(
+                Column("runs_batted_in"),
+                Column("runs"),
+                Column("stolen_bases"),
+                Column("caught_stealing"),
+                Column("sacrifice_flies"),
+                Column("sacrifice_bunts"),
+                Column("reached_on_error"),
+                Column("fielders_choice"),
+                css_class="form-row"),
+            )
 
 class PlayerHittingGameStatsForm(forms.ModelForm):
     class Meta:
@@ -70,7 +105,6 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
         self._team_game_stats = kwargs.pop('team_game_stats')
         super(PlayerHittingGameStatsForm, self).__init__(*args, **kwargs)
         self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
-        self.fields['player'].widget.attrs['readonly'] = True
         self.fields['player'].label = False
 
         self.helper = FormHelper()
@@ -107,5 +141,60 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
     def process(self):
         player_stats = self.save(commit=False)
         player_stats.save()
+        print("FORM SAVED -----------------------")
         return player_stats
+
+class PlayerHittingGameStatsForm2(forms.ModelForm):
+    class Meta:
+        model = PlayerHittingGameStats
+        exclude = ['team_stats', 'season', 'average','on_base_percentage',
+            'slugging_percentage', 'on_base_plus_slugging', 'hits',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        self._team_season = kwargs.pop('team_season')
+        self._team_game_stats = kwargs.pop('team_game_stats')
+        super(PlayerHittingGameStatsForm2, self).__init__(*args, **kwargs)
+        self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+        self.fields['player'].label = False
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column("player", css_class="form-group col-md-6"),
+                css_class="form-row"
+                ),
+            Row(
+                Column("plate_appearances"),
+                Column("at_bats"),
+                Column("singles"),
+                Column("doubles"),
+                Column("triples"),
+                Column("homeruns"),
+                Column("strikeouts"),
+                Column("walks"),
+                Column("hit_by_pitch"),
+                css_class="form-row"),
+            Row(
+                Column("runs_batted_in"),
+                Column("runs"),
+                Column("stolen_bases"),
+                Column("caught_stealing"),
+                Column("sacrifice_flies"),
+                Column("sacrifice_bunts"),
+                Column("reached_on_error"),
+                Column("fielders_choice"),
+                css_class="form-row"),
+            )
+        self.helper.form_tag = False
+
+
+    def process(self):
+        player_stats = self.save(commit=False)
+        player_stats.save()
+        print("FORM SAVED -----------------------")
+        return player_stats
+
+HittingGameStatsFormset = inlineformset_factory(TeamGameStats,
+    PlayerHittingGameStats, form=PlayerHittingGameStatsForm2, extra=0)
 

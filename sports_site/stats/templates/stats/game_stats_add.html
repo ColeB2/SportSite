@@ -20,16 +20,17 @@
         <form method="post">
             {% csrf_token %}
             {{ formset.management_form }}
-            {% for form in formset %}
-                {% crispy form %}
-            {% endfor %}
-
-
+            {% crispy formset helper %}
 
             <br><br>
+            <div class="form-actions">
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </div>
+            <br><br>
 
-            <input type="submit" value="Submit" class="btn btn-primary">
-
+            {% for hidden in formset.hiden_fields %}
+            {{hidden}}
+            {% endfor %}
         </form>
         {% else %}
         <h2>Access Denied</h2>
