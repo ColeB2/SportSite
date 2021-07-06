@@ -61,45 +61,6 @@ def create_team_game_stats_view(request, game_pk, team_season_pk):
     return render(request, "stats/game_stats_create.html", context)
 
 
-def add_game_stats_view2(request, game_pk, team_season_pk):
-    game = Game.objects.get(pk=game_pk)
-    team_season = TeamSeason.objects.get(pk=team_season_pk)
-    roster = Roster.objects.get(team=team_season)
-    players = roster.playerseason_set.all()
-
-    team_game_stats, created = TeamGameStats.objects.get_or_create(
-            season=team_season.season, team=team_season, game=game)
-
-    player_stats = team_game_stats.playerhittinggamestats_set.all()
-
-    StatsFormset = modelformset_factory(PlayerHittingGameStats,
-        form=PlayerHittingGameStatsForm, extra=len(players)-len(player_stats))
-    formset = StatsFormset(queryset=player_stats, data=request.POST or None,
-        files=request.FILES or None,
-        form_kwargs={'team_season':team_season,
-                     'team_game_stats':team_game_stats})
-
-    if request.method == "POST":
-        if formset.is_valid():
-            for form in formset:
-                if form.is_valid():
-                    new_hitting_stats = form.process()
-                    if new_hitting_stats:
-                        messages.success(request, f"{new_hitting_stats} created for {game}")
-            formset.save(commit=False)
-
-        return redirect('league-admin-schedule', team_season.season.season.year, team_season.season.pk)
-
-    context = {
-        "game":game,
-        "team_season":team_season,
-        "roster": roster,
-        "players": players,
-        "formset": formset,
-        }
-    return render(request, "stats/game_stats_add.html", context)
-
-
 def add_game_stats_view(request, game_pk, team_season_pk):
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
@@ -118,25 +79,9 @@ def add_game_stats_view(request, game_pk, team_season_pk):
         form_kwargs={'team_season':team_season,
                      'team_game_stats':team_game_stats})
         if formset.is_valid():
-            print(formset.is_bound)
-            print("Formset.is_valid-----------")
-            formset.save(commit=False)
-            # for form in formset:
-            #     print("for form in formset-------")
-            #     print(form.errors)
-            #     if form.is_valid():
-            #         print("starting form.save------------")
-            #         form.save(commit=False)
-            # for form in formset:
-            #     if form.is_valid():
-            #         new_hitting_stats = form.process()
-            #         form.save()
-            #         if new_hitting_stats:
-            #             messages.success(request, f"{new_hitting_stats} created for {game}")
-            print(formset.errors)
-            print(f"not form erorors {formset.non_form_errors()}")
-            a = formset.non_form_errors()
-            print(a)
+            for form in formset:
+                saved_stats = form.process()
+                messages.success(request, f"{saved_stats} saved.")
             return redirect('league-admin-schedule', team_season.season.season.year, team_season.season.pk)
     else:
         formset = HittingGameStatsFormset(
@@ -157,10 +102,12 @@ def add_game_stats_view(request, game_pk, team_season_pk):
 def game_stats_info_view(request, game_pk, team_season_pk, team_game_pk):
     game_stats = TeamGameStats.objects.get(pk=team_game_pk)
     player_stats = game_stats.playerhittinggamestats_set.all()
+    pitching_stats = game_stats.playerpitchinggamestats_set.all()
 
     context = {
         "game_stats":game_stats,
         "player_stats":player_stats,
+        "pitching_stats":pitching_stats,
         }
 
     return render(request, "stats/game_stats_info.html", context)

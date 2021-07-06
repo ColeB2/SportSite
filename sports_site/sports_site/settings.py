@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'taggit',
-    'django_filters'
+    'django_filters',
+    'django-tables2',
 ]
 
 MIDDLEWARE = [

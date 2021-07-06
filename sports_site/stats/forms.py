@@ -139,62 +139,10 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
 
 
     def process(self):
-        player_stats = self.save(commit=False)
+        player_stats = self.save()
         player_stats.save()
-        print("FORM SAVED -----------------------")
-        return player_stats
-
-class PlayerHittingGameStatsForm2(forms.ModelForm):
-    class Meta:
-        model = PlayerHittingGameStats
-        exclude = ['team_stats', 'season', 'average','on_base_percentage',
-            'slugging_percentage', 'on_base_plus_slugging', 'hits',
-        ]
-
-    def __init__(self, *args, **kwargs):
-        self._team_season = kwargs.pop('team_season')
-        self._team_game_stats = kwargs.pop('team_game_stats')
-        super(PlayerHittingGameStatsForm2, self).__init__(*args, **kwargs)
-        self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
-        self.fields['player'].label = False
-
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Row(
-                Column("player", css_class="form-group col-md-6"),
-                css_class="form-row"
-                ),
-            Row(
-                Column("plate_appearances"),
-                Column("at_bats"),
-                Column("singles"),
-                Column("doubles"),
-                Column("triples"),
-                Column("homeruns"),
-                Column("strikeouts"),
-                Column("walks"),
-                Column("hit_by_pitch"),
-                css_class="form-row"),
-            Row(
-                Column("runs_batted_in"),
-                Column("runs"),
-                Column("stolen_bases"),
-                Column("caught_stealing"),
-                Column("sacrifice_flies"),
-                Column("sacrifice_bunts"),
-                Column("reached_on_error"),
-                Column("fielders_choice"),
-                css_class="form-row"),
-            )
-        self.helper.form_tag = False
-
-
-    def process(self):
-        player_stats = self.save(commit=False)
-        player_stats.save()
-        print("FORM SAVED -----------------------")
         return player_stats
 
 HittingGameStatsFormset = inlineformset_factory(TeamGameStats,
-    PlayerHittingGameStats, form=PlayerHittingGameStatsForm2, extra=0)
+    PlayerHittingGameStats, form=PlayerHittingGameStatsForm, extra=0)
 

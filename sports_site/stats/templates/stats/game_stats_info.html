@@ -21,6 +21,10 @@
         {% for player in player_stats %}
             <h6>{{player.player.player}}</h6>
         {% endfor %}
+
+        {% for player in player_stats %}
+            <h6>{{player.hits}}</h6>
+        {% endfor %}
         <a class="btn btn-primary "href="#">Edit Stats</a>
         <br>
         <h4>Pitching Stats</h4>
