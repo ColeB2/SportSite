@@ -14,24 +14,24 @@
 
 
         {% if perms.league.league_admin %}
-        <h3>{{game_stats}}</h3>
+        <h2>Adds Stats for: {{game.date}} {{team_season.team}}</h2>
         <br><br>
-        <h4>Offensive Stats</h4>
-        <br>
-        {% for player in player_stats %}
-            <h6>{{player.player.player}}</h6>
-        {% endfor %}
+        <legend><small>Edit stats below</small></legend>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {% crispy formset helper %}
 
-        {% for player in player_stats %}
-            <h6>{{player.hits}}</h6>
-        {% endfor %}
-        <a class="btn btn-primary "href="{% url 'stats-add-game-stats' game_pk team_season_pk %}">Edit Stats</a>
-        <br>
-        <h4>Pitching Stats</h4>
-        <a class="btn btn-primary "href="#">Edit Stats</a>
-        <br>
+            <br><br>
+            <div class="form-actions">
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </div>
+            <br><br>
 
-
+            {% for hidden in formset.hiden_fields %}
+            {{hidden}}
+            {% endfor %}
+        </form>
         {% else %}
         <h2>Access Denied</h2>
         <!--<h3>You Don't Own <b>{{current_stage.season.league}}</b>'s <b>{{current_stage}}</b></h3>-->

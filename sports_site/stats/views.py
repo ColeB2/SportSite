@@ -14,7 +14,7 @@ from .decorators import user_owns_game
 # Create your views here.
 @permission_required('league.league_admin')
 @user_owns_game
-def create_team_game_stats_view(request, game_pk, team_season_pk):
+def team_game_stats_create_view(request, game_pk, team_season_pk):
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
     roster = Roster.objects.get(team=team_season)
@@ -61,7 +61,7 @@ def create_team_game_stats_view(request, game_pk, team_season_pk):
     return render(request, "stats/game_stats_create.html", context)
 
 
-def add_game_stats_view(request, game_pk, team_season_pk):
+def team_game_stats_edit_view(request, game_pk, team_season_pk):
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
     roster = Roster.objects.get(team=team_season)
@@ -96,15 +96,17 @@ def add_game_stats_view(request, game_pk, team_season_pk):
         "formset": formset,
         "helper": helper,
         }
-    return render(request, "stats/game_stats_add.html", context)
+    return render(request, "stats/game_stats_edit.html", context)
 
 
-def game_stats_info_view(request, game_pk, team_season_pk, team_game_pk):
+def team_game_stats_info_view(request, game_pk, team_season_pk, team_game_pk):
     game_stats = TeamGameStats.objects.get(pk=team_game_pk)
     player_stats = game_stats.playerhittinggamestats_set.all()
     pitching_stats = game_stats.playerpitchinggamestats_set.all()
 
     context = {
+        "game_pk": game_pk,
+        "team_season_pk": team_season_pk,
         "game_stats":game_stats,
         "player_stats":player_stats,
         "pitching_stats":pitching_stats,

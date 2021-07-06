@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.models import Permission
 from datetime import datetime
 from league.models import Game, Player, Season, SeasonStage, TeamSeason
+from stats.models import TeamGameStats
 
 
 
@@ -226,6 +227,14 @@ class CreateGameForm(forms.Form):
                 new_game.location = location_data
 
             new_game.save()
+
+            home_game_stats = TeamGameStats(season=current_stage,
+                team=home_data, game=new_game)
+            away_game_stats = TeamGameStats(season=current_stage,
+                team=away_data, game=new_game)
+
+            home_game_stats.save()
+            away_game_stats.save()
 
         return new_game
 

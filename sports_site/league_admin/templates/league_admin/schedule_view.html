@@ -39,13 +39,13 @@
 
             <td>
                 <h6>
-                     <a href="{% url 'stats-create-game-stats' game.pk game.home_team.pk %}">{{game.home_team.team}}</a>
+                     <a href="{% url 'stats-game-stats-create' game.pk game.home_team.pk %}">{{game.home_team.team}}</a>
                 </h6>
             </td>
 
             <td>
                 <h6>
-                     <a href="{% url 'stats-create-game-stats' game.pk game.away_team.pk %}">{{game.away_team.team}}</a>
+                     <a href="{% url 'stats-game-stats-create' game.pk game.away_team.pk %}">{{game.away_team.team}}</a>
                 </h6>
             </td>
 
