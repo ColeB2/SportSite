@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from ..forms import (CreateGameForm, EditGameForm)
 from league.models import (SeasonStage, Game, TeamSeason)
+from stats.models import TeamGameStats
 from ..decorators import user_owns_season_stage
 
 
@@ -24,7 +25,7 @@ def league_admin_schedule_select_view(request):
 @user_owns_season_stage
 def league_admin_schedule_view(request, season_year, season_stage_pk):
     stage = SeasonStage.objects.get(pk=season_stage_pk)
-    schedule = Game.objects.all().filter(season__pk=season_stage_pk )
+    schedule = Game.objects.all().filter(season__pk=season_stage_pk)
     context = {
         "schedule": schedule,
         "season_year": season_year,

@@ -99,8 +99,8 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk):
     return render(request, "stats/game_stats_edit.html", context)
 
 
-def team_game_stats_info_view(request, game_pk, team_season_pk, team_game_pk):
-    game_stats = TeamGameStats.objects.get(pk=team_game_pk)
+def team_game_stats_info_view(request, game_pk, team_season_pk):
+    game_stats = TeamGameStats.objects.get(team__pk=team_season_pk, game__pk=game_pk)
     player_stats = game_stats.playerhittinggamestats_set.all()
     pitching_stats = game_stats.playerpitchinggamestats_set.all()
 

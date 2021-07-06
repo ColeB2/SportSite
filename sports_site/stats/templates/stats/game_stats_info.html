@@ -15,6 +15,7 @@
 
         {% if perms.league.league_admin %}
         <h3>{{game_stats}}</h3>
+        <a class="btn btn-primary" href="{% url 'stats-game-stats-create' game_pk team_season_pk %}">Create Lineup</a>
         <br><br>
         <h4>Offensive Stats</h4>
         <br>
@@ -22,10 +23,7 @@
             <h6>{{player.player.player}}</h6>
         {% endfor %}
 
-        {% for player in player_stats %}
-            <h6>{{player.hits}}</h6>
-        {% endfor %}
-        <a class="btn btn-primary "href="{% url 'stats-add-game-stats' game_pk team_season_pk %}">Edit Stats</a>
+        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit Stats</a>
         <br>
         <h4>Pitching Stats</h4>
         <a class="btn btn-primary "href="#">Edit Stats</a>

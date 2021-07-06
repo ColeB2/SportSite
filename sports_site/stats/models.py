@@ -55,7 +55,7 @@ class PlayerHittingGameStats(models.Model):
     average = models.FloatField(null=True, blank=True, verbose_name="AVG")
     on_base_percentage = models.FloatField(null=True, blank=True, verbose_name="OBP")
     slugging_percentage = models.FloatField(null=True, blank=True, verbose_name="SLG")
-    on_base_plus_slugging = models.FloatField(null=True, blank=True, verbose_name="OPS",  help_text=f"On-Base Plus Slugging\nCombined rate of OBP and SLG.\nOBP+SLG")
+    on_base_plus_slugging = models.FloatField(null=True, blank=True, verbose_name="OPS",  help_text="On-Base Plus Slugging\nCombined rate of OBP and SLG.\nOBP+SLG")
     reached_on_error = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="ROE")
     fielders_choice = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="FC")
 
