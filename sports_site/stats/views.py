@@ -11,6 +11,10 @@ from .forms import (PlayerHittingGameStatsForm, PlayerStatsCreateForm, PHGSFHelp
     HittingGameStatsFormset)
 from .decorators import user_owns_game
 
+from .tables import ASPlayerHittingGameStatsTable
+from django_tables2.views import SingleTableMixin
+from django_tables2 import SingleTableView
+
 # Create your views here.
 @permission_required('league.league_admin')
 @user_owns_game
@@ -103,6 +107,7 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     game_stats = TeamGameStats.objects.get(team__pk=team_season_pk, game__pk=game_pk)
     player_stats = game_stats.playerhittinggamestats_set.all()
     pitching_stats = game_stats.playerpitchinggamestats_set.all()
+    table = ASPlayerHittingGameStatsTable(player_stats)
 
     context = {
         "game_pk": game_pk,
@@ -110,9 +115,13 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
         "game_stats":game_stats,
         "player_stats":player_stats,
         "pitching_stats":pitching_stats,
+        "table": table,
         }
 
     return render(request, "stats/game_stats_info.html", context)
+
+class team_game_stats_info_view2(SingleTableView):
+    pass
 
 
 def select_games_view(request, season_stage_pk):

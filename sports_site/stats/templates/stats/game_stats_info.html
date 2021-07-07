@@ -1,7 +1,7 @@
 {% extends "news/base.html" %}
-{% load crispy_forms_tags %}
+{% load render_table from django_tables2 %}
 {% block content %}
-<div class="container">
+<div class="container-fluid">
     <div class="content-section">
 
         {% if messages %}
@@ -19,14 +19,15 @@
         <br><br>
         <h4>Offensive Stats</h4>
         <br>
-        {% for player in player_stats %}
-            <h6>{{player.player.player}}</h6>
-        {% endfor %}
+        <div class="table-responsive">
+        {% render_table table %}
+        </div>
 
-        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit Stats</a>
+        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit</a>
         <br>
         <h4>Pitching Stats</h4>
-        <a class="btn btn-primary "href="#">Edit Stats</a>
+
+        <a class="btn btn-primary "href="#">Edit</a>
         <br>
 
 
