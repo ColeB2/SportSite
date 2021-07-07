@@ -87,14 +87,14 @@ class PlayerPitchingGameStats(models.Model):
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True)
     player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True)
 
-    wins = models.IntegerField(null=True, blank=True, default=0, verbose_name="W")
-    losses = models.IntegerField(null=True, blank=True, default=0, verbose_name="L")
-    games = models.IntegerField(null=True, blank=True, default=0, verbose_name="G")
-    games_started = models.IntegerField(null=True, blank=True, default=0, verbose_name="GS")
-    complete_games = models.IntegerField(null=True, blank=True, default=0, verbose_name="CG")
-    shutouts = models.IntegerField(null=True, blank=True, default=0, verbose_name="SHO")
-    saves = models.IntegerField(null=True, blank=True, default=0, verbose_name="SV")
-    save_ops = models.IntegerField(null=True, blank=True, default=0, verbose_name="SVO")
+    win = models.IntegerField(null=True, blank=True, default=0, verbose_name="W")
+    loss = models.IntegerField(null=True, blank=True, default=0, verbose_name="L")
+    game = models.IntegerField(null=True, blank=True, default=0, verbose_name="G")
+    game_started = models.IntegerField(null=True, blank=True, default=0, verbose_name="GS")
+    complete_game = models.IntegerField(null=True, blank=True, default=0, verbose_name="CG")
+    shutout = models.IntegerField(null=True, blank=True, default=0, verbose_name="SHO")
+    save = models.IntegerField(null=True, blank=True, default=0, verbose_name="SV")
+    save_op = models.IntegerField(null=True, blank=True, default=0, verbose_name="SVO")
     innings_pitched = models.IntegerField(null=True, blank=True, default=0, verbose_name="IP")
     hits_allowed = models.IntegerField(null=True, blank=True, default=0, verbose_name="H")
     runs_allowed = models.IntegerField(null=True, blank=True, default=0, verbose_name="R")
@@ -120,7 +120,7 @@ class PlayerPitchingGameStats(models.Model):
     def save(self, *args, **kwargs):
         self.whip = _calc_whip(self.walks_allowed, self.hits_allowed, self.innings_pitched)
         self.era = _calc_era(self.earned_runs, self.innings_pitched)
-        # self.average = _calc_average(self.hits_allowed, self.at_bats)
+        #self.average = _calc_average(self.hits_allowed, self.at_bats)
         super(PlayerPitchingGameStats, self).save(*args, **kwargs)
 
 

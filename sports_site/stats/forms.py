@@ -143,6 +143,59 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
         player_stats.save()
         return player_stats
 
+class PlayerPitchingGameStatsForm(forms.ModelForm):
+    class Meta:
+        model = PlayerPitchingGameStats
+        exclude = ['team_stats', 'season', 'average','game', 'whip', 'era',
+        ]
+
+    def __init__(self, *args, **kwargs):
+        self._team_season = kwargs.pop('team_season')
+        self._team_game_stats = kwargs.pop('team_game_stats')
+        super(PlayerHittingGameStatsForm, self).__init__(*args, **kwargs)
+        self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+        self.fields['player'].label = False
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column("player", css_class="form-group col-md-6"),
+                css_class="form-row"
+                ),
+            Row(
+                Column("win"),
+                Column("loss"),
+                Column("game_started"),
+                Column("complete_game"),
+                Column("shutout"),
+                Column("save"),
+                Column("save_op"),
+                Column("innings_pitched"),
+                css_class="form-row"),
+            Row(
+                Column("hits_allowed"),
+                Column("runs_allowed"),
+                Column("earned_runs"),
+                Column("homeruns_allowed"),
+                Column("hit_batters"),
+                Column("walks_allowed"),
+                Column("strikeouts"),
+                css_class="form-row"),
+            )
+        self.helper.form_tag = False
+
+
+    def process(self):
+        player_stats = self.save()
+        player_stats.save()
+        return player_stats
+
 HittingGameStatsFormset = inlineformset_factory(TeamGameStats,
     PlayerHittingGameStats, form=PlayerHittingGameStatsForm, extra=0)
+
+PitchingGameStatsFormset = inlineformset_factory(TeamGameStats,
+    PlayerPitchingGameStats, form=PlayerPitchingGameStatsForm, extra=0)
+
+
+
 
