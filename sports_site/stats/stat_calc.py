@@ -45,12 +45,21 @@ def _calc_era(earned_runs, innings_pitched, innings=7):
         return float(0)
 
 def _calc_win_pct(wins, losses, ties):
-    if wins == 0 and losses == 0:
-        return f".000"
+    return ((wins+(ties/2)) / (wins+losses+ties))
 
-    pct = int(1000*round(( (wins+(ties/2)) / (wins+losses+ties) ),3))
+def _convert_ip_to_outs(innings_pitched):
+    value = round(innings_pitched)
+    putouts = value*3
+    decimal = round(innings_pitched%1, 1)
+    if decimal == 0.1:
+        putouts += 1
+    elif decimal == 0.2:
+        putouts += 2
 
-    if pct == 1000:
-        return f"{str(pct)[0:1]}.{str(pct)[1:]}"
-    else:
-        return f".{pct}"
+    return putouts
+
+
+def _calc_pitchers_avg(hits_allowed, innings_pitched, PK, CS):
+    """rudimentary basic way to calculate average for pitchers"""
+    outs = _convert_ip_to_outs(innings_pitched)
+    return hits_allowed / ((hits_allowed+outs)-(PK+ CS))

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from league.models import PlayerSeason, TeamSeason, SeasonStage, Game
 import datetime
 from .stat_calc import (_calc_average, _calc_obp, _calc_slugging, _calc_ops,
-    _calc_win_pct, _calc_whip, _calc_era)
+    _calc_win_pct, _calc_whip, _calc_era, _calc_pitchers_avg)
 from .validators import validate_innings_pitched
 
 class PlayerHittingStats(models.Model):
@@ -87,22 +87,25 @@ class PlayerPitchingGameStats(models.Model):
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True)
     player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True)
 
-    win = models.IntegerField(null=True, blank=True, default=0, verbose_name="W")
-    loss = models.IntegerField(null=True, blank=True, default=0, verbose_name="L")
-    game = models.IntegerField(null=True, blank=True, default=0, verbose_name="G")
-    game_started = models.IntegerField(null=True, blank=True, default=0, verbose_name="GS")
-    complete_game = models.IntegerField(null=True, blank=True, default=0, verbose_name="CG")
-    shutout = models.IntegerField(null=True, blank=True, default=0, verbose_name="SHO")
-    save = models.IntegerField(null=True, blank=True, default=0, verbose_name="SV")
-    save_op = models.IntegerField(null=True, blank=True, default=0, verbose_name="SVO")
+    win = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="W")
+    loss = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="L")
+    game = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="G")
+    game_started = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="GS")
+    complete_game = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="CG")
+    shutout = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SHO")
+    save = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SV")
+    save_op = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SVO")
     innings_pitched = models.FloatField(validators=[validate_innings_pitched],  null=True, blank=True, default=0, verbose_name="IP", help_text="Innings Pitched\nThe number of putouts recorded while the pitcher was on the mound divided by 3.\n.1 - 1 out\n.2 - 2 outs.")
-    hits_allowed = models.IntegerField(null=True, blank=True, default=0, verbose_name="H")
-    runs_allowed = models.IntegerField(null=True, blank=True, default=0, verbose_name="R")
-    earned_runs = models.IntegerField(null=True, blank=True, default=0, verbose_name="ER")
-    homeruns_allowed =  models.IntegerField(null=True, blank=True, default=0, verbose_name="HR")
-    hit_batters = models.IntegerField(null=True, blank=True, default=0, verbose_name="HB")
-    walks_allowed = models.IntegerField(null=True, blank=True, default=0, verbose_name="BB")
-    strikeouts = models.IntegerField(null=True, blank=True, default=0, verbose_name="K")
+    hits_allowed = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="H")
+    runs_allowed = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="R")
+    earned_runs = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="ER")
+    homeruns_allowed =  models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="HR")
+    hit_batters = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="HB")
+    walks_allowed = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="BB")
+    strikeouts = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="K")
+    stolen_bases_allowed = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SB")
+    runners_caught_stealing = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="CS")
+    pick_offs = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="PK")
     average = models.FloatField(null=True, blank=True, verbose_name='AVG')
     whip = models.FloatField(null=True, blank=True, verbose_name='WHIP')
     era = models.FloatField(null=True, blank=True, verbose_name='ERA')
@@ -120,7 +123,7 @@ class PlayerPitchingGameStats(models.Model):
     def save(self, *args, **kwargs):
         self.whip = _calc_whip(self.walks_allowed, self.hits_allowed, self.innings_pitched)
         self.era = _calc_era(self.earned_runs, self.innings_pitched)
-        # self.average = _calc_average(self.hits_allowed, self.at_bats)
+        #self.average = _calc_pitchers_avg(self.hits_allowed, self.innings_pitched, self.pick_offs, self.runners_caught_stealing)
         super(PlayerPitchingGameStats, self).save(*args, **kwargs)
 
 
