@@ -1,19 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.db import router
-from django.forms.models import modelformset_factory
-from django.forms import formset_factory, inlineformset_factory
+from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from league.models import Game, TeamSeason, Roster
 from .models import (PlayerHittingGameStats, TeamGameStats,
     PlayerPitchingGameStats)
-from .forms import (PlayerHittingGameStatsForm, PlayerStatsCreateForm, PHGSFHelper,
-    HittingGameStatsFormset)
+from .forms import (PlayerStatsCreateForm, PHGSFHelper, HittingGameStatsFormset)
 from .decorators import user_owns_game
 
-from .tables import ASPlayerHittingGameStatsTable
-from django_tables2.views import SingleTableMixin
-from django_tables2 import SingleTableView
+from .tables import (ASPlayerHittingGameStatsTable,
+    ASPlayerPitchingGameStatsTable)
 
 # Create your views here.
 @permission_required('league.league_admin')
@@ -108,6 +105,7 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     player_stats = game_stats.playerhittinggamestats_set.all()
     pitching_stats = game_stats.playerpitchinggamestats_set.all()
     table = ASPlayerHittingGameStatsTable(player_stats)
+    table2 = ASPlayerPitchingGameStatsTable(pitching_stats)
 
     context = {
         "game_pk": game_pk,
@@ -116,13 +114,7 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
         "player_stats":player_stats,
         "pitching_stats":pitching_stats,
         "table": table,
+        "table2":table2,
         }
 
     return render(request, "stats/game_stats_info.html", context)
-
-class team_game_stats_info_view2(SingleTableView):
-    pass
-
-
-def select_games_view(request, season_stage_pk):
-    pass
