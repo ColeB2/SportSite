@@ -31,6 +31,17 @@ class Season(models.Model):
     def __str__(self):
         return f"{self.year}"
 
+    def save(self, *args, **kwargs):
+        if self.featured:
+            try:
+                temp = Season.objects.get(league=self.league, featured=True)
+                if self != temp:
+                    temp.featured = False
+                    temp.save()
+            except Season.DoesNotExist:
+                pass
+
+        super(Season, self).save(*args, **kwargs)
 
 class SeasonStage(models.Model):
     STAGE_PRINT = {"R":"Regular Season","P":"Postseason"}
