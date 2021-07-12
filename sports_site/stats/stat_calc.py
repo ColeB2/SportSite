@@ -38,7 +38,7 @@ def _calc_whip(walks, hits, innings_pitched):
     else:
         return float(0)
 
-def _calc_era(earned_runs, innings_pitched, innings=7):
+def _calc_era(earned_runs, innings_pitched, innings=9):
     if innings_pitched:
         return round(float((earned_runs*innings)/innings_pitched), 2)
     else:

@@ -4,6 +4,7 @@ from django.shortcuts import render#, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
+from league.models import League
 from .forms import ArticleCreateForm
 from .decorators import user_owns_article
 
@@ -11,9 +12,11 @@ from .decorators import user_owns_article
 # Create your views here.
 def home(request):
     league_slug = request.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
     Article_data = Article.objects.all().filter(league__url=league_slug).order_by('-id')[:10]
     context = {
         "articles": Article_data,
+        "league": league,
         }
     return render(request, 'news/home.html', context)
 
@@ -103,6 +106,11 @@ class ArticlesView(ListView):
         league_slug = self.request.GET.get('league', None)
         queryset = Article.objects.all().filter(league__url=league_slug).order_by('-id')
         return queryset
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['league'] = League.objects.get(url=self.request.GET.get('league', None))
+        return data
 
 
 

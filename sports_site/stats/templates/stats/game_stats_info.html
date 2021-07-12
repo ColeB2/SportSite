@@ -15,24 +15,22 @@
 
         {% if perms.league.league_admin %}
         <h3>{{game_stats}}</h3>
-        <a class="btn btn-primary" href="{% url 'stats-game-stats-create' game_pk team_season_pk %}">Create Lineup</a>
-        <br><br>
-        <h4>Offensive Stats</h4>
-        <br>
+        <a class="btn btn-primary" href="{% url 'stats-game-stats-create' game_pk team_season_pk %}">Create Lineup</a><br><br>
+
+        <h4>Offensive Stats</h4><br>
 
         <div class="table-responsive">
             {% render_table table %}
         </div>
 
-        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit</a>
-        <br>
-        <h4>Pitching Stats</h4>
+        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit</a><br>
 
-        <a class="btn btn-primary "href="#">Edit</a>
-        <br>
+        <h4>Pitching Stats</h4><br>
         <div class="table-responsive">
             {% render_table table2 %}
         </div>
+
+        <a class="btn btn-primary "href="#">Edit</a>
 
 
         {% else %}
