@@ -22,6 +22,11 @@
 
         <br><br>
 
+        <a class="btn btn-primary" href="{% url 'league-admin-season-edit' season_year season.pk season.pk %}">
+            Edit {{season_year}} Season
+        </a>
+
+
         <a class="btn btn-primary" href="{% url 'league-admin-season-stage-create' season_year season.pk %}">
             New Season Stage
         </a>

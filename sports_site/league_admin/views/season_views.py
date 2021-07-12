@@ -1,13 +1,19 @@
 from django.contrib import messages
 from django.contrib.admin.utils import NestedObjects
 from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import router
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
-from ..forms import (SeasonCreateForm, SeasonStageCreateForm, TeamSelectForm)
+from django.utils.decorators import method_decorator
+from django.urls import reverse
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from ..forms import (SeasonCreateForm, SeasonStageCreateForm, TeamSelectForm, SeasonForm)
 from league.models import (League, Season, SeasonStage, Team, TeamSeason)
 from ..decorators import (user_owns_season, user_owns_season_stage,
     user_owns_team_season)
+
+
 
 
 
@@ -69,6 +75,22 @@ def league_admin_season_delete_info_view(request, season_year, season_pk):
     }
     return render(request, "league_admin/season_delete.html", context)
 
+
+class SeasonEditView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'league.league_admin'
+    template_name = 'league_admin/season_edit.html'
+    model = Season
+    form_class = SeasonForm
+
+
+    @method_decorator(user_owns_season)
+    def dispatch(self, *args, **kwargs):
+        return super(SeasonEditView, self).dispatch(*args, **kwargs)
+
+
+    def get_success_url(self):
+        url = reverse('league-admin-season-stage', args=[self.object.year, self.object.pk])
+        return url
 
 
 """SeasonStage Views"""

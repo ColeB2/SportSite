@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
 from league.models import League
+from stats.models import PlayerHittingGameStats
 from .forms import ArticleCreateForm
 from .decorators import user_owns_article
 

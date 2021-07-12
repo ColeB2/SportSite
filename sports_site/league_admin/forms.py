@@ -22,17 +22,29 @@ class SeasonSelectForm(forms.ModelForm):
 class SeasonCreateForm(forms.ModelForm):
     class Meta:
         model = Season
-        fields = ['year',]
+        fields = ['year', 'featured']
 
     def process(self, league):
         year_data = self.cleaned_data.get('year')
+        featured_data = self.cleaned_data.get('featured')
 
-        new_season, created = Season.objects.get_or_create(year=year_data, league=league)
+        new_season, created = Season.objects.get_or_create(year=year_data, league=league, featured=featured_data)
 
         if created:
             new_season.save()
 
         return new_season, created
+
+class SeasonForm(forms.ModelForm):
+    class Meta:
+        model = Season
+        fields = ['year', 'featured']
+
+    def process(self):
+        season_save = self.save()
+        season_save.save()
+        return season_save
+
 
 
 class SeasonStageCreateForm(forms.ModelForm):
