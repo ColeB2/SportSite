@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import permission_required
 from django.db import router
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
-from league.models import Game, TeamSeason, Roster
+from league.models import Game, League, Roster, TeamSeason
 from .models import (PlayerHittingGameStats, TeamGameStats,
     PlayerPitchingGameStats)
 from .forms import (PlayerStatsCreateForm, PHGSFHelper, HittingGameStatsFormset)
@@ -118,3 +118,14 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
         }
 
     return render(request, "stats/game_stats_info.html", context)
+
+
+"""Stats Display Views"""
+def stats_display_view(request):
+    league_slug = reqeust.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league)
+
+    context = {
+        "hitting_stats": hitting_stats,
+        }
