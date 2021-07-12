@@ -23,8 +23,10 @@ def home(request):
 
 def news_detail(request, slug):
     article = Article.objects.get(slug=slug)
+    league = League.objects.get(pk=article.league.pk)
     context = {
-        "article": article
+        "article": article,
+        "league": league,
         }
     return render(request, 'news/news_detail.html', context)
 
