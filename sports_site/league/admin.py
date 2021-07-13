@@ -17,7 +17,7 @@ class SeasonStageInline(admin.TabularInline):
 
 @admin.register(Season)
 class SeasonAdmin(admin.ModelAdmin):
-    list_display = ("year",)
+    list_display = ("year", "league")
     inlines = [SeasonStageInline,]
 
 @admin.register(SeasonStage)

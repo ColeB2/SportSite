@@ -54,9 +54,23 @@ class SeasonStage(models.Model):
 
     stage = models.CharField(choices=SEASON_STAGE, max_length=20, null=True)
     season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True)
+    featured = models.BooleanField(null=True, default=False, verbose_name="Featured")
 
     def __str__(self):
         return f"{self.season} {self.STAGE_PRINT[self.stage]}"
+
+
+    def save(self, *args, **kwargs):
+        if self.featured:
+            try:
+                temp = SeasonStage.objects.get(season__league=self.season.league, featured=True)
+                if self != temp:
+                    temp.featured = False
+                    temp.save()
+            except SeasonStage.DoesNotExist:
+                pass
+
+        super(SeasonStage, self).save(*args, **kwargs)
 
 
 
