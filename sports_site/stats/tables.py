@@ -25,3 +25,14 @@ class ASPlayerPitchingGameStatsTable(tables.Table):
             "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
             "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
             "whip")
+
+
+class PlayerHittingStatsTable(tables.Table):
+    """Table used to display stats for given game on admin pages for editing
+    stats. Omits Team"""
+    class Meta:
+        model = PlayerHittingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("first", "last", "at_bats", "plate_appearances",
+            "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
+            "walks", "strikeouts", "stolen_bases", "caught_stealing")

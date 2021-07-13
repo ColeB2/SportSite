@@ -1,16 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.db import router
+from django.db.models import Count, Sum, F
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
-from league.models import Game, League, Roster, TeamSeason, Season
+from league.models import Game, League, Roster, TeamSeason, Season, SeasonStage
 from .models import (PlayerHittingGameStats, TeamGameStats,
     PlayerPitchingGameStats)
 from .forms import (PlayerStatsCreateForm, PHGSFHelper, HittingGameStatsFormset)
 from .decorators import user_owns_game
 
 from .tables import (ASPlayerHittingGameStatsTable,
-    ASPlayerPitchingGameStatsTable)
+    ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable)
 
 # Create your views here.
 @permission_required('league.league_admin')
@@ -122,10 +123,30 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
 
 """Stats Display Views"""
 def stats_display_view(request):
-    league_slug = reqeust.GET.get('league', None)
+    league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league)
+    featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
+    hitting_stats1 = hitting_stats.values("player").annotate(
+        first = F("player__player__first_name"),
+        last = F("player__player__last_name"),
+        at_bats = Sum('at_bats'),
+        plate_appearances = Sum('plate_appearances'),
+        runs = Sum('runs'),
+        hits = Sum('hits'),
+        doubles = Sum('doubles'),
+        triples = Sum('triples'),
+        homeruns = Sum('homeruns'),
+        runs_batted_in = Sum('runs_batted_in'),
+        walks = Sum('walks'),
+        strikeouts = Sum('strikeouts'),
+        stolen_bases = Sum('stolen_bases'),
+        caught_stealing = Sum('caught_stealing'),
+        )
+    table = PlayerHittingStatsTable(hitting_stats1)
 
     context = {
         "hitting_stats": hitting_stats,
+        "table": table,
         }
+    return render(request, "stats/stats_page.html", context)
