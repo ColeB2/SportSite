@@ -4,6 +4,7 @@ from django.db import router
 from django.db.models import Count, Sum, F
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
+from django_tables2 import RequestConfig
 from league.models import Game, League, Roster, TeamSeason, Season, SeasonStage
 from .models import (PlayerHittingGameStats, TeamGameStats,
     PlayerPitchingGameStats)
@@ -144,6 +145,7 @@ def stats_display_view(request):
         caught_stealing = Sum('caught_stealing'),
         )
     table = PlayerHittingStatsTable(hitting_stats1)
+    RequestConfig(request).configure(table)
 
     context = {
         "hitting_stats": hitting_stats,
