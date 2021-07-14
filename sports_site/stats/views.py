@@ -148,6 +148,7 @@ def stats_display_view(request):
     RequestConfig(request).configure(table)
 
     context = {
+        "league": league,
         "hitting_stats": hitting_stats,
         "table": table,
         }
