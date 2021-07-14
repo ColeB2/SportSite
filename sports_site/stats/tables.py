@@ -35,4 +35,4 @@ class PlayerHittingStatsTable(tables.Table):
         template_name = "django_tables2/bootstrap-responsive.html"
         fields = ("first", "last", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
-            "walks", "strikeouts", "stolen_bases", "caught_stealing")
+            "walks", "strikeouts", "stolen_bases", "caught_stealing", "average")

@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.db import router
-from django.db.models import Count, Sum, F
+from django.db.models import  ExpressionWrapper, F, FloatField, Sum
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
-from league.models import Game, League, Roster, TeamSeason, Season, SeasonStage
+from league.models import Game, League, Roster, TeamSeason, SeasonStage
 from .models import (PlayerHittingGameStats, TeamGameStats,
     PlayerPitchingGameStats)
 from .forms import (PlayerStatsCreateForm, PHGSFHelper, HittingGameStatsFormset)
@@ -144,6 +144,9 @@ def stats_display_view(request):
         stolen_bases = Sum('stolen_bases'),
         caught_stealing = Sum('caught_stealing'),
         )
+    print('NEEDED VALUE')
+    print(hitting_stats1)
+
     table = PlayerHittingStatsTable(hitting_stats1)
     RequestConfig(request).configure(table)
 
