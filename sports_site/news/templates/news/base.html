@@ -31,7 +31,13 @@
                 <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item text-white drop-item header-link" href="{% url 'news-page' %}?league={{request.GET.league}}">News</a>
                     <a class="dropdown-item text-white drop-item header-link" href="#">Teams</a>
+                    {% if league.name %}
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'stats-page' %}?league={{league.url}}">Stats Works</a>
+                    {% elif user.is_authenticated %}
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'stats-page' %}?league={{user.userprofile.league.url}}">Stats ELIF</a>
+                    {% else %}
                     <a class="dropdown-item text-white drop-item header-link" href="{% url 'stats-page' %}?league={{request.GET.league}}">Stats</a>
+                    {% endif %}
                     <a class="dropdown-item text-white drop-item header-link" href="#}">Standings</a>
                     <a class="dropdown-item text-white drop-item header-link" href="#">Schedule</a>
                 </div>
