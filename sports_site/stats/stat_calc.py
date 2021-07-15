@@ -8,6 +8,29 @@ def _convert_to_int(string_value):
     elif string_value[0:1] == '.' :
         return int(string_value[1:])
 
+def _normalize_str_length(str_value, req_length):
+    if len(str_value) != req_length:
+        for i in range(req_length - len(str_value)):
+            str_value +='0'
+    return str_value
+
+
+def _convert_to_str(float):
+    if float == 0:
+        return ".000"
+
+    str_value = str(round(float,3))
+
+    if str_value[0] != '0':
+        str_value = _normalize_str_length(str_value, 5)
+    else:
+        str_value = str_value[1:]
+        str_value = _normalize_str_length(str_value, 4)
+
+
+
+    return str_value
+
 def _calc_average(hits, at_bats):
     if at_bats:
         return round(float(hits/at_bats),3)
