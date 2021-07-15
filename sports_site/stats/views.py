@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.db import router
 from django.db.models import  ExpressionWrapper, F, FloatField, Sum
+from django.db.models.functions import Cast
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
@@ -11,6 +12,7 @@ from .models import (PlayerHittingGameStats, TeamGameStats,
 from .forms import (PlayerStatsCreateForm, PHGSFHelper, HittingGameStatsFormset)
 from .decorators import user_owns_game
 
+from .stat_calc import _calc_average
 from .tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable)
 
@@ -143,9 +145,8 @@ def stats_display_view(request):
         strikeouts = Sum('strikeouts'),
         stolen_bases = Sum('stolen_bases'),
         caught_stealing = Sum('caught_stealing'),
+        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField())
         )
-    print('NEEDED VALUE')
-    print(hitting_stats1)
 
     table = PlayerHittingStatsTable(hitting_stats1)
     RequestConfig(request).configure(table)

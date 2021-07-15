@@ -1,5 +1,7 @@
+from django.db.models import F, Sum
 import django_tables2 as tables
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats)
+from .stat_calc import _calc_average
 
 class ASPlayerHittingGameStatsTable(tables.Table):
     """Table used to display stats for given game on admin pages for editing
@@ -30,9 +32,21 @@ class ASPlayerPitchingGameStatsTable(tables.Table):
 class PlayerHittingStatsTable(tables.Table):
     """Table used to display stats for given game on admin pages for editing
     stats. Omits Team"""
+    # average = tables.Column(empty_values=())
     class Meta:
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
         fields = ("first", "last", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
-            "walks", "strikeouts", "stolen_bases", "caught_stealing", "average")
+            "walks", "strikeouts", "stolen_bases", "caught_stealing", 'average')
+
+
+    def render_average(self, record):
+        return str(record['average'])
+
+    # def order_average(self, queryset, is_descending):
+    #     queryset = queryset.annotate(
+    #         average = F('hits') + F('at_bats')
+    #         ).order_by(("-" if is_descending else "") + "average")
+
+    #     return (queryset, True)
