@@ -127,6 +127,7 @@ class TeamCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TeamCreateForm, self).__init__(*args, **kwargs)
         self.fields['owner'].required = False
+        self.fields['owner'].label = "Owner/Team User Account"
         self.fields['place'].required = False
 
     def process(self, league):
