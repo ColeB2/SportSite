@@ -124,6 +124,11 @@ class TeamCreateForm(forms.ModelForm):
         model = Team
         fields = ['owner', 'name', 'place']
 
+    def __init__(self, *args, **kwargs):
+        super(TeamCreateForm, self).__init__(*args, **kwargs)
+        self.fields['owner'].required = False
+        self.fields['place'].required = False
+
     def process(self, league):
         owner = self.cleaned_data.get('owner')
         name = self.cleaned_data.get('name')
