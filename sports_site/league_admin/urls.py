@@ -33,6 +33,8 @@ urlpatterns = [
     path('schedule/<int:season_year>/stages/<season_stage_pk>/<game_pk>/edit', views.league_admin_edit_game_view, name='league-admin-game-edit'),
     path('schedule/<int:season_year>/stages/<season_stage_pk>/<game_pk>/delete', views.league_admin_delete_game_info_view, name='league-admin-game-delete'),
 
+    path('teams/add', views.league_admin_team_create_view, name='league-admin-team-create'),
+
     path('users/', views.league_admin_users_view, name='league-admin-users'),
     path('users/<user_name>/<user_pk>', views.league_admin_user_info_view, name='league-admin-user-info'),
     path('users/<user_name>/<user_pk>/edit/permissions/', views.league_admin_user_edit_perms_view, name='league-admin-user-edit-perms'),

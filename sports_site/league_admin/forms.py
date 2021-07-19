@@ -3,7 +3,7 @@ from crispy_forms.layout import (Layout, Row, Column, MultiWidgetField, HTML)
 from django import forms
 from django.contrib.auth.models import Permission
 from datetime import datetime
-from league.models import Game, Player, Season, SeasonStage, TeamSeason
+from league.models import Game, Player, Season, SeasonStage, Team, TeamSeason
 from stats.models import TeamGameStats
 
 
@@ -117,6 +117,23 @@ class EditPlayerForm(forms.ModelForm):
         player.save()
 
         return player
+
+
+class TeamCreateForm(forms.ModelForm):
+    class Meta:
+        model = Team
+        fields = ['owner', 'name', 'place']
+
+    def process(self, league):
+        owner = self.cleaned_data.get('owner')
+        name = self.cleaned_data.get('name')
+        place = self.cleaned_data.get('place')
+
+        new_team = Team(owner=owner, name=name, place=place, league=league)
+        new_team.save()
+
+        return new_team
+
 
 
 class EditGameForm(forms.ModelForm):
