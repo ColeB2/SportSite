@@ -32,21 +32,17 @@ class ASPlayerPitchingGameStatsTable(tables.Table):
 class PlayerHittingStatsTable(tables.Table):
     """Table used to display stats for given game on admin pages for editing
     stats. Omits Team"""
-    # average = tables.Column(empty_values=())
     class Meta:
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
         fields = ("first", "last", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
-            "walks", "strikeouts", "stolen_bases", "caught_stealing", 'average')
+            "walks", "strikeouts", "stolen_bases",  "caught_stealing",
+            "hit_by_pitch", "sacrifice_flies", "average", "on_base_percentage")
 
 
     def render_average(self, record):
         return _convert_to_str(record['average'])
 
-    # def order_average(self, queryset, is_descending):
-    #     queryset = queryset.annotate(
-    #         average = F('hits') + F('at_bats')
-    #         ).order_by(("-" if is_descending else "") + "average")
-
-    #     return (queryset, True)
+    def render_on_base_percentage(self, record):
+        return _convert_to_str(record['on_base_percentage'])

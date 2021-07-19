@@ -145,7 +145,21 @@ def stats_display_view(request):
         strikeouts = Sum('strikeouts'),
         stolen_bases = Sum('stolen_bases'),
         caught_stealing = Sum('caught_stealing'),
-        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField())
+        hit_by_pitch = Sum('hit_by_pitch'),
+        sacrifice_flies = Sum('sacrifice_flies'),
+        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField()),
+        on_base_percentage = (
+            Cast(F('hits'), FloatField()) +
+            Cast(F('walks'), FloatField()) +
+            Cast(F('hit_by_pitch'), FloatField())
+            ) /
+            (
+            Cast(F('at_bats'), FloatField()) +
+            Cast(F('walks'), FloatField()) +
+            Cast(F('hit_by_pitch'), FloatField()) +
+            Cast(F('sacrifice_flies'), FloatField())
+            )
+
         )
 
     table = PlayerHittingStatsTable(hitting_stats1)
