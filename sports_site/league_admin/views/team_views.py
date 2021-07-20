@@ -58,3 +58,25 @@ def league_admin_team_info_view(request, team_pk):
         "team_seasons": team_seasons,
     }
     return render(request, "league_admin/team_page.html",context)
+
+
+@permission_required('league.league_admin')
+def league_admin_team_delete_info_view(request, team_pk):
+    team = Team.objects.get(pk=team_pk)
+
+    using = router.db_for_write(team._meta.model)
+    nested_object = NestedObjects(using)
+    nested_object.collect([team])
+
+    if request.method == 'POST':
+        team.delete()
+        messages.success(request, f"{team} and all releated object were deleted")
+        return redirect('league-admin-team-select')
+    else:
+        pass
+
+    context = {
+        'team':team,
+        'nested_object':nested_object,
+    }
+    return render(request, "league_admin/team_delete.html", context)

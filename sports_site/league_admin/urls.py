@@ -38,6 +38,7 @@ urlpatterns = [
     path('teams/', views.league_admin_team_select_view, name='league-admin-team-select'),
     path('teams/add', views.league_admin_team_create_view, name='league-admin-team-create'),
     path('teams/team/<team_pk>', views.league_admin_team_info_view, name="league-admin-team-info"),
+    path('teams/<team_pk>/delete', views.league_admin_team_delete_info_view, name='league-admin-team-delete'),
 
     path('users/', views.league_admin_users_view, name='league-admin-users'),
     path('users/<user_name>/<user_pk>', views.league_admin_user_info_view, name='league-admin-user-info'),

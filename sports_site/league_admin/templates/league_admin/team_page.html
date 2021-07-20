@@ -21,7 +21,7 @@
         {% endfor %}
 
         <br><br>
-        <a class="btn btn-danger" href="{% url 'league-admin-season-create' %}">Delete {{team}}</a>
+        <a class="btn btn-danger" href="{% url 'league-admin-team-delete' team.pk %}">Delete {{team}}</a>
 
 
 
