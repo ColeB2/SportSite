@@ -12,7 +12,6 @@ from .models import (PlayerHittingGameStats, TeamGameStats,
 from .forms import (PlayerStatsCreateForm, PHGSFHelper, HittingGameStatsFormset)
 from .decorators import user_owns_game
 
-from .stat_calc import _calc_average
 from .tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable)
 

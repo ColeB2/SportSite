@@ -19,7 +19,7 @@
         {% endfor %}
 
         <br><br>
-        <a class="btn btn-primary" href="#">Add Existing Teams</a>
+        <a class="btn btn-primary" href="{% url 'league-admin-season-stage-add-teams' stage.season.year stage.season.pk stage.pk %}">Add Existing Teams</a>
         <a class="btn btn-primary" href="#">Create a Team</a>
         <a class="btn btn-danger" href="{% url 'league-admin-season-stage-delete' stage.season.year stage.season.pk stage.pk %}">Delete {{stage}} Stage</a>
 

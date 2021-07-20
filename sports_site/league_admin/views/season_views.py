@@ -145,7 +145,7 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
         formset = TeamFormset(form_kwargs={'team_queryset':teams})
 
     context = {
-        'season':'season',
+        'season':season,
         'season_year': season_year,
         'stages':stages,
         "form": form,
@@ -188,6 +188,45 @@ def league_admin_season_stage_delete_info_view(request, season_year, season_pk, 
         'nested_object':nested_object,
     }
     return render(request, "league_admin/season_stage_delete.html", context)
+
+
+@permission_required('league.league_admin')
+@user_owns_season_stage
+def league_admin_season_stage_add_teams_view(request, season_year, season_pk, season_stage_pk):
+    season = Season.objects.get(pk=season_pk)
+    stage = SeasonStage.objects.get(pk=season_stage_pk)
+
+    league = League.objects.get(pk = request.user.userprofile.league.pk)
+    teams = Team.objects.all().filter(league=league)
+    existing_teams = TeamSeason.objects.all().filter(season=stage)
+
+    TeamFormset = formset_factory(TeamSelectForm, extra=len(teams))
+
+    if request.method == 'POST':
+        formset = TeamFormset(data=request.POST, form_kwargs={'team_queryset':teams})
+        if formset.is_valid():
+            for form in formset:
+                new_teamseason, created = form.process(season=stage)
+
+                if new_teamseason:
+                    if created:
+                        messages.success(request, f"{new_teamseason} created")
+                    else:
+                        messages.info(request, f"{new_teamseason} already exists")
+
+
+        return redirect('league-admin-season-stage-info', season_year, season_pk, season_stage_pk)
+    else:
+        formset = TeamFormset(form_kwargs={'team_queryset':teams})
+
+    context = {
+        'season':season,
+        'season_year': season_year,
+        'stage':stage,
+        'teams': existing_teams,
+        'formset': formset,
+    }
+    return render(request, "league_admin/season_stage_add_teams.html", context)
 
 
 """Team Season"""

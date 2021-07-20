@@ -1,0 +1,26 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+
+        <h2>{{ stage }}</h2>
+
+
+        <h2>Teams:</h2>
+        {% for team in teams %}
+        <h6>{{ team }}</h6>
+        {% endfor %}
+        <form method="post">
+
+            {% csrf_token %}
+            <legend><small>Select teams to add/teams that qualify for the season stage.</small></legend>
+            {{formset|crispy}}
+
+            <input type="submit" value="Add Teams" class="btn btn-primary">
+        </form>
+
+    </div>
+</div>
+
+{% endblock content %}

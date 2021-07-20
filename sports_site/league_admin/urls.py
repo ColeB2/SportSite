@@ -16,6 +16,8 @@ urlpatterns = [
     path('season/<int:season_year>/<season_pk>/<season_stage_pk>', views.league_admin_season_stage_info_view, name='league-admin-season-stage-info'),
     path('season/<int:season_year>/<season_pk>/<season_stage_pk>/delete', views.league_admin_season_stage_delete_info_view, name='league-admin-season-stage-delete'),
 
+    path('season/<int:season_year>/<season_pk>/<season_stage_pk>/add/teams',
+        views.league_admin_season_stage_add_teams_view, name='league-admin-season-stage-add-teams'),
     path('season/<int:season_year>/<season_pk>/<season_stage_pk>/<team_name>/<team_season_pk>',
         views.league_admin_team_season_info_view, name='league-admin-team-season-info'),
     path('season/<int:season_year>/<season_pk>/<season_stage_pk>/<team_name>/<team_season_pk>/delete',
