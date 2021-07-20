@@ -11,14 +11,22 @@
         </ul>
         {% endif %}
 
-        <h3>Teams:</h3>
-        {% for team in teams %}
+        <h2>{{ team }}:</h2>
+        {% for team_season in team_seasons %}
         <h6>
-            <a href="{% url 'league-admin-team-info' team.pk %}">{{team}}</a>
+            <a href="{% url 'league-admin-team-season-info' team_season.season.season.year team_season.season.season.pk team_season.season.pk team_season.team.name team_season.pk %}">
+                {{team_season}}
+            </a>
         </h6>
         {% endfor %}
 
         <br><br>
+        <a class="btn btn-danger" href="{% url 'league-admin-season-create' %}">Delete {{team}}</a>
+
+
+
+
+
     </div>
 </div>
 
