@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from ..filters import PlayerFilter
 from ..forms import (TeamCreateForm)
-from league.models import (League, Player)
+from league.models import (Player, Team)
 from user.models import UserProfile
 from ..decorators import user_owns_player
 
@@ -38,3 +38,14 @@ def league_admin_team_create_view(request):
         "lu":league_users
     }
     return render(request, "league_admin/team_create.html", context)
+
+
+@permission_required('league.league_admin')
+def league_admin_team_select_view(request):
+    league = request.user.userprofile.league
+    teams = Team.objects.all().filter(league=league)
+
+    context = {
+        "teams":teams
+    }
+    return render(request, "league_admin/team_select.html",context)
