@@ -2,11 +2,10 @@ from django.contrib import messages
 from django.contrib.admin.utils import NestedObjects
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import router
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from ..forms import (TeamCreateForm)
+from ..decorators import user_owns_team
 from league.models import (Team, TeamSeason)
 
 
@@ -49,6 +48,7 @@ def league_admin_team_select_view(request):
 
 
 @permission_required('league.league_admin')
+@user_owns_team
 def league_admin_team_info_view(request, team_pk):
     team = Team.objects.get(pk=team_pk)
     team_seasons = TeamSeason.objects.all().filter(team=team)
@@ -61,6 +61,7 @@ def league_admin_team_info_view(request, team_pk):
 
 
 @permission_required('league.league_admin')
+@user_owns_team
 def league_admin_team_delete_info_view(request, team_pk):
     team = Team.objects.get(pk=team_pk)
 

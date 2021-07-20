@@ -1,5 +1,5 @@
 from django.core.exceptions import PermissionDenied
-from league.models import Player, Season, SeasonStage, TeamSeason
+from league.models import Player, Season, SeasonStage, Team, TeamSeason
 from functools import wraps
 
 
@@ -44,6 +44,18 @@ def user_owns_team_season(function):
     def wrap (request, *args, **kwargs):
         teamseason = TeamSeason.objects.get(pk=kwargs['team_season_pk'])
         if teamseason.team.league == request.user.userprofile.league:
+            return function(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    return wrap
+
+
+def user_owns_team(function):
+    @wraps(function)
+    def wrap (request, *args, **kwargs):
+        team = Team.objects.get(pk=kwargs['team_pk'])
+        if team.league == request.user.userprofile.league:
             return function(request, *args, **kwargs)
         else:
             raise PermissionDenied
