@@ -57,7 +57,7 @@ def roster_edit_copy(request, team_name, season, roster_pk):
                         new_playerseason.save()
                         messages.success(request, f"{new_playerseason} created and added to {roster}")
 
-            return redirect('roster-view', team_name=team_name, season=season, pk=roster_pk)
+            return redirect('roster-view', team_name=team_name, season=season, roster_pk=roster_pk)
     else:
         form = RosterSelectForm(roster_queryset=rosters)
 
