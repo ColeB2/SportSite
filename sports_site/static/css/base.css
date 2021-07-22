@@ -83,6 +83,11 @@ background-color: #425766;
     color: #fff;
 }
 
+.leader-link {
+    text-decoration: none;
+    font-weight: bold;
+}
+
 /*NEWS ARTICLE*/
 .article-headline {
     text-decoration: none;

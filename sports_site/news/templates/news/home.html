@@ -4,6 +4,7 @@
 <!--DIV ROW COL-->
 <div class="container-lg">
     <div class="row justify-content-center">
+        <h1>{{avg}}</h1>
 
 
         <!--CENTER COLUMN: Main News Column-->
@@ -66,7 +67,10 @@
                 </div>
                 <div class="row">
                     <div class="col-8">
-                        <h6>{{avg.first}} {{avg.last}}</h6>
+                        <h6>
+                            <a class="article-headline"
+                               href="{% url 'player-page' avg.player_id %}">{{avg.first}} {{avg.last}}</a>
+                        </h6>
                     </div>
                     <div class="col-4">
                         <h3>{{avg.average}}</h3>
@@ -86,7 +90,10 @@
                 </div>
                 <div class="row">
                     <div class="col-8">
-                        <h6>{{homeruns.first}} {{homeruns.last}}</h6>
+                        <h6>
+                            <a class="article-headline"
+                               href="{% url 'player-page' homeruns.player_id %}">{{homeruns.first}} {{homeruns.last}}</a>
+                        </h6>
                     </div>
                     <div class="col-4">
                         <h3>{{homeruns.homeruns}}</h3>
@@ -106,7 +113,10 @@
                 </div>
                 <div class="row">
                     <div class="col-8">
-                        <h6>{{runs_batted_in.first}} {{runs_batted_in.last}}</h6>
+                        <h6>
+                            <a class="article-headline"
+                               href="{% url 'player-page' runs_batted_in.player_id %}">{{runs_batted_in.first}} {{runs_batted_in.last}}</a>
+                        </h6>
                     </div>
                     <div class="col-4">
                         <h3>{{runs_batted_in.runs_batted_in}}</h3>
@@ -126,7 +136,10 @@
                 </div>
                 <div class="row">
                     <div class="col-8">
-                        <h6>{{stolen_bases.first}} {{stolen_bases.last}}</h6>
+                        <h6>
+                            <a class="article-headline"
+                               href="{% url 'player-page' stolen_bases.player_id %}">{{stolen_bases.first}} {{stolen_bases.last}}</a>
+                        </h6>
                     </div>
                     <div class="col-4">
                         <h3>{{stolen_bases.stolen_bases}}</h3>
@@ -146,7 +159,10 @@
                 </div>
                 <div class="row">
                     <div class="col-8">
-                        <h6>{{runs.first}} {{runs.last}}</h6>
+                        <h6>
+                            <a class="article-headline"
+                               href="{% url 'player-page' runs.player_id %}">{{runs.first}} {{runs.last}}</a>
+                        </h6>
                     </div>
                     <div class="col-4">
                         <h3>{{runs.runs}}</h3>
