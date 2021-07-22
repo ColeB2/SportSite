@@ -27,6 +27,7 @@ urlpatterns = [
     path('league/roster/', include("user.urls")),
     path('league/admin/', include("league_admin.urls")),
     path('league/stats/', include("stats.urls")),
+    path('league/', include("league.urls")),
     path('', include("core.urls")),
 ]
 
