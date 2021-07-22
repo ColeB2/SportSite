@@ -15,9 +15,18 @@
 
 
 
-        <h4>Stats</h4><br>
+        <h4>Player Profile:</h4>
 
-        {{player}}
+        <div class="row">
+            <h1>{{player.first_name}} {{player.last_name}}</h1>
+        </div>
+        <div class="row">
+            <h6>Birthdate: {{player.birthdate}}</h6>
+            <h6>Height: {{player.height_feet}}' {{player.height_inches}}"</h6>
+            <h6>Weight: {{player.weight}}lbs</h6>
+            <h6>B/T: {{player.bats}}/{{player.throw}}</h6>
+        </div>
+
 
 
     </div>

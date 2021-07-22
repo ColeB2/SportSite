@@ -113,6 +113,7 @@ class Roster(models.Model):
             ("user_roster_create_players", "User can create new players to add to roster"),
             )
 
+
     def __str__(self):
         return f"{self.team}"
 
@@ -127,6 +128,16 @@ class Player(models.Model):
     first_name = models.CharField(max_length=35, null=True, blank=True)
     last_name = models.CharField(max_length=35, null=True, blank=True)
 
+    birthdate = models.DateField(null=True, blank=True, default=None)
+    bats = models.CharField(max_length=10, null=True, blank=True, default=None)
+    throw = models.CharField(max_length=10, null=True, blank=True, default=None)
+
+    height_feet = models.PositiveIntegerField(null=True, blank=True, default=None)
+    height_inches = models.PositiveIntegerField(null=True, blank=True, default=None)
+    weight = models.PositiveIntegerField(null=True, blank=True, default=None)
+
+
+
     def __str__(self):
         return f"{self.last_name}, {self.first_name}"
 
@@ -137,6 +148,11 @@ class PlayerSeason(models.Model):
     player = models.ForeignKey(Player, on_delete=models.CASCADE, null=True)
     team = models.ForeignKey(Roster, on_delete=models.CASCADE, null=True)
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True, blank=True)
+
+
+    number = models.PositiveIntegerField(null=True, blank=True, default=None)
+    position = models.CharField(max_length=35, null=True, blank=True, default=None)
+
 
     def __str__(self):
         return f"{self.player} {self.season}"
