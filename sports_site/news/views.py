@@ -1,11 +1,15 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models import  F, FloatField, Sum
+from django.db.models.functions import Cast
 from django.http import HttpResponseRedirect
 from django.shortcuts import render#, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Article
-from league.models import League
+from league.models import League, SeasonStage
+from stats.stat_calc import _calc_average, _convert_to_str
 from stats.models import PlayerHittingGameStats
+from stats.tables import PlayerHittingStatsTable
 from .forms import ArticleCreateForm
 from .decorators import user_owns_article
 
@@ -15,11 +19,49 @@ def home(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
     Article_data = Article.objects.all().filter(league__url=league_slug).order_by('-id')[:10]
+
+    """Leaders"""
+    stats = league_leaders_widget(league)
+    avg = stats.order_by('-average')[0]
+    avg["average"] = _convert_to_str(avg["average"])
+    homeruns = stats.order_by('-homeruns')[0]
+    runs_batted_in = stats.order_by('-runs_batted_in')[0]
+    runs = stats.order_by('-runs')[0]
+    stolen_bases = stats.order_by('-stolen_bases')[0]
+
+
+
     context = {
         "articles": Article_data,
         "league": league,
+        "stats": stats,
+        "avg":avg,
+        "homeruns":homeruns,
+        "runs_batted_in": runs_batted_in,
+        "runs": runs,
+        "stolen_bases":stolen_bases,
         }
     return render(request, 'news/home.html', context)
+
+
+def league_leaders_widget(league):
+    """Returns league leaders in Avg, HomeRuns, RBI, SB and Runs"""
+    featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
+    hitting_stats1 = hitting_stats.values("player").annotate(
+        first = F("player__player__first_name"),
+        last = F("player__player__last_name"),
+        team = F("player__team__team__team__name"),
+        at_bats = Sum('at_bats'),
+        runs = Sum('runs'),
+        hits = Sum('hits'),
+        homeruns = Sum('homeruns'),
+        runs_batted_in = Sum('runs_batted_in'),
+        stolen_bases = Sum('stolen_bases'),
+        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField())
+        )
+    return hitting_stats1
+
 
 
 def news_detail(request, slug):
