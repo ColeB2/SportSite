@@ -96,9 +96,6 @@ class PlayerCreateForm(forms.ModelForm):
         model = Player
         fields = ['first_name', 'last_name',]
 
-    def __init__(self, *args, **kwargs):
-        super(PlayerCreateForm, self).__init__(*args, **kwargs)
-        self.fields["last_name"].required = True
 
     def process(self, league):
         first_name = self.cleaned_data.get('first_name')
