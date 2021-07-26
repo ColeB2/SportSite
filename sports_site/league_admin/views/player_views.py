@@ -21,7 +21,12 @@ def league_admin_player_create_view(request):
             new_player = form.process(league=league)
             messages.success(request, f"{new_player} created.")
 
-        return redirect('league-admin-dashboard')
+
+        if 'create' in request.POST:
+            return redirect('league-admin-dashboard')
+        elif 'create-edit-vitals' in request.POST:
+            return redirect('league-admin-player-edit', new_player.pk)
+
     else:
         form = PlayerCreateForm()
 

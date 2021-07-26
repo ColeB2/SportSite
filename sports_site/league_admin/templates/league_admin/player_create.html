@@ -16,8 +16,11 @@
             {% csrf_token %}
             {{form|crispy}}
 
-            <input type="submit" value="Create Player" class="btn btn-primary">
-            <input type="submit" value="Create Player" class="btn btn-primary">
+            <input type="submit" name="create" value="Create Player"
+                class="btn btn-primary">
+            <input type="submit" name="create-edit-vitals"
+                value="Create Player and Edit Vitals"
+                class="btn btn-primary">
             <a class="btn btn-primary "href="{% url 'league-admin-player-select' %}">Back</a>
 
         </form>
