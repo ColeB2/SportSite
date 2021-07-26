@@ -66,6 +66,42 @@ def random_hitting_stats(pgs):
         p.save()
 
 
+def tally_game_runs(games_queryset):
+    games = games_queryset
+
+    for game in games:
+        tgs = game.teamgamestats_set.all()
+        for team in tgs:
+            ps = team.playerhittinggamestats_set.all()
+            runs = 0
+            for p in ps:
+                runs += p.runs
+            if team.team == game.home_team:
+                game.home_score = runs
+            elif team.team == game.away_team:
+                game.away_score = runs
+            game.save()
+
+
+
+def equalize_runs_rbis(games_queryset):
+    games = games_queryset
+    for game in games:
+        tgs = game.teamgamestats_set.all()
+        for team in tgs:
+            ps = team.playerhittinggamestats_set.all()
+            runs = 0
+            rbi = 0
+            for p in ps:
+                runs += p.runs
+                rbi += p.runs_batted_in
+            if rbi > runs:
+                for p in ps:
+                    if p.runs < (p.hits + p.walks + p.hit_by_pitch):
+                        p.runs += (rbi - runs)
+                        p.save()
+                        break
+
 
 
 
