@@ -31,6 +31,29 @@ class TeamGameStats(models.Model):
         super(TeamGameStats,self).save(*args, **kwargs)
 
 
+class GameResults(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
+    home_score = models.PositiveIntegerField(null=True, blank=True, default=0)
+    away_score = models.PositiveIntegerField(null=True, blank=True, default=0)
+
+
+class TeamGameResults(models.Model):
+    team = models.ForeignKey(TeamSeason, on_delete=models.CASCADE, null=True)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, null=True)
+
+    runs_for = models.PositiveIntegerField(null=True, blank=True, default=0)
+    runs_against = models.PositiveIntegerField(null=True, blank=True, default=0)
+    win = models.BooleanField(null=True, default=None)
+    loss = models.BooleanField(null=True, default=None)
+    tie = models.BooleanField(null=True, default=None)
+
+    linescore = models.CharField(max_length=50, null=True, default="0-0-0-0-0-0-0-0-0", blank=True, help_text="Line score formatted with dashes, - to separate innings.")
+
+
+
+
+
+
 class PlayerHittingGameStats(models.Model):
     team_stats = models.ForeignKey(TeamGameStats, on_delete=models.CASCADE, null=True, blank=True)
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True, blank=True)

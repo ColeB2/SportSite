@@ -171,6 +171,7 @@ class Game(models.Model):
     start_time = models.TimeField(default=datetime.time(hour=19,minute=00), null=True, blank=True, verbose_name="Time")
     location = models.CharField(max_length=20, null=True, blank=True, help_text="Defaults to home team.")
     stats_entered = models.BooleanField(null=True, default=False, verbose_name="Stats Entered")
+
     home_stats_entered = models.BooleanField(null=True, default=False, verbose_name="Stats Entered")
     away_stats_entered = models.BooleanField(null=True, default=False, verbose_name="Stats Entered")
     home_score = models.IntegerField(null=True, blank=True, default=0)
