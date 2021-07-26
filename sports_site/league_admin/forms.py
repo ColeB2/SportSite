@@ -109,7 +109,15 @@ class PlayerCreateForm(forms.ModelForm):
 class EditPlayerForm(forms.ModelForm):
     class Meta:
         model = Player
-        fields = ['first_name', 'last_name',]
+        fields = ['first_name', 'last_name', "birthdate", "bats", "throw",
+            "height_feet", "height_inches", "weight"]
+
+    def __init__(self, *args, **kwargs):
+        super(EditPlayerForm, self).__init__(*args, **kwargs)
+        self.fields["birthdate"].label = "Birthdate - YYYY-MM-DD format"
+        self.fields["height_feet"].label = "Height, feet, ie 5,6, etc."
+        self.fields["height_feet"].label = "Height, inches, ie 1,2,3,4... etc."
+        self.fields["weight"].label = "Weight, lbs"
 
 
     def process(self):
