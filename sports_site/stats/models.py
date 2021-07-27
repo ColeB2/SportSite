@@ -52,7 +52,8 @@ class TeamGameLineScore(models.Model):
     seventh = models.PositiveIntegerField(null=True, blank=True, default=0)
     eighth = models.PositiveIntegerField(null=True, blank=True, default=0)
     ninth = models.PositiveIntegerField(null=True, blank=True, default=0)
-    linescore = models.CharField(max_length=50, null=True, default="None", blank=True, help_text="Extra innings score, formatted with dashes, - to separate each score. Ex for 3 extra innings, 0-1-1.")
+
+    extras = models.CharField(max_length=50, null=True, default="None", blank=True, help_text="Extra innings score, formatted with dashes, - to separate each score. Ex for 3 extra innings, 0-1-1.")
 
 
 
