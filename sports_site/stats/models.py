@@ -56,6 +56,10 @@ class TeamGameLineScore(models.Model):
     extras = models.CharField(max_length=50, null=True, default="None", blank=True, help_text="Extra innings score, formatted with dashes, - to separate each score. Ex for 3 extra innings, 0-1-1.")
 
 
+    def __str__(self):
+        return f"{self.game.team.team} Linescore for {self.game}"
+
+
 
 class PlayerHittingGameStats(models.Model):
     team_stats = models.ForeignKey(TeamGameStats, on_delete=models.CASCADE, null=True, blank=True)

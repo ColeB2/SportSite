@@ -15,8 +15,20 @@
 
         {% if perms.league.league_admin %}
         <h3>{{game_stats}}</h3>
-        <a class="btn btn-primary" href="{% url 'stats-game-stats-create' game_pk team_season_pk %}">Create Lineup</a><br><br>
+        <a class="btn btn-primary"
+            href="{% url 'stats-game-stats-create' game_pk team_season_pk %}">
+            Create Lineup
+        </a>
+        <a class="btn btn-primary"
+            href="{% url 'stats-linescore-create' game_pk team_season_pk game_stats.pk %}">
+            Create Linescore
+        </a>
 
+
+        <h4>Linescore:</h4>
+
+
+        <br><br>
         <h4>Offensive Stats</h4><br>
 
         <div class="table-responsive">

@@ -2,7 +2,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import (Layout, Row, Column)
 from django import forms
 from django.forms.models import inlineformset_factory
-from .models import PlayerHittingGameStats, PlayerPitchingGameStats, TeamGameStats
+from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
+    TeamGameLineScore, TeamGameStats)
 from league.models import PlayerSeason
 
 
@@ -58,6 +59,28 @@ class PlayerStatsCreateForm(forms.Form):
                 pitching_stats.save()
 
         return (hitting_stats, hit_created, pitching_stats, pitch_created, pitched)
+
+
+class LinescoreCreateForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        self._game_stats = kwargs.pop('game_stats')
+        super(LinescoreCreateForm, self).__init__(*args, **kwargs)
+
+    def process(self):
+        linescore, created = TeamGameLineScore.objects.get_or_create(game=self._game_stats)
+        if created:
+            linescore.save()
+        return linescore, created
+
+
+class LinescoreEditForm(forms.ModelForm):
+    class Meta:
+        model = TeamGameLineScore
+        exclude = ["game",]
+
+    def __init__(self, *args, **kwargs):
+        super(LinescoreEditForm, self).__init__(*args, **kwargs)
+
 
 
 class PHGSFHelper(FormHelper):

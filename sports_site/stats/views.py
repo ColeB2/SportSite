@@ -1,15 +1,16 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.db import router
-from django.db.models import  ExpressionWrapper, F, FloatField, Sum
+from django.db.models import F, FloatField, Sum
 from django.db.models.functions import Cast
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
 from league.models import Game, League, Roster, TeamSeason, SeasonStage
-from .models import (PlayerHittingGameStats, TeamGameStats,
+from .models import (PlayerHittingGameStats, TeamGameLineScore, TeamGameStats,
     PlayerPitchingGameStats)
-from .forms import (PlayerStatsCreateForm, PHGSFHelper, HittingGameStatsFormset)
+from .forms import (LinescoreCreateForm, HittingGameStatsFormset,
+    PlayerStatsCreateForm, PHGSFHelper, )
 from .decorators import user_owns_game
 
 from .tables import (ASPlayerHittingGameStatsTable,
@@ -81,7 +82,7 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk):
         data=request.POST,
         files=request.FILES,
         form_kwargs={'team_season':team_season,
-                     'team_game_stats':team_game_stats})
+                     'game_stats':team_game_stats})
         if formset.is_valid():
             for form in formset:
                 saved_stats = form.process()
@@ -91,7 +92,7 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk):
         formset = HittingGameStatsFormset(
         instance=team_game_stats,
         form_kwargs={'team_season':team_season,
-                     'team_game_stats':team_game_stats})
+                     'game_stats':team_game_stats})
     context = {
         "game":game,
         "team_season":team_season,
@@ -109,6 +110,7 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     pitching_stats = game_stats.playerpitchinggamestats_set.all()
     table = ASPlayerHittingGameStatsTable(player_stats)
     table2 = ASPlayerPitchingGameStatsTable(pitching_stats)
+    linescore = TeamGameLineScore.objects.get(game=game_stats, game__team=team_season_pk)
 
     context = {
         "game_pk": game_pk,
@@ -118,9 +120,24 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
         "pitching_stats":pitching_stats,
         "table": table,
         "table2":table2,
+        "linescore": linescore,
         }
 
     return render(request, "stats/game_stats_info.html", context)
+
+
+def team_game_linescore_create_view(request, game_pk, team_season_pk, team_game_stats_pk):
+    """View which creates a linescore model and if one doesn't exist and
+    immediately redirects to  team game stats info view"""
+    game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
+
+    linescore, created = TeamGameLineScore.objects.get_or_create(game=game_stats)
+    if created:
+        linescore.save()
+        messages.success(request, f"{linescore} created.")
+    else:
+        messages.info(request, f"{linescore} already exists.")
+    return redirect("stats-team-game-stats", game_pk, team_season_pk)
 
 
 """Stats Display Views"""

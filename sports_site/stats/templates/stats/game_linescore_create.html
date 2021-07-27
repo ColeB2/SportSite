@@ -1,0 +1,42 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+
+        {% if perms.league.league_admin %}
+        <h2>Game: {{game.date}} {{team_season.team}}</h2>
+        <br><br>
+        <legend><small>Select all players who participated in listed game.</small></legend>
+        <form method="post">
+            {% csrf_token %}
+            {% crispy form %}
+
+
+
+
+            <br><br>
+
+            <input type="submit" name="create" value="Create" class="btn btn-primary">
+
+        </form>
+        {% else %}
+        <h2>Access Denied</h2>
+        <h3>You Don't Own <b>{{game_stats.game.season.season.league}}</b>'s <b>{{game_stats}}</b></h3>
+
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock content %}
