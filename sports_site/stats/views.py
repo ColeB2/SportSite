@@ -6,11 +6,12 @@ from django.db.models.functions import Cast
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
+
 from league.models import Game, League, Roster, TeamSeason, SeasonStage
 from .models import (PlayerHittingGameStats, TeamGameLineScore, TeamGameStats,
     PlayerPitchingGameStats)
-from .forms import (LinescoreCreateForm, HittingGameStatsFormset,
-    PlayerStatsCreateForm, PHGSFHelper, )
+from .forms import (LinescoreCreateForm, LinescoreEditForm,
+    HittingGameStatsFormset, PlayerStatsCreateForm, PHGSFHelper, )
 from .decorators import user_owns_game
 
 from .tables import (ASPlayerHittingGameStatsTable,
@@ -66,6 +67,7 @@ def team_game_stats_create_view(request, game_pk, team_season_pk):
     return render(request, "stats/game_stats_create.html", context)
 
 
+@permission_required('league.league_admin')
 def team_game_stats_edit_view(request, game_pk, team_season_pk):
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
@@ -104,6 +106,7 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk):
     return render(request, "stats/game_stats_edit.html", context)
 
 
+@permission_required('league.league_admin')
 def team_game_stats_info_view(request, game_pk, team_season_pk):
     game_stats = TeamGameStats.objects.get(team__pk=team_season_pk, game__pk=game_pk)
     player_stats = game_stats.playerhittinggamestats_set.all()
@@ -126,6 +129,8 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     return render(request, "stats/game_stats_info.html", context)
 
 
+"""Linescore Views"""
+@permission_required('league.league_admin')
 def team_game_linescore_create_view(request, game_pk, team_season_pk, team_game_stats_pk):
     """View which creates a linescore model and if one doesn't exist and
     immediately redirects to  team game stats info view"""
@@ -138,6 +143,30 @@ def team_game_linescore_create_view(request, game_pk, team_season_pk, team_game_
     else:
         messages.info(request, f"{linescore} already exists.")
     return redirect("stats-team-game-stats", game_pk, team_season_pk)
+
+
+@permission_required('league.league_admin')
+def team_game_linescore_edit_view(request, game_pk, team_season_pk, team_game_stats_pk, linescore_pk):
+    game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
+    linescore = TeamGameLineScore.objects.get(pk=linescore_pk)
+
+    if request.method == "POST":
+        form = LinescoreEditForm(data=request.post, files=request.files, instance=linescore)
+        if form.is_valid:
+            linescore_save = form.process()
+            messages.success(request, f"{linescore_save} saved.")
+        return redirect("stats-team-game-stats", game_pk, team_season_pk)
+    else:
+        form = LinescoreEditForm(instance=linescore)
+
+    context = {
+        "game_pk": game_pk,
+        "team_season_pk": team_season_pk,
+        "game_stats":game_stats,
+        "linescore": linescore,
+        "form":form,
+        }
+    return render(request, "stats/game_linescore_create.html", context)
 
 
 """Stats Display Views"""

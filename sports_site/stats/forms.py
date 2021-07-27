@@ -78,9 +78,10 @@ class LinescoreEditForm(forms.ModelForm):
         model = TeamGameLineScore
         exclude = ["game",]
 
-    def __init__(self, *args, **kwargs):
-        super(LinescoreEditForm, self).__init__(*args, **kwargs)
-
+    def process(self):
+        linescore_save = self.save()
+        linescore_save.save()
+        return linescore_save
 
 
 class PHGSFHelper(FormHelper):
