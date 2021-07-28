@@ -126,7 +126,7 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self._team_season = kwargs.pop('team_season')
-        self._team_game_stats = kwargs.pop('team_game_stats')
+        self._team_game_stats = kwargs.pop('game_stats')
         super(PlayerHittingGameStatsForm, self).__init__(*args, **kwargs)
         self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
         self.fields['player'].label = False
