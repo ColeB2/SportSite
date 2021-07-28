@@ -118,11 +118,10 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     try:
         linescore = TeamGameLineScore.objects.get(game=game_stats, game__team=team_season_pk)
         ls = TeamGameLineScore.objects.all().filter(game=game_stats, game__team=team_season_pk)
+        table3 = TeamGameLineScoreTable(ls)
     except ObjectDoesNotExist:
         linescore = None
-
-    if linescore:
-        table3 = TeamGameLineScoreTable(ls)
+        table3 = None
 
     context = {
         "game_pk": game_pk,
