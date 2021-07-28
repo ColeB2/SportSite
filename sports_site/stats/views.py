@@ -16,7 +16,8 @@ from .forms import (LinescoreCreateForm, LinescoreEditForm,
 from .decorators import user_owns_game
 
 from .tables import (ASPlayerHittingGameStatsTable,
-    ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable)
+    ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
+    TeamGameLineScoreTable)
 
 # Create your views here.
 @permission_required('league.league_admin')
@@ -116,9 +117,12 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     table2 = ASPlayerPitchingGameStatsTable(pitching_stats)
     try:
         linescore = TeamGameLineScore.objects.get(game=game_stats, game__team=team_season_pk)
+        ls = TeamGameLineScore.objects.all().filter(game=game_stats, game__team=team_season_pk)
     except ObjectDoesNotExist:
         linescore = None
-    table3 = TeamGameLineScoreTable(linescore)
+
+    if linescore:
+        table3 = TeamGameLineScoreTable(ls)
 
     context = {
         "game_pk": game_pk,
