@@ -1,6 +1,7 @@
 from django.db.models import F, Sum
 import django_tables2 as tables
-from .models import (PlayerHittingGameStats, PlayerPitchingGameStats)
+from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
+    TeamGameLineScore)
 from .stat_calc import _calc_average, _convert_to_str
 
 class ASPlayerHittingGameStatsTable(tables.Table):
@@ -46,3 +47,12 @@ class PlayerHittingStatsTable(tables.Table):
 
     def render_on_base_percentage(self, record):
         return _convert_to_str(record['on_base_percentage'])
+
+
+class TeamGameLineScoreTable(tables.Table):
+    """Table used to display linescore of a game."""
+    class Meta:
+        model = TeamGameLineScore
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("first", "second", "third", "fourth", "fifth", "sixth",
+            "seventh","eighth", "ninth",)

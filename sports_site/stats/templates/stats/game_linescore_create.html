@@ -19,7 +19,7 @@
         <legend><small>Select all players who participated in listed game.</small></legend>
         <form method="post">
             {% csrf_token %}
-            {% crispy form %}
+            {{ form|crispy }}
 
 
 

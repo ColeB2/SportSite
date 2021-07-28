@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import router
 from django.db.models import F, FloatField, Sum
 from django.db.models.functions import Cast
@@ -113,7 +114,11 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     pitching_stats = game_stats.playerpitchinggamestats_set.all()
     table = ASPlayerHittingGameStatsTable(player_stats)
     table2 = ASPlayerPitchingGameStatsTable(pitching_stats)
-    linescore = TeamGameLineScore.objects.get(game=game_stats, game__team=team_season_pk)
+    try:
+        linescore = TeamGameLineScore.objects.get(game=game_stats, game__team=team_season_pk)
+    except ObjectDoesNotExist:
+        linescore = None
+    table3 = TeamGameLineScoreTable(linescore)
 
     context = {
         "game_pk": game_pk,
@@ -123,6 +128,7 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
         "pitching_stats":pitching_stats,
         "table": table,
         "table2":table2,
+        "table3": table3,
         "linescore": linescore,
         }
 
@@ -148,10 +154,13 @@ def team_game_linescore_create_view(request, game_pk, team_season_pk, team_game_
 @permission_required('league.league_admin')
 def team_game_linescore_edit_view(request, game_pk, team_season_pk, team_game_stats_pk, linescore_pk):
     game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
-    linescore = TeamGameLineScore.objects.get(pk=linescore_pk)
+    try:
+        linescore = TeamGameLineScore.objects.get(game=game_stats, game__team=team_season_pk)
+    except ObjectDoesNotExist:
+        linescore = None
 
     if request.method == "POST":
-        form = LinescoreEditForm(data=request.post, files=request.files, instance=linescore)
+        form = LinescoreEditForm(data=request.POST, files=request.FILES, instance=linescore)
         if form.is_valid:
             linescore_save = form.process()
             messages.success(request, f"{linescore_save} saved.")
