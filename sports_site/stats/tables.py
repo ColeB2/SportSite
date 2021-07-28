@@ -31,8 +31,7 @@ class ASPlayerPitchingGameStatsTable(tables.Table):
 
 
 class PlayerHittingStatsTable(tables.Table):
-    """Table used to display stats for given game on admin pages for editing
-    stats. Omits Team"""
+    """Table used to display stats for given game"""
     class Meta:
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
@@ -54,5 +53,5 @@ class TeamGameLineScoreTable(tables.Table):
     class Meta:
         model = TeamGameLineScore
         template_name = "django_tables2/bootstrap-responsive.html"
-        fields = ("first", "second", "third", "fourth", "fifth", "sixth",
-            "seventh","eighth", "ninth",)
+        fields = ["first", "second", "third", "fourth", "fifth", "sixth",
+            "seventh","eighth", "ninth",]

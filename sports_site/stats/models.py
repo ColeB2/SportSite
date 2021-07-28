@@ -43,17 +43,17 @@ class TeamGameStats(models.Model):
 class TeamGameLineScore(models.Model):
     game = models.ForeignKey(TeamGameStats, on_delete=models.CASCADE, null=True)
 
-    first = models.PositiveIntegerField(null=True, blank=True, default=0)
-    second = models.PositiveIntegerField(null=True, blank=True, default=0)
-    third = models.PositiveIntegerField(null=True, blank=True, default=0)
-    fourth = models.PositiveIntegerField(null=True, blank=True, default=0)
-    fifth = models.PositiveIntegerField(null=True, blank=True, default=0)
-    sixth = models.PositiveIntegerField(null=True, blank=True, default=0)
-    seventh = models.PositiveIntegerField(null=True, blank=True, default=0)
-    eighth = models.PositiveIntegerField(null=True, blank=True, default=0)
-    ninth = models.PositiveIntegerField(null=True, blank=True, default=0)
+    first = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="1")
+    second = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="2")
+    third = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="3")
+    fourth = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="4")
+    fifth = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="5")
+    sixth = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="6")
+    seventh = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="7")
+    eighth = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="8")
+    ninth = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="9")
 
-    extras = models.CharField(max_length=50, null=True, default="None", blank=True, help_text="Extra innings score, formatted with dashes, - to separate each score. Ex for 3 extra innings, 0-1-1.")
+    extras = models.CharField(max_length=50, null=True, default="None", blank=True, help_text="Extra innings score, formatted with dashes, - to separate each score. Ex for 3 extra innings, 0-1-1.", verbose_name="extras")
 
 
     def __str__(self):
