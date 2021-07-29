@@ -5,10 +5,8 @@ from django.db import router
 from django.db.models import F, FloatField, Sum
 from django.db.models.functions import Cast
 from django.forms import formset_factory
-
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
-
 from league.models import Game, League, Roster, TeamSeason, SeasonStage
 from .get_stats import get_extra_innings
 from .models import (PlayerHittingGameStats, TeamGameLineScore, TeamGameStats,
@@ -16,12 +14,12 @@ from .models import (PlayerHittingGameStats, TeamGameLineScore, TeamGameStats,
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PlayerStatsCreateForm, PHGSFHelper, )
 from .decorators import user_owns_game
-
 from .tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
     TeamGameLineScoreTable)
 
-# Create your views here.
+
+
 @permission_required('league.league_admin')
 @user_owns_game
 def team_game_stats_create_view(request, game_pk, team_season_pk):
