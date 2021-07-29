@@ -84,25 +84,30 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk):
 
     team_game_stats, created = TeamGameStats.objects.get_or_create(
             season=team_season.season, team=team_season, game=game)
+
     helper = PHGSFHelper()
 
     if request.method == "POST":
         formset = HittingGameStatsFormset(
-        instance=team_game_stats,
-        data=request.POST,
-        files=request.FILES,
-        form_kwargs={'team_season':team_season,
-                     'game_stats':team_game_stats})
+            instance=team_game_stats,
+            data=request.POST,
+            files=request.FILES,
+            form_kwargs={'team_season':team_season,
+                         'game_stats':team_game_stats})
         if formset.is_valid():
             for form in formset:
                 saved_stats = form.process()
                 messages.success(request, f"{saved_stats} saved.")
-            return redirect('league-admin-schedule', team_season.season.season.year, team_season.season.pk)
+
+            return redirect('league-admin-schedule',
+                team_season.season.season.year,
+                team_season.season.pk)
+
     else:
         formset = HittingGameStatsFormset(
-        instance=team_game_stats,
-        form_kwargs={'team_season':team_season,
-                     'game_stats':team_game_stats})
+            instance=team_game_stats,
+            form_kwargs={'team_season':team_season,
+                         'game_stats':team_game_stats})
     context = {
         "game":game,
         "team_season":team_season,
