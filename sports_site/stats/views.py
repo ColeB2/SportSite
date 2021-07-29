@@ -5,15 +5,16 @@ from django.db import router
 from django.db.models import F, FloatField, Sum
 from django.db.models.functions import Cast
 from django.forms import formset_factory
-from django.forms.models import model_to_dict
+
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
 
 from league.models import Game, League, Roster, TeamSeason, SeasonStage
+from .get_stats import get_extra_innings
 from .models import (PlayerHittingGameStats, TeamGameLineScore, TeamGameStats,
     PlayerPitchingGameStats)
-from .forms import (LinescoreCreateForm, LinescoreEditForm,
-    HittingGameStatsFormset, PlayerStatsCreateForm, PHGSFHelper, )
+from .forms import (LinescoreEditForm, HittingGameStatsFormset,
+    PlayerStatsCreateForm, PHGSFHelper, )
 from .decorators import user_owns_game
 
 from .tables import (ASPlayerHittingGameStatsTable,
@@ -116,29 +117,10 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     pitching_stats = game_stats.playerpitchinggamestats_set.all()
     table = ASPlayerHittingGameStatsTable(player_stats)
     table2 = ASPlayerPitchingGameStatsTable(pitching_stats)
+
     try:
         linescore = TeamGameLineScore.objects.get(game=game_stats, game__team=team_season_pk)
-        table_data = [model_to_dict(linescore, fields=[field.name for field in linescore._meta.fields])]
-
-        """table test"""
-        ex = table_data[0].pop("extras")
-        table_data[0].pop("game")
-        table_data[0].pop("id")
-
-
-        # print(table_data)
-        # print(ex)
-
-        if 'None' != ex != None:
-            extras = ex.split("-")
-            tl = len(table_data[0])
-            exlen = len(extras)
-            print(extras)
-            for i in range(tl, tl+exlen, 1):
-                list_i = i-tl
-                table_data[0][str(i+1)] = int(extras[list_i])
-
-
+        table_data = get_extra_innings(linescore)
         table3 = TeamGameLineScoreTable(table_data)
 
     except ObjectDoesNotExist:
@@ -156,7 +138,6 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
         "table2":table2,
         "table3": table3,
         "linescore": linescore,
-        "table_data":table_data,
         }
 
     return render(request, "stats/game_stats_info.html", context)
