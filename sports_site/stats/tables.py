@@ -1,8 +1,7 @@
-from django.db.models import F, Sum
 import django_tables2 as tables
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore)
-from .stat_calc import _calc_average, _convert_to_str
+from .stat_calc import _convert_to_str
 
 class ASPlayerHittingGameStatsTable(tables.Table):
     """Table used to display stats for given game on admin pages for editing
@@ -55,3 +54,25 @@ class TeamGameLineScoreTable(tables.Table):
         template_name = "django_tables2/bootstrap-responsive.html"
         fields = ["first", "second", "third", "fourth", "fifth", "sixth",
             "seventh","eighth", "ninth",]
+
+
+    def __init__(self, *args, **kwargs):
+        """Checks if arg dict has more than min inning value (HARDCODED 9) and
+        if it does, adds those values to base_columns using key as name (happens
+        to equal to str number from min inning on...)
+        ToDo: Find better solution. Works, as long as you don't open up an extra
+        inning lienscore first.
+        """
+        ex_len = len(args[0][0])
+        print(ex_len)
+        print(args[0][0])
+        print(self.base_columns)
+        if ex_len > 9:
+            for i in range(9, ex_len):
+                self.base_columns[str(i+1)] = tables.Column()
+        else:
+            for i in range(ex_len, len(self.base_columns)):
+                self.base_columns.popitem()
+        super(TeamGameLineScoreTable, self).__init__(*args, **kwargs)
+
+

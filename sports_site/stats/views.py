@@ -126,8 +126,8 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
         table_data[0].pop("id")
 
 
-        print(table_data)
-        print(ex)
+        # print(table_data)
+        # print(ex)
 
         if 'None' != ex != None:
             extras = ex.split("-")
