@@ -31,7 +31,8 @@ def team_game_stats_create_view(request, game_pk, team_season_pk):
     team_game_stats, created = TeamGameStats.objects.get_or_create(
             season=team_season.season, team=team_season, game=game)
 
-    StatsFormset = formset_factory(form=PlayerStatsCreateForm, extra=len(players))
+    StatsFormset = formset_factory(form=PlayerStatsCreateForm,
+                                   extra=len(players))
 
     formset = StatsFormset(data=request.POST or None,
                            files=request.FILES or None,
@@ -43,15 +44,19 @@ def team_game_stats_create_view(request, game_pk, team_season_pk):
             if form.is_valid():
                 hitting_stats, h_created, pitching_stats, p_created, pitched = form.process()
                 if h_created:
-                    messages.success(request, f"{hitting_stats.player.player} hitting stats created for {game}")
+                    messages.success(request,
+                        f"{hitting_stats.player.player} hitting stats created for {game}")
                 else:
                     if hitting_stats:
-                        messages.info(request, f"{hitting_stats.player.player} already has stats for {game}.")
+                        messages.info(request,
+                            f"{hitting_stats.player.player} already has stats for {game}.")
                 if p_created:
-                    messages.success(request, f"{pitching_stats.player.player} pitching stats created for {game}")
+                    messages.success(request,
+                        f"{pitching_stats.player.player} pitching stats created for {game}")
                 else:
                     if pitching_stats and pitched:
-                        messages.info(request, f"{pitching_stats.player} already has pitching stats for {game}.")
+                        messages.info(request,
+                            f"{pitching_stats.player} already has pitching stats for {game}.")
 
 
         if 'create' in request.POST:
