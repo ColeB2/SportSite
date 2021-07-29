@@ -6,7 +6,8 @@ from .models import PlayerHittingGameStats
 
 
 def get_league_leaders(league, featured_stage):
-    """Returns league leaders in Avg, HomeRuns, RBI, SB and Runs"""
+    """Returns league leaders in Avg, HomeRuns, RBI, SB and Runs in use for the
+    main home page widget."""
     hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
     hitting_stats1 = hitting_stats.values("player").annotate(
         player_id = F("player__player__pk"),
@@ -20,6 +21,43 @@ def get_league_leaders(league, featured_stage):
         runs_batted_in = Sum('runs_batted_in'),
         stolen_bases = Sum('stolen_bases'),
         average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField())
+        )
+    return hitting_stats1
+
+
+def get_all_season_hitting_stats(league, featured_stage):
+    """Gets all hitting stats, and returns them in a usable fashion for the
+    django-tables2 main stats page."""
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
+    hitting_stats1 = hitting_stats.values("player").annotate(
+        first = F("player__player__first_name"),
+        last = F("player__player__last_name"),
+        at_bats = Sum('at_bats'),
+        plate_appearances = Sum('plate_appearances'),
+        runs = Sum('runs'),
+        hits = Sum('hits'),
+        doubles = Sum('doubles'),
+        triples = Sum('triples'),
+        homeruns = Sum('homeruns'),
+        runs_batted_in = Sum('runs_batted_in'),
+        walks = Sum('walks'),
+        strikeouts = Sum('strikeouts'),
+        stolen_bases = Sum('stolen_bases'),
+        caught_stealing = Sum('caught_stealing'),
+        hit_by_pitch = Sum('hit_by_pitch'),
+        sacrifice_flies = Sum('sacrifice_flies'),
+        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField()),
+        on_base_percentage = (
+            Cast(F('hits'), FloatField()) +
+            Cast(F('walks'), FloatField()) +
+            Cast(F('hit_by_pitch'), FloatField())
+            ) /
+            (
+            Cast(F('at_bats'), FloatField()) +
+            Cast(F('walks'), FloatField()) +
+            Cast(F('hit_by_pitch'), FloatField()) +
+            Cast(F('sacrifice_flies'), FloatField())
+            )
         )
     return hitting_stats1
 

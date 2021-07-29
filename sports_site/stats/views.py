@@ -8,7 +8,7 @@ from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
 from league.models import Game, League, Roster, TeamSeason, SeasonStage
-from .get_stats import get_extra_innings
+from .get_stats import get_all_season_hitting_stats, get_extra_innings
 from .models import (PlayerHittingGameStats, TeamGameLineScore, TeamGameStats,
     PlayerPitchingGameStats)
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
@@ -139,7 +139,6 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
         "table3": table3,
         "linescore": linescore,
         }
-
     return render(request, "stats/game_stats_info.html", context)
 
 
@@ -193,45 +192,12 @@ def stats_display_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
     featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
-    hitting_stats1 = hitting_stats.values("player").annotate(
-        first = F("player__player__first_name"),
-        last = F("player__player__last_name"),
-        at_bats = Sum('at_bats'),
-        plate_appearances = Sum('plate_appearances'),
-        runs = Sum('runs'),
-        hits = Sum('hits'),
-        doubles = Sum('doubles'),
-        triples = Sum('triples'),
-        homeruns = Sum('homeruns'),
-        runs_batted_in = Sum('runs_batted_in'),
-        walks = Sum('walks'),
-        strikeouts = Sum('strikeouts'),
-        stolen_bases = Sum('stolen_bases'),
-        caught_stealing = Sum('caught_stealing'),
-        hit_by_pitch = Sum('hit_by_pitch'),
-        sacrifice_flies = Sum('sacrifice_flies'),
-        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField()),
-        on_base_percentage = (
-            Cast(F('hits'), FloatField()) +
-            Cast(F('walks'), FloatField()) +
-            Cast(F('hit_by_pitch'), FloatField())
-            ) /
-            (
-            Cast(F('at_bats'), FloatField()) +
-            Cast(F('walks'), FloatField()) +
-            Cast(F('hit_by_pitch'), FloatField()) +
-            Cast(F('sacrifice_flies'), FloatField())
-            )
-
-        )
-
-    table = PlayerHittingStatsTable(hitting_stats1)
+    hitting_stats = get_all_season_hitting_stats(league, featured_stage)
+    table = PlayerHittingStatsTable(hitting_stats)
     RequestConfig(request).configure(table)
 
     context = {
         "league": league,
-        "hitting_stats": hitting_stats,
         "table": table,
         }
     return render(request, "stats/stats_page.html", context)
