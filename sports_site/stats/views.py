@@ -70,6 +70,7 @@ def team_game_stats_create_view(request, game_pk, team_season_pk):
 
 
 @permission_required('league.league_admin')
+@user_owns_game
 def team_game_stats_edit_view(request, game_pk, team_season_pk):
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
@@ -109,6 +110,7 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk):
 
 
 @permission_required('league.league_admin')
+@user_owns_game
 def team_game_stats_info_view(request, game_pk, team_season_pk):
     game_stats = TeamGameStats.objects.get(team__pk=team_season_pk, game__pk=game_pk)
     player_stats = game_stats.playerhittinggamestats_set.all()
@@ -143,6 +145,7 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
 
 """Linescore Views"""
 @permission_required('league.league_admin')
+@user_owns_game
 def team_game_linescore_create_view(request, game_pk, team_season_pk, team_game_stats_pk):
     """View which creates a linescore model and if one doesn't exist and
     immediately redirects to  team game stats info view"""
@@ -158,6 +161,7 @@ def team_game_linescore_create_view(request, game_pk, team_season_pk, team_game_
 
 
 @permission_required('league.league_admin')
+@user_owns_game
 def team_game_linescore_edit_view(request, game_pk, team_season_pk, team_game_stats_pk, linescore_pk):
     game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
     try:
