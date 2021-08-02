@@ -131,10 +131,7 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     try:
         linescore = TeamGameLineScore.objects.get(game=game_stats, game__team=team_season_pk)
         table_data = [get_extra_innings(linescore)]
-        table_data.append(get_extra_innings(linescore))
-        print(f"table_data::{table_data}")
-        td = table_data
-        table3 = TeamGameLineScoreTable(td)
+        table3 = TeamGameLineScoreTable(table_data)
 
     except ObjectDoesNotExist:
         linescore = None
