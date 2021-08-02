@@ -14,9 +14,10 @@
 
 
         {% if perms.league.league_admin %}
-        <h2>Game: {{game.date}} {{team_season.team}}</h2>
+        <h2>Game: {{game_stats.game}}</h2>
+        <h2>Team:  {{game_stats.team.team}}</h2>
         <br><br>
-        <legend><small>Select all players who participated in listed game.</small></legend>
+        <legend><small>Update the score for each given inning.</small></legend>
         <form method="post">
             {% csrf_token %}
             {{ form|crispy }}

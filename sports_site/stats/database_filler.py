@@ -22,7 +22,6 @@ def get_games(season_stage):
     games = season_stage.game_set.all()
     return games
 
-
 def create_schedule(dates, games, team_dict):
     """Creates a schedule given list of dates, a same len list of games for said
     date, and a team_dict to map numbers from games to teamseason objects.

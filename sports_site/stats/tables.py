@@ -63,6 +63,7 @@ class TeamGameLineScoreTable(tables.Table):
         ToDo: Find better solution. Works, as long as you don't open up an extra
         inning lienscore first.
         """
+
         extras_len = len(args[0][0])
         if extras_len > 9:
             for i in range(9, extras_len):
@@ -70,6 +71,7 @@ class TeamGameLineScoreTable(tables.Table):
         else:
             for i in range(extras_len, len(self.base_columns)):
                 self.base_columns.popitem()
+
         super(TeamGameLineScoreTable, self).__init__(*args, **kwargs)
 
 

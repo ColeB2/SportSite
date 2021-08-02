@@ -14,11 +14,15 @@
 
 
         {% if perms.league.league_admin %}
-        <h3>{{game_stats}}</h3>
+        <h2>{{game_stats.team}}</h2>
+
+        <h4>Game: {{game_stats.game}}</h4>
+
         <a class="btn btn-primary"
             href="{% url 'stats-game-stats-create' game_pk team_season_pk %}">
             Create Lineup
         </a>
+
         <a class="btn btn-primary"
             href="{% url 'stats-linescore-create' game_pk team_season_pk game_stats.pk %}">
             Create Linescore
@@ -26,6 +30,7 @@
 
         {% if linescore %}
         <h4>Linescore:</h4>
+        <h5>RF: {{game_stats.runs_for}} RA: {{game_stats.runs_against}}</h5>
         {% render_table table3 %}
         <a class="btn btn-primary "href="{% url 'stats-linescore-edit' game_pk team_season_pk game_stats.pk linescore.pk %}">Edit</a><br>
         {% endif %}
