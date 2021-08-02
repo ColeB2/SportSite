@@ -8,12 +8,19 @@ td = {'2':teams[0], '1':teams[1], '3':teams[2], '4':teams[3], '5':teams[4], '6':
 '''
 
 def get_league(url="SBBL"):
+    """Gets and returns league model object based of url slug."""
     league = League.objects.get(url=url)
     return league
 
 def get_featured_season_stage(league=None):
+    """Gets featured season stage and returns it given league object."""
     season_stage = SeasonStage.objects.get(featured=True, season__league=league)
     return season_stage
+
+def get_games(season_stage):
+    """Gets all games in given season stage."""
+    games = season_stage.game_set.all()
+    return games
 
 
 def create_schedule(dates, games, team_dict):
