@@ -66,11 +66,13 @@ def get_all_season_standings_stats(league, featured_stage):
     django-tables2 standings page"""
     game_stats = TeamGameStats.objects.all().filter(season=featured_stage)
     standings_stats = game_stats.values("team").annotate(
-        team_name = F("team__team"),
-        wins = Sum("win"),
+        team_name = F("team__team__name"),
+        # wins = Sum("win"),
         win = Count(Case(When(win=True, then=1))),
-        loss = Sum("loss"),
-        tie = Sum("tie"),
+        loss = Count(Case(When(loss=True, then=1))),
+        tie = Count(Case(When(tie=True, then=1))),
+        # loss = Sum("loss"),
+        # tie = Sum("tie"),
         pct =  (
             Cast(F("win"), FloatField()) +
             (Cast(F("tie"), FloatField()) * 0.5)
@@ -83,10 +85,11 @@ def get_all_season_standings_stats(league, featured_stage):
         runs_for = Sum("runs_for"),
         runs_against = Sum("runs_against"),
         differential = (
-            Cast(F("runs_for"), FloatField()) /
+            Cast(F("runs_for"), FloatField()) -
             Cast(F("runs_against"),FloatField())
             ),
         )
+    print(f"standings_stats {standings_stats}")
     return standings_stats
 
 

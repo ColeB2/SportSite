@@ -79,8 +79,24 @@ class StandingsTable(tables.Table):
     class Meta:
         model = TeamGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
-        fields = ["team", "win", "loss", "tie", "pct", "runs_for",
+        fields = ["team_name", "win", "loss", "tie", "pct", "runs_for",
             "runs_against", "differential",]
+
+
+    def render_win(self, record):
+        return str(record['win'])
+
+
+    def render_loss(self, record):
+        return str(record['loss'])
+
+
+    def render_tie(self, record):
+        return str(record['tie'])
+
+
+    def render_pct(self, record):
+        return _convert_to_str(record['pct'])
 
 
 
