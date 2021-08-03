@@ -29,8 +29,7 @@
         </a>
 
         {% if linescore %}
-        <h4>Linescore:</h4>
-        <h5>RF: {{game_stats.runs_for}} RA: {{game_stats.runs_against}}</h5>
+        <h4>Team Linescore:</h4>
         {% render_table table3 %}
         <a class="btn btn-primary "href="{% url 'stats-linescore-edit' game_pk team_season_pk game_stats.pk linescore.pk %}">Edit</a><br>
         {% endif %}
