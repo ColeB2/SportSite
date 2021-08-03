@@ -1,7 +1,7 @@
 from django.db.models import  F, FloatField, Sum
 from django.db.models.functions import Cast
 from django.forms.models import model_to_dict
-from .models import PlayerHittingGameStats
+from .models import PlayerHittingGameStats, TeamGameStats
 
 
 
@@ -60,6 +60,33 @@ def get_all_season_hitting_stats(league, featured_stage):
             )
         )
     return hitting_stats1
+
+def get_all_season_standings_stats(league, featured_stage):
+    """Gets all the standings data, and returns them in usable fashion for
+    django-tables2 standings page"""
+    game_stats = TeamGameStats.objects.all().filter(season=featured_stage)
+    standings_stats = game_stats.values("team").annotate(
+        team = F("team__team"),
+        wins = Sum("win"),
+        loss = Sum("loss"),
+        tie = Sum("tie"),
+        pct =  (
+            Cast(F("win"), FloatField()) +
+            (Cast(F("tie"), FloatField()) * 0.5)
+            ) /
+            (
+            Cast(F('win'), FloatField()) +
+            Cast(F('loss'), FloatField()) +
+            Cast(F('tie'), FloatField())
+            ),
+        runs_for = Sum("runs_for"),
+        runs_against = Sum("runs_against"),
+        differential = (
+            Cast(F("runs_for"), FloatField()) /
+            Cast(F("runs_against"),FloatField())
+            ),
+        )
+    return standings_stats
 
 
 def get_extra_innings(linescore_obj):

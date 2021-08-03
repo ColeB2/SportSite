@@ -27,6 +27,9 @@ def home(request):
     stolen_bases = stats.order_by('-stolen_bases')[0]
 
 
+    """Games"""
+
+
 
     context = {
         "articles": Article_data,
@@ -39,10 +42,6 @@ def home(request):
         "stolen_bases":stolen_bases,
         }
     return render(request, 'news/home.html', context)
-
-
-
-
 
 
 def news_detail(request, slug):

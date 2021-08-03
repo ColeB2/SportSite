@@ -1,6 +1,6 @@
 import django_tables2 as tables
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
-    TeamGameLineScore)
+    TeamGameLineScore, TeamGameStats)
 from .stat_calc import _convert_to_str
 
 class ASPlayerHittingGameStatsTable(tables.Table):
@@ -73,5 +73,14 @@ class TeamGameLineScoreTable(tables.Table):
                 self.base_columns.popitem()
 
         super(TeamGameLineScoreTable, self).__init__(*args, **kwargs)
+
+
+class StandingsTable(tables.Table):
+    class Meta:
+        model = TeamGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ["team", "win", "loss", "tie", "pct", "runs_for",
+            "runs_against", "differential",]
+
 
 
