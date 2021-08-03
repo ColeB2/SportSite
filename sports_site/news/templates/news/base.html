@@ -38,7 +38,13 @@
                     {% else %}
                     <a class="dropdown-item text-white drop-item header-link" href="{% url 'stats-page' %}?league={{request.GET.league}}">Stats</a>
                     {% endif %}
-                    <a class="dropdown-item text-white drop-item header-link" href="#}">Standings</a>
+                    {% if league.name %}
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'standings-page' %}?league={{league.url}}">Standings</a>
+                    {% elif user.is_authenticated %}
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'standings-page' %}?league={{user.userprofile.league.url}}">Standings</a>
+                    {% else %}
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'standings-page' %}?league={{request.GET.league}}">Standings</a>
+                    {% endif %}
                     <a class="dropdown-item text-white drop-item header-link" href="#">Schedule</a>
                 </div>
             </div>
