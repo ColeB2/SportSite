@@ -1,4 +1,4 @@
-from django.db.models import  F, FloatField, Sum
+from django.db.models import  F, FloatField, Sum, Count, Case, When
 from django.db.models.functions import Cast
 from django.forms.models import model_to_dict
 from .models import PlayerHittingGameStats, TeamGameStats
@@ -66,8 +66,9 @@ def get_all_season_standings_stats(league, featured_stage):
     django-tables2 standings page"""
     game_stats = TeamGameStats.objects.all().filter(season=featured_stage)
     standings_stats = game_stats.values("team").annotate(
-        team = F("team__team"),
+        team_name = F("team__team"),
         wins = Sum("win"),
+        win = Count(Case(When(win=True, then=1))),
         loss = Sum("loss"),
         tie = Sum("tie"),
         pct =  (
