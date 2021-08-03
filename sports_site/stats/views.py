@@ -2,16 +2,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import router
-from django.db.models import F, FloatField, Sum
-from django.db.models.functions import Cast
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
 from league.models import Game, League, Roster, TeamSeason, SeasonStage
 from .get_stats import (get_all_season_hitting_stats,
     get_all_season_standings_stats, get_extra_innings)
-from .models import (PlayerHittingGameStats, TeamGameLineScore, TeamGameStats,
-    PlayerPitchingGameStats)
+from .models import (TeamGameLineScore, TeamGameStats,)
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PlayerStatsCreateForm, PHGSFHelper, )
 from .decorators import user_owns_game
@@ -210,6 +207,7 @@ def stats_display_view(request):
     context = {
         "league": league,
         "table": table,
+        "featured_stage": featured_stage,
         }
     return render(request, "stats/stats_page.html", context)
 
@@ -226,5 +224,6 @@ def standings_display_view(request):
     context = {
         "league": league,
         "table": table,
+        "featured_stage": featured_stage,
     }
     return render(request, "stats/standings_page.html", context)

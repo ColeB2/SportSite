@@ -2,6 +2,9 @@ from django.db import models
 from django.utils.timezone import now
 from django.contrib.auth.models import User
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 import datetime
 
@@ -183,3 +186,5 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
         self.location = f"{self.home_team.team.place}"
         super(Game, self).save(*args, **kwargs)
+
+

@@ -6,6 +6,9 @@ import datetime
 from .stat_calc import (_calc_average, _calc_obp, _calc_slugging, _calc_ops,
     _calc_win_pct, _calc_whip, _calc_era, _calc_pitchers_avg)
 from .validators import validate_innings_pitched
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 class PlayerHittingStats(models.Model):
     player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True)
