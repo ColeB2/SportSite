@@ -14,9 +14,25 @@
 
         <div class="row">
             <h1>{{ team }}:</h1>
-            <h4>Rosters:</h4>
-            <h4>Schedule:</h4>
-            <h4>Stats:</h4>
+
+            <p><font size="+2"><b>Rosters: </b></font>
+            {% for season in team_season %}
+                <a>{{ season.season.season.year}}</a>
+            {% endfor %}
+            </p>
+
+            <p><font size="+2"><b>Schedule: </b></font>
+            {% for season in team_season %}
+                <a>{{ season.season.season.year}}</a>
+            {% endfor %}
+            </p>
+
+            <p><font size="+2"><b>Stats: </b></font>
+            {% for season in team_season %}
+                <a>{{ season.season.season.year}}</a>
+            {% endfor %}
+            </p>
+
         </div>
 
     </div>

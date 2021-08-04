@@ -97,3 +97,7 @@ background-color: #425766;
 .article-headline:hover {
     color: #1a4ea6;
 }
+
+.inline-title{
+    font-size: 2em;
+}

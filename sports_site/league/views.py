@@ -35,11 +35,13 @@ def team_page_view(request, team_pk):
     league = team.league
     featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
 
+    team_season = team.teamseason_set.all()
+
     context = {
         "featured_stage": featured_stage,
         "league": league,
+        "team_season": team_season,
         "team": team,
-
         }
     return render(request, "league/team_page.html", context)
 
