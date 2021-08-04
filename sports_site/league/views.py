@@ -44,3 +44,15 @@ def team_page_view(request, team_pk):
     return render(request, "league/team_page.html", context)
 
 
+def team_select_page_view(request):
+    league_slug = request.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
+    teams = Team.objects.all().filter(league=league)
+
+    context = {
+        "league": league,
+        "teams": teams,
+    }
+    return render(request, "league/team_select_page.html", context)
+
+

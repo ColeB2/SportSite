@@ -30,7 +30,13 @@
                 </button>
                 <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item text-white drop-item header-link" href="{% url 'news-page' %}?league={{request.GET.league}}">News</a>
-                    <a class="dropdown-item text-white drop-item header-link" href="#">Teams</a>
+                    {% if league.name %}
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'team-select-page' %}?league={{league.url}}">Teams</a>
+                    {% elif user.is_authenticated %}
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'team-select-page' %}?league={{user.userprofile.league.url}}">Teams</a>
+                    {% else %}
+                    <a class="dropdown-item text-white drop-item header-link" href="{% url 'team-select-page' %}?league={{request.GET.league}}">Teams</a>
+                    {% endif %}
                     {% if league.name %}
                     <a class="dropdown-item text-white drop-item header-link" href="{% url 'stats-page' %}?league={{league.url}}">Stats</a>
                     {% elif user.is_authenticated %}
