@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Player, PlayerSeason
+from .models import Game, League, Player, PlayerSeason, SeasonStage
 
 # Create your views here.
 def player_page_view(request, player_pk):
@@ -12,3 +12,17 @@ def player_page_view(request, player_pk):
         "player_seasons": player_seasons,
         }
     return render(request, "league/player_page.html", context)
+
+
+def schedule_view(request):
+    league_slug = request.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
+    featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
+    schedule = Game.objects.all().filter(season=featured_stage)
+
+    context = {
+        "league": league,
+        "schedule": schedule,
+        "featured_stage": featured_stage,
+    }
+    return render(request, "league/schedule_page.html", context)
