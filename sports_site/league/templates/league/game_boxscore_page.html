@@ -15,8 +15,12 @@
         <div class="row">
             <h1>{{ game }}</h1>
         </div>
-        {<div class="table-responsive">
+        <div class="table-responsive">
             {% render_table home_stats_table %}
+        </div>
+
+        <div class="table-responsive">
+            {% render_table away_stats_table %}
         </div>
     </div>
 </div>

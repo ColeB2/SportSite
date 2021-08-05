@@ -99,4 +99,16 @@ class StandingsTable(tables.Table):
         return _convert_to_str(record['pct'])
 
 
+class PlayerHittingGameStatsTable(tables.Table):
+    """Table used to display stats for given game"""
+    class Meta:
+        model = PlayerHittingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("player__player", "at_bats", "plate_appearances",
+            "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
+            "walks", "strikeouts", "stolen_bases",  "caught_stealing",
+            "hit_by_pitch", "sacrifice_flies")
+
+
+
 
