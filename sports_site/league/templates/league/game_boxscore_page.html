@@ -15,10 +15,21 @@
         <div class="row">
             <h1>{{ game }}</h1>
         </div>
+
+        <!--LineScore-->
+        <div class="table-responsive">
+            {% render_table boxscore_table %}
+        </div>
+
+        <!--Home Team Stats-->
+        <h3>{{game.home_team.team}}</h3>
         <div class="table-responsive">
             {% render_table home_stats_table %}
         </div>
 
+
+        <!--Away Team Stats-->
+        <h3>{{game.away_team.team}}</h3>
         <div class="table-responsive">
             {% render_table away_stats_table %}
         </div>

@@ -1,8 +1,11 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from .models import (Game, League, Player, PlayerSeason, SeasonStage, Team,
     TeamSeason)
+
+from stats.get_stats import get_extra_innings
 from stats.models import (TeamGameStats, TeamGameLineScore)
-from stats.tables import PlayerHittingGameStatsTable
+from stats.tables import PlayerHittingGameStatsTable, TeamGameLineScoreTable
 
 
 def player_page_view(request, player_pk):
@@ -67,12 +70,24 @@ def game_boxscore_page_view(request, game_pk):
     home_game_stats = TeamGameStats.objects.get(game=game, team=game.home_team)
     home_stats = home_game_stats.playerhittinggamestats_set.all()
     home_stats_table = PlayerHittingGameStatsTable(home_stats)
-    home_linescore = home_game_stats.teamgamelinescore_set.all()
+
 
     away_game_stats = TeamGameStats.objects.get(game=game, team=game.away_team)
     away_stats = away_game_stats.playerhittinggamestats_set.all()
     away_stats_table = PlayerHittingGameStatsTable(away_stats)
-    away_linescore = away_game_stats.teamgamelinescore_set.all()
+
+
+    try:
+        home_linescore = home_game_stats.teamgamelinescore_set.all()[0]
+        away_linescore = away_game_stats.teamgamelinescore_set.all()[0]
+        table_data = [ get_extra_innings(away_linescore), get_extra_innings(home_linescore)]
+        boxscore_table = TeamGameLineScoreTable(table_data)
+    except ObjectDoesNotExist:
+        home_linescore = None
+        away_linescore = None
+        table_data = None
+        boxscore_table = None
+
 
     context = {
         "game": game,
@@ -85,6 +100,7 @@ def game_boxscore_page_view(request, game_pk):
         "away_stats": away_stats,
         "away_stats_table": away_stats_table,
         "away_linescore": away_linescore,
+        "boxscore_table": boxscore_table
         }
     return render(request, "league/game_boxscore_page.html", context)
 
