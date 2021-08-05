@@ -49,30 +49,42 @@ class PlayerHittingStatsTable(tables.Table):
 
 class TeamGameLineScoreTable(tables.Table):
     """Table used to display linescore of a game."""
-    class Meta:
-        model = TeamGameLineScore
-        template_name = "django_tables2/bootstrap-responsive.html"
-        fields = ["first", "second", "third", "fourth", "fifth", "sixth",
-            "seventh","eighth", "ninth",]
-
-
     def __init__(self, *args, **kwargs):
         """Checks if arg dict has more than min inning value (HARDCODED 9) and
         if it does, adds those values to base_columns using key as name (happens
         to equal to str number from min inning on...)
         ToDo: Find better solution. Works, as long as you don't open up an extra
         inning lienscore first.
-        """
 
+        Currently args[0][0] len should be 10:
+            9 innings
+            1 R total
+        """
         extras_len = len(args[0][0])
-        if extras_len > 9:
-            for i in range(9, extras_len):
+        non_inn_vals = 1
+        if extras_len > 10:
+            for i in range(9, extras_len-non_inn_vals):
                 self.base_columns[str(i+1)] = tables.Column()
         else:
-            for i in range(extras_len, len(self.base_columns)):
+            for i in range(extras_len-non_inn_vals, len(self.base_columns)):
                 self.base_columns.popitem()
 
+        if args[0][0]["R"]:
+            self.base_columns["R"] = tables.Column()
+            self.base_columns.move_to_end("R")
+
+        print(f"args: {args[0][0]}")
+        print(f"base cols: {self.base_columns}")
+
+
         super(TeamGameLineScoreTable, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = TeamGameLineScore
+        template_name = "django_tables2/bootstrap-responsive.html"
+
+        fields = ["first", "second", "third", "fourth", "fifth", "sixth",
+            "seventh","eighth", "ninth",]
 
 
 class StandingsTable(tables.Table):

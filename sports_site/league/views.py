@@ -80,7 +80,10 @@ def game_boxscore_page_view(request, game_pk):
     try:
         home_linescore = home_game_stats.teamgamelinescore_set.all()[0]
         away_linescore = away_game_stats.teamgamelinescore_set.all()[0]
-        table_data = [ get_extra_innings(away_linescore), get_extra_innings(home_linescore)]
+        table_data = [
+            get_extra_innings(away_linescore),
+            get_extra_innings(home_linescore)
+        ]
         boxscore_table = TeamGameLineScoreTable(table_data)
     except ObjectDoesNotExist:
         home_linescore = None

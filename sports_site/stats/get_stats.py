@@ -89,7 +89,6 @@ def get_all_season_standings_stats(league, featured_stage):
             Cast(F("runs_against"),FloatField())
             ),
         )
-    print(f"standings_stats {standings_stats}")
     return standings_stats
 
 
@@ -108,5 +107,7 @@ def get_extra_innings(linescore_obj):
         for i in range(table_data_len, table_data_len + extras_len, 1):
             list_i = i - table_data_len
             table_data[str(i+1)] = int(extras[list_i])
+
+    table_data["R"] = sum(table_data.values())
 
     return table_data
