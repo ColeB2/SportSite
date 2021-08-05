@@ -97,8 +97,10 @@ def get_extra_innings(linescore_obj):
     id values from it, then turns the extras values into own key/value pairs in
     the dictionary and returns the dict for use in django-tables."""
     table_data = model_to_dict(linescore_obj, fields=[field.name for field in linescore_obj._meta.fields])
+    print(table_data)
     extra_innings = table_data.pop("extras")
-    table_data.pop("game")
+    # game_obj = TeamGameStats.objects.get(pk=table_data.pop("game"))
+    game_pk = table_data.pop("game")
     table_data.pop("id")
     if 'None' != extra_innings != None:
         extras = extra_innings.split("-")
@@ -109,5 +111,7 @@ def get_extra_innings(linescore_obj):
             table_data[str(i+1)] = int(extras[list_i])
 
     table_data["R"] = sum(table_data.values())
+    table_data["game"] = TeamGameStats.objects.get(pk=game_pk)
+    # table_data["F"] = game_obj.team.team.name
 
     return table_data

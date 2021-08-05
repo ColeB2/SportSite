@@ -58,11 +58,12 @@ class TeamGameLineScoreTable(tables.Table):
 
         Currently args[0][0] len should be 10:
             9 innings
-            1 R total
+            1 R - total runs
+            1 F - Final -- Team(s) involved
         """
         extras_len = len(args[0][0])
-        non_inn_vals = 1
-        if extras_len > 10:
+        non_inn_vals = 2
+        if extras_len > 9+non_inn_vals:
             for i in range(9, extras_len-non_inn_vals):
                 self.base_columns[str(i+1)] = tables.Column()
         else:
@@ -72,6 +73,10 @@ class TeamGameLineScoreTable(tables.Table):
         if args[0][0]["R"]:
             self.base_columns["R"] = tables.Column()
             self.base_columns.move_to_end("R")
+
+        # if args[0][0]["game"]:
+        #     self.base_columns["game"] = tables.Column()
+        #     self.base_columns.move_to_end("game", last=False)
 
         print(f"args: {args[0][0]}")
         print(f"base cols: {self.base_columns}")
@@ -83,8 +88,10 @@ class TeamGameLineScoreTable(tables.Table):
         model = TeamGameLineScore
         template_name = "django_tables2/bootstrap-responsive.html"
 
-        fields = ["first", "second", "third", "fourth", "fifth", "sixth",
-            "seventh","eighth", "ninth",]
+        fields = [
+            "first", "second", "third", "fourth", "fifth", "sixth",
+            "seventh","eighth", "ninth",
+        ]
 
 
 class StandingsTable(tables.Table):
