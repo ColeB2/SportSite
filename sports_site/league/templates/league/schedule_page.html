@@ -20,6 +20,7 @@
                     <th>Date</th>
                     <th>Home Team</th>
                     <th>Away Team</th>
+                    <th>Start Time</th>
                     <th>Stats Entered</th>
                 </tr>
             {% for game in schedule %}
@@ -41,6 +42,10 @@
                 <h6>
                      <a href="#">{{game.away_team.team}}</a>
                 </h6>
+            </td>
+
+            <td>
+                <h6>{{game.start_time}}</h6>
             </td>
 
             <td>
