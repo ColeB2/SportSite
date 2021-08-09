@@ -115,3 +115,26 @@ def get_extra_innings(linescore_obj):
     # table_data["F"] = game_obj.team.team.name
 
     return table_data
+
+
+def get_stats_info(stats_queryset):
+    doubles = []
+    triples = []
+    homeruns = []
+    rbi = []
+
+    for player in stats_queryset:
+        if player.doubles:
+            doubles.append((player.player.player.last_name, player.player.player.first_name, player.doubles))
+        if player.triples:
+            triples.append((player.player.player.last_name, player.player.player.first_name, player.triples))
+        if player.homeruns:
+            homeruns.append((player.player.player.last_name, player.player.player.first_name, player.homeruns))
+        if player.runs_batted_in:
+            rbi.append((player.player.player.last_name, player.player.player.first_name, player.runs_batted_in))
+
+    print(doubles, triples, homeruns, rbi)
+
+
+    return (doubles, triples, homeruns, rbi)
+

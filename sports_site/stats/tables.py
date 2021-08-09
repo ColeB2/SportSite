@@ -121,6 +121,17 @@ class PlayerHittingGameStatsTable(tables.Table):
             "hit_by_pitch", "sacrifice_flies")
 
 
+class TESTTable(tables.Table):
+    """Table used to display stats for given game"""
+    class Meta:
+        model = PlayerHittingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("player__player", "at_bats", "runs", "hits", "runs_batted_in",
+            "walks", "strikeouts",)
+
+
+
+
 class PlayerPitchingGameStatsTable(tables.Table):
     """Table used to display pitching stats for given game"""
     class Meta:

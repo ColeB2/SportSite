@@ -3,10 +3,10 @@ from django.shortcuts import render
 from .models import (Game, League, Player, PlayerSeason, SeasonStage, Team,
     TeamSeason)
 
-from stats.get_stats import get_extra_innings
+from stats.get_stats import get_extra_innings, get_stats_info
 from stats.models import (TeamGameStats, TeamGameLineScore)
 from stats.tables import (PlayerHittingGameStatsTable,
-    PlayerPitchingGameStatsTable, TeamGameLineScoreTable)
+    PlayerPitchingGameStatsTable, TeamGameLineScoreTable, TESTTable)
 
 
 def player_page_view(request, player_pk):
@@ -73,6 +73,8 @@ def game_boxscore_page_view(request, game_pk):
     home_stats_table = PlayerHittingGameStatsTable(home_stats)
     home_pitching_stats = home_game_stats.playerpitchinggamestats_set.all()
     home_pitching_stats_table = PlayerPitchingGameStatsTable(home_pitching_stats)
+    TEST_T = TESTTable(home_stats)
+    TEST_T1 = get_stats_info(home_stats)
 
 
     away_game_stats = TeamGameStats.objects.get(game=game, team=game.away_team)
@@ -98,6 +100,8 @@ def game_boxscore_page_view(request, game_pk):
 
 
     context = {
+        "TEST_TABLE": TEST_T,
+        "TEST_T1": TEST_T1,
         "game": game,
         "league": league,
         "home_game_stats": home_game_stats,

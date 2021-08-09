@@ -21,6 +21,24 @@
             {% render_table boxscore_table %}
         </div>
 
+        <!--TEST-->
+
+            <div class="row">
+                <div class="col-6">
+                    <div class="table-responsive">
+                        {% render_table TEST_TABLE %}
+                    </div>
+                {{TEST_T1}}
+                </div>
+
+                <div class="col-6">
+                    <div class="table-responsive">
+                        {% render_table TEST_TABLE %}
+                    </div>
+                </div>
+            </div>
+
+
         <!--Home Team Stats-->
         <h2>Hitting Stats</h2>
         <h3>{{game.home_team.team}}</h3>
