@@ -74,14 +74,6 @@ class TeamGameLineScoreTable(tables.Table):
             self.base_columns["R"] = tables.Column()
             self.base_columns.move_to_end("R")
 
-        # if args[0][0]["game"]:
-        #     self.base_columns["game"] = tables.Column()
-        #     self.base_columns.move_to_end("game", last=False)
-
-        print(f"args: {args[0][0]}")
-        print(f"base cols: {self.base_columns}")
-
-
         super(TeamGameLineScoreTable, self).__init__(*args, **kwargs)
 
     class Meta:
@@ -127,6 +119,17 @@ class PlayerHittingGameStatsTable(tables.Table):
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
             "walks", "strikeouts", "stolen_bases",  "caught_stealing",
             "hit_by_pitch", "sacrifice_flies")
+
+
+class PlayerPitchingGameStatsTable(tables.Table):
+    """Table used to display pitching stats for given game"""
+    class Meta:
+        model = PlayerPitchingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("player__player", "game_started","save_converted", "save_op",
+            "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
+            "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
+            )
 
 
 

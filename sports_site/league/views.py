@@ -5,7 +5,8 @@ from .models import (Game, League, Player, PlayerSeason, SeasonStage, Team,
 
 from stats.get_stats import get_extra_innings
 from stats.models import (TeamGameStats, TeamGameLineScore)
-from stats.tables import PlayerHittingGameStatsTable, TeamGameLineScoreTable
+from stats.tables import (PlayerHittingGameStatsTable,
+    PlayerPitchingGameStatsTable, TeamGameLineScoreTable)
 
 
 def player_page_view(request, player_pk):
@@ -70,11 +71,15 @@ def game_boxscore_page_view(request, game_pk):
     home_game_stats = TeamGameStats.objects.get(game=game, team=game.home_team)
     home_stats = home_game_stats.playerhittinggamestats_set.all()
     home_stats_table = PlayerHittingGameStatsTable(home_stats)
+    home_pitching_stats = home_game_stats.playerpitchinggamestats_set.all()
+    home_pitching_stats_table = PlayerPitchingGameStatsTable(home_pitching_stats)
 
 
     away_game_stats = TeamGameStats.objects.get(game=game, team=game.away_team)
     away_stats = away_game_stats.playerhittinggamestats_set.all()
     away_stats_table = PlayerHittingGameStatsTable(away_stats)
+    away_pitching_stats = away_game_stats.playerpitchinggamestats_set.all()
+    away_pitching_stats_table = PlayerPitchingGameStatsTable(away_pitching_stats)
 
 
     try:
@@ -98,10 +103,12 @@ def game_boxscore_page_view(request, game_pk):
         "home_game_stats": home_game_stats,
         "home_stats": home_stats,
         "home_stats_table": home_stats_table,
+        "home_pitching_stats_table": home_pitching_stats_table,
         "home_linescore": home_linescore,
         "away_game_stats": away_game_stats,
         "away_stats": away_stats,
         "away_stats_table": away_stats_table,
+        "away_pitching_stats_table": away_pitching_stats_table,
         "away_linescore": away_linescore,
         "boxscore_table": boxscore_table
         }

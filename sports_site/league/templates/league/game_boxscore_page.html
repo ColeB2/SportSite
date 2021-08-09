@@ -22,6 +22,7 @@
         </div>
 
         <!--Home Team Stats-->
+        <h2>Hitting Stats</h2>
         <h3>{{game.home_team.team}}</h3>
         <div class="table-responsive">
             {% render_table home_stats_table %}
@@ -33,6 +34,19 @@
         <div class="table-responsive">
             {% render_table away_stats_table %}
         </div>
+
+        <!--Home Team Pitching-->
+        <h3>{{game.home_team.team}}</h3>
+        <div class="table-responsive">
+            {% render_table home_pitching_stats_table %}
+        </div>
+
+        <!--Away Team Pitching-->
+        <h3>{{game.away_team.team}}</h3>
+        <div class="table-responsive">
+            {% render_table away_pitching_stats_table %}
+        </div>
+
     </div>
 </div>
 {% endblock content %}
