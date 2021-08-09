@@ -91,6 +91,7 @@ class PlayerHittingGameStats(models.Model):
     on_base_plus_slugging = models.FloatField(null=True, blank=True, verbose_name="OPS",  help_text="On-Base Plus Slugging\nCombined rate of OBP and SLG.\nOBP+SLG")
     reached_on_error = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="ROE")
     fielders_choice = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="FC")
+    ground_into_double_play = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name= "GIDP")
 
 
     class Meta:
