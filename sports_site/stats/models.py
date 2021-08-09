@@ -69,6 +69,10 @@ class PlayerHittingGameStats(models.Model):
     season = models.ForeignKey(SeasonStage, on_delete=models.CASCADE, null=True, blank=True)
     player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True, blank=True)
 
+    batting_order_position = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="Order Position")
+    starter = models.BooleanField(null=True, default=True, verbose_name="Starter")
+    substitute = models.BooleanField(null=True, default=False, verbose_name="Sub")
+
     at_bats = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="AB")
     plate_appearances = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="PA")
     hits = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="H")
@@ -91,7 +95,11 @@ class PlayerHittingGameStats(models.Model):
     on_base_plus_slugging = models.FloatField(null=True, blank=True, verbose_name="OPS",  help_text="On-Base Plus Slugging\nCombined rate of OBP and SLG.\nOBP+SLG")
     reached_on_error = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="ROE")
     fielders_choice = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="FC")
+
+    intentional_walks = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="IBB")
+    left_on_base = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="LOB")
     ground_into_double_play = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name= "GIDP")
+    two_out_runs_batted_in = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="2-out-RBI")
 
 
     class Meta:
@@ -107,10 +115,6 @@ class PlayerHittingGameStats(models.Model):
         self.game = self.team_stats.game
         self.season = self.team_stats.season
         self.hits = (self.singles + self.doubles + self.triples + self.homeruns)
-        self.average = _calc_average(self.hits, self.at_bats)
-        self.on_base_percentage = _calc_obp(self.hits, self.walks, self.hit_by_pitch, self.at_bats, self.sacrifice_flies)
-        self.slugging_percentage = _calc_slugging(self.singles, self.doubles, self.triples, self.homeruns, self.at_bats)
-        self.on_base_plus_slugging = _calc_ops(self.on_base_percentage, self.slugging_percentage)
         super(PlayerHittingGameStats, self).save(*args , **kwargs)
 
 
@@ -154,9 +158,6 @@ class PlayerPitchingGameStats(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.whip = _calc_whip(self.walks_allowed, self.hits_allowed, self.innings_pitched)
-        self.era = _calc_era(self.earned_runs, self.innings_pitched)
-        #self.average = _calc_pitchers_avg(self.hits_allowed, self.innings_pitched, self.pick_offs, self.runners_caught_stealing)
         super(PlayerPitchingGameStats, self).save(*args, **kwargs)
 
 
