@@ -123,23 +123,38 @@ def get_stats_info(stats_queryset):
     homeruns = ["HR:",]
     total_bases = ["TB:",]
     rbi = ["RBI:",]
+    rbi_2out = ["2-out RBI:",]
+    gidp = ["GIDP:",]
+    sf = ["SF:",]
+    sb = ["SB:",]
+    cs = ["CS:",]
 
     for player in stats_queryset:
         if player.hits:
             tb = player.singles
             if player.doubles:
                 tb += player.doubles*2
-                doubles.append((player.player.player.last_name, player.player.player.first_name, player.doubles))
+                doubles.append((player, player.doubles))
             if player.triples:
                 tb += player.triples*3
-                triples.append((player.player.player.last_name, player.player.player.first_name, player.triples))
+                triples.append((player, player.triples))
             if player.homeruns:
                 tb += player.homeruns*4
-                homeruns.append((player.player.player.last_name, player.player.player.first_name, player.homeruns))
+                homeruns.append((player, player.homeruns))
+        if player.two_out_runs_batted_in:
+            rbi_2out.append((player, player.two_out_runs_batted_in))
         if player.runs_batted_in:
-            rbi.append((player.player.player.last_name, player.player.player.first_name, player.runs_batted_in))
-        if player.runs_batted_in:
-            rbi.append((player.player.player.last_name, player.player.player.first_name, player.runs_batted_in))
+            rbi.append((player, player.runs_batted_in))
+        if player.ground_into_double_play:
+            gidp.append((player, player.ground_into_double_player))
+        if player.sacrifice_flies:
+            sf.append((player, player.sacrifice_flies))
+
+        if player.stolen_bases:
+            sb.append((player, player.stolen_bases))
+        if player.caught_stealing:
+            cs.append((player, player.caught_stealing))
+
 
 
     return (doubles, triples, homeruns, total_bases, rbi)
