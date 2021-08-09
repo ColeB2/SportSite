@@ -118,23 +118,32 @@ def get_extra_innings(linescore_obj):
 
 
 def get_stats_info(stats_queryset):
-    doubles = []
-    triples = []
-    homeruns = []
-    rbi = []
+    doubles = ["2B:",]
+    triples = ["3B:",]
+    homeruns = ["HR:",]
+    total_bases = ["TB:",]
+    rbi = ["RBI:",]
 
     for player in stats_queryset:
-        if player.doubles:
-            doubles.append((player.player.player.last_name, player.player.player.first_name, player.doubles))
-        if player.triples:
-            triples.append((player.player.player.last_name, player.player.player.first_name, player.triples))
-        if player.homeruns:
-            homeruns.append((player.player.player.last_name, player.player.player.first_name, player.homeruns))
+        if player.hits:
+            tb = player.singles
+            if player.doubles:
+                tb += player.doubles*2
+                doubles.append((player.player.player.last_name, player.player.player.first_name, player.doubles))
+            if player.triples:
+                tb += player.triples*3
+                triples.append((player.player.player.last_name, player.player.player.first_name, player.triples))
+            if player.homeruns:
+                tb += player.homeruns*4
+                homeruns.append((player.player.player.last_name, player.player.player.first_name, player.homeruns))
+        if player.runs_batted_in:
+            rbi.append((player.player.player.last_name, player.player.player.first_name, player.runs_batted_in))
         if player.runs_batted_in:
             rbi.append((player.player.player.last_name, player.player.player.first_name, player.runs_batted_in))
 
-    print(doubles, triples, homeruns, rbi)
 
+    return (doubles, triples, homeruns, total_bases, rbi)
 
-    return (doubles, triples, homeruns, rbi)
+def format_stats(stats):
+    pass
 
