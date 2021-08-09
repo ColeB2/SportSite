@@ -98,6 +98,7 @@ class PlayerHittingGameStats(models.Model):
 
     intentional_walks = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="IBB")
     left_on_base = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="LOB")
+    picked_off = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="PO")
     ground_into_double_play = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name= "GIDP")
     two_out_runs_batted_in = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="2-out-RBI")
 
