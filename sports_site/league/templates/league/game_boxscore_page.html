@@ -12,41 +12,38 @@
         </ul>
         {% endif %}
 
-        <div class="row">
+        <div class="d-flex justify-content-center">
             <h1>{{ game }}</h1>
         </div>
 
-        <!--LineScore-->
+        <!--LineScore and Extra Info-->
         <div class="d-flex justify-content-center table-responsive">
             {% render_table boxscore_table %}
         </div>
 
-
-        <!--TEST-->
-
-            <div class="row">
-                <div class="col-6">
-                    <div class="table-responsive">
-                        {% render_table away_boxscore %}
-                    </div>
-                {% for stat in away_extra %}
-                    {% if stat.1 %}
-                        <b>{{stat.0}}</b>{{stat.1}}<br>
-                    {% endif %}
-                {% endfor %}
+        <div class="row">
+            <div class="col-6">
+                <div class="table-responsive">
+                    {% render_table away_boxscore %}
                 </div>
-
-                <div class="col-6">
-                    <div class="table-responsive">
-                        {% render_table home_boxscore %}
-                    </div>
-                {% for stat in home_extra %}
-                    {% if stat.1 %}
-                        <b>{{stat.0}}</b>{{stat.1}}<br>
-                    {% endif %}
-                {% endfor %}
-                </div>
+            {% for stat in away_extra %}
+                {% if stat.1 %}
+                    <b>{{stat.0}}</b>{{stat.1}}<br>
+                {% endif %}
+            {% endfor %}
             </div>
+
+            <div class="col-6">
+                <div class="table-responsive">
+                    {% render_table home_boxscore %}
+                </div>
+            {% for stat in home_extra %}
+                {% if stat.1 %}
+                    <b>{{stat.0}}</b>{{stat.1}}<br>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </div>
 
 
         <!--Home Team Stats-->

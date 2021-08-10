@@ -73,7 +73,6 @@ class TeamGameLineScoreTable(tables.Table):
         if args[0][0]["R"]:
             self.base_columns["R"] = tables.Column()
             self.base_columns.move_to_end("R")
-
         super(TeamGameLineScoreTable, self).__init__(*args, **kwargs)
 
     class Meta:
