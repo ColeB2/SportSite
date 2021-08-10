@@ -5,8 +5,8 @@ from .models import (Game, League, Player, PlayerSeason, SeasonStage, Team,
 
 from stats.get_stats import get_extra_innings, get_stats_info, format_stats
 from stats.models import (TeamGameStats, TeamGameLineScore)
-from stats.tables import (PlayerHittingGameStatsTable,
-    PlayerPitchingGameStatsTable, TeamGameLineScoreTable, TESTTable)
+from stats.tables import (BattingOrderTable, PlayerHittingGameStatsTable,
+    PlayerPitchingGameStatsTable, TeamGameLineScoreTable,)
 
 
 def player_page_view(request, player_pk):
@@ -73,8 +73,9 @@ def game_boxscore_page_view(request, game_pk):
     home_stats_table = PlayerHittingGameStatsTable(home_stats)
     home_pitching_stats = home_game_stats.playerpitchinggamestats_set.all()
     home_pitching_stats_table = PlayerPitchingGameStatsTable(home_pitching_stats)
-    TEST_T = TESTTable(home_stats)
-    TEST_T1 = format_stats(get_stats_info(home_stats))
+
+    home_boxscore = BattingOrderTable(home_stats)
+    home_extra = format_stats(get_stats_info(home_stats))
 
 
     away_game_stats = TeamGameStats.objects.get(game=game, team=game.away_team)
@@ -82,6 +83,9 @@ def game_boxscore_page_view(request, game_pk):
     away_stats_table = PlayerHittingGameStatsTable(away_stats)
     away_pitching_stats = away_game_stats.playerpitchinggamestats_set.all()
     away_pitching_stats_table = PlayerPitchingGameStatsTable(away_pitching_stats)
+
+    away_boxscore = BattingOrderTable(away_stats)
+    away_extra = format_stats(get_stats_info(away_stats))
 
 
     try:
@@ -100,18 +104,20 @@ def game_boxscore_page_view(request, game_pk):
 
 
     context = {
-        "TEST_TABLE": TEST_T,
-        "TEST_T1": TEST_T1,
         "game": game,
         "league": league,
         "home_game_stats": home_game_stats,
         "home_stats": home_stats,
         "home_stats_table": home_stats_table,
+        "home_boxscore": home_boxscore,
+        "home_extra": home_extra,
         "home_pitching_stats_table": home_pitching_stats_table,
         "home_linescore": home_linescore,
         "away_game_stats": away_game_stats,
         "away_stats": away_stats,
         "away_stats_table": away_stats_table,
+        "away_boxscore": away_boxscore,
+        "away_extra": away_extra,
         "away_pitching_stats_table": away_pitching_stats_table,
         "away_linescore": away_linescore,
         "boxscore_table": boxscore_table

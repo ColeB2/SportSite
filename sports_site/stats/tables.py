@@ -121,7 +121,7 @@ class PlayerHittingGameStatsTable(tables.Table):
             "hit_by_pitch", "sacrifice_flies")
 
 
-class TESTTable(tables.Table):
+class BattingOrderTable(tables.Table):
     """Table used to display stats for given game"""
     class Meta:
         model = PlayerHittingGameStats

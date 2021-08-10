@@ -17,18 +17,19 @@
         </div>
 
         <!--LineScore-->
-        <div class="table-responsive">
+        <div class="d-flex justify-content-center table-responsive">
             {% render_table boxscore_table %}
         </div>
+
 
         <!--TEST-->
 
             <div class="row">
                 <div class="col-6">
                     <div class="table-responsive">
-                        {% render_table TEST_TABLE %}
+                        {% render_table away_boxscore %}
                     </div>
-                {% for stat in TEST_T1 %}
+                {% for stat in away_extra %}
                     {% if stat.1 %}
                         <b>{{stat.0}}</b>{{stat.1}}<br>
                     {% endif %}
@@ -37,9 +38,9 @@
 
                 <div class="col-6">
                     <div class="table-responsive">
-                        {% render_table TEST_TABLE %}
+                        {% render_table home_boxscore %}
                     </div>
-                {% for stat in TEST_T1 %}
+                {% for stat in home_extra %}
                     {% if stat.1 %}
                         <b>{{stat.0}}</b>{{stat.1}}<br>
                     {% endif %}
