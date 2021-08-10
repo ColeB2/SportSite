@@ -28,13 +28,22 @@
                     <div class="table-responsive">
                         {% render_table TEST_TABLE %}
                     </div>
-                {{TEST_T1}}
+                {% for stat in TEST_T1 %}
+                    {% if stat.1 %}
+                        <b>{{stat.0}}</b>{{stat.1}}<br>
+                    {% endif %}
+                {% endfor %}
                 </div>
 
                 <div class="col-6">
                     <div class="table-responsive">
                         {% render_table TEST_TABLE %}
                     </div>
+                {% for stat in TEST_T1 %}
+                    {% if stat.1 %}
+                        <b>{{stat.0}}</b>{{stat.1}}<br>
+                    {% endif %}
+                {% endfor %}
                 </div>
             </div>
 

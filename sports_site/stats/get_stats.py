@@ -61,6 +61,28 @@ def get_all_season_hitting_stats(league, featured_stage):
         )
     return hitting_stats1
 
+
+def get_extra_stat_totals(player):
+    """Gets totals for extra stats given playerhitting gamestats object
+    player - PlayerHittingGameStats object"""
+    game = player.team_stats.game
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+        player__player=player.player, season=game.season, team_stats__game__date__range=["2021-05-14",game.date])
+    hitting_stats1 = hitting_stats.values("player").annotate(
+        doubles = Sum('doubles'),
+        triples = Sum('triples'),
+        homeruns = Sum('homeruns'),
+        runs_batted_in = Sum('runs_batted_in'),
+        two_out_runs_batted_in = Sum('two_out_runs_batted_in'),
+        stolen_bases = Sum('stolen_bases'),
+        caught_stealing = Sum('caught_stealing'),
+        sacrifice_flies = Sum('sacrifice_flies'),
+        gidp = Sum('ground_into_double_play'),
+        po = Sum('picked_off')
+        )
+    return hitting_stats1
+
+
 def get_all_season_standings_stats(league, featured_stage):
     """Gets all the standings data, and returns them in usable fashion for
     django-tables2 standings page"""
@@ -128,6 +150,7 @@ def get_stats_info(stats_queryset):
     sf = ["SF:",]
     sb = ["SB:",]
     cs = ["CS:",]
+    po = ["PO:",]
 
     for player in stats_queryset:
         if player.hits:
@@ -154,11 +177,29 @@ def get_stats_info(stats_queryset):
             sb.append((player, player.stolen_bases))
         if player.caught_stealing:
             cs.append((player, player.caught_stealing))
+        if player.picked_off:
+            po.append((player, player.picked_off))
 
 
 
-    return (doubles, triples, homeruns, total_bases, rbi)
+    return (doubles, triples, homeruns, total_bases, rbi, rbi_2out, gidp, sf, sb,cs,po)
 
 def format_stats(stats):
-    pass
+    stat_list = []
+    print(f"stats {stats}")
+    for stat in stats:
+        print(f"stat: {stat}")
+        stat_type = stat.pop(0)
+        print(f"stat_type {stat_type}")
+        stat_str = ""
+        for player, stat_value in stat:
+            last = player.player.player.last_name
+            first = player.player.player.first_name[0]
+            player_str = f" {last}, {first}. {str(stat_value)};"
+
+            stat_str += player_str
+        stat_list.append((stat_type, stat_str))
+    return stat_list
+
+
 
