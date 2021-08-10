@@ -67,8 +67,8 @@ def get_extra_stat_totals(player):
     player - PlayerHittingGameStats object"""
     game = player.team_stats.game
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
-        player__player=player.player, season=game.season, team_stats__game__date__range=["2021-05-14",game.date])
-    hitting_stats1 = hitting_stats.values("player").annotate(
+        player__player=player.player.player, season=game.season, team_stats__game__date__range=["2021-05-14",game.date])
+    hitting_stats1 = hitting_stats.values("player").aggregate(
         doubles = Sum('doubles'),
         triples = Sum('triples'),
         homeruns = Sum('homeruns'),
@@ -76,9 +76,6 @@ def get_extra_stat_totals(player):
         two_out_runs_batted_in = Sum('two_out_runs_batted_in'),
         stolen_bases = Sum('stolen_bases'),
         caught_stealing = Sum('caught_stealing'),
-        sacrifice_flies = Sum('sacrifice_flies'),
-        gidp = Sum('ground_into_double_play'),
-        po = Sum('picked_off')
         )
     return hitting_stats1
 
@@ -153,32 +150,35 @@ def get_stats_info(stats_queryset):
     po = ["PO:",]
 
     for player in stats_queryset:
+        player_totals = get_extra_stat_totals(player)
+        print(f"PLAYER TOTALS TEST------------------{player_totals}")
+        print(f"{player_totals.values()}")
         if player.hits:
             tb = player.singles
             if player.doubles:
                 tb += player.doubles*2
-                doubles.append((player, player.doubles))
+                doubles.append((player, player.doubles, player_totals["doubles"]))
             if player.triples:
                 tb += player.triples*3
-                triples.append((player, player.triples))
+                triples.append((player, player.triples, player_totals["triples"]))
             if player.homeruns:
                 tb += player.homeruns*4
-                homeruns.append((player, player.homeruns))
+                homeruns.append((player, player.homeruns, player_totals["homeruns"]))
         if player.two_out_runs_batted_in:
-            rbi_2out.append((player, player.two_out_runs_batted_in))
+            rbi_2out.append((player, player.two_out_runs_batted_in, None))
         if player.runs_batted_in:
-            rbi.append((player, player.runs_batted_in))
+            rbi.append((player, player.runs_batted_in, player_totals["runs_batted_in"]))
         if player.ground_into_double_play:
-            gidp.append((player, player.ground_into_double_player))
+            gidp.append((player, player.ground_into_double_play, None))
         if player.sacrifice_flies:
-            sf.append((player, player.sacrifice_flies))
+            sf.append((player, player.sacrifice_flies, None))
 
         if player.stolen_bases:
-            sb.append((player, player.stolen_bases))
+            sb.append((player, player.stolen_bases, player_totals["stolen_bases"]))
         if player.caught_stealing:
-            cs.append((player, player.caught_stealing))
+            cs.append((player, player.caught_stealing, player_totals["caught_stealing"]))
         if player.picked_off:
-            po.append((player, player.picked_off))
+            po.append((player, player.picked_off, None))
 
 
 
@@ -186,16 +186,18 @@ def get_stats_info(stats_queryset):
 
 def format_stats(stats):
     stat_list = []
-    print(f"stats {stats}")
     for stat in stats:
-        print(f"stat: {stat}")
         stat_type = stat.pop(0)
-        print(f"stat_type {stat_type}")
         stat_str = ""
-        for player, stat_value in stat:
+        for player, stat_value, total in stat:
             last = player.player.player.last_name
             first = player.player.player.first_name[0]
-            player_str = f" {last}, {first}. {str(stat_value)};"
+            if stat_value == 1:
+                stat_value=""
+            if total:
+                player_str = f" {last}, {first}. {str(stat_value)} ({total});"
+            else:
+                player_str = f" {last}, {first}. {str(stat_value)};"
 
             stat_str += player_str
         stat_list.append((stat_type, stat_str))
