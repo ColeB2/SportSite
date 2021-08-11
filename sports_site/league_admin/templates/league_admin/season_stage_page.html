@@ -11,7 +11,12 @@
         </ul>
         {% endif %}
 
+        {% if stage.featured %}
+        <h3>{{stage}}*</h3>
+        {% else %}
         <h3>{{stage}}</h3>
+        {% endif %}
+
         {% for team in teams %}
         <h6>
             <a href="{% url 'league-admin-team-season-info' stage.season.year stage.season.pk stage.pk team.team.name team.pk%}">{{team}}</a>
@@ -19,9 +24,12 @@
         {% endfor %}
 
         <br><br>
+        <a class="btn btn-primary" href="{% url 'league-admin-season-stage-featured' stage.season.year stage.season.pk stage.pk %}">Make Featured</a>
         <a class="btn btn-primary" href="{% url 'league-admin-season-stage-add-teams' stage.season.year stage.season.pk stage.pk %}">Add Existing Teams</a>
         <a class="btn btn-primary" href="{% url 'league-admin-team-create' %}">Create a Team</a>
         <a class="btn btn-danger" href="{% url 'league-admin-season-stage-delete' stage.season.year stage.season.pk stage.pk %}">Delete {{stage}} Stage</a>
+
+        <legend><small>* - denotes featured season stage</small></legend>
 
 
 

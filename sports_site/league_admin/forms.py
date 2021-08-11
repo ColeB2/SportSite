@@ -49,13 +49,15 @@ class SeasonForm(forms.ModelForm):
 class SeasonStageCreateForm(forms.ModelForm):
     class Meta:
         model = SeasonStage
-        fields = ['stage']
+        fields = ['stage', 'featured']
 
 
     def process(self, season):
         stage_data = self.cleaned_data.get('stage')
+        featured_data = self.cleaned_data.get('featured')
 
-        new_stage, created = SeasonStage.objects.get_or_create(stage=stage_data, season=season)
+        new_stage, created = SeasonStage.objects.get_or_create(stage=stage_data,
+            season=season,featured=featured_data)
 
         if created:
             new_stage.save()

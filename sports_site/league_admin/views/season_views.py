@@ -229,6 +229,17 @@ def league_admin_season_stage_add_teams_view(request, season_year, season_pk, se
     return render(request, "league_admin/season_stage_add_teams.html", context)
 
 
+@permission_required('league.league_admin')
+@user_owns_season_stage
+def league_admin_season_stage_set_featured_view(request,season_year, season_pk, season_stage_pk):
+    stage = SeasonStage.objects.get(pk=season_stage_pk)
+
+    stage.featured = True
+    stage.save()
+
+    return redirect('league-admin-season-stage-info', season_year, season_pk, season_stage_pk)
+
+
 """Team Season"""
 @permission_required('league.league_admin')
 @user_owns_team_season
