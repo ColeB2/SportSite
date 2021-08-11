@@ -116,7 +116,7 @@ def get_extra_innings(linescore_obj):
     id values from it, then turns the extras values into own key/value pairs in
     the dictionary and returns the dict for use in django-tables."""
     table_data = model_to_dict(linescore_obj, fields=[field.name for field in linescore_obj._meta.fields])
-    print(table_data)
+    print(f"After model_to_dict table data: {table_data}")
     extra_innings = table_data.pop("extras")
     # game_obj = TeamGameStats.objects.get(pk=table_data.pop("game"))
     game_pk = table_data.pop("game")
@@ -130,8 +130,11 @@ def get_extra_innings(linescore_obj):
             table_data[str(i+1)] = int(extras[list_i])
 
     table_data["R"] = sum(table_data.values())
-    table_data["game"] = TeamGameStats.objects.get(pk=game_pk)
+    tgs = TeamGameStats.objects.get(pk=game_pk)
+    table_data["game"] = tgs.team.team
     # table_data["F"] = game_obj.team.team.name
+
+    print(f"Before return table data {table_data}")
 
     return table_data
 
@@ -151,8 +154,8 @@ def get_stats_info(stats_queryset):
 
     for player in stats_queryset:
         player_totals = get_extra_stat_totals(player)
-        print(f"PLAYER TOTALS TEST------------------{player_totals}")
-        print(f"{player_totals.values()}")
+        # print(f"PLAYER TOTALS TEST------------------{player_totals}")
+        # print(f"{player_totals.values()}")
         if player.hits:
             tb = player.singles
             if player.doubles:

@@ -66,6 +66,32 @@ class SeasonStage(models.Model):
 
 
 """Team Related Models"""
+def unique_abbreviation(obj_instance, obj_abbreviation=None, iterations=0):
+    """
+    A function to calculate a unique abbrev. for instance. Works by checking if
+    abbrev is provided, if not, creates one, then checks if it exists.
+    If it does, it check next letter in the place string and tries again..
+    """
+    if obj_abbreviation:
+        abbreviation = obj_abbreviation
+    else:
+        abbreviation = obj_instance.place[0:3].upper()
+
+    obj_class = obj_instance.__class__
+    queryset_exists = obj_class.objects.filter(abbreviation=abbreviation).exists()
+
+    if queryset_exists:
+        if obj_class.objects.get(abbreviation=abbreviation) == obj_instance:
+            return abbreviation
+        else:
+            if len(obj_instance.place) >= iterations+4:
+                new_abbreviation = obj_instance.place[0:2].upper() + obj_instance.place[3+iterations:4+iterations].upper()
+                return unique_abbreviation(obj_instance, obj_abbreviation=new_abbreviation, iterations=iterations+1)
+            else:
+                return None
+    return abbreviation
+
+
 class Team(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)

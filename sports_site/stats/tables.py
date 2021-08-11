@@ -61,6 +61,7 @@ class TeamGameLineScoreTable(tables.Table):
             1 R - total runs
             1 F - Final -- Team(s) involved
         """
+        print(f"Boxscore Args: {args}")
         extras_len = len(args[0][0])
         non_inn_vals = 2
         if extras_len > 9+non_inn_vals:
