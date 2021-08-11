@@ -29,22 +29,10 @@ class League(models.Model):
 class Season(models.Model):
     year = models.CharField(max_length=10, null=False, default=now().year, help_text="Year in YYYY format, ie 2020")
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
-    featured = models.BooleanField(null=True, default=True, verbose_name="Featured")
 
     def __str__(self):
         return f"{self.year}"
 
-    def save(self, *args, **kwargs):
-        if self.featured:
-            try:
-                temp = Season.objects.get(league=self.league, featured=True)
-                if self != temp:
-                    temp.featured = False
-                    temp.save()
-            except Season.DoesNotExist:
-                pass
-
-        super(Season, self).save(*args, **kwargs)
 
 class SeasonStage(models.Model):
     STAGE_PRINT = {"R":"Regular Season","P":"Postseason"}
@@ -83,6 +71,7 @@ class Team(models.Model):
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=30, null=True, blank=True)
     place = models.CharField(max_length=30, null=True, blank=True)
+    abbreviation = models.SlugField(max_length=3, null=True, blank=True, unique=True)
 
     def __str__(self):
         return f"{self.place} {self.name}"

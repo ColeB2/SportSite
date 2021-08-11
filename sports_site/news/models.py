@@ -53,6 +53,7 @@ class Article(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.slug = unique_slug(self, self.slug)
+        if self._state.adding is True:
+            self.slug = unique_slug(self, self.slug)
         super(Article, self).save(*args, **kwargs)
 
