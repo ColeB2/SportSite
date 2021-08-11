@@ -131,7 +131,10 @@ def get_extra_innings(linescore_obj):
 
     table_data["R"] = sum(table_data.values())
     tgs = TeamGameStats.objects.get(pk=game_pk)
-    table_data["game"] = tgs.team.team
+    if tgs.team.team.abbreviation:
+        table_data["game"] = tgs.team.team.abbreviation
+    else:
+        table_data["game"] = tgs.team.team.name
     # table_data["F"] = game_obj.team.team.name
 
     print(f"Before return table data {table_data}")

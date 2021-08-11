@@ -53,34 +53,45 @@ class TeamGameLineScoreTable(tables.Table):
         """Checks if arg dict has more than min inning value (HARDCODED 9) and
         if it does, adds those values to base_columns using key as name (happens
         to equal to str number from min inning on...)
-        ToDo: Find better solution. Works, as long as you don't open up an extra
-        inning lienscore first.
 
-        Currently args[0][0] len should be 10:
+        Currently args[0][0] len should be 11:
             9 innings
             1 R - total runs
-            1 F - Final -- Team(s) involved
+            1 Game - Team(s) involved
         """
-        print(f"Boxscore Args: {args}")
         extras_len = len(args[0][0])
         non_inn_vals = 2
+
+        """Len of supplied dictionary greater than val, create table columns for
+        those values."""
         if extras_len > 9+non_inn_vals:
             for i in range(9, extras_len-non_inn_vals):
                 self.base_columns[str(i+1)] = tables.Column()
-        else:
-            for i in range(extras_len-non_inn_vals, len(self.base_columns)):
-                self.base_columns.popitem()
+
+
+        """Pops any keys that aren't supplied in the args dictionary. Does so
+        because When swapping from a boxscore with >9 innings to a regular
+        sized boxscore, it maintains the length of longer boxscore."""
+        keys_to_pop = []
+        for key in self.base_columns.keys():
+            if key not in args[0][0].keys():
+                keys_to_pop.append(key)
+
+        for key in keys_to_pop:
+            self.base_columns.pop(key)
+
 
         if args[0][0]["R"]:
             self.base_columns["R"] = tables.Column()
             self.base_columns.move_to_end("R")
+
         super(TeamGameLineScoreTable, self).__init__(*args, **kwargs)
 
     class Meta:
         model = TeamGameLineScore
         template_name = "django_tables2/bootstrap-responsive.html"
 
-        fields = [
+        fields = ["game",
             "first", "second", "third", "fourth", "fifth", "sixth",
             "seventh","eighth", "ninth",
         ]
