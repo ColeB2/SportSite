@@ -1,22 +1,16 @@
-{% extends "news/base.html" %}
+{% extends "league_admin/player_create.html" %}
 {% load crispy_forms_tags %}
-{% block content %}
-<div class="container">
-    <div class="content-section">
 
-        <h2>Player:</h2>
-        <legend><small>Edit Player Fields:</small></legend>
-        <form method="post">
-            {% csrf_token %}
-            {{ form| crispy }}
 
-            <input type="submit" value="Save" class="btn btn-primary">
+{% block player_title %}
+    <h2>Player: {{player_instance}}</h2>
+{% endblock player_title %}
 
-            <a class="btn btn-danger" href="{% url 'league-admin-player-delete' player_instance.pk %}">
-                Delete {{player_instance}}
-            </a>
-        </form>
-    </div>
-</div>
 
-{% endblock content %}
+{% block player_button_content %}
+    <input type="submit" value="Save" class="btn btn-primary">
+
+    <a class="btn btn-danger" href="{% url 'league-admin-player-delete' player_instance.pk %}">
+        Delete {{player_instance}}</a>
+    <br><br>
+{% endblock player_button_content %}
