@@ -19,12 +19,19 @@ def home(request):
     """Leaders"""
     featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
     stats = get_league_leaders(league, featured_stage)
-    avg = stats.order_by('-average')[0]
-    avg["average"] = _convert_to_str(avg["average"])
-    homeruns = stats.order_by('-homeruns')[0]
-    runs_batted_in = stats.order_by('-runs_batted_in')[0]
-    runs = stats.order_by('-runs')[0]
-    stolen_bases = stats.order_by('-stolen_bases')[0]
+    if stats:
+        avg = stats.order_by('-average')[0]
+        avg["average"] = _convert_to_str(avg["average"])
+        homeruns = stats.order_by('-homeruns')[0]
+        runs_batted_in = stats.order_by('-runs_batted_in')[0]
+        runs = stats.order_by('-runs')[0]
+        stolen_bases = stats.order_by('-stolen_bases')[0]
+    else:
+        avg = None
+        homeruns = None
+        runs_batted_in = None
+        runs = None
+        stolen_bases = None
 
 
     """Games"""

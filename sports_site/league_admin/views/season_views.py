@@ -8,7 +8,7 @@ from django.forms import formset_factory
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views.generic import UpdateView
-from ..forms import (SeasonCreateForm, SeasonStageCreateForm, TeamSelectForm, SeasonForm)
+from ..forms import SeasonStageCreateForm, TeamSelectForm, SeasonForm
 from league.models import (League, Season, SeasonStage, Team, TeamSeason)
 from ..decorators import (user_owns_season, user_owns_season_stage,
     user_owns_team_season)

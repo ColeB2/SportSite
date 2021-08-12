@@ -53,6 +53,7 @@
         </div>
 
         <!--Spacing Purposes right side///LEAGUE LEADERS-->
+        {% if stats %}
         <div class="align-self-start border ms-md-2 my-md-2 col-12 col-md-3 bg-light">
             <h6 class="border-bottom"><a class="article-headline"
                 href="{% url 'stats-page' %}?league={{request.GET.league}}">LEAGUE LEADERS</a></h6>
@@ -176,6 +177,7 @@
 
             </div>
         </div>
+        {% endif %}
 
     </div>
 </div>
