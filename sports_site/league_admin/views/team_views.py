@@ -22,8 +22,6 @@ def league_admin_team_create_view(request):
             new_team = form.process(league=league)
             messages.success(request, f"{new_team} created.")
 
-        # next=request.POST.get('next', '/')
-        # return HttpResponseRedirect(next)
         return redirect('league-admin-dashboard')
 
     else:
@@ -34,6 +32,34 @@ def league_admin_team_create_view(request):
         "lu":league_users
     }
     return render(request, "league_admin/team_create.html", context)
+
+
+@permission_required('league.league_admin')
+def league_admin_team_edit_view(request, team_pk):
+    team_instance = Team.objects.get(pk=team_pk)
+    league = team_instance.league
+    league_users = User.objects.all().filter(userprofile__league=league)
+
+
+    if request.method == 'POST':
+        form = TeamCreateForm(data=request.POST, files=request.FILES, instance=team_instance)
+        form.fields['owner'].queryset=league_users
+        if form.is_valid():
+            team = form.process_edit()
+            messages.success(request, f"{team} edited.")
+
+        return redirect('league-admin-team-info', team_pk)
+
+    else:
+        form = TeamCreateForm(instance=team_instance)
+        form.fields['owner'].queryset=league_users
+    context = {
+        "form": form,
+        "lu":league_users,
+        "team_instance": team_instance,
+        "league": league,
+    }
+    return render(request, "league_admin/team_edit.html", context)
 
 
 @permission_required('league.league_admin')

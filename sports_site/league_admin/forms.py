@@ -132,24 +132,31 @@ class EditPlayerForm(forms.ModelForm):
 class TeamCreateForm(forms.ModelForm):
     class Meta:
         model = Team
-        fields = ['owner', 'name', 'place']
+        fields = ['owner', 'name', 'place', 'abbreviation']
 
     def __init__(self, *args, **kwargs):
         super(TeamCreateForm, self).__init__(*args, **kwargs)
         self.fields['owner'].required = False
-        self.fields['owner'].label = "Owner/Team User Account"
+        self.fields['owner'].label = "Owner/Team Admin Account"
         self.fields['place'].required = False
 
     def process(self, league):
         owner = self.cleaned_data.get('owner')
         name = self.cleaned_data.get('name')
         place = self.cleaned_data.get('place')
+        abbreviation = self.cleaned_data.get('abbreviation')
 
-        new_team = Team(owner=owner, name=name, place=place, league=league)
+        new_team = Team(owner=owner, name=name, place=place, league=league,
+            abbreviation=abbreviation)
         new_team.save()
 
         return new_team
 
+    def process_edit(self):
+        team = self.save(commit=False)
+        team.save()
+
+        return team
 
 
 class EditGameForm(forms.ModelForm):
