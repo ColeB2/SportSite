@@ -10,8 +10,10 @@
         <form method="post">
             {% csrf_token %}
             {{form|crispy}}
+            {% block teamcontent%}
             <input type="hidden" name="next" value="{{ request.path }}">
             <input type="submit" value="Create Team" class="btn btn-primary">
+            {% endblock teamcontent %}
         </form>
     </div>
 </div>
