@@ -19,7 +19,7 @@ class SeasonSelectForm(forms.ModelForm):
         self.fields['stage'].required = False
 
 
-class SeasonCreateForm(forms.ModelForm):
+class SeasonForm(forms.ModelForm):
     class Meta:
         model = Season
         fields = ['year',]
@@ -33,16 +33,6 @@ class SeasonCreateForm(forms.ModelForm):
             new_season.save()
 
         return new_season, created
-
-class SeasonForm(forms.ModelForm):
-    class Meta:
-        model = Season
-        fields = ['year',]
-
-    def process(self):
-        season_save = self.save()
-        season_save.save()
-        return season_save
 
 
 

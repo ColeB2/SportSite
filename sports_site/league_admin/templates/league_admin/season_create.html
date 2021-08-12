@@ -4,21 +4,22 @@
 <div class="container">
     <div class="content-section">
 
-        <h2>Existing Seasons:</h2>
-        {% for season in seasons %}
-        <h4>{{season}}</h4>
-        {% endfor %}
-        <br><br>
-        <h2>Create a Season:</h2>
-
-
-
+        {% block season_content %}
+            <h2>Existing Seasons:</h2>
+            {% for season in seasons %}
+            <h4>{{season}}</h4>
+            {% endfor %}
+            <br><br>
+            <h2>Create a Season:</h2>
+        {% endblock season_content %}
 
         <form method="post">
             {% csrf_token %}
             {{form|crispy}}
 
+            {% block season_button %}
             <input type="submit" value="Create Season" class="btn btn-primary">
+            {% endblock season_button %}
         </form>
 
     </div>

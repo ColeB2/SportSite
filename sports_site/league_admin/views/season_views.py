@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from django.utils.decorators import method_decorator
 from django.urls import reverse
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import UpdateView
 from ..forms import (SeasonCreateForm, SeasonStageCreateForm, TeamSelectForm, SeasonForm)
 from league.models import (League, Season, SeasonStage, Team, TeamSeason)
 from ..decorators import (user_owns_season, user_owns_season_stage,
@@ -35,7 +35,7 @@ def league_admin_create_season_view(request):
     seasons = Season.objects.all().filter(league__admin=request.user)
 
     if request.method == 'POST':
-        form = SeasonCreateForm(data = request.POST)
+        form = SeasonForm(data = request.POST)
         if form.is_valid():
             new_season, created = form.process(league=request.user.userprofile.league)
 
@@ -46,7 +46,7 @@ def league_admin_create_season_view(request):
 
         return redirect('league-admin-season')
     else:
-        form = SeasonCreateForm()
+        form = SeasonForm()
 
     context = {
         'seasons':seasons,

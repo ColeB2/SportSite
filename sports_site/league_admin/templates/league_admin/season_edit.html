@@ -1,22 +1,10 @@
-{% extends "news/base.html" %}
-{% load crispy_forms_tags %}
-{% block content %}
-<div class="container-lg mt-5">
-  <div class="row">
+{% extends "league_admin/season_create.html" %}
 
 
-    {% if perms.league.league_admin and user.userprofile.league == season.league %}
-    <form method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="Save" class="btn btn-primary">
-        <br><br>
-    </form>
-    {% else %}
-    <h2>Access Denied</h2>
-    {% endif %}
+{% block season_content %}
+<h2>Season:</h2>
+{% endblock season_content %}
 
-
-  </div>
-</div>
-{% endblock content %}
+{% block season_button %}
+    <input type="submit" value="Save" class="btn btn-primary">
+{% endblock season_button%}
