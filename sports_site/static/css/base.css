@@ -22,6 +22,23 @@
 /*  z-index: 1;*/
 /*  background-color: #fff;*/
 /*}*/
+div.scrollmenu {
+  background-color: rgb(240,240,240);
+  overflow: auto;
+  white-space: nowrap;
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+div.scrollmenu a:hover {
+  background-color: rgb(255,255,255);
+}
 
 html {
     background-color: rgb(240,240,240);

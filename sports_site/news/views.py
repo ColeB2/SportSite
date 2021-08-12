@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render#, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from league.models import League, SeasonStage
+from league.models import Game, League, SeasonStage
 from stats.get_stats import get_league_leaders
 from stats.stat_calc import _convert_to_str
 from .decorators import user_owns_article
@@ -35,12 +35,14 @@ def home(request):
 
 
     """Games"""
+    schedule = Game.objects.all().filter(season=featured_stage)
 
 
 
     context = {
         "articles": Article_data,
         "league": league,
+        "schedule": schedule,
         "stats": stats,
         "avg":avg,
         "homeruns":homeruns,
