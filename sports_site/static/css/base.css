@@ -22,13 +22,13 @@
 /*  z-index: 1;*/
 /*  background-color: #fff;*/
 /*}*/
-div.scrollmenu {
+div.sport-ticker {
   background-color: rgb(240,240,240);
   overflow: auto;
   white-space: nowrap;
 }
 
-div.scrollmenu a {
+div.sport-ticker a {
   display: inline-block;
   color: white;
   text-align: center;
@@ -36,9 +36,15 @@ div.scrollmenu a {
   text-decoration: none;
 }
 
-div.scrollmenu a:hover {
+div.sport-ticker a:hover {
   background-color: rgb(255,255,255);
 }
+
+table.sport-ticker {
+    float:left;
+    border: 1px solid black;
+}
+
 
 html {
     background-color: rgb(240,240,240);

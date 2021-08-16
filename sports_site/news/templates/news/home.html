@@ -2,9 +2,23 @@
 {% block content %}
 
 
-<div class="scrollmenu">
+<div class="sport-ticker">
         {% for game in schedule %}
-             {{game}}
+            <span class="border border-3">
+                {{game.away_team.team.abbreviation}}
+                {{game.home_team.team.abbreviation}}
+            </span>
+
+        {% endfor %}
+</div>
+
+<div class="sport-ticker">
+        {% for game in schedule %}
+            <table class="sport-ticker">
+                <tr><td>FINAL</td></tr>
+                <tr><td>{{game.away_team.team.abbreviation}}  {{game.away_score}}</td></tr>
+                <tr><td>{{game.home_team.team.abbreviation}}  {{game.home_score}}</td></tr>
+            </table>
         {% endfor %}
 </div>
 <div class="container-lg">
