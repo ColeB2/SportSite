@@ -1,13 +1,6 @@
 from django.db import models
-from django.utils.timezone import now
-from django.contrib.auth.models import User
 from league.models import PlayerSeason, TeamSeason, SeasonStage, Game
-import datetime
-from .stat_calc import (_calc_average, _calc_obp, _calc_slugging, _calc_ops,
-    _calc_win_pct, _calc_whip, _calc_era, _calc_pitchers_avg)
 from .validators import validate_innings_pitched
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 
 class PlayerHittingStats(models.Model):
