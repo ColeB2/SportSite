@@ -18,8 +18,9 @@ div.sport-ticker a:hover {
 
 table.sport-ticker {
     border: 1px solid black;
-    float: left;
+    display: inline-table;
 }
+
 
 html {
     background-color: rgb(240,240,240);
