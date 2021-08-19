@@ -1,10 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
-from .models import (Game, League, Player, PlayerSeason, SeasonStage, Team,
-    TeamSeason)
-
+from .models import Game, League, Player, PlayerSeason, SeasonStage, Team
 from stats.get_stats import get_extra_innings, get_stats_info, format_stats
-from stats.models import (TeamGameStats, TeamGameLineScore)
+from stats.models import TeamGameStats
 from stats.tables import (BattingOrderTable, PlayerHittingGameStatsTable,
     PlayerPitchingGameStatsTable, TeamGameLineScoreTable,)
 

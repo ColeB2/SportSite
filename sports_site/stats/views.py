@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import router
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
