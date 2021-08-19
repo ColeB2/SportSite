@@ -17,8 +17,13 @@ div.sport-ticker a:hover {
 }
 
 table.sport-ticker {
-    border: 1px solid black;
+    /*border: 1px solid black;*/
     display: inline-table;
+    margin: 0px;
+}
+
+.border-right {
+    border-right: 1px solid black;
 }
 
 
