@@ -6,8 +6,7 @@
         {% for game in schedule %}
             <table class="sport-ticker">
                 {% ifchanged game.date %}
-                    <caption>{{game.date}}</caption>
-                {% else %}
+                    <tr><th colspan="3">{{game.date}}</th></tr>
                 {% endifchanged %}
 
                 {% if game.home_score %}
