@@ -10,6 +10,7 @@ from .decorators import user_owns_article
 from .forms import ArticleCreateForm
 from .models import Article
 
+from django.db.models.query import QuerySet
 
 def home(request):
     league_slug = request.GET.get('league', None)
@@ -36,6 +37,10 @@ def home(request):
 
     """Games"""
     schedule = Game.objects.all().filter(season=featured_stage)
+    schedule21 = Game.objects.all().filter(season=featured_stage).query
+    schedule21.group_by = ["date"]
+    schedule2 = QuerySet(query=schedule21, model=Game)
+
 
 
 
@@ -43,6 +48,7 @@ def home(request):
         "articles": Article_data,
         "league": league,
         "schedule": schedule,
+        "schedule2": schedule2,
         "stats": stats,
         "avg":avg,
         "homeruns":homeruns,
