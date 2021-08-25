@@ -1,26 +1,7 @@
 {% extends "news/base.html" %}
 {% block content %}
 
-
-<div class="sport-ticker">
-        {% for game in schedule %}
-            <table class="sport-ticker">
-                {% ifchanged game.date %}
-                    <tr><th colspan="4">{{game.date}}</th></tr>
-                {% endifchanged %}
-
-                {% if game.home_score %}
-                    <tr><td>FINAL</td></tr>
-                {% else %}
-                    <tr><td>{{game.start_time}}</td></tr>
-                {% endif %}
-                <tr><td>{{game.away_team.team.abbreviation}}  {{game.away_score}}</td></tr>
-                <tr><td>{{game.home_team.team.abbreviation}}  {{game.home_score}}</td></tr>
-            </table>
-        {% endfor %}
-</div>
-
-{% regroup schedule2 by date as schedy %}
+{% regroup schedule by date as schedy %}
 <h1>Test</h1>
 <div class="sport-ticker">
     {% for date in schedy %}

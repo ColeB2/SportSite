@@ -36,10 +36,9 @@ def home(request):
 
 
     """Games"""
-    schedule = Game.objects.all().filter(season=featured_stage)
-    schedule21 = Game.objects.all().filter(season=featured_stage).query
-    schedule21.group_by = ["date"]
-    schedule2 = QuerySet(query=schedule21, model=Game)
+    schedule_query = Game.objects.all().filter(season=featured_stage).query
+    schedule_query.group_by = ["date"]
+    schedule = QuerySet(query=schedule_query, model=Game)
 
 
 
@@ -48,7 +47,6 @@ def home(request):
         "articles": Article_data,
         "league": league,
         "schedule": schedule,
-        "schedule2": schedule2,
         "stats": stats,
         "avg":avg,
         "homeruns":homeruns,
