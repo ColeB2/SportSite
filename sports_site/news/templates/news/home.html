@@ -2,18 +2,17 @@
 {% block content %}
 
 {% regroup schedule by date as schedy %}
-<h1>Test</h1>
 <div class="sport-ticker">
     {% for date in schedy %}
         <table class="sport-ticker">
             <tr>
-                <th colspan="3">{{date.grouper}}</th>
+                <th class="sport-ticker" colspan="3">{{date.grouper}}</th>
             </tr>
 
             <tr>
                 {% for game in date.list %}
                     {% if game.home_score %}
-                        <td>FINAL</td>
+                        <td class="sport-ticker">FINAL</td>
                     {% else %}
                         <td>{{game.start_time}}</td>
                     {% endif %}
@@ -22,13 +21,13 @@
 
             <tr>
                 {% for game in date.list %}
-                    <td>{{game.away_team.team.abbreviation}}  {{game.away_score}}</td>
+                    <td class="sport-ticker">{{game.away_team.team.abbreviation}}  {{game.away_score}}</td>
                 {% endfor %}
                     </tr>
 
             <tr>
                 {% for game in date.list %}
-                    <td>{{game.home_team.team.abbreviation}}  {{game.home_score}}</td>
+                    <td class="sport-ticker">{{game.home_team.team.abbreviation}}  {{game.home_score}}</td>
                 {% endfor %}
             </tr>
         </table>
