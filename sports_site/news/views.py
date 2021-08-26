@@ -9,8 +9,9 @@ from stats.stat_calc import _convert_to_str
 from .decorators import user_owns_article
 from .forms import ArticleCreateForm
 from .models import Article
-
 from django.db.models.query import QuerySet
+
+
 
 def home(request):
     league_slug = request.GET.get('league', None)
