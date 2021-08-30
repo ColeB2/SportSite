@@ -5,24 +5,30 @@ div.sport-ticker {
 }
 
 div.sport-ticker a {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
 }
 
 div.sport-ticker a:hover {
-  background-color: rgb(255,255,255);
+    background-color: rgb(255,255,255);
 }
 
 table.sport-ticker {
-    border: 1px solid black;
+    border-collapse: collapse;
     display: inline-table;
-    margin: 0px;
+    margin: 10px;
 }
 th.sport-ticker, td.sport-ticker {
-    border: 1px solid black;
+    padding-right: 10px;
+}
+
+table.sport-ticker-inside {
+    border-collapse: collapse;
+    margin: 0px ;
+    display: inline-table;
 }
 
 

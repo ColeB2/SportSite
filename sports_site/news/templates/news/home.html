@@ -21,18 +21,62 @@
 
             <tr>
                 {% for game in date.list %}
-                    <td class="sport-ticker">{{game.away_team.team.abbreviation}}  {{game.away_score}}</td>
+                    <td class="sport-ticker">{{game.away_team.team.abbreviation}}      {{game.away_score}}</td>
                 {% endfor %}
                     </tr>
 
             <tr>
                 {% for game in date.list %}
-                    <td class="sport-ticker">{{game.home_team.team.abbreviation}}  {{game.home_score}}</td>
+                    <td class="sport-ticker">{{game.home_team.team.abbreviation}}      {{game.home_score}}</td>
                 {% endfor %}
             </tr>
         </table>
     {% endfor %}
 </div>
+
+
+<div class="sport-ticker">
+    {% for date in schedy %}
+        <table class="sport-ticker">
+            <tr>
+                <th class="sport-ticker" colspan="1">{{date.grouper}}</th>
+            </tr>
+
+            <tr>
+
+                <td>
+                    <table class="sport-ticker-inside">
+                    <tr>
+                    {% for game in date.list %}
+                        {% if game.home_score %}
+                            <th class="sport-ticker" colspan="2">FINAL</td>
+                        {% else %}
+                            <th class-"sport-ticker" colspan="2">{{game.start_time}}</td>
+                        {% endif %}
+
+                    {% endfor %}
+                    </tr>
+
+                    <tr>
+                    {% for game in date.list %}
+                        <td class="sport-ticker">{{game.away_team.team.abbreviation}}</td>
+                        <td class="sport-ticker">{{game.away_score}}</td>
+                    {% endfor %}
+                    </tr>
+                    <tr>
+                    {% for game in date.list %}
+                        <td class="sport-ticker">{{game.home_team.team.abbreviation}}</td>
+                        <td class="sport-ticker">{{game.home_score}}</td>
+                    {% endfor %}
+                    </tr>
+                </table>
+                </td>
+            </tr>
+
+        </table>
+    {% endfor %}
+</div>
+
 
 
 <div class="container-lg">
