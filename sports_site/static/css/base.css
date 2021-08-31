@@ -31,6 +31,10 @@ table.sport-ticker-inside {
     display: inline-table;
 }
 
+th.sport-ticker-inside, td.sport-ticker-inside {
+    padding-right: 50px;
+}
+
 
 
 
