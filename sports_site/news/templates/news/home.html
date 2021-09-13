@@ -15,9 +15,14 @@
                         <tr>
                         {% for game in date.list %}
                             {% if game.home_score %}
-                                <th class="sport-ticker-inside" colspan="2">FINAL</td>
+                                <th class="sport-ticker-inside" colspan="2">
+                                    <a href="{% url 'game-boxscore-page' game.pk %}"
+                                       class="sport-ticker-link">
+                                        FINAL
+                                    </a>
+                                </th>
                             {% else %}
-                                <th class-"sport-ticker-inside" colspan="2">{{game.start_time}}</td>
+                                <th class-"sport-ticker-inside" colspan="2"><a>{{game.start_time}}</a></td>
                             {% endif %}
 
                         {% endfor %}
@@ -51,7 +56,7 @@
 
         <!--CENTER COLUMN: Main News Column-->
         <div class="align-self-start border me-md-2 mb-2 col-12 col-md-8 bg-light">
-                {% if articles%}
+                {% if articles %}
                     <img class="img-fluid" height="300" width="300" src="{{ articles.0.image.url }}">
                     <h1>
                         <a href="{% url 'news-detail' articles.0.slug %}?league={{request.GET.league}}" class="article-headline">

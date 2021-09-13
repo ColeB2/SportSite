@@ -4,18 +4,6 @@ div.sport-ticker {
   white-space: nowrap;
 }
 
-div.sport-ticker a {
-    display: inline-block;
-    color: white;
-    text-align: center;
-    padding: 14px;
-    text-decoration: none;
-}
-
-div.sport-ticker a:hover {
-    background-color: rgb(255,255,255);
-}
-
 table.sport-ticker {
     border-collapse: collapse;
     display: inline-table;
@@ -33,6 +21,15 @@ table.sport-ticker-inside {
 
 th.sport-ticker-inside, td.sport-ticker-inside {
     padding-right: 50px;
+}
+
+a.sport-ticker-link {
+    text-decoration: none;
+    color: rgb(0,0,0);
+}
+
+a.sport-ticker-link:hover {
+    color: #1a4ea6;
 }
 
 
