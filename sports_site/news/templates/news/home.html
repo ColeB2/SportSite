@@ -1,10 +1,10 @@
 {% extends "news/base.html" %}
 {% block content %}
-
+<a href="#June 27, 2021">Link</a>
 {% regroup schedule by date as schedy %}
 <div class="sport-ticker">
     {% for date in schedy %}
-        <table class="sport-ticker">
+        <table id="{{date.grouper}}" class="sport-ticker">
             <tr>
                 <th class="sport-ticker" colspan="1">{{date.grouper}}</th>
             </tr>
@@ -97,7 +97,7 @@
 
         <!--Spacing Purposes right side///LEAGUE LEADERS-->
         {% if stats %}
-        <div class="align-self-start border ms-md-2 my-md-2 col-12 col-md-3 bg-light">
+        <div id="LeagueLeaders" class="align-self-start border ms-md-2 my-md-2 col-12 col-md-3 bg-light">
             <h6 class="border-bottom"><a class="article-headline"
                 href="{% url 'stats-page' %}?league={{request.GET.league}}">LEAGUE LEADERS</a></h6>
 
