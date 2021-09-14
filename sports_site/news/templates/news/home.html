@@ -117,7 +117,7 @@
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' avg.player_id %}">{{avg.first}} {{avg.last}}</a>
+                               href="{% url 'player-page' avg.player_id %}?league={{request.GET.league}}">{{avg.first}} {{avg.last}}</a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -140,7 +140,7 @@
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' homeruns.player_id %}">{{homeruns.first}} {{homeruns.last}}</a>
+                               href="{% url 'player-page' homeruns.player_id %}?league={{request.GET.league}}">{{homeruns.first}} {{homeruns.last}}</a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -163,7 +163,7 @@
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' runs_batted_in.player_id %}">{{runs_batted_in.first}} {{runs_batted_in.last}}</a>
+                               href="{% url 'player-page' runs_batted_in.player_id %}?league={{request.GET.league}}">{{runs_batted_in.first}} {{runs_batted_in.last}}</a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -186,7 +186,7 @@
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' stolen_bases.player_id %}">{{stolen_bases.first}} {{stolen_bases.last}}</a>
+                               href="{% url 'player-page' stolen_bases.player_id %}?league={{request.GET.league}}">{{stolen_bases.first}} {{stolen_bases.last}}</a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -209,7 +209,7 @@
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' runs.player_id %}">{{runs.first}} {{runs.last}}</a>
+                               href="{% url 'player-page' runs.player_id %}?league={{request.GET.league}}">{{runs.first}} {{runs.last}}</a>
                         </h6>
                     </div>
                     <div class="col-4">

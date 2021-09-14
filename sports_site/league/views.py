@@ -8,8 +8,9 @@ from stats.tables import (BattingOrderTable, PlayerHittingGameStatsTable,
 
 
 def player_page_view(request, player_pk):
-    player = Player.objects.get(pk=player_pk)
-    league = player.league
+    league_slug = request.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
+    player = Player.objects.get(league=league, pk=player_pk)
     player_seasons = PlayerSeason.objects.all().filter(player=player)
 
     context = {
