@@ -6,8 +6,12 @@ from .models import PlayerHittingGameStats, TeamGameStats
 
 
 def get_league_leaders(league, featured_stage):
-    """Returns league leaders in Avg, HomeRuns, RBI, SB and Runs in use for the
-    main home page widget."""
+    """
+    Returns league leaders in Avg, HomeRuns, RBI, SB and Runs in use for the
+    main home page widget.
+    View in news/views.py - home function
+    Template - news/home.html
+    """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
     hitting_stats1 = hitting_stats.values("player").annotate(
         player_id = F("player__player__pk"),
@@ -26,8 +30,13 @@ def get_league_leaders(league, featured_stage):
 
 
 def get_all_season_hitting_stats(league, featured_stage):
-    """Gets all hitting stats, and returns them in a usable fashion for the
-    django-tables2 main stats page."""
+    """
+    Gets all hitting stats, and returns them in a usable fashion for the
+    django-tables2 main stats page.
+
+    View - stats/views.py - stats_display_view
+    Template - stats/stats_page.html
+    """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
     hitting_stats1 = hitting_stats.values("player").annotate(
         first = F("player__player__first_name"),
@@ -63,8 +72,10 @@ def get_all_season_hitting_stats(league, featured_stage):
 
 
 def get_extra_stat_totals(player):
-    """Gets totals for extra stats given playerhitting gamestats object
-    player - PlayerHittingGameStats object"""
+    """
+    Gets totals for extra stats given playerhitting gamestats object
+    player - PlayerHittingGameStats object
+    """
     game = player.team_stats.game
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
         player__player=player.player.player, season=game.season, team_stats__game__date__range=["2021-05-14",game.date])
@@ -81,8 +92,10 @@ def get_extra_stat_totals(player):
 
 
 def get_all_season_standings_stats(league, featured_stage):
-    """Gets all the standings data, and returns them in usable fashion for
-    django-tables2 standings page"""
+    """
+    Gets all the standings data, and returns them in usable fashion for
+    django-tables2 standings page
+    """
     game_stats = TeamGameStats.objects.all().filter(season=featured_stage)
     standings_stats = game_stats.values("team").annotate(
         team_name = F("team__team__name"),
@@ -112,9 +125,17 @@ def get_all_season_standings_stats(league, featured_stage):
 
 
 def get_extra_innings(linescore_obj):
-    """Takes linescore object turns it into a dictionary, removes the game and
+    """
+    Takes linescore object turns it into a dictionary, removes the game and
     id values from it, then turns the extras values into own key/value pairs in
-    the dictionary and returns the dict for use in django-tables."""
+    the dictionary and returns the dict for use in django-tables.
+
+    Data returned is for use in TeamGameLineScoreTable([-returned table_data-,]),
+    often as a list of multiple objects of itself.
+
+    View - league/views.py - game_boxscore_page_view
+    Template - league/game_boxscore_page.html
+    """
     table_data = model_to_dict(linescore_obj, fields=[field.name for field in linescore_obj._meta.fields])
     extra_innings = table_data.pop("extras")
     game_pk = table_data.pop("game")
@@ -140,6 +161,16 @@ def get_extra_innings(linescore_obj):
 
 
 def get_stats_info(stats_queryset):
+    """
+    get_stats_info - Get the extra info stats that shows under the boxscore of a
+    game summary.
+
+    Used in conjunction with format_stats to gather and display properly. ie
+    format_stats(get_stats_info(-given_stats-))
+
+    Views - league/views.py game_boxscore_page_view
+    Templates - league/game_boxscore_page.html
+    """
     doubles = ["2B:",]
     triples = ["3B:",]
     homeruns = ["HR:",]
@@ -154,8 +185,6 @@ def get_stats_info(stats_queryset):
 
     for player in stats_queryset:
         player_totals = get_extra_stat_totals(player)
-        # print(f"PLAYER TOTALS TEST------------------{player_totals}")
-        # print(f"{player_totals.values()}")
         if player.hits:
             tb = player.singles
             if player.doubles:
@@ -188,6 +217,16 @@ def get_stats_info(stats_queryset):
     return (doubles, triples, homeruns, total_bases, rbi, rbi_2out, gidp, sf, sb,cs,po)
 
 def format_stats(stats):
+    """
+    Formats boxscore extra stats that show under the box score. Ex, is Joe hits
+    a homerun HR: Joe, Bob(8)
+
+    Used in conjunction with format_stats to gather and display properly. ie
+    format_stats(get_stats_info(-given_stats-))
+
+    View - league/views.py - game_boxscore_page_view
+    Templates - league/game_boxscore_page.html
+    """
     stat_list = []
     for stat in stats:
         stat_type = stat.pop(0)

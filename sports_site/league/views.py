@@ -12,7 +12,6 @@ def player_page_view(request, player_pk):
     league = League.objects.get(url=league_slug)
 
     player = get_object_or_404(Player, pk=player_pk, league=league)
-    # player = Player.objects.get(league=league, pk=player_pk)
     player_seasons = PlayerSeason.objects.all().filter(player=player)
 
     context = {
