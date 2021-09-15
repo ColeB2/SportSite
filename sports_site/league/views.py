@@ -3,7 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from django_tables2 import RequestConfig
 from .models import Game, League, Player, PlayerSeason, SeasonStage, Team
 from stats.get_stats import (format_stats, get_extra_innings,
-    get_player_season_hitting_stats, get_stats_info)
+    get_player_career_hitting_stats, get_player_season_hitting_stats,
+    get_stats_info)
 from stats.models import TeamGameStats
 from stats.tables import (BattingOrderTable, PlayerHittingGameStatsTable,
     PlayerHittingPageStatsTable, PlayerPitchingGameStatsTable, TeamGameLineScoreTable,)
@@ -19,7 +20,7 @@ def player_page_view(request, player_pk):
 
     featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
     season_stats = get_player_season_hitting_stats(player=player, league=league, featured_stage=featured_stage)
-
+    career_reg_season_stats = get_player_career_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
     table = PlayerHittingPageStatsTable(season_stats)
     RequestConfig(request).configure(table)
 
@@ -28,6 +29,7 @@ def player_page_view(request, player_pk):
         "player": player,
         "player_seasons": player_seasons,
         "season_stats": season_stats,
+        "career_stats": career_reg_season_stats,
         "table": table,
         }
     return render(request, "league/player_page.html", context)
