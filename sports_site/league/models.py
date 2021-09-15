@@ -30,17 +30,20 @@ class Season(models.Model):
 
 
 class SeasonStage(models.Model):
-    STAGE_PRINT = {"R":"Regular Season","P":"Postseason"}
+    STAGE_PRINT = {"R":"Regular Season","P":"Postseason", "O": "Other"}
     REGULAR = 'R'
     POST = 'P'
+    OTHER = 'O'
     SEASON_STAGE = [
         (REGULAR, 'Regular Season'),
         (POST, 'Postseason'),
+        (OTHER, 'Other'),
     ]
 
-    stage = models.CharField(choices=SEASON_STAGE, max_length=20, null=True)
+    stage = models.CharField(choices=SEASON_STAGE, max_length=20, null=True, help_text="The stage the season is in. Each season can contain multiple stages.")
     season = models.ForeignKey(Season, on_delete=models.CASCADE, null=True)
-    featured = models.BooleanField(null=True, default=False, verbose_name="Featured")
+    stage_name = models.CharField(max_length=50, null=True, default=None, blank=True, help_text="Used to denote name of stage. IE, Tournament, Preseason. Recommended when selecting stage as other.")
+    featured = models.BooleanField(null=False, default=False, verbose_name="Featured", help_text="Denotes whether the stage should be the main showcase for stats, standings etc.")
 
     def __str__(self):
         return f"{self.season} {self.STAGE_PRINT[self.stage]}"
