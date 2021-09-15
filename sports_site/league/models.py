@@ -46,7 +46,10 @@ class SeasonStage(models.Model):
     featured = models.BooleanField(null=False, default=False, verbose_name="Featured", help_text="Denotes whether the stage should be the main showcase for stats, standings etc.")
 
     def __str__(self):
-        return f"{self.season} {self.STAGE_PRINT[self.stage]}"
+        if self.stage_name:
+            return f"{self.season} {self.stage_name}"
+        else:
+            return f"{self.season} {self.STAGE_PRINT[self.stage]}"
 
 
     def save(self, *args, **kwargs):
