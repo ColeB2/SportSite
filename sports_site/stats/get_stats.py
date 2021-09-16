@@ -144,7 +144,7 @@ def get_player_career_hitting_stats(player, league, stage_type=SeasonStage.REGUL
 
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player=player, player__player__league=league, season__stage=stage_type)
-    hitting_stats1 = hitting_stats.values("player").annotate(
+    return_stats = hitting_stats.aggregate(
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
         runs = Sum('runs'),
@@ -159,20 +159,14 @@ def get_player_career_hitting_stats(player, league, stage_type=SeasonStage.REGUL
         caught_stealing = Sum('caught_stealing'),
         hit_by_pitch = Sum('hit_by_pitch'),
         sacrifice_flies = Sum('sacrifice_flies'),
-        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField()),
-        on_base_percentage = (
-            Cast(F('hits'), FloatField()) +
-            Cast(F('walks'), FloatField()) +
-            Cast(F('hit_by_pitch'), FloatField())
-            ) /
-            (
-            Cast(F('at_bats'), FloatField()) +
-            Cast(F('walks'), FloatField()) +
-            Cast(F('hit_by_pitch'), FloatField()) +
-            Cast(F('sacrifice_flies'), FloatField())
-            )
         )
-    return hitting_stats1
+    return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
+    return_stats["on_base_percentage"] = (
+        (return_stats["hits"] + return_stats["walks"] + return_stats["hit_by_pitch"]) /
+        (return_stats["at_bats"] + return_stats["walks"] + return_stats["hit_by_pitch"] + return_stats["sacrifice_flies"])
+        )
+
+    return return_stats
 
 
 def _get_extra_stat_totals(player):
