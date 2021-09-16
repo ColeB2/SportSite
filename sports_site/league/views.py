@@ -20,11 +20,13 @@ def player_page_view(request, player_pk):
 
     featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
     season_stats = get_player_season_hitting_stats(player=player, league=league, featured_stage=featured_stage)
-    career_reg_season_stats = get_player_career_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
-    table_data = [season_stats, career_reg_season_stats]
-    print(f"-----------------------season_stats: {season_stats}")
-    print(f"------------career_reg_season_stats: {career_reg_season_stats}")
-    table = PlayerHittingPageStatsTable(season_stats)
+    season_stats_dict = season_stats[0]
+
+    career_stats = get_player_career_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
+    table_data = [season_stats_dict, career_stats]
+    print(f"-----------------------season_stats_dict: {season_stats_dict}")
+    print(f"----------------------------career_stats: {career_stats}")
+    table = PlayerHittingPageStatsTable(table_data)
     RequestConfig(request).configure(table)
 
     context = {
@@ -32,7 +34,7 @@ def player_page_view(request, player_pk):
         "player": player,
         "player_seasons": player_seasons,
         "season_stats": season_stats,
-        "career_stats": career_reg_season_stats,
+        "career_stats": career_stats,
         "table": table,
         }
     return render(request, "league/player_page.html", context)
