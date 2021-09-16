@@ -98,6 +98,7 @@ def get_player_season_hitting_stats(player, league, featured_stage):
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player=player, player__player__league=league, season=featured_stage)
     hitting_stats1 = hitting_stats.values("player").annotate(
+        year = F("season__season__year"),
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
         runs = Sum('runs'),
@@ -140,6 +141,8 @@ def get_player_career_hitting_stats(player, league, stage_type=SeasonStage.REGUL
         stage_type - stage field from SeasonStage model object. Defaults to
             SeasonStage.REGULAR
 
+    Returns dictionary of totals for various player hitting stats.
+
     Views: league/views.py - player_page_view.
 
     """
@@ -160,6 +163,7 @@ def get_player_career_hitting_stats(player, league, stage_type=SeasonStage.REGUL
         hit_by_pitch = Sum('hit_by_pitch'),
         sacrifice_flies = Sum('sacrifice_flies'),
         )
+    return_stats["year"] = "Career"
     return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
     return_stats["on_base_percentage"] = (
         (return_stats["hits"] + return_stats["walks"] + return_stats["hit_by_pitch"]) /
