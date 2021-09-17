@@ -23,7 +23,7 @@ def get_league_leaders(league, featured_stage):
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
-    hitting_stats1 = hitting_stats.values("player").annotate(
+    return_stats = hitting_stats.values("player").annotate(
         player_id = F("player__player__pk"),
         first = F("player__player__first_name"),
         last = F("player__player__last_name"),
@@ -39,7 +39,7 @@ def get_league_leaders(league, featured_stage):
             Cast(F('at_bats'), FloatField())
             )
         )
-    return hitting_stats1
+    return return_stats
 
 
 def get_all_season_hitting_stats(league, featured_stage):
@@ -110,7 +110,7 @@ def get_player_season_hitting_stats(player, league, featured_stage):
                                                 player__player=player,
                                                 player__player__league=league,
                                                 season=featured_stage)
-    hitting_stats1 = hitting_stats.values("player").annotate(
+    return_stats = hitting_stats.values("player").annotate(
         year = F("season__season__year"),
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
@@ -140,7 +140,7 @@ def get_player_season_hitting_stats(player, league, featured_stage):
             Cast(F('sacrifice_flies'), FloatField())
             )
         )
-    return hitting_stats1
+    return return_stats
 
 
 def get_all_player_season_hitting_stats(player, league,
