@@ -20,7 +20,9 @@ def get_league_leaders(league, featured_stage):
     Views - news/views.py - home function
     Template - news/home.html
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+                                                player__player__league=league,
+                                                season=featured_stage)
     hitting_stats1 = hitting_stats.values("player").annotate(
         player_id = F("player__player__pk"),
         first = F("player__player__first_name"),
@@ -32,7 +34,10 @@ def get_league_leaders(league, featured_stage):
         homeruns = Sum('homeruns'),
         runs_batted_in = Sum('runs_batted_in'),
         stolen_bases = Sum('stolen_bases'),
-        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField())
+        average = (
+            Cast(F('hits'),FloatField()) /
+            Cast(F('at_bats'), FloatField())
+            )
         )
     return hitting_stats1
 
@@ -50,8 +55,10 @@ def get_all_season_hitting_stats(league, featured_stage):
     View - stats/views.py - stats_display_view
     Template - stats/stats_page.html
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player__league=league, season=featured_stage)
-    hitting_stats1 = hitting_stats.values("player").annotate(
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+                                                player__player__league=league,
+                                                season=featured_stage)
+    return_stats = hitting_stats.values("player").annotate(
         first = F("player__player__first_name"),
         last = F("player__player__last_name"),
         at_bats = Sum('at_bats'),
@@ -68,7 +75,10 @@ def get_all_season_hitting_stats(league, featured_stage):
         caught_stealing = Sum('caught_stealing'),
         hit_by_pitch = Sum('hit_by_pitch'),
         sacrifice_flies = Sum('sacrifice_flies'),
-        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField()),
+        average = (
+            Cast(F('hits'),FloatField()) /
+            Cast(F('at_bats'), FloatField())
+            ),
         on_base_percentage = (
             Cast(F('hits'), FloatField()) +
             Cast(F('walks'), FloatField()) +
@@ -81,7 +91,7 @@ def get_all_season_hitting_stats(league, featured_stage):
             Cast(F('sacrifice_flies'), FloatField())
             )
         )
-    return hitting_stats1
+    return return_stats
 
 
 def get_player_season_hitting_stats(player, league, featured_stage):
@@ -94,9 +104,12 @@ def get_player_season_hitting_stats(player, league, featured_stage):
         featured_stage - The SeasonStage model object to be used for the
             gathering of stats.
 
-    View - league/views.py player_page_view
+    View - league/views.py player_page_view - currently unused.
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player=player, player__player__league=league, season=featured_stage)
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+                                                player__player=player,
+                                                player__player__league=league,
+                                                season=featured_stage)
     hitting_stats1 = hitting_stats.values("player").annotate(
         year = F("season__season__year"),
         at_bats = Sum('at_bats'),
@@ -113,7 +126,8 @@ def get_player_season_hitting_stats(player, league, featured_stage):
         caught_stealing = Sum('caught_stealing'),
         hit_by_pitch = Sum('hit_by_pitch'),
         sacrifice_flies = Sum('sacrifice_flies'),
-        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField()),
+        average = Cast(F('hits'),FloatField()) /
+                  Cast(F('at_bats'), FloatField()),
         on_base_percentage = (
             Cast(F('hits'), FloatField()) +
             Cast(F('walks'), FloatField()) +
@@ -129,7 +143,8 @@ def get_player_season_hitting_stats(player, league, featured_stage):
     return hitting_stats1
 
 
-def get_all_player_season_hitting_stats(player, league, stage_type=SeasonStage.REGULAR):
+def get_all_player_season_hitting_stats(player, league,
+                                        stage_type=SeasonStage.REGULAR):
     """
     Retrieves the hittings stats for each season participated in for given stage
     type.
@@ -154,7 +169,10 @@ def get_all_player_season_hitting_stats(player, league, stage_type=SeasonStage.R
         caught_stealing = Sum('caught_stealing'),
         hit_by_pitch = Sum('hit_by_pitch'),
         sacrifice_flies = Sum('sacrifice_flies'),
-        average = Cast(F('hits'),FloatField())/ Cast(F('at_bats'), FloatField()),
+        average = (
+            Cast(F('hits'),FloatField()) /
+            Cast(F('at_bats'), FloatField())
+            ),
         on_base_percentage = (
             Cast(F('hits'), FloatField()) +
             Cast(F('walks'), FloatField()) +
@@ -187,7 +205,10 @@ def get_player_career_hitting_stats(player, league, stage_type=SeasonStage.REGUL
     Views: league/views.py - player_page_view.
 
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(player__player=player, player__player__league=league, season__stage=stage_type)
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+                                                player__player=player,
+                                                player__player__league=league,
+                                                season__stage=stage_type)
     return_stats = hitting_stats.aggregate(
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),

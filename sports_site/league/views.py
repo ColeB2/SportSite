@@ -3,8 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django_tables2 import RequestConfig
 from .models import Game, League, Player, PlayerSeason, SeasonStage, Team
 from stats.get_stats import (format_stats, get_all_player_season_hitting_stats,
-    get_extra_innings, get_player_career_hitting_stats,
-    get_player_season_hitting_stats, get_stats_info)
+    get_extra_innings, get_player_career_hitting_stats, get_stats_info)
 from stats.models import TeamGameStats
 from stats.tables import (BattingOrderTable, PlayerHittingGameStatsTable,
     PlayerHittingPageStatsTable, PlayerPitchingGameStatsTable, TeamGameLineScoreTable,)
