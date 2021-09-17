@@ -188,7 +188,9 @@ def get_all_player_season_hitting_stats(player, league,
     return return_stats
 
 
-def get_player_career_hitting_stats(player, league, stage_type=SeasonStage.REGULAR):
+def get_player_career_hitting_stats(player,
+                                    league,
+                                    stage_type=SeasonStage.REGULAR):
     """
     Retrieves the career hittings stats for given player during given
     stage_type. Defaults to regular season.
@@ -225,12 +227,21 @@ def get_player_career_hitting_stats(player, league, stage_type=SeasonStage.REGUL
         hit_by_pitch = Sum('hit_by_pitch'),
         sacrifice_flies = Sum('sacrifice_flies'),
         )
+
     return_stats["year"] = "Career"
     return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
     return_stats["on_base_percentage"] = (
-        (return_stats["hits"] + return_stats["walks"] + return_stats["hit_by_pitch"]) /
-        (return_stats["at_bats"] + return_stats["walks"] + return_stats["hit_by_pitch"] + return_stats["sacrifice_flies"])
-        )
+        (
+        return_stats["hits"] +
+        return_stats["walks"] +
+        return_stats["hit_by_pitch"]
+        ) /
+        (
+        return_stats["at_bats"] +
+        return_stats["walks"] +
+        return_stats["hit_by_pitch"] +
+        return_stats["sacrifice_flies"]
+        ))
 
     return return_stats
 
@@ -245,8 +256,10 @@ def _get_extra_stat_totals(player):
     """
     game = player.team_stats.game
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
-        player__player=player.player.player, season=game.season, team_stats__game__date__range=["2021-05-14",game.date])
-    hitting_stats1 = hitting_stats.values("player").aggregate(
+                        player__player=player.player.player,
+                        season=game.season,
+                        team_stats__game__date__range=["2021-05-14",game.date])
+    return_stats = hitting_stats.values("player").aggregate(
         doubles = Sum('doubles'),
         triples = Sum('triples'),
         homeruns = Sum('homeruns'),
@@ -255,7 +268,7 @@ def _get_extra_stat_totals(player):
         stolen_bases = Sum('stolen_bases'),
         caught_stealing = Sum('caught_stealing'),
         )
-    return hitting_stats1
+    return return_stats
 
 
 def get_all_season_standings_stats(league, featured_stage):
@@ -305,7 +318,7 @@ def get_extra_innings(linescore_obj):
     id values from it, then turns the extras values into own key/value pairs in
     the dictionary and returns the dict for use in django-tables.
 
-    Data returned is for use in TeamGameLineScoreTable([-returned table_data-,]),
+    Data returned for use in TeamGameLineScoreTable([-returned table_data-,]),
     often as a list of multiple objects of itself.
 
     Params:
@@ -315,7 +328,9 @@ def get_extra_innings(linescore_obj):
     Views - league/views.py - game_boxscore_page_view
     Templates Featured - league/game_boxscore_page.html
     """
-    table_data = model_to_dict(linescore_obj, fields=[field.name for field in linescore_obj._meta.fields])
+    table_data = model_to_dict(
+                    linescore_obj,
+                    fields=[field.name for field in linescore_obj._meta.fields])
     extra_innings = table_data.pop("extras")
     game_pk = table_data.pop("game")
     table_data.pop("id")
@@ -373,32 +388,41 @@ def get_stats_info(stats_queryset):
             tb = player.singles
             if player.doubles:
                 tb += player.doubles*2
-                doubles.append((player, player.doubles, player_totals["doubles"]))
+                doubles.append(
+                    (player, player.doubles, player_totals["doubles"]))
             if player.triples:
                 tb += player.triples*3
-                triples.append((player, player.triples, player_totals["triples"]))
+                triples.append(
+                    (player, player.triples, player_totals["triples"]))
             if player.homeruns:
                 tb += player.homeruns*4
-                homeruns.append((player, player.homeruns, player_totals["homeruns"]))
+                homeruns.append(
+                    (player, player.homeruns, player_totals["homeruns"]))
         if player.two_out_runs_batted_in:
             rbi_2out.append((player, player.two_out_runs_batted_in, None))
         if player.runs_batted_in:
-            rbi.append((player, player.runs_batted_in, player_totals["runs_batted_in"]))
+            rbi.append(
+                (player, player.runs_batted_in, player_totals["runs_batted_in"])
+                )
         if player.ground_into_double_play:
-            gidp.append((player, player.ground_into_double_play, None))
+            gidp.append(
+                (player, player.ground_into_double_play, None))
         if player.sacrifice_flies:
             sf.append((player, player.sacrifice_flies, None))
 
         if player.stolen_bases:
-            sb.append((player, player.stolen_bases, player_totals["stolen_bases"]))
+            sb.append(
+                (player, player.stolen_bases, player_totals["stolen_bases"]))
         if player.caught_stealing:
-            cs.append((player, player.caught_stealing, player_totals["caught_stealing"]))
+            cs.append(
+                (player, player.caught_stealing, player_totals["caught_stealing"]))
         if player.picked_off:
             po.append((player, player.picked_off, None))
 
 
 
-    return (doubles, triples, homeruns, total_bases, rbi, rbi_2out, gidp, sf, sb,cs,po)
+    return (doubles, triples, homeruns, total_bases, rbi, rbi_2out, gidp, sf,
+            sb, cs, po)
 
 def format_stats(stats):
     """
