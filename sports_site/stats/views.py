@@ -1,6 +1,8 @@
 from django.contrib import messages
+from django.contrib.admin.utils import NestedObjects
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import router
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
@@ -192,6 +194,32 @@ def team_game_linescore_edit_view(request, game_pk, team_season_pk, team_game_st
         "form":form,
         }
     return render(request, "stats/game_linescore_create.html", context)
+
+
+@permission_required('league.league_admin')
+@user_owns_game
+def team_game_linescore_delete_info_view(request, game_pk, team_season_pk, team_game_stats_pk, linescore_pk):
+    game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
+
+
+    using = router.db_for_write(game_stats._meta.model)
+    nested_object = NestedObjects(using)
+    nested_object.collect([game_stats])
+
+    if request.method == 'POST':
+        game_stats.delete()
+        messages.success(request, f"{game_stats} and all releated object were deleted")
+        return redirect('stats-team-game-stats', game_pk, team_season_pk)
+    else:
+        pass
+
+    context = {
+        "game_pk": game_pk,
+        "team_season_pk": team_season_pk,
+        "game_stats": game_stats,
+        "nested_object": nested_object,
+        }
+    return render(request, "stats/game_linescore_delete.html", context)
 
 
 """Stats Display Views"""
