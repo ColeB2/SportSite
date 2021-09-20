@@ -102,7 +102,7 @@ class PlayerHittingGameStats(models.Model):
 
 
     def __str__(self):
-        return f"{self.player}"
+        return f"Player: {self.player.player} Game: {self.team_stats}"
 
 
     def save(self, *args, **kwargs):

@@ -14,9 +14,9 @@
         {% endif %}
 
 
-        <legend>Warning: Deleting {{linescore}} will delete all object related to it.</legend>
+        <legend>Warning: Deleting this lineup will delete all objects listed below.</legend>
 
-        {{nested_object.nested|unordered_list }}
+        {{hitting_stats|unordered_list}}
         <form method="POST">
             {% csrf_token %}
 

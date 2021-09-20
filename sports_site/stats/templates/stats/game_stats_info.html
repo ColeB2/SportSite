@@ -44,6 +44,7 @@
         </div>
 
         <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit</a>
+        <a class="btn btn-danger "href="{% url 'stats-game-stats-delete' game_pk team_season_pk game_stats.pk %}">Delete</a>
         <br>
         <h4>Pitching Stats</h4><br>
         <div class="table-responsive">

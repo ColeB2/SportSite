@@ -6,6 +6,7 @@ urlpatterns = [
     path('standings/', views.standings_display_view, name="standings-page"),
     path('game/<int:game_pk>/team/<int:team_season_pk>/add', views.team_game_stats_edit_view, name='stats-game-stats-edit'),
     path('game/<int:game_pk>/team/<int:team_season_pk>/create', views.team_game_stats_create_view, name='stats-game-stats-create'),
+    path('game/<int:game_pk>/team/<int:team_season_pk>/lineup/<int:team_game_stats_pk>/delete,', views.team_game_stats_delete_info_view, name='stats-game-stats-delete'),
     path('game/<int:game_pk>/team/<int:team_season_pk>/info', views.team_game_stats_info_view, name='stats-team-game-stats'),
     path('game/<int:game_pk>/team/<int:team_season_pk>/linescore/<int:team_game_stats_pk>', views.team_game_linescore_create_view, name='stats-linescore-create'),
     path('game/<int:game_pk>/team/<int:team_season_pk>/linescore/<int:team_game_stats_pk>/<int:linescore_pk>/edit', views.team_game_linescore_edit_view, name='stats-linescore-edit'),
