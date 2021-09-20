@@ -187,14 +187,26 @@ def get_player_season_hitting_stats(player, league, featured_stage):
 
 
 def get_player_last_x_hitting_stats(player, league, num_games):
+    """
+    Gets last x games played for a hitter to use in display last X games table:
+
+    Params:
+        Params:
+        player - Player Model Object
+        league - League model object
+        num_games - Int, number of games wanting to be displayed. Starting from
+            most recent, up until the nth number of game described by this int.
+
+    View - league/views.py player_page_view
+    """
 
     hitting_stats = PlayerHittingGameStats.objects.filter(
                                     player__player=player,
                                     player__player__league=league).order_by(
                                         "-team_stats__game__date"
                                         )[:num_games]
-    return_stats = hitting_stats.values("season__season__year").annotate(
-        year = F("season__season__year"),
+    return_stats = hitting_stats.values("team_stats__game__date").annotate(
+        year = F("team_stats__game__date"),
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
         runs = Sum('runs'),

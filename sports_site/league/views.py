@@ -31,7 +31,6 @@ def player_page_view(request, player_pk):
     RequestConfig(request).configure(table)
 
     split_table = PlayerHittingPageStatsTable(player_splits)
-    RequestConfig(request).configure(split_table)
 
     context = {
         "league": league,
