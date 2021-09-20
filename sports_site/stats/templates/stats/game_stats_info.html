@@ -31,7 +31,9 @@
         {% if linescore %}
         <h4>Team Linescore:</h4>
         {% render_table table3 %}
-        <a class="btn btn-primary "href="{% url 'stats-linescore-edit' game_pk team_season_pk game_stats.pk linescore.pk %}">Edit</a><br>
+        <a class="btn btn-primary" href="{% url 'stats-linescore-edit' game_pk team_season_pk game_stats.pk linescore.pk %}">Edit</a>
+        <a class="btn btn-danger" href="{% url 'stats-linescore-delete' game_pk team_season_pk game_stats.pk linescore.pk %}">Delete</a>
+        <br>
         {% endif %}
 
         <br><br>
@@ -41,8 +43,8 @@
             {% render_table table %}
         </div>
 
-        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit</a><br>
-        <a class="btn btn-danger" href="{% url 'stats-linescore-delete' game_pk team_season_pk game_stats.pk %}">Delete</a>
+        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit</a>
+        <br>
         <h4>Pitching Stats</h4><br>
         <div class="table-responsive">
             {% render_table table2 %}

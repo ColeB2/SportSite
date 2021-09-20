@@ -199,16 +199,16 @@ def team_game_linescore_edit_view(request, game_pk, team_season_pk, team_game_st
 @permission_required('league.league_admin')
 @user_owns_game
 def team_game_linescore_delete_info_view(request, game_pk, team_season_pk, team_game_stats_pk, linescore_pk):
-    game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
+    linescore = TeamGameLineScore.objects.get(pk=linescore_pk)
 
 
-    using = router.db_for_write(game_stats._meta.model)
+    using = router.db_for_write(linescore._meta.model)
     nested_object = NestedObjects(using)
-    nested_object.collect([game_stats])
+    nested_object.collect([linescore])
 
     if request.method == 'POST':
-        game_stats.delete()
-        messages.success(request, f"{game_stats} and all releated object were deleted")
+        linescore.delete()
+        messages.success(request, f"{linescore} and all releated object were deleted")
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
     else:
         pass
@@ -216,7 +216,7 @@ def team_game_linescore_delete_info_view(request, game_pk, team_season_pk, team_
     context = {
         "game_pk": game_pk,
         "team_season_pk": team_season_pk,
-        "game_stats": game_stats,
+        "linescore": linescore,
         "nested_object": nested_object,
         }
     return render(request, "stats/game_linescore_delete.html", context)
