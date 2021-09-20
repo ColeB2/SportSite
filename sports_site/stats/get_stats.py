@@ -14,7 +14,6 @@ def annotate_stats(stats_queryset, annotate_value="player"):
     - optional stats to grab
     - do the common ones, and combine it based on need of uncommon needs?
     """
-
     stats_queryset.values(annotate_value).annotate(
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
@@ -172,6 +171,48 @@ def get_player_season_hitting_stats(player, league, featured_stage):
         sacrifice_flies = Sum('sacrifice_flies'),
         average = Cast(F('hits'),FloatField()) /
                   Cast(F('at_bats'), FloatField()),
+        on_base_percentage = (
+            Cast(F('hits'), FloatField()) +
+            Cast(F('walks'), FloatField()) +
+            Cast(F('hit_by_pitch'), FloatField())
+            ) /
+            (
+            Cast(F('at_bats'), FloatField()) +
+            Cast(F('walks'), FloatField()) +
+            Cast(F('hit_by_pitch'), FloatField()) +
+            Cast(F('sacrifice_flies'), FloatField())
+            )
+        )
+    return return_stats
+
+
+def get_player_last_x_hitting_stats(player, league, num_games):
+
+    hitting_stats = PlayerHittingGameStats.objects.filter(
+                                    player__player=player,
+                                    player__player__league=league).order_by(
+                                        "-team_stats__game__date"
+                                        )[:num_games]
+    return_stats = hitting_stats.values("season__season__year").annotate(
+        year = F("season__season__year"),
+        at_bats = Sum('at_bats'),
+        plate_appearances = Sum('plate_appearances'),
+        runs = Sum('runs'),
+        hits = Sum('hits'),
+        doubles = Sum('doubles'),
+        triples = Sum('triples'),
+        homeruns = Sum('homeruns'),
+        runs_batted_in = Sum('runs_batted_in'),
+        walks = Sum('walks'),
+        strikeouts = Sum('strikeouts'),
+        stolen_bases = Sum('stolen_bases'),
+        caught_stealing = Sum('caught_stealing'),
+        hit_by_pitch = Sum('hit_by_pitch'),
+        sacrifice_flies = Sum('sacrifice_flies'),
+        average = (
+            Cast(F('hits'),FloatField()) /
+            Cast(F('at_bats'), FloatField())
+            ),
         on_base_percentage = (
             Cast(F('hits'), FloatField()) +
             Cast(F('walks'), FloatField()) +

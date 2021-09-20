@@ -3,7 +3,8 @@ from django.shortcuts import render, get_object_or_404
 from django_tables2 import RequestConfig
 from .models import Game, League, Player, PlayerSeason, SeasonStage, Team
 from stats.get_stats import (format_stats, get_all_player_season_hitting_stats,
-    get_extra_innings, get_player_career_hitting_stats, get_stats_info)
+    get_extra_innings, get_player_career_hitting_stats,
+    get_player_last_x_hitting_stats, get_stats_info)
 from stats.models import TeamGameStats
 from stats.tables import (BattingOrderTable, PlayerHittingGameStatsTable,
     PlayerHittingPageStatsTable, PlayerPitchingGameStatsTable, TeamGameLineScoreTable,)
@@ -19,6 +20,7 @@ def player_page_view(request, player_pk):
 
     all_stats = get_all_player_season_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
     career_stats = get_player_career_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
+    player_splits = get_player_last_x_hitting_stats(player=player, league=league, num_games=5)
 
     table_data = []
     for statline in all_stats:
@@ -28,11 +30,15 @@ def player_page_view(request, player_pk):
     table = PlayerHittingPageStatsTable(table_data)
     RequestConfig(request).configure(table)
 
+    split_table = PlayerHittingPageStatsTable(player_splits)
+    RequestConfig(request).configure(split_table)
+
     context = {
         "league": league,
         "player": player,
         "player_seasons": player_seasons,
         "table": table,
+        "split_table": split_table,
         }
     return render(request, "league/player_page.html", context)
 
