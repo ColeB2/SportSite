@@ -98,9 +98,7 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk, team_game_stats_
                 saved_stats = form.process()
                 messages.success(request, f"{saved_stats} saved.")
 
-            return redirect('league-admin-schedule',
-                team_season.season.season.year,
-                team_season.season.pk)
+            return redirect('stats-team-game-stats', game_pk, team_season_pk)
 
     else:
         formset = HittingGameStatsFormset(

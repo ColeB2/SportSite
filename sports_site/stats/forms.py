@@ -172,7 +172,7 @@ class PPGSFHelper(FormHelper):
                 Column("game_started"),
                 Column("complete_game"),
                 Column("shutout"),
-                Column("save"),
+                Column("save_converted"),
                 Column("save_op"),
                 Column("innings_pitched"),
                 css_class="form-row"),
