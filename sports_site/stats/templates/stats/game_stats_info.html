@@ -45,7 +45,7 @@
         </div>
 
 
-        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit</a>
+        <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk game_stats.pk %}">Edit</a>
         <a class="btn btn-danger "href="{% url 'stats-game-stats-delete' game_pk team_season_pk game_stats.pk %}">Delete</a>
         {% endif %}
 
@@ -57,7 +57,7 @@
             {% render_table table2 %}
         </div>
 
-        <a class="btn btn-primary" href="#">Edit</a>
+        <a class="btn btn-primary" href="{% url 'stats-game-pitching-stats-edit' game_pk team_season_pk game_stats.pk %}">Edit</a>
         <a class="btn btn-danger"  href="{% url 'stats-game-pitching-stats-delete' game_pk team_season_pk game_stats.pk %}">Delete</a>
         {% endif %}
 

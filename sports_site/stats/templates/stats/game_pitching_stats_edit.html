@@ -1,0 +1,45 @@
+{% extends "news/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <div class="content-section">
+
+        {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+
+        {% if perms.league.league_admin %}
+        <h2>Adds Stats for: {{game.date}} {{team_season.team}}</h2>
+        <br><br>
+        <legend><small>Edit stats below</small></legend>
+        <form method="post">
+            {% csrf_token %}
+            {{ formset.management_form }}
+            {% crispy formset helper %}
+
+            <br><br>
+            <div class="form-actions">
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </div>
+            <br><br>
+
+            {% for hidden in formset.hiden_fields %}
+            {{hidden}}
+            {% endfor %}
+        </form>
+        {% else %}
+        <h2>Access Denied</h2>
+        <!--<h3>You Don't Own <b>{{current_stage.season.league}}</b>'s <b>{{current_stage}}</b></h3>-->
+
+
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock content %}

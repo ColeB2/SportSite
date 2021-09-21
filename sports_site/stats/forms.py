@@ -155,6 +155,39 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
         player_stats.save()
         return player_stats
 
+
+class PPGSFHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.form_method = 'post'
+        self.form_tag = False
+        self.layout = Layout(
+            Row(
+                Column("player", css_class="form-group col-md-6"),
+                css_class="form-row"
+                ),
+            Row(
+                Column("win"),
+                Column("loss"),
+                Column("game_started"),
+                Column("complete_game"),
+                Column("shutout"),
+                Column("save"),
+                Column("save_op"),
+                Column("innings_pitched"),
+                css_class="form-row"),
+            Row(
+                Column("hits_allowed"),
+                Column("runs_allowed"),
+                Column("earned_runs"),
+                Column("homeruns_allowed"),
+                Column("hit_batters"),
+                Column("walks_allowed"),
+                Column("strikeouts"),
+                css_class="form-row"),
+            )
+
+
 class PlayerPitchingGameStatsForm(forms.ModelForm):
     class Meta:
         model = PlayerPitchingGameStats
@@ -163,8 +196,8 @@ class PlayerPitchingGameStatsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self._team_season = kwargs.pop('team_season')
-        self._team_game_stats = kwargs.pop('team_game_stats')
-        super(PlayerHittingGameStatsForm, self).__init__(*args, **kwargs)
+        self._team_game_stats = kwargs.pop('game_stats')
+        super(PlayerPitchingGameStatsForm, self).__init__(*args, **kwargs)
         self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
         self.fields['player'].label = False
 

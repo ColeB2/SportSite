@@ -126,7 +126,7 @@ class PlayerPitchingGameStats(models.Model):
     shutout = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SHO")
     save_converted = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SV")
     save_op = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SVO")
-    innings_pitched = models.FloatField(validators=[validate_innings_pitched],  null=True, blank=True, default=0, verbose_name="IP", help_text="Innings Pitched\nThe number of putouts recorded while the pitcher was on the mound divided by 3.\n.1 - 1 out\n.2 - 2 outs.")
+    innings_pitched = models.FloatField(validators=[validate_innings_pitched],  null=True, blank=True, default=0, verbose_name="IP", help_text="Innings Pitched\nUse: .1 - 1 out\n.2 - 2 outs.")
     hits_allowed = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="H")
     runs_allowed = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="R")
     earned_runs = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="ER")

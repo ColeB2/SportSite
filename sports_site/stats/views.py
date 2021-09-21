@@ -11,7 +11,7 @@ from .get_stats import (get_all_season_hitting_stats,
     get_all_season_standings_stats, get_extra_innings)
 from .models import (TeamGameLineScore, TeamGameStats,)
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
-    PlayerStatsCreateForm, PHGSFHelper, )
+    PitchingGameStatsFormset, PlayerStatsCreateForm, PHGSFHelper, PPGSFHelper)
 from .decorators import user_owns_game
 from .tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable, StandingsTable,
@@ -75,7 +75,7 @@ def team_game_stats_create_view(request, game_pk, team_season_pk):
 
 @permission_required('league.league_admin')
 @user_owns_game
-def team_game_stats_edit_view(request, game_pk, team_season_pk):
+def team_game_stats_edit_view(request, game_pk, team_season_pk, team_game_stats_pk):
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
     roster = Roster.objects.get(team=team_season)
@@ -117,6 +117,54 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk):
         }
     return render(request, "stats/game_stats_edit.html", context)
 
+
+@permission_required('league.league_admin')
+@user_owns_game
+def team_game_pitching_stats_edit_view(request, game_pk, team_season_pk, team_game_stats_pk):
+    game = Game.objects.get(pk=game_pk)
+    team_season = TeamSeason.objects.get(pk=team_season_pk)
+    roster = Roster.objects.get(team=team_season)
+    players = roster.playerseason_set.all()
+
+    team_game_stats= TeamGameStats.objects.get(pk=team_game_stats_pk,
+                                                season=team_season.season,
+                                                team=team_season,
+                                                game=game)
+
+    helper = PPGSFHelper()
+
+    if request.method == "POST":
+        formset = PitchingGameStatsFormset(
+            instance=team_game_stats,
+            data=request.POST,
+            files=request.FILES,
+            form_kwargs={'team_season':team_season,
+                         'game_stats':team_game_stats})
+        if formset.is_valid():
+            for form in formset:
+                saved_stats = form.process()
+                messages.success(request, f"{saved_stats} saved.")
+
+            return redirect('league-admin-schedule',
+                team_season.season.season.year,
+                team_season.season.pk)
+
+    else:
+        formset = PitchingGameStatsFormset(
+            instance=team_game_stats,
+            form_kwargs={'team_season':team_season,
+                         'game_stats':team_game_stats})
+    context = {
+        "game":game,
+        "team_season":team_season,
+        "roster": roster,
+        "players": players,
+        "formset": formset,
+        "helper": helper,
+        }
+    return render(request, "stats/game_pitching_stats_edit.html", context)
+
+
 @permission_required('league.league_admin')
 @user_owns_game
 def team_game_stats_delete_info_view(request, game_pk, team_season_pk, team_game_stats_pk):
@@ -151,7 +199,6 @@ def team_game_pitching_stats_delete_info_view(request, game_pk, team_season_pk, 
     if request.method == 'POST':
         for stat_obj in pitching_stats:
             stat_obj.delete()
-        # game_stats.delete()
         messages.success(request, f"{pitching_stats} and all releated object were deleted")
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
     else:
