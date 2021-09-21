@@ -124,6 +124,8 @@ def team_game_stats_delete_info_view(request, game_pk, team_season_pk, team_game
     hitting_stats = game_stats.playerhittinggamestats_set.all()
 
     if request.method == 'POST':
+        for stat_obj in hitting_stats:
+            stat_obj.delete()
         # game_stats.delete()
         messages.success(request, f"{hitting_stats} and all releated object were deleted")
         return redirect('stats-team-game-stats', game_pk, team_season_pk)

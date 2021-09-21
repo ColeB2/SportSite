@@ -36,22 +36,30 @@
         <br>
         {% endif %}
 
+
         <br><br>
         <h4>Offensive Stats</h4><br>
-
+        {% if player_stats %}
         <div class="table-responsive">
             {% render_table table %}
         </div>
 
+
         <a class="btn btn-primary "href="{% url 'stats-game-stats-edit' game_pk team_season_pk %}">Edit</a>
         <a class="btn btn-danger "href="{% url 'stats-game-stats-delete' game_pk team_season_pk game_stats.pk %}">Delete</a>
-        <br>
+        {% endif %}
+
+
+        <br><br>
         <h4>Pitching Stats</h4><br>
+        {% if pitching_stats %}
         <div class="table-responsive">
             {% render_table table2 %}
         </div>
 
-        <a class="btn btn-primary "href="#">Edit</a>
+        <a class="btn btn-primary" href="#">Edit</a>
+        <a class="btn btn-danger"  href="#">Delete</a>
+        {% endif %}
 
 
 
