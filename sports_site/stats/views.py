@@ -78,21 +78,27 @@ def team_game_stats_create_view(request, game_pk, team_season_pk):
     if request.method == "POST":
         for form in formset:
             if form.is_valid():
-                hitting_stats, h_created, pitching_stats, p_created, pitched = form.process()
+                hitting_stats, h_created, pitching_stats, p_created, \
+                    pitched = form.process()
+
                 if h_created:
                     messages.success(request,
-                        f"{hitting_stats.player.player} hitting stats created for {game}")
+                        f"{hitting_stats.player.player} hitting stats "
+                        f"created for {game}")
                 else:
                     if hitting_stats:
                         messages.info(request,
-                            f"{hitting_stats.player.player} already has stats for {game}.")
+                            f"{hitting_stats.player.player} already has "
+                            f"stats for {game}.")
                 if p_created:
                     messages.success(request,
-                        f"{pitching_stats.player.player} pitching stats created for {game}")
+                        f"{pitching_stats.player.player} pitching stats "
+                        f"created for {game}")
                 else:
                     if pitching_stats and pitched:
                         messages.info(request,
-                            f"{pitching_stats.player} already has pitching stats for {game}.")
+                            f"{pitching_stats.player} already has pitching "
+                            f"stats for {game}.")
 
 
         if 'create' in request.POST:
@@ -113,7 +119,9 @@ def team_game_stats_create_view(request, game_pk, team_season_pk):
 
 @permission_required('league.league_admin')
 @user_owns_game
-def team_game_stats_edit_view(request, game_pk, team_season_pk, team_game_stats_pk):
+def team_game_stats_edit_view(request, game_pk, team_season_pk,
+                              team_game_stats_pk):
+
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
     roster = Roster.objects.get(team=team_season)
@@ -156,14 +164,19 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk, team_game_stats_
 
 @permission_required('league.league_admin')
 @user_owns_game
-def team_game_stats_delete_info_view(request, game_pk, team_season_pk, team_game_stats_pk):
+def team_game_stats_delete_info_view(request, game_pk, team_season_pk,
+                                     team_game_stats_pk):
+
     game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
     hitting_stats = game_stats.playerhittinggamestats_set.all()
 
     if request.method == 'POST':
         for stat_obj in hitting_stats:
             stat_obj.delete()
-        messages.success(request, f"{hitting_stats} and all releated object were deleted")
+        messages.success(request,
+            f"{hitting_stats} and all releated "
+            f"object were deleted")
+
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
 
     context = {
@@ -178,7 +191,9 @@ def team_game_stats_delete_info_view(request, game_pk, team_season_pk, team_game
 """Team Game Stats -- Pitching """
 @permission_required('league.league_admin')
 @user_owns_game
-def team_game_pitching_stats_edit_view(request, game_pk, team_season_pk, team_game_stats_pk):
+def team_game_pitching_stats_edit_view(request, game_pk, team_season_pk,
+                                       team_game_stats_pk):
+
     game = Game.objects.get(pk=game_pk)
     team_season = TeamSeason.objects.get(pk=team_season_pk)
     roster = Roster.objects.get(team=team_season)
@@ -225,14 +240,18 @@ def team_game_pitching_stats_edit_view(request, game_pk, team_season_pk, team_ga
 
 @permission_required('league.league_admin')
 @user_owns_game
-def team_game_pitching_stats_delete_info_view(request, game_pk, team_season_pk, team_game_stats_pk):
+def team_game_pitching_stats_delete_info_view(request, game_pk, team_season_pk,
+                                              team_game_stats_pk):
+
     game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
     pitching_stats = game_stats.playerpitchinggamestats_set.all()
 
     if request.method == 'POST':
         for stat_obj in pitching_stats:
             stat_obj.delete()
-        messages.success(request, f"{pitching_stats} and all releated object were deleted")
+        messages.success(request,
+            f"{pitching_stats} and all releated object were deleted")
+
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
     else:
         pass
@@ -250,9 +269,11 @@ def team_game_pitching_stats_delete_info_view(request, game_pk, team_season_pk, 
 """Linescore Views"""
 @permission_required('league.league_admin')
 @user_owns_game
-def team_game_linescore_create_view(request, game_pk, team_season_pk, team_game_stats_pk):
+def team_game_linescore_create_view(request, game_pk, team_season_pk,
+                                    team_game_stats_pk):
     """View which creates a linescore model and if one doesn't exist and
     immediately redirects to  team game stats info view"""
+
     game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
 
     linescore, created = TeamGameLineScore.objects.get_or_create(game=game_stats)
@@ -261,13 +282,17 @@ def team_game_linescore_create_view(request, game_pk, team_season_pk, team_game_
         messages.success(request, f"{linescore} created.")
     else:
         messages.info(request, f"{linescore} already exists.")
+
     return redirect("stats-team-game-stats", game_pk, team_season_pk)
 
 
 @permission_required('league.league_admin')
 @user_owns_game
-def team_game_linescore_edit_view(request, game_pk, team_season_pk, team_game_stats_pk, linescore_pk):
+def team_game_linescore_edit_view(request, game_pk, team_season_pk,
+                                  team_game_stats_pk, linescore_pk):
+
     game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
+
     try:
         linescore = TeamGameLineScore.objects.get(game=game_stats,
                                                   game__team=team_season_pk)
@@ -297,7 +322,8 @@ def team_game_linescore_edit_view(request, game_pk, team_season_pk, team_game_st
 
 @permission_required('league.league_admin')
 @user_owns_game
-def team_game_linescore_delete_info_view(request, game_pk, team_season_pk, team_game_stats_pk, linescore_pk):
+def team_game_linescore_delete_info_view(request, game_pk, team_season_pk,
+                                         team_game_stats_pk, linescore_pk):
     linescore = TeamGameLineScore.objects.get(pk=linescore_pk)
 
 
@@ -307,10 +333,10 @@ def team_game_linescore_delete_info_view(request, game_pk, team_season_pk, team_
 
     if request.method == 'POST':
         linescore.delete()
-        messages.success(request, f"{linescore} and all releated object were deleted")
+        messages.success(request,
+            f"{linescore} and all releated object were deleted")
+
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
-    else:
-        pass
 
     context = {
         "game_pk": game_pk,
@@ -325,7 +351,8 @@ def team_game_linescore_delete_info_view(request, game_pk, team_season_pk, team_
 def stats_display_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
-    featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
+    featured_stage = SeasonStage.objects.get(season__league=league,
+                                             featured=True)
     hitting_stats = get_all_season_hitting_stats(league, featured_stage)
     table = PlayerHittingStatsTable(hitting_stats)
     RequestConfig(request).configure(table)
@@ -342,7 +369,8 @@ def stats_display_view(request):
 def standings_display_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
-    featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
+    featured_stage = SeasonStage.objects.get(season__league=league,
+                                             featured=True)
     standings_stats = get_all_season_standings_stats(league, featured_stage)
     table = StandingsTable(standings_stats)
     RequestConfig(request).configure(table)
