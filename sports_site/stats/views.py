@@ -141,6 +141,31 @@ def team_game_stats_delete_info_view(request, game_pk, team_season_pk, team_game
     return render(request, "stats/game_stats_delete.html", context)
 
 
+
+@permission_required('league.league_admin')
+@user_owns_game
+def team_game_pitching_stats_delete_info_view(request, game_pk, team_season_pk, team_game_stats_pk):
+    game_stats = TeamGameStats.objects.get(pk=team_game_stats_pk)
+    pitching_stats = game_stats.playerpitchinggamestats_set.all()
+
+    if request.method == 'POST':
+        for stat_obj in pitching_stats:
+            stat_obj.delete()
+        # game_stats.delete()
+        messages.success(request, f"{pitching_stats} and all releated object were deleted")
+        return redirect('stats-team-game-stats', game_pk, team_season_pk)
+    else:
+        pass
+
+    context = {
+        "game_pk": game_pk,
+        "team_season_pk": team_season_pk,
+        "game_stats": game_stats,
+        "pitching_stats": pitching_stats,
+        }
+    return render(request, "stats/game_pitching_stats_delete.html", context)
+
+
 @permission_required('league.league_admin')
 @user_owns_game
 def team_game_stats_info_view(request, game_pk, team_season_pk):
