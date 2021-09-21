@@ -102,8 +102,7 @@ def team_game_stats_create_view(request, game_pk, team_season_pk):
 
 
         if 'create' in request.POST:
-            return redirect('league-admin-schedule',
-                team_season.season.season.year, team_season.season.pk)
+            return redirect('stats-add-game-stats', game_pk, team_season_pk)
         elif 'create-and-continue' in request.POST:
             return redirect('stats-add-game-stats', game_pk, team_season_pk)
 
