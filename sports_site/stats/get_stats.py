@@ -240,11 +240,14 @@ def get_player_last_x_hitting_stats(player, league, num_games):
     return return_stats
 
 
+def get_last_x_hitting_stats_totals(player, league, num_games):
+    pass
+
 def get_all_player_season_hitting_stats(player, league,
                                         stage_type=SeasonStage.REGULAR):
     """
-    Retrieves the hittings stats for each season participated in for given stage
-    type.
+    Retrieves the hittings stats for each season participated
+    in for given stage type.
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player=player,
@@ -294,10 +297,10 @@ def get_player_career_hitting_stats(player,
 
     Params:
         player - Player model object from league.models Player.
-        league - League model object from league.models League. Retrieved from
-            request.GET.get('league') url.
-        stage_type - stage field from SeasonStage model object. Defaults to
-            SeasonStage.REGULAR
+        league - League model object from league.models League.
+            Retrieved from request.GET.get('league') url.
+        stage_type - stage field from SeasonStage model object.
+            Defaults to SeasonStage.REGULAR
 
     Returns dictionary of totals for various player hitting stats.
 
@@ -345,8 +348,8 @@ def get_player_career_hitting_stats(player,
 
 def _get_extra_stat_totals(player):
     """
-    Internal method used in get_stats_info
-    Retrieves the totals for the extra stats given playerhittinggamestats object
+    Internal method used in get_stats_info. Retrieves the totals for
+    the extra stats from a playerhittinggamestats model object.
 
     Params:
         player - PlayerHittingGameStats object
@@ -370,8 +373,8 @@ def _get_extra_stat_totals(player):
 
 def get_all_season_standings_stats(league, featured_stage):
     """
-    Gets all the standings data for the featured stage, and returns them in
-    usable fashion for a django-tables2 standings page.
+    Gets all the standings data for the featured stage, and returns
+    them in usable fashion for a django-tables2 standings page.
 
     Params:
         league - League model object
@@ -408,16 +411,16 @@ def get_all_season_standings_stats(league, featured_stage):
 
 def get_extra_innings(linescore_obj):
     """
-    Takes linescore object turns it into a dictionary, removes the game and
-    id values from it, then turns the extras values into own key/value pairs in
-    the dictionary and returns the dict for use in django-tables.
+    Takes linescore object turns it into a dictionary, removes the
+    game and id values from it, then turns the extras values into
+    own key/value pairs in the dictionary and returns the dict for
+    use in django-tables.
 
-    Data returned for use in TeamGameLineScoreTable([-returned table_data-,]),
-    often as a list of multiple objects of itself.
+    Data retured as a list of multiple obj of itself used as so:
+    TeamGameLineScoreTable([-returned table_data-,])
 
     Params:
-        linescore_obj - TeamGameLineScore model object from the stats/models.py
-            file.
+        linescore_obj - TeamGameLineScore model object - stats/models.py
 
     Views - league/views.py - game_boxscore_page_view
     Templates Featured - league/game_boxscore_page.html
@@ -450,15 +453,15 @@ def get_extra_innings(linescore_obj):
 
 def get_stats_info(stats_queryset):
     """
-    get_stats_info - Get the extra info stats that shows under the boxscore of a
-    game summary.
+    get_stats_info - Get the extra info stats that shows under the
+    boxscore of a game summary.
 
-    Used in conjunction with format_stats to gather and display properly. ie
-    format_stats(get_stats_info(-given_stats-))
+    Used in conjunction with format_stats to gather and display
+    properly. ie format_stats(get_stats_info(-given_stats-))
 
     Params:
-        stats_queryset: Queryset of multiple PlayerHittingGameStats. Often
-            gathered in reverse from a TeamGameStats object.
+        stats_queryset: Queryset of multiple PlayerHittingGameStats.
+            Often gathered in reverse from a TeamGameStats object.
             ie teamgamestatsobject.playerhittinggamestats_set.all()
 
     Views - league/views.py game_boxscore_page_view
@@ -509,7 +512,8 @@ def get_stats_info(stats_queryset):
                 (player, player.stolen_bases, player_totals["stolen_bases"]))
         if player.caught_stealing:
             cs.append(
-                (player, player.caught_stealing, player_totals["caught_stealing"]))
+                (player, player.caught_stealing,
+                 player_totals["caught_stealing"]))
         if player.picked_off:
             po.append((player, player.picked_off, None))
 
@@ -520,11 +524,11 @@ def get_stats_info(stats_queryset):
 
 def format_stats(stats):
     """
-    Formats boxscore extra stats that show under the box score. Ex, is Joe hits
-    a homerun HR: Joe, Bob(8)
+    Formats boxscore extra stats that show under the box score.
+    Ex, is Joe hits a homerun HR: Joe, Bob(8)
 
-    Used in conjunction with format_stats to gather and display properly. ie
-    format_stats(get_stats_info(<given_stats>))
+    Used in conjunction with format_stats to gather and display properly.
+    i.e. format_stats(get_stats_info(<given_stats>))
 
     Params:
         stats: Stats returned from get_stats_info(<stats>) function.
