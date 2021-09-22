@@ -188,7 +188,8 @@ def get_player_season_hitting_stats(player, league, featured_stage):
 
 def get_player_last_x_hitting_stats(player, league, num_games):
     """
-    Gets last x games played for a hitter to use in display last X games table:
+    Gets last x games played for a hitter to use in display last
+    X games table. Does so for the featured stage.
 
     Params:
         Params:
@@ -202,7 +203,8 @@ def get_player_last_x_hitting_stats(player, league, num_games):
 
     hitting_stats = PlayerHittingGameStats.objects.filter(
                                     player__player=player,
-                                    player__player__league=league).order_by(
+                                    player__player__league=league,
+                                    season__featured=True).order_by(
                                         "-team_stats__game__date"
                                         )[:num_games]
     return_stats = hitting_stats.values("team_stats__game__date").annotate(
