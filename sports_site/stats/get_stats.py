@@ -248,6 +248,10 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
                                     player__player__league=league,
                                     season__featured=True).order_by(
                                         "-team_stats__game__date")[:num_games]
+    print(f"Hitting_stats 1 {hitting_stats}")
+
+    # hitting_stats = get_player_last_x_hitting_stats(player, league, num_games)
+    print(hitting_stats)
     return_stats = hitting_stats.aggregate(
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
@@ -265,20 +269,22 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
         sacrifice_flies = Sum('sacrifice_flies'),
         )
 
-    return_stats["year"] = "Career"
-    return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
-    return_stats["on_base_percentage"] = (
-        (
-        return_stats["hits"] +
-        return_stats["walks"] +
-        return_stats["hit_by_pitch"]
-        ) /
-        (
-        return_stats["at_bats"] +
-        return_stats["walks"] +
-        return_stats["hit_by_pitch"] +
-        return_stats["sacrifice_flies"]
-        ))
+    # return_stats["year"] = "Career"
+    # return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
+    # return_stats["on_base_percentage"] = (
+        # (
+        # return_stats["hits"] +
+        # return_stats["walks"] +
+        # return_stats["hit_by_pitch"]
+        # ) /
+        # (
+        # return_stats["at_bats"] +
+        # return_stats["walks"] +
+        # return_stats["hit_by_pitch"] +
+        # return_stats["sacrifice_flies"]
+        # ))
+
+    print(f"return stats {return_stats}")
 
     return return_stats
 
