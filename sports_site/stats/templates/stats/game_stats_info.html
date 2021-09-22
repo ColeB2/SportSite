@@ -19,7 +19,7 @@
         <h4>Game: {{game_stats.game}}</h4>
 
         <a class="btn btn-primary"
-            href="{% url 'stats-game-stats-create' game_pk team_season_pk %}">
+            href="{% url 'stats-game-stats-create' game_pk team_season_pk game_stats.pk %}">
             Create Lineup
         </a>
 

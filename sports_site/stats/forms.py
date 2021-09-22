@@ -21,16 +21,12 @@ class PlayerStatsCreateForm(forms.Form):
             required=False,
             )
 
-        self.fields["pitched"] = forms.BooleanField(
-            required=False,
-            )
 
         #crispy layout
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
                 Column("player", css_class="form-group col-md-5"),
-                Column("pitched", css_class="form-group col-md-4"),
                 css_class="form-row"
                 ),
             )
@@ -40,25 +36,50 @@ class PlayerStatsCreateForm(forms.Form):
 
     def process(self):
         _player = self.cleaned_data.get("player")
-        hitting_stats, hit_created, pitching_stats, pitch_created, pitched =(
-            _player, False, _player, False, None)
-        if _player:
-            hitting_stats, hit_created = PlayerHittingGameStats.objects.get_or_create(
-                team_stats=self._team_game_stats,
-                season=self._team_season.season,
-                player=_player)
-            hitting_stats.save()
-            if self.cleaned_data.get("pitched") == True:
-                pitching_stats, pitch_created = PlayerPitchingGameStats.objects.get_or_create(
-                    team_stats=self._team_game_stats,
-                    season=self._team_season.season,
-                    player=_player)
+        hitting_stats, created = PlayerHittingGameStats.objects.get_or_create(
+                                            team_stats=self._team_game_stats,
+                                            season=self._team_season.season,
+                                            player=_player)
+        hitting_stats.save()
+        return hitting_stats, created
 
-                pitched=True
 
-                pitching_stats.save()
 
-        return (hitting_stats, hit_created, pitching_stats, pitch_created, pitched)
+class PlayerPitchingStatsCreateForm(forms.Form):
+    """Creates all player pitching stats objects to be edited later"""
+    def __init__(self, *args, **kwargs):
+        self._team_season = kwargs.pop('team_season')
+        self._team_game_stats = kwargs.pop('team_game_stats')
+        super(PlayerStatsCreateForm, self).__init__(*args, **kwargs)
+        self.player_queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+
+        self.fields["player"] = forms.ModelChoiceField(
+            queryset=self.player_queryset,
+            label=False,
+            required=False,
+            )
+
+
+        #crispy layout
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column("player", css_class="form-group col-md-5"),
+                css_class="form-row"
+                ),
+            )
+        self.helper.form_tag = False
+
+
+
+    def process(self):
+        _player = self.cleaned_data.get("player")
+        pitching_stats, created = PlayerPitchingGameStats.objects.get_or_create(
+                                            team_stats=self._team_game_stats,
+                                            season=self._team_season.season,
+                                            player=_player)
+        pitching_stats.save()
+        return pitching_stats, created
 
 
 class LinescoreEditForm(forms.ModelForm):
