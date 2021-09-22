@@ -50,7 +50,7 @@ class PlayerPitchingStatsCreateForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('team_game_stats')
-        super(PlayerStatsCreateForm, self).__init__(*args, **kwargs)
+        super(PlayerPitchingStatsCreateForm, self).__init__(*args, **kwargs)
         self.player_queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
 
         self.fields["player"] = forms.ModelChoiceField(

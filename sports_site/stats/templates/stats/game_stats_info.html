@@ -18,18 +18,16 @@
 
         <h4>Game: {{game_stats.game}}</h4>
 
-        <a class="btn btn-primary"
-            href="{% url 'stats-game-stats-create' game_pk team_season_pk game_stats.pk %}">
-            Create Lineup
-        </a>
+
 
         <a class="btn btn-primary"
             href="{% url 'stats-linescore-create' game_pk team_season_pk game_stats.pk %}">
             Create Linescore
         </a>
+        <br><br>
 
-        {% if linescore %}
         <h4>Team Linescore:</h4>
+        {% if linescore %}
         {% render_table table3 %}
         <a class="btn btn-primary" href="{% url 'stats-linescore-edit' game_pk team_season_pk game_stats.pk linescore.pk %}">Edit</a>
         <a class="btn btn-danger" href="{% url 'stats-linescore-delete' game_pk team_season_pk game_stats.pk linescore.pk %}">Delete</a>
@@ -37,6 +35,11 @@
         {% endif %}
 
 
+        <br><br>
+        <a class="btn btn-primary"
+            href="{% url 'stats-game-stats-create' game_pk team_season_pk game_stats.pk %}">
+            Create Lineup
+        </a>
         <br><br>
         <h4>Offensive Stats</h4><br>
         {% if player_stats %}
@@ -50,6 +53,11 @@
         {% endif %}
 
 
+        <br><br>
+        <a class="btn btn-primary"
+            href="{% url 'stats-game-pitching-stats-create' game_pk team_season_pk game_stats.pk %}">
+            Create Pitching Stats
+        </a>
         <br><br>
         <h4>Pitching Stats</h4><br>
         {% if pitching_stats %}
