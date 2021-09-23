@@ -186,7 +186,7 @@ class PlayerPageHittingStatsSplitsTable(tables.Table):
     """
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap-responsive.html"
+        template_name = "django_tables2/bootstrap-responsive-custom.html"
         fields = ("duration", "at_bats", "plate_appearances", "runs", "hits", "doubles",
             "triples", "homeruns", "runs_batted_in", "walks", "strikeouts",
             "stolen_bases",  "caught_stealing", "hit_by_pitch",
@@ -209,7 +209,7 @@ class PlayerPageGameHittingStatsSplitsTable(tables.Table):
     """
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap-responsive.html"
+        template_name = "django_tables2/bootstrap-responsive-custom.html"
         fields = ("date", "at_bats", "plate_appearances", "runs", "hits", "doubles",
             "triples", "homeruns", "runs_batted_in", "walks", "strikeouts",
             "stolen_bases",  "caught_stealing", "hit_by_pitch",
