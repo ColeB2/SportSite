@@ -42,6 +42,7 @@ def player_page_view(request, player_pk):
         "league": league,
         "player": player,
         "player_seasons": player_seasons,
+        "table_data": table_data,
         "table": table,
         "split_table": split_table,
         "last_x_table": last_x_table,

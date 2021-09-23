@@ -118,3 +118,10 @@ background-color: #425766;
 .inline-title{
     font-size: 2em;
 }
+
+
+/*Player Page*/
+.thead-color {
+    background-color: #15476a;
+    color: rgb(204,210,217);
+}
