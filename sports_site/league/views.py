@@ -8,7 +8,9 @@ from stats.get_stats import (format_stats, get_all_player_season_hitting_stats,
     get_stats_info)
 from stats.models import TeamGameStats
 from stats.tables import (BattingOrderTable, PlayerHittingGameStatsTable,
-    PlayerHittingPageStatsTable, PlayerPitchingGameStatsTable, TeamGameLineScoreTable,)
+    PlayerPageGameHittingStatsSplitsTable, PlayerPageHittingStatsTable,
+    PlayerPageHittingStatsSplitsTable, PlayerPitchingGameStatsTable,
+    TeamGameLineScoreTable,)
 
 
 
@@ -32,11 +34,9 @@ def player_page_view(request, player_pk):
         table_data.append(statline)
     table_data.append(career_stats)
 
-    table = PlayerHittingPageStatsTable(table_data)
-    RequestConfig(request).configure(table)
-
-    split_table = PlayerHittingPageStatsTable(player_splits)
-    last_x_table = PlayerHittingPageStatsTable(last_x_splits)
+    table = PlayerPageHittingStatsTable(table_data)
+    split_table = PlayerPageGameHittingStatsSplitsTable(player_splits)
+    last_x_table = PlayerPageHittingStatsSplitsTable(last_x_splits)
 
     context = {
         "league": league,

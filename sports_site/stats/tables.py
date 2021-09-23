@@ -154,7 +154,7 @@ class PlayerPitchingGameStatsTable(tables.Table):
             )
 
 
-class PlayerHittingPageStatsTable(tables.Table):
+class PlayerPageHittingStatsTable(tables.Table):
     """
     Table used to display personal hitting stats for given player on their
     own personal player profile page.
@@ -165,6 +165,52 @@ class PlayerHittingPageStatsTable(tables.Table):
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
         fields = ("year", "at_bats", "plate_appearances", "runs", "hits", "doubles",
+            "triples", "homeruns", "runs_batted_in", "walks", "strikeouts",
+            "stolen_bases",  "caught_stealing", "hit_by_pitch",
+            "sacrifice_flies", "average", "on_base_percentage")
+
+
+    def render_average(self, record):
+        return _convert_to_str(record['average'])
+
+    def render_on_base_percentage(self, record):
+        return _convert_to_str(record['on_base_percentage'])
+
+
+class PlayerPageHittingStatsSplitsTable(tables.Table):
+    """
+    Table used to display personal hitting stats for given player on their
+    own personal player profile page.
+
+    View - league/view.py - player_page_view
+    """
+    class Meta:
+        model = PlayerHittingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("duration", "at_bats", "plate_appearances", "runs", "hits", "doubles",
+            "triples", "homeruns", "runs_batted_in", "walks", "strikeouts",
+            "stolen_bases",  "caught_stealing", "hit_by_pitch",
+            "sacrifice_flies", "average", "on_base_percentage")
+
+
+    def render_average(self, record):
+        return _convert_to_str(record['average'])
+
+    def render_on_base_percentage(self, record):
+        return _convert_to_str(record['on_base_percentage'])
+
+
+class PlayerPageGameHittingStatsSplitsTable(tables.Table):
+    """
+    Table used to display personal hitting stats for given player on their
+    own personal player profile page.
+
+    View - league/view.py - player_page_view
+    """
+    class Meta:
+        model = PlayerHittingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("date", "at_bats", "plate_appearances", "runs", "hits", "doubles",
             "triples", "homeruns", "runs_batted_in", "walks", "strikeouts",
             "stolen_bases",  "caught_stealing", "hit_by_pitch",
             "sacrifice_flies", "average", "on_base_percentage")

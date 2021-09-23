@@ -208,7 +208,7 @@ def get_player_last_x_hitting_stats(player, league, num_games):
                                         "-team_stats__game__date"
                                         )[:num_games]
     return_stats = hitting_stats.values("team_stats__game__date").annotate(
-        year = F("team_stats__game__date"),
+        date = F("team_stats__game__date"),
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
         runs = Sum('runs'),
@@ -266,7 +266,7 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
         sacrifice_flies = Sum('sacrifice_flies'),
         )
 
-    return_stats["year"] = f"Last {num_games} Games"
+    return_stats["duration"] = f"Last {num_games} Games"
     try:
         return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
     except:
