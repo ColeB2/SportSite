@@ -156,7 +156,7 @@ class PitchingOrderTable(tables.Table):
         "earned_runs", "walks_allowed", "strikeouts", "homeruns_allowed", "era")
 
     def render_average(self, record):
-        return _convert_to_str(record['era'])
+        return _convert_to_str_pitching(record['era'])
 
 
 
