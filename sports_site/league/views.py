@@ -93,6 +93,7 @@ def team_select_page_view(request):
 
 
 def game_boxscore_page_view(request, game_pk):
+    """Page that shows all the stats for a given game, the boxscore etc."""
     game = Game.objects.get(pk=game_pk)
     league = game.season.season.league
 

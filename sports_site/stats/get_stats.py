@@ -135,6 +135,7 @@ def get_all_season_hitting_stats(league, featured_stage):
     return return_stats
 
 
+"""Player Page Stats Functions"""
 def get_player_season_hitting_stats(player, league, featured_stage):
     """
     Gets hitting stats for a given player, and a given stage.
@@ -243,6 +244,18 @@ def get_player_last_x_hitting_stats(player, league, num_games):
 
 
 def get_player_last_x_hitting_stats_totals(player, league, num_games):
+    """
+    Gets last x games played totals for a hitter to use in display
+    last X games totals table. Does so for the featured stage.
+
+    Params:
+        Params:
+        player - Player Model Object
+        league - League model object
+        num_games - Int, number of games wanting to be displayed. Starting from
+            most recent, up until the nth number of game described by this int.
+
+    View - league/views.py player_page_view"""
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                     player__player=player,
                                     player__player__league=league,
