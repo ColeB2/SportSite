@@ -580,6 +580,79 @@ def format_stats(stats):
     return stat_list
 
 
+def get_pitching_stats_info(stats_queryset):
+    """
+    get_pitching_stats_info - Get the extra info stats that shows under
+    the pitching stats of a game summary.
+
+    Used in conjunction with format_pitching_stats to gather and display
+    properly.
+        ie format_pitching_stats(get_pitching_stats_info(-given_stats-))
+
+    Params:
+        stats_queryset: Queryset of multiple PlayerHittingGameStats.
+            Often gathered in reverse from a TeamGameStats object.
+            ie teamgamestatsobject.playerhittinggamestats_set.all()
+
+    Views - league/views.py game_boxscore_page_view
+    Templates - league/game_boxscore_page.html
+    """
+    doubles = ["2B:",]
+    triples = ["3B:",]
+    homeruns = ["HR:",]
+    total_bases = ["TB:",]
+    rbi = ["RBI:",]
+    rbi_2out = ["2-out RBI:",]
+    gidp = ["GIDP:",]
+    sf = ["SF:",]
+    sb = ["SB:",]
+    cs = ["CS:",]
+    po = ["PO:",]
+
+    for player in stats_queryset:
+        player_totals = _get_extra_stat_totals(player)
+        if player.hits:
+            tb = player.singles
+            if player.doubles:
+                tb += player.doubles*2
+                doubles.append(
+                    (player, player.doubles, player_totals["doubles"]))
+            if player.triples:
+                tb += player.triples*3
+                triples.append(
+                    (player, player.triples, player_totals["triples"]))
+            if player.homeruns:
+                tb += player.homeruns*4
+                homeruns.append(
+                    (player, player.homeruns, player_totals["homeruns"]))
+        if player.two_out_runs_batted_in:
+            rbi_2out.append((player, player.two_out_runs_batted_in, None))
+        if player.runs_batted_in:
+            rbi.append(
+                (player, player.runs_batted_in, player_totals["runs_batted_in"])
+                )
+        if player.ground_into_double_play:
+            gidp.append(
+                (player, player.ground_into_double_play, None))
+        if player.sacrifice_flies:
+            sf.append((player, player.sacrifice_flies, None))
+
+        if player.stolen_bases:
+            sb.append(
+                (player, player.stolen_bases, player_totals["stolen_bases"]))
+        if player.caught_stealing:
+            cs.append(
+                (player, player.caught_stealing,
+                 player_totals["caught_stealing"]))
+        if player.picked_off:
+            po.append((player, player.picked_off, None))
+
+
+
+    return (doubles, triples, homeruns, total_bases, rbi, rbi_2out, gidp, sf,
+            sb, cs, po)
+
+
 """Stadings Page"""
 def get_all_season_standings_stats(league, featured_stage):
     """
