@@ -46,6 +46,24 @@
         </div>
 
 
+        <!--Pitching Stats-->
+        <div class="row">
+            <div class="col-6">
+                <div class="table-responsive">
+                    {% render_table away_pitching %}
+                </div>
+
+            </div>
+
+            <div class="col-6">
+                <div class="table-responsive">
+                    {% render_table home_pitching %}
+                </div>
+            </div>
+        </div>
+
+
+
         <!--Home Team Stats-->
         <h2>Hitting Stats</h2>
         <h3>{{game.home_team.team}}</h3>

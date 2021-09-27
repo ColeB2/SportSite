@@ -15,21 +15,33 @@ def _normalize_str_length(str_value, req_length):
     return str_value
 
 
-def _convert_to_str(float):
-    if float == 0:
+def _convert_to_str(float_val):
+    if float_val == 0:
         return ".000"
 
-    str_value = str(round(float,3))
+    str_value = str(round(float_val,3))
 
     if str_value[0] != '0':
         str_value = _normalize_str_length(str_value, 5)
     else:
         str_value = str_value[1:]
         str_value = _normalize_str_length(str_value, 4)
-
-
-
     return str_value
+
+
+def _convert_to_str_pitching(float_val):
+    if float_val == 0:
+        return "0.00"
+
+    str_value = str(round(float_val,2))
+
+    if str_value[0] != '0':
+        str_value = _normalize_str_length(str_value, 4)
+    else:
+        str_value = str_value[1:]
+        str_value = _normalize_str_length(str_value, 3)
+    return str_value
+
 
 def _calc_average(hits, at_bats):
     if at_bats:

@@ -1,7 +1,7 @@
 import django_tables2 as tables
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore, TeamGameStats)
-from .stat_calc import _convert_to_str
+from .stat_calc import _convert_to_str, convert_to_str_pitching
 
 class ASPlayerHittingGameStatsTable(tables.Table):
     """Table used to display stats for given game on admin pages for editing
@@ -152,7 +152,7 @@ class PitchingOrderTable(tables.Table):
     class Meta:
         model = PlayerPitchingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
-        fields = ("player__player", "innigs_pitched", "runs_allowed",
+        fields = ("player__player", "innings_pitched", "runs_allowed",
         "earned_runs", "walks_allowed", "strikeouts", "homeruns_allowed", "era")
 
     def render_average(self, record):

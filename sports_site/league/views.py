@@ -104,6 +104,7 @@ def game_boxscore_page_view(request, game_pk):
     home_pitching_stats_table = PlayerPitchingGameStatsTable(home_pitching_stats)
 
     home_boxscore = BattingOrderTable(home_stats)
+    home_pitching = PitchingOrderTable(home_pitching_stats)
     home_extra = format_stats(get_stats_info(home_stats))
 
 
@@ -114,6 +115,7 @@ def game_boxscore_page_view(request, game_pk):
     away_pitching_stats_table = PlayerPitchingGameStatsTable(away_pitching_stats)
 
     away_boxscore = BattingOrderTable(away_stats)
+    away_pitching = PitchingOrderTable(away_pitching_stats)
     away_extra = format_stats(get_stats_info(away_stats))
 
 
@@ -139,6 +141,7 @@ def game_boxscore_page_view(request, game_pk):
         "home_stats": home_stats,
         "home_stats_table": home_stats_table,
         "home_boxscore": home_boxscore,
+        "home_pitching": home_pitching,
         "home_extra": home_extra,
         "home_pitching_stats_table": home_pitching_stats_table,
         "home_linescore": home_linescore,
@@ -146,6 +149,7 @@ def game_boxscore_page_view(request, game_pk):
         "away_stats": away_stats,
         "away_stats_table": away_stats_table,
         "away_boxscore": away_boxscore,
+        "away_pitching": away_pitching,
         "away_extra": away_extra,
         "away_pitching_stats_table": away_pitching_stats_table,
         "away_linescore": away_linescore,
