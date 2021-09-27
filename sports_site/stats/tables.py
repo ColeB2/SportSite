@@ -155,8 +155,9 @@ class PitchingOrderTable(tables.Table):
         fields = ("player__player", "innings_pitched", "runs_allowed",
         "earned_runs", "walks_allowed", "strikeouts", "homeruns_allowed", "era")
 
-    def render_average(self, record):
-        return _convert_to_str_pitching(record['era'])
+    def render_era(self, record):
+        print(f"record {record.era}")
+        return _convert_to_str_pitching(record.era)
 
 
 
