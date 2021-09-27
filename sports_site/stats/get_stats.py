@@ -409,34 +409,6 @@ def get_player_career_hitting_stats(player,
     return return_stats
 
 
-def _get_extra_stat_totals(player):
-    """
-    Internal method used in get_stats_info. Retrieves the totals for
-    the extra stats from a playerhittinggamestats model object.
-
-    Params:
-        player - PlayerHittingGameStats object
-    """
-    game = player.team_stats.game
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
-                        player__player=player.player.player,
-                        season=game.season,
-                        team_stats__game__date__range=["2021-05-14",game.date])
-    return_stats = hitting_stats.values("player").aggregate(
-        doubles = Sum('doubles'),
-        triples = Sum('triples'),
-        homeruns = Sum('homeruns'),
-        runs_batted_in = Sum('runs_batted_in'),
-        two_out_runs_batted_in = Sum('two_out_runs_batted_in'),
-        stolen_bases = Sum('stolen_bases'),
-        caught_stealing = Sum('caught_stealing'),
-        )
-    return return_stats
-
-
-
-
-
 def get_extra_innings(linescore_obj):
     """
     Takes linescore object turns it into a dictionary, removes the
@@ -477,6 +449,31 @@ def get_extra_innings(linescore_obj):
 
 
     return table_data
+
+
+def _get_extra_stat_totals(player):
+    """
+    Internal method used in get_stats_info. Retrieves the totals for
+    the extra stats from a playerhittinggamestats model object.
+
+    Params:
+        player - PlayerHittingGameStats object
+    """
+    game = player.team_stats.game
+    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+                        player__player=player.player.player,
+                        season=game.season,
+                        team_stats__game__date__range=["2021-05-14",game.date])
+    return_stats = hitting_stats.values("player").aggregate(
+        doubles = Sum('doubles'),
+        triples = Sum('triples'),
+        homeruns = Sum('homeruns'),
+        runs_batted_in = Sum('runs_batted_in'),
+        two_out_runs_batted_in = Sum('two_out_runs_batted_in'),
+        stolen_bases = Sum('stolen_bases'),
+        caught_stealing = Sum('caught_stealing'),
+        )
+    return return_stats
 
 
 def get_stats_info(stats_queryset):
