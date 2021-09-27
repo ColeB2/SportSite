@@ -149,6 +149,14 @@ class PitchingOrderTable(tables.Table):
     Table used to display pitching stats for given game, in order
     of pitcher appearance
     """
+    class Meta:
+        model = PlayerPitchingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("player__player", "innigs_pitched", "runs_allowed",
+        "earned_runs", "walks_allowed", "strikeouts", "homeruns_allowed", "era")
+
+    def render_average(self, record):
+        return _convert_to_str(record['era'])
 
 
 

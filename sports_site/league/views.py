@@ -7,10 +7,10 @@ from stats.get_stats import (format_stats, get_all_player_season_hitting_stats,
     get_player_last_x_hitting_stats, get_player_last_x_hitting_stats_totals,
     get_stats_info)
 from stats.models import TeamGameStats
-from stats.tables import (BattingOrderTable, PlayerHittingGameStatsTable,
-    PlayerPageGameHittingStatsSplitsTable, PlayerPageHittingStatsTable,
-    PlayerPageHittingStatsSplitsTable, PlayerPitchingGameStatsTable,
-    TeamGameLineScoreTable,)
+from stats.tables import (BattingOrderTable, PitchingOrderTable,
+    PlayerHittingGameStatsTable, PlayerPageGameHittingStatsSplitsTable,
+    PlayerPageHittingStatsTable, PlayerPageHittingStatsSplitsTable,
+    PlayerPitchingGameStatsTable, TeamGameLineScoreTable,)
 
 
 
