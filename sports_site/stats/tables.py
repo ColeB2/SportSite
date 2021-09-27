@@ -122,7 +122,10 @@ class StandingsTable(tables.Table):
 
 
 class PlayerHittingGameStatsTable(tables.Table):
-    """Table used to display stats for given game"""
+    """
+    Table used to display batting stats for given game game, in order
+    of which each player batted during the game.
+    """
     class Meta:
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
@@ -139,6 +142,13 @@ class BattingOrderTable(tables.Table):
         template_name = "django_tables2/bootstrap-responsive.html"
         fields = ("player__player", "at_bats", "runs", "hits", "runs_batted_in",
             "walks", "strikeouts",)
+
+
+class PitchingOrderTable(tables.Table):
+    """
+    Table used to display pitching stats for given game, in order
+    of pitcher appearance
+    """
 
 
 

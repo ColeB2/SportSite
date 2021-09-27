@@ -304,6 +304,8 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
 
     return return_stats
 
+
+
 def get_all_player_season_hitting_stats(player, league,
                                         stage_type=SeasonStage.REGULAR):
     """
@@ -432,42 +434,7 @@ def _get_extra_stat_totals(player):
     return return_stats
 
 
-def get_all_season_standings_stats(league, featured_stage):
-    """
-    Gets all the standings data for the featured stage, and returns
-    them in usable fashion for a django-tables2 standings page.
 
-    Params:
-        league - League model object
-        featured_stage - The SeasonStage model object to be used for the
-            gathering of stats.
-
-    Views - stats/views.py - standings_display_view
-    Template Featured - stats/standings_page.html
-    """
-    game_stats = TeamGameStats.objects.all().filter(season=featured_stage)
-    standings_stats = game_stats.values("team").annotate(
-        team_name = F("team__team__name"),
-        win = Count(Case(When(win=True, then=1))),
-        loss = Count(Case(When(loss=True, then=1))),
-        tie = Count(Case(When(tie=True, then=1))),
-        pct =  (
-            Cast(F("win"), FloatField()) +
-            (Cast(F("tie"), FloatField()) * 0.5)
-            ) /
-            (
-            Cast(F('win'), FloatField()) +
-            Cast(F('loss'), FloatField()) +
-            Cast(F('tie'), FloatField())
-            ),
-        runs_for = Sum("runs_for"),
-        runs_against = Sum("runs_against"),
-        differential = (
-            Cast(F("runs_for"), FloatField()) -
-            Cast(F("runs_against"),FloatField())
-            ),
-        )
-    return standings_stats
 
 
 def get_extra_innings(linescore_obj):
@@ -615,3 +582,41 @@ def format_stats(stats):
         stat_list.append((stat_type, stat_str))
     return stat_list
 
+
+"""Stadings Page"""
+def get_all_season_standings_stats(league, featured_stage):
+    """
+    Gets all the standings data for the featured stage, and returns
+    them in usable fashion for a django-tables2 standings page.
+
+    Params:
+        league - League model object
+        featured_stage - The SeasonStage model object to be used for the
+            gathering of stats.
+
+    Views - stats/views.py - standings_display_view
+    Template Featured - stats/standings_page.html
+    """
+    game_stats = TeamGameStats.objects.all().filter(season=featured_stage)
+    standings_stats = game_stats.values("team").annotate(
+        team_name = F("team__team__name"),
+        win = Count(Case(When(win=True, then=1))),
+        loss = Count(Case(When(loss=True, then=1))),
+        tie = Count(Case(When(tie=True, then=1))),
+        pct =  (
+            Cast(F("win"), FloatField()) +
+            (Cast(F("tie"), FloatField()) * 0.5)
+            ) /
+            (
+            Cast(F('win'), FloatField()) +
+            Cast(F('loss'), FloatField()) +
+            Cast(F('tie'), FloatField())
+            ),
+        runs_for = Sum("runs_for"),
+        runs_against = Sum("runs_against"),
+        differential = (
+            Cast(F("runs_for"), FloatField()) -
+            Cast(F("runs_against"),FloatField())
+            ),
+        )
+    return standings_stats
