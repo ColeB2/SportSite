@@ -1,6 +1,6 @@
 from league.models import League, Game, TeamSeason, SeasonStage
 from stats.models import TeamGameLineScore, TeamGameStats
-from random import randint
+from random import randint, choice
 '''
 dates = [datetime.date(2021,5,14), datetime.date(2021,5,16),datetime.date(2021,5,21),datetime.date(2021,5,23),datetime.date(2021,5,28),datetime.date(2021,5,30),datetime.date(2021,6,4),datetime.date(2021,6,6),datetime.date(2021,6,11),datetime.date(2021,6,13),datetime.date(2021,6,18),datetime.date(2021,6,20),datetime.date(2021,6,25),datetime.date(2021,6,27),datetime.date(2021,7,2),datetime.date(2021,7,4)]
 g = [[41,52,36], [21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63],[12,34,56],[31,26,45],[61,53,42],[51,46,23],[14,52,36],[21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63]]
@@ -121,6 +121,76 @@ def equalize_runs_rbis(games_queryset):
                         p.runs += (rbi - runs)
                         p.save()
                         break
+
+
+def create_pitching_stats(tgs):
+    """
+    Params:
+        tgs - TeamGameStats object
+    """
+    for game in tgs:
+        pgs = game.playerpitchinggamestats_set.all()
+
+
+        team1 = pgs[0].team_stats
+        team_one = []
+        team_two = []
+        for player in pgs:
+            if player.team_stats == team1:
+                team_one.append(player)
+            else:
+                team_two.append(player)
+
+        team_one_linescore = team_one[0].team_stats.teamgamelinescore_set.get()
+        team_two_linescore = team_two[0].team_stats.teamgamelinescore_set.get()
+
+        random_pitching_stats(team_one, team_one_linescore, team_two_linescore)
+        random_pitching_stats(team_two, team_two_linescore, team_one_linescore)
+
+
+def random_pitching_stats(pgs, home_linescore, opposing_linescore):
+    """
+    Params:
+        pgs - List of all PlayerPitchingGameStats for a team in a game.
+        opposing_linescore - Linescore of opponent team for given players
+            game.
+
+    """
+    starter_innings = [5, 5.1, 5.2, 6, 6.1, 6.2, 7, 7.1, 7.2, 8, 8.1, 8.2, 9]
+    win = False
+    loss = False
+    tie = False
+
+    starter = False
+
+    tgs = pgs[0].team_stats
+    hls = home_linescore
+    ols = opposing_linescore
+    runs_against = tgs.runs_against
+
+    if len(pgs) == 1:
+        pgs[0].complete_game == 1
+        pgs[0].innings_pitched == 9
+
+    for player in pgs:
+        if player.team_stats.win and win == False:
+            win = True
+            player.win += 1
+        elif player.team_stats.loss and loss == False:
+            loss = True
+            player.loss += 1
+
+        player.game += 1
+
+        if starter == False:
+            player.game_started += 1
+            starter = True
+
+
+
+
+
+
 
 
 
