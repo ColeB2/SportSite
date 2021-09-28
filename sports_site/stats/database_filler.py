@@ -38,6 +38,9 @@ def create_schedule(dates, games, team_dict):
             new_game.save()
 
 def random_hitting_stats(pgs):
+    """
+    Params:
+        pgs - player game stats queryset."""
     for p in pgs:
         ab = 3 + randint(0,2)
         bb = randint(0, 5-ab)
