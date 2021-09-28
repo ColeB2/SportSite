@@ -1,6 +1,6 @@
-from league.models import League, Game, TeamSeason, SeasonStage
-from stats.models import TeamGameLineScore, TeamGameStats
+from league.models import League, Game, SeasonStage
 from random import randint, choice
+from django.db.models import  Sum
 '''
 dates = [datetime.date(2021,5,14), datetime.date(2021,5,16),datetime.date(2021,5,21),datetime.date(2021,5,23),datetime.date(2021,5,28),datetime.date(2021,5,30),datetime.date(2021,6,4),datetime.date(2021,6,6),datetime.date(2021,6,11),datetime.date(2021,6,13),datetime.date(2021,6,18),datetime.date(2021,6,20),datetime.date(2021,6,25),datetime.date(2021,6,27),datetime.date(2021,7,2),datetime.date(2021,7,4)]
 g = [[41,52,36], [21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63],[12,34,56],[31,26,45],[61,53,42],[51,46,23],[14,52,36],[21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63]]
@@ -141,19 +141,44 @@ def create_pitching_stats(tgs):
             else:
                 team_two.append(player)
 
-        team_one_linescore = team_one[0].team_stats.teamgamelinescore_set.get()
-        team_two_linescore = team_two[0].team_stats.teamgamelinescore_set.get()
-
-        random_pitching_stats(team_one, team_one_linescore, team_two_linescore)
-        random_pitching_stats(team_two, team_two_linescore, team_one_linescore)
+        tgs1 = team_one[0].team_stats
+        tgs2 = team_two[0].team_stats
 
 
-def random_pitching_stats(pgs, home_linescore, opposing_linescore):
+        random_pitching_stats(team_one, tgs1, tgs2)
+        random_pitching_stats(team_two, tgs2, tgs1)
+
+def total_hitting_stats(hqs):
+    """Totals up a queryset of players hitting stats in a game.
+    Params:
+        hgs - Queryset of PlayerHittingGameStats"""
+
+
+    return_stats = hqs.aggregate(
+        at_bats = Sum('at_bats'),
+        plate_appearances = Sum('plate_appearances'),
+        runs = Sum('runs'),
+        hits = Sum('hits'),
+        doubles = Sum('doubles'),
+        triples = Sum('triples'),
+        homeruns = Sum('homeruns'),
+        runs_batted_in = Sum('runs_batted_in'),
+        walks = Sum('walks'),
+        strikeouts = Sum('strikeouts'),
+        stolen_bases = Sum('stolen_bases'),
+        caught_stealing = Sum('caught_stealing'),
+        hit_by_pitch = Sum('hit_by_pitch'),
+        sacrifice_flies = Sum('sacrifice_flies'),
+        )
+
+    return return_stats
+
+def random_pitching_stats(pgs, tgs1, tgs2):
     """
     Params:
         pgs - List of all PlayerPitchingGameStats for a team in a game.
-        opposing_linescore - Linescore of opponent team for given players
-            game.
+        tgs1 - TeamGameStats of the team listed in pgs
+        tgs2 - TeamGameStats of opposing team
 
     """
     starter_innings = [5, 5.1, 5.2, 6, 6.1, 6.2, 7, 7.1, 7.2, 8, 8.1, 8.2, 9]
@@ -163,10 +188,10 @@ def random_pitching_stats(pgs, home_linescore, opposing_linescore):
 
     starter = False
 
-    tgs = pgs[0].team_stats
-    hls = home_linescore
-    ols = opposing_linescore
-    runs_against = tgs.runs_against
+    team_one_linescore = tgs1.teamgamelinescore_set.get()
+    team_two_linescore = tgs2.teamgamelinescore_set.get()
+    ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
+    runs_against = tgs1.runs_against
 
     if len(pgs) == 1:
         pgs[0].complete_game == 1
