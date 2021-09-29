@@ -173,6 +173,75 @@ def total_hitting_stats(hqs):
 
     return return_stats
 
+
+"""
+For random_pitching_innings: Copy base into bash, tabs are spaces.
+from stats.models import TeamGameStats
+from league.models import SeasonStage
+from stats.database_filler import random_pitching_innings
+ss = SeasonStage.objects.all()[2]
+tgs = TeamGameStats.objects.all().filter(season=ss, game__date__year=2021)
+for game in tgs:
+    pgs = game.playerpitchinggamestats_set.all()
+    random_pitching_innings(pgs)
+    print('Done')
+"""
+
+def random_pitching_innings(pgs):
+    """
+    Params:
+        pgs - List of all PlayerPitchingGameStats for a team in a game.
+        tgs1 - TeamGameStats of the team listed in pgs
+        tgs2 - TeamGameStats of opposing team
+    """
+    starter_innings = [5, 5.1, 5.2, 6, 6.1, 6.2, 7]
+    inning_outs = {0:0, 0.1:1, 0.2:2, 1:3, 1.1:4, 1.2:5, 2:6, 2.1:7, 2.2:8, 3:9,
+        3.1:10, 3.2:11, 4:12, 4.1:13, 4.2:14, 5:15, 5.1:16, 5.2:17, 6:18,
+        6.1:19, 6.2:20, 7:21, 7.1:22, 7.2:23, 8:24, 8.1:25, 8.2:26, 9:27}
+    outs_inning = {0: 0, 1: 0.1, 2: 0.2, 3: 1, 4: 1.1, 5: 1.2, 6: 2, 7: 2.1,
+        8: 2.2, 9: 3, 10: 3.1, 11: 3.2, 12: 4, 13: 4.1, 14: 4.2, 15: 5, 16: 5.1,
+        17: 5.2, 18: 6, 19: 6.1, 20: 6.2, 21: 7, 22: 7.1, 23: 7.2, 24: 8,
+        25: 8.1, 26: 8.2, 27: 9}
+    totals_outs = 27
+    pitchers = len(pgs)
+
+    starter = False
+
+    if len(pgs) == 1 and starter == False:
+        pgs[0].complete_game == 1
+        pgs[0].innings_pitched == 9
+
+    for player in pgs:
+        if starter == False:
+            player.innings_pitched = choice(starter_innings)
+            player.game_started = 1
+            player.game = 1
+            starter = True
+            starter_outs = inning_outs[player.innings_pitched]
+            totals_outs -= starter_outs
+            pitchers -= 1
+        elif pitchers == 1:
+            player.innings_pitched = outs_inning[totals_outs]
+            player.game = 1
+        else:
+            possible_outs = totals_outs - pitchers
+            if possible_outs > 1:
+                player.innings_pitched = outs_inning[randint(1, possible_outs)]
+            elif possible_outs == 1:
+                player.innings_pitched = possible_outs
+            else:
+                pass
+
+            real_outs = inning_outs[player.innings_pitched]
+
+            totals_outs -= real_outs
+            pitchers -= 1
+            player.game = 1
+
+
+        player.save()
+
+
 def random_pitching_stats(pgs, tgs1, tgs2):
     """
     Params:
@@ -181,7 +250,16 @@ def random_pitching_stats(pgs, tgs1, tgs2):
         tgs2 - TeamGameStats of opposing team
 
     """
-    starter_innings = [5, 5.1, 5.2, 6, 6.1, 6.2, 7, 7.1, 7.2, 8, 8.1, 8.2, 9]
+    starter_innings = [5, 5.1, 5.2, 6, 6.1, 6.2, 7]
+    inning_outs = {0:0, 0.1:1, 0.2:2, 1:3, 1.1:4, 1.2:5, 2:6, 2.1:7, 2.2:8, 3:9,
+        3.1:10, 3.2:11, 4:12, 4.1:13, 4.2:14, 5:15, 5.1:16, 5.2:17, 6:18,
+        6.1:19, 6.2:20, 7:21, 7.1:22, 7.2:23, 8:24, 8.1:25, 8.2:26, 9:27}
+    outs_inning = {0: 0, 1: 0.1, 2: 0.2, 3: 1, 4: 1.1, 5: 1.2, 6: 2, 7: 2.1,
+        8: 2.2, 9: 3, 10: 3.1, 11: 3.2, 12: 4, 13: 4.1, 14: 4.2, 15: 5, 16: 5.1,
+        17: 5.2, 18: 6, 19: 6.1, 20: 6.2, 21: 7, 22: 7.1, 23: 7.2, 24: 8,
+        25: 8.1, 26: 8.2, 27: 9}
+    totals_outs = 27
+    pitchers = len(pgs)
     win = False
     loss = False
     tie = False
@@ -193,9 +271,11 @@ def random_pitching_stats(pgs, tgs1, tgs2):
     ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
     runs_against = tgs1.runs_against
 
-    if len(pgs) == 1:
+    if len(pgs) == 1 and starter == False:
         pgs[0].complete_game == 1
         pgs[0].innings_pitched == 9
+
+
 
     for player in pgs:
         if player.team_stats.win and win == False:
@@ -204,6 +284,9 @@ def random_pitching_stats(pgs, tgs1, tgs2):
         elif player.team_stats.loss and loss == False:
             loss = True
             player.loss += 1
+        elif player.team_stats.ltie and tie == False:
+            tie = True
+            player.tie += 1
 
         player.game += 1
 
