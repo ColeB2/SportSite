@@ -187,7 +187,6 @@ for game in tgs:
     random_pitching_innings(pgs)
     print('Done')
 """
-
 def random_pitching_innings(pgs):
     """
     Params:
@@ -243,6 +242,26 @@ def random_pitching_innings(pgs):
         player.save()
 
 
+'''
+For random_pitching_stats: Copy base into bash, tabs are spaces.
+from stats.models import TeamGameStats
+from league.models import SeasonStage, Game
+from stats.database_filler import random_pitching_stats
+ss = SeasonStage.objects.all()[2]
+games = Game.objects.all().filter(season=ss, date__year=2021)
+for game in games:
+    tgs = game.teamgamestats_set.all()
+    tgs1 = tgs[0]
+    tgs2 = tgs[1]
+    for g in tgs:
+        print(g, end='')
+        pgs = g.playerpitchinggamestats_set.all()
+        if g == tgs1:
+            random_pitching_stats(pgs, g, tgs2)
+        else:
+            random_pitching_stats(pgs, g, tgs1)
+    print("Done Game")
+'''
 def random_pitching_stats(pgs, tgs1, tgs2):
     """
     Params:
@@ -254,32 +273,18 @@ def random_pitching_stats(pgs, tgs1, tgs2):
     inning_outs = {0:0, 0.1:1, 0.2:2, 1:3, 1.1:4, 1.2:5, 2:6, 2.1:7, 2.2:8, 3:9,
         3.1:10, 3.2:11, 4:12, 4.1:13, 4.2:14, 5:15, 5.1:16, 5.2:17, 6:18,
         6.1:19, 6.2:20, 7:21, 7.1:22, 7.2:23, 8:24, 8.1:25, 8.2:26, 9:27}
-    outs_inning = {0: 0, 1: 0.1, 2: 0.2, 3: 1, 4: 1.1, 5: 1.2, 6: 2, 7: 2.1,
-        8: 2.2, 9: 3, 10: 3.1, 11: 3.2, 12: 4, 13: 4.1, 14: 4.2, 15: 5, 16: 5.1,
-        17: 5.2, 18: 6, 19: 6.1, 20: 6.2, 21: 7, 22: 7.1, 23: 7.2, 24: 8,
-        25: 8.1, 26: 8.2, 27: 9}
 
     total_outs = 27
-    pitchers = len(pgs)
-    win = False
-    loss = False
-    tie = False
 
-    starter = False
-
-    team_one_linescore = tgs1.teamgamelinescore_set.get()
-    team_two_linescore = tgs2.teamgamelinescore_set.get()
     ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
-    runs_against = tgs1.runs_against
     total_hits = hits_left = ths2["hits"]
-    total_hr = hr_left = ths2["homeruns"]
     total_bb = bb_left = ths2["walks"]
     total_k = k_left = ths2["strikeouts"]
     total_sb = sb_left = ths2["stolen_bases"]
     total_cs = cs_left = ths2["caught_stealing"]
     total_hbp = hbp_left = ths2["hit_by_pitch"]
 
-    last_player = pgs[-1]
+    last_player = pgs.last()
     for player in pgs:
         pitch_outs = inning_outs[player.innings_pitched]
 
@@ -344,6 +349,49 @@ def random_pitching_stats(pgs, tgs1, tgs2):
             cs_allowed = 0
         player.runners_caught_stealing = cs_allowed
 
+        player.save()
+
+
+
+def random_pitching_runs_decision(pgs, tgs1, tgs2):
+    """
+    Params:
+        pgs - List of all PlayerPitchingGameStats for a team in a game.
+        tgs1 - TeamGameStats of the team listed in pgs
+        tgs2 - TeamGameStats of opposing team
+
+    """
+    inning_outs = {0:0, 0.1:1, 0.2:2, 1:3, 1.1:4, 1.2:5, 2:6, 2.1:7, 2.2:8, 3:9,
+        3.1:10, 3.2:11, 4:12, 4.1:13, 4.2:14, 5:15, 5.1:16, 5.2:17, 6:18,
+        6.1:19, 6.2:20, 7:21, 7.1:22, 7.2:23, 8:24, 8.1:25, 8.2:26, 9:27}
+    outs_inning = {0: 0, 1: 0.1, 2: 0.2, 3: 1, 4: 1.1, 5: 1.2, 6: 2, 7: 2.1,
+        8: 2.2, 9: 3, 10: 3.1, 11: 3.2, 12: 4, 13: 4.1, 14: 4.2, 15: 5, 16: 5.1,
+        17: 5.2, 18: 6, 19: 6.1, 20: 6.2, 21: 7, 22: 7.1, 23: 7.2, 24: 8,
+        25: 8.1, 26: 8.2, 27: 9}
+
+    total_outs = 27
+    pitchers = len(pgs)
+    win = False
+    loss = False
+    tie = False
+
+    starter = False
+
+    team_one_linescore = tgs1.teamgamelinescore_set.get()
+    team_two_linescore = tgs2.teamgamelinescore_set.get()
+    ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
+    runs_against = tgs1.runs_against
+    total_hits = hits_left = ths2["hits"]
+    total_hr = hr_left = ths2["homeruns"]
+    total_bb = bb_left = ths2["walks"]
+    total_k = k_left = ths2["strikeouts"]
+    total_sb = sb_left = ths2["stolen_bases"]
+    total_cs = cs_left = ths2["caught_stealing"]
+    total_hbp = hbp_left = ths2["hit_by_pitch"]
+
+    last_player = pgs[-1]
+    for player in pgs:
+        pitch_outs = inning_outs[player.innings_pitched]
 
 
 
