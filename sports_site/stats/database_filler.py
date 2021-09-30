@@ -1,6 +1,7 @@
 from league.models import League, Game, SeasonStage
 from random import randint, choice
 from django.db.models import  Sum
+from math import floor, ceil
 '''
 dates = [datetime.date(2021,5,14), datetime.date(2021,5,16),datetime.date(2021,5,21),datetime.date(2021,5,23),datetime.date(2021,5,28),datetime.date(2021,5,30),datetime.date(2021,6,4),datetime.date(2021,6,6),datetime.date(2021,6,11),datetime.date(2021,6,13),datetime.date(2021,6,18),datetime.date(2021,6,20),datetime.date(2021,6,25),datetime.date(2021,6,27),datetime.date(2021,7,2),datetime.date(2021,7,4)]
 g = [[41,52,36], [21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63],[12,34,56],[31,26,45],[61,53,42],[51,46,23],[14,52,36],[21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63]]
@@ -250,7 +251,6 @@ def random_pitching_stats(pgs, tgs1, tgs2):
         tgs2 - TeamGameStats of opposing team
 
     """
-    starter_innings = [5, 5.1, 5.2, 6, 6.1, 6.2, 7]
     inning_outs = {0:0, 0.1:1, 0.2:2, 1:3, 1.1:4, 1.2:5, 2:6, 2.1:7, 2.2:8, 3:9,
         3.1:10, 3.2:11, 4:12, 4.1:13, 4.2:14, 5:15, 5.1:16, 5.2:17, 6:18,
         6.1:19, 6.2:20, 7:21, 7.1:22, 7.2:23, 8:24, 8.1:25, 8.2:26, 9:27}
@@ -258,7 +258,8 @@ def random_pitching_stats(pgs, tgs1, tgs2):
         8: 2.2, 9: 3, 10: 3.1, 11: 3.2, 12: 4, 13: 4.1, 14: 4.2, 15: 5, 16: 5.1,
         17: 5.2, 18: 6, 19: 6.1, 20: 6.2, 21: 7, 22: 7.1, 23: 7.2, 24: 8,
         25: 8.1, 26: 8.2, 27: 9}
-    totals_outs = 27
+
+    total_outs = 27
     pitchers = len(pgs)
     win = False
     loss = False
@@ -270,29 +271,78 @@ def random_pitching_stats(pgs, tgs1, tgs2):
     team_two_linescore = tgs2.teamgamelinescore_set.get()
     ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
     runs_against = tgs1.runs_against
+    total_hits = hits_left = ths2["hits"]
+    total_hr = hr_left = ths2["homeruns"]
+    total_bb = bb_left = ths2["walks"]
+    total_k = k_left = ths2["strikeouts"]
+    total_sb = sb_left = ths2["stolen_bases"]
+    total_cs = cs_left = ths2["caught_stealing"]
+    total_hbp = hbp_left = ths2["hit_by_pitch"]
 
-    if len(pgs) == 1 and starter == False:
-        pgs[0].complete_game == 1
-        pgs[0].innings_pitched == 9
-
-
-
+    last_player = pgs[-1]
     for player in pgs:
-        if player.team_stats.win and win == False:
-            win = True
-            player.win += 1
-        elif player.team_stats.loss and loss == False:
-            loss = True
-            player.loss += 1
-        elif player.team_stats.ltie and tie == False:
-            tie = True
-            player.tie += 1
+        pitch_outs = inning_outs[player.innings_pitched]
 
-        player.game += 1
+        #hits:
+        if player == last_player:
+            hits_allowed = hits_left
+        elif hits_left:
+            hits_allowed = ceil((pitch_outs/total_outs)*total_hits)
+            hits_left -= hits_allowed
+        else:
+            hits_allowed = 0
+        player.hits_allowed = hits_allowed
 
-        if starter == False:
-            player.game_started += 1
-            starter = True
+        #walks:
+        if player == last_player:
+            bb_allowed = bb_left
+        elif bb_left:
+            bb_allowed = ceil((pitch_outs/total_outs)*total_bb)
+            bb_left -= bb_allowed
+        else:
+            bb_allowed = 0
+        player.walks_allowed = bb_allowed
+
+        #walks
+        if player == last_player:
+            hbp_allowed = hbp_left
+        elif hbp_left:
+            hbp_allowed = ceil((pitch_outs/total_outs)*total_hbp)
+            hbp_left -= hbp_allowed
+        else:
+            hbp_allowed = 0
+        player.hit_batters = hbp_allowed
+
+        #strikeouts
+        if player == last_player:
+            k_allowed = k_left
+        elif k_left:
+            k_allowed = ceil((pitch_outs/total_outs)*total_k)
+            k_left -= k_allowed
+        else:
+            k_allowed = 0
+        player.strikeouts = k_allowed
+
+
+        #stolen bases
+        if player == last_player:
+            sb_allowed = sb_left
+        elif sb_left:
+            sb_allowed = ceil((pitch_outs/total_outs)*total_sb)
+            sb_left -= sb_allowed
+        else:
+            sb_allowed = 0
+        player.stolen_bases_allowed = sb_allowed
+
+        #caught_stealing
+        if player == last_player:
+            cs_allowed = cs_left
+        elif cs_left:
+            cs_allowed = ceil((pitch_outs/total_outs)*total_cs)
+            cs_left -= cs_allowed
+        else:
+            cs_allowed = 0
+        player.runners_caught_stealing = cs_allowed
 
 
 
