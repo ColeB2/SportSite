@@ -152,10 +152,6 @@ class PlayerPitchingGameStats(models.Model):
         return f"{self.player}"
 
 
-    def save(self, *args, **kwargs):
-        super(PlayerPitchingGameStats, self).save(*args, **kwargs)
-
-
 
 
 

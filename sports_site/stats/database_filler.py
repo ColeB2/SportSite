@@ -13,15 +13,18 @@ def get_league(url="SBBL"):
     league = League.objects.get(url=url)
     return league
 
+
 def get_featured_season_stage(league=None):
     """Gets featured season stage and returns it given league object."""
     season_stage = SeasonStage.objects.get(featured=True, season__league=league)
     return season_stage
 
+
 def get_games(season_stage):
     """Gets all games in given season stage."""
     games = season_stage.game_set.all()
     return games
+
 
 def create_schedule(dates, games, team_dict):
     """Creates a schedule given list of dates, a same len list of games for said
@@ -37,6 +40,7 @@ def create_schedule(dates, games, team_dict):
             new_game = Game(season=ss, home_team=team_dict[str(value)[1]],
                 away_team=team_dict[str(value)[0]], date=game_date)
             new_game.save()
+
 
 def random_hitting_stats(pgs):
     """
@@ -102,7 +106,6 @@ def tally_game_runs(games_queryset):
             elif team.team == game.away_team:
                 game.away_score = runs
             game.save()
-
 
 
 def equalize_runs_rbis(games_queryset):
@@ -244,6 +247,7 @@ def random_pitching_innings(pgs):
 
 '''
 For random_pitching_stats: Copy base into bash, tabs are spaces.
+
 from stats.models import TeamGameStats
 from league.models import SeasonStage, Game
 from stats.database_filler import random_pitching_stats
@@ -290,9 +294,12 @@ def random_pitching_stats(pgs, tgs1, tgs2):
 
         #hits:
         if player == last_player:
-            hits_allowed = hits_left
+            if hits_left > 0:
+                hits_allowed = hits_left
+            else:
+                hits_allowed = 0
         elif hits_left:
-            hits_allowed = ceil((pitch_outs/total_outs)*total_hits)
+            hits_allowed = floor((pitch_outs/total_outs)*total_hits)
             hits_left -= hits_allowed
         else:
             hits_allowed = 0
@@ -300,19 +307,25 @@ def random_pitching_stats(pgs, tgs1, tgs2):
 
         #walks:
         if player == last_player:
-            bb_allowed = bb_left
+            if bb_left > 0:
+                bb_allowed = bb_left
+            else:
+                bb_allowed = 0
         elif bb_left:
-            bb_allowed = ceil((pitch_outs/total_outs)*total_bb)
+            bb_allowed = floor((pitch_outs/total_outs)*total_bb)
             bb_left -= bb_allowed
         else:
             bb_allowed = 0
         player.walks_allowed = bb_allowed
 
-        #walks
+        #hit by pitch
         if player == last_player:
-            hbp_allowed = hbp_left
+            if hbp_left > 0:
+                hbp_allowed = hbp_left
+            else:
+                hbp_allowed = 0
         elif hbp_left:
-            hbp_allowed = ceil((pitch_outs/total_outs)*total_hbp)
+            hbp_allowed = floor((pitch_outs/total_outs)*total_hbp)
             hbp_left -= hbp_allowed
         else:
             hbp_allowed = 0
@@ -320,34 +333,44 @@ def random_pitching_stats(pgs, tgs1, tgs2):
 
         #strikeouts
         if player == last_player:
-            k_allowed = k_left
+            if k_left > 0:
+                k_allowed = k_left
+            else:
+                k_allowed = 0
         elif k_left:
-            k_allowed = ceil((pitch_outs/total_outs)*total_k)
+            k_allowed = floor((pitch_outs/total_outs)*total_k)
             k_left -= k_allowed
         else:
             k_allowed = 0
         player.strikeouts = k_allowed
 
 
+        #caught_stealing
+        if player == last_player:
+            if cs_left > 0:
+                cs_allowed = cs_left
+            else:
+                cs_allowed = 0
+        elif cs_left:
+            cs_allowed = floor((pitch_outs/total_outs)*total_cs)
+            cs_left -= cs_allowed
+        else:
+            cs_allowed = 0
+        player.runners_caught_stealing = cs_allowed
+
         #stolen bases
         if player == last_player:
-            sb_allowed = sb_left
+            if sb_left > 0:
+                sb_allowed = sb_left
+            else:
+                sb_allowed = 0
         elif sb_left:
-            sb_allowed = ceil((pitch_outs/total_outs)*total_sb)
+            sb_allowed = floor((pitch_outs/total_outs)*total_sb)
             sb_left -= sb_allowed
         else:
             sb_allowed = 0
         player.stolen_bases_allowed = sb_allowed
 
-        #caught_stealing
-        if player == last_player:
-            cs_allowed = cs_left
-        elif cs_left:
-            cs_allowed = ceil((pitch_outs/total_outs)*total_cs)
-            cs_left -= cs_allowed
-        else:
-            cs_allowed = 0
-        player.runners_caught_stealing = cs_allowed
 
         player.save()
 
