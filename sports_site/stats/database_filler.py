@@ -400,17 +400,17 @@ def random_pitching_runs_decision(pgs, tgs1, tgs2):
 
     starter = False
 
-    team_one_linescore = tgs1.teamgamelinescore_set.get()
+    t1_linescore = tgs1.teamgamelinescore_set.get()
+    tls1 = [
+        t1_linescore.first,   t1_linescore.second, t1_linescore.third,
+        t1_linescore.fourth,  t1_linescore.fifth,  t1_linescore.sixth,
+        t1_linescore.seventh, t1_linescore.eigth, t1_linescore.ninth],
     team_two_linescore = tgs2.teamgamelinescore_set.get()
     ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
     runs_against = tgs1.runs_against
-    total_hits = hits_left = ths2["hits"]
+    total_runs = runs_left = ths2["runs"]
     total_hr = hr_left = ths2["homeruns"]
-    total_bb = bb_left = ths2["walks"]
-    total_k = k_left = ths2["strikeouts"]
-    total_sb = sb_left = ths2["stolen_bases"]
-    total_cs = cs_left = ths2["caught_stealing"]
-    total_hbp = hbp_left = ths2["hit_by_pitch"]
+
 
     last_player = pgs[-1]
     for player in pgs:
