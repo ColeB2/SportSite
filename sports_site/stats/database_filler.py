@@ -392,39 +392,79 @@ def random_pitching_runs_decision(pgs, tgs1, tgs2):
         17: 5.2, 18: 6, 19: 6.1, 20: 6.2, 21: 7, 22: 7.1, 23: 7.2, 24: 8,
         25: 8.1, 26: 8.2, 27: 9}
 
-    total_outs = 27
+    total_outs = outs_left = 27
     pitchers = len(pgs)
     win = False
     loss = False
     tie = False
-
-    starter = False
+    lead = False
+    pitcher_of_record = 0
 
     t1_linescore = tgs1.teamgamelinescore_set.get()
     tls1 = [
         t1_linescore.first,   t1_linescore.second, t1_linescore.third,
         t1_linescore.fourth,  t1_linescore.fifth,  t1_linescore.sixth,
-        t1_linescore.seventh, t1_linescore.eigth, t1_linescore.ninth],
-    team_two_linescore = tgs2.teamgamelinescore_set.get()
+        t1_linescore.seventh, t1_linescore.eigth,  t1_linescore.ninth
+        ]
+
+    t2_linescore = tgs2.teamgamelinescore_set.get()
+    tls2 = [
+        t2_linescore.first,   t2_linescore.second, t2_linescore.third,
+        t2_linescore.fourth,  t2_linescore.fifth,  t2_linescore.sixth,
+        t2_linescore.seventh, t2_linescore.eigth,  t2_linescore.ninth
+        ]
     ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
-    runs_against = tgs1.runs_against
     total_runs = runs_left = ths2["runs"]
     total_hr = hr_left = ths2["homeruns"]
 
 
-    last_player = pgs[-1]
+    last_player = pgs.last()
+    outs = 0
+    player_index = 0
+    winning_pitcher = None
+    deciding_pitcher = None
+    trf = 0
+    tra = 0
     for player in pgs:
         pitch_outs = inning_outs[player.innings_pitched]
+        outs_left -= pitch_outs
+        rf = 0
+        ra = 0
+
+        for index in range(outs, outs+pitch_outs, 3):
+            inning_index = index//3
+            rf += tls1[inning_index]
+            ra += tls2[inning_index]
+            trf += rf
+            tra += ra
+            tls1[inning_index] = tls2[inning_index] = 0
+        outs+= pitch_outs
+
+        if rf > ra:
+            if lead:
+                lead = True
+            else:
+                deciding_pitcher = player
+                lead = True
+        elif rf < ra:
+            if lead:
+                losing_pitcher = player
+            else:
+                pass
+        elif rf == ra:
+            pass
 
 
 
+        player.runs_allowed = ra
+        player.earned_runs = ra
+        runs_left -= ra
 
+        if hr_left:
+            hr = floor((ra/total_runs))
+            hr_left -= hr
+        else:
+            hr = 0
+        player.homeruns_allowed = hr
 
-
-
-
-
-
-
-
-
+        player.save()
