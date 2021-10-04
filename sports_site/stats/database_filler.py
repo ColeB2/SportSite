@@ -1,7 +1,7 @@
 from league.models import League, Game, SeasonStage
 from random import randint, choice
 from django.db.models import  Sum
-from math import floor, ceil
+from math import floor
 '''
 dates = [datetime.date(2021,5,14), datetime.date(2021,5,16),datetime.date(2021,5,21),datetime.date(2021,5,23),datetime.date(2021,5,28),datetime.date(2021,5,30),datetime.date(2021,6,4),datetime.date(2021,6,6),datetime.date(2021,6,11),datetime.date(2021,6,13),datetime.date(2021,6,18),datetime.date(2021,6,20),datetime.date(2021,6,25),datetime.date(2021,6,27),datetime.date(2021,7,2),datetime.date(2021,7,4)]
 g = [[41,52,36], [21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63],[12,34,56],[31,26,45],[61,53,42],[51,46,23],[14,52,36],[21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63]]
