@@ -2,11 +2,8 @@ from league.models import League, Game, SeasonStage
 from random import randint, choice
 from django.db.models import  Sum
 from math import floor
-'''
-dates = [datetime.date(2021,5,14), datetime.date(2021,5,16),datetime.date(2021,5,21),datetime.date(2021,5,23),datetime.date(2021,5,28),datetime.date(2021,5,30),datetime.date(2021,6,4),datetime.date(2021,6,6),datetime.date(2021,6,11),datetime.date(2021,6,13),datetime.date(2021,6,18),datetime.date(2021,6,20),datetime.date(2021,6,25),datetime.date(2021,6,27),datetime.date(2021,7,2),datetime.date(2021,7,4)]
-g = [[41,52,36], [21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63],[12,34,56],[31,26,45],[61,53,42],[51,46,23],[14,52,36],[21,43,65],[13,62,54],[16,35,24],[15,64,32],[41,25,63]]
-td = {'2':teams[0], '1':teams[1], '3':teams[2], '4':teams[3], '5':teams[4], '6':teams[5]}
-'''
+
+
 
 def get_league(url="SBBL"):
     """Gets and returns league model object based of url slug."""
@@ -27,12 +24,16 @@ def get_games(season_stage):
 
 
 def create_schedule(dates, games, team_dict):
-    """Creates a schedule given list of dates, a same len list of games for said
-    date, and a team_dict to map numbers from games to teamseason objects.
-    dates - list of dates using datetime.date objects.
-    games - list of lists of games, outer list being list of games, inner lists
-        being the list of games for given date,
-    team_dict - dictionary value that maps to proper team."""
+    """
+    Creates a schedule given list of dates, a same len list of games
+    for said date, and a team_dict to map numbers from games to
+    teamseason objects.
+    Params:
+        dates - list of dates using datetime.date objects.
+        games - list of lists of games, outer list being list of games,
+            inner lists being the list of games for given date,
+        team_dict - dictionary value that maps to proper team.
+    """
     ss = SeasonStage.objects.all()[2]
     for i in range(len(games)):
         game_date = dates[i]
@@ -45,7 +46,8 @@ def create_schedule(dates, games, team_dict):
 def random_hitting_stats(pgs):
     """
     Params:
-        pgs - player game stats queryset."""
+        pgs - player game stats queryset.
+    """
     for p in pgs:
         ab = 3 + randint(0,2)
         bb = randint(0, 5-ab)
@@ -151,6 +153,7 @@ def create_pitching_stats(tgs):
 
         random_pitching_stats(team_one, tgs1, tgs2)
         random_pitching_stats(team_two, tgs2, tgs1)
+
 
 def total_hitting_stats(hqs):
     """Totals up a queryset of players hitting stats in a game.
@@ -403,7 +406,6 @@ def random_pitching_runs(pgs, tgs1, tgs2):
         pgs - List of all PlayerPitchingGameStats for a team in a game.
         tgs1 - TeamGameStats of the team listed in pgs
         tgs2 - TeamGameStats of opposing team
-
     """
     inning_outs = {0:0, 0.1:1, 0.2:2, 1:3, 1.1:4, 1.2:5, 2:6, 2.1:7, 2.2:8, 3:9,
         3.1:10, 3.2:11, 4:12, 4.1:13, 4.2:14, 5:15, 5.1:16, 5.2:17, 6:18,
