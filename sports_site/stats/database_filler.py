@@ -376,7 +376,28 @@ def random_pitching_stats(pgs, tgs1, tgs2):
 
 
 
-def random_pitching_runs_decision(pgs, tgs1, tgs2):
+'''
+For random_pitching_runs: Copy base into bash, tabs are spaces.
+
+from stats.models import TeamGameStats
+from league.models import SeasonStage, Game
+from stats.database_filler import random_pitching_runs
+ss = SeasonStage.objects.all()[2]
+games = Game.objects.all().filter(season=ss, date__year=2021)
+for game in games:
+    tgs = game.teamgamestats_set.all()
+    tgs1 = tgs[0]
+    tgs2 = tgs[1]
+    for g in tgs:
+        print(g, end='')
+        pgs = g.playerpitchinggamestats_set.all()
+        if g == tgs1:
+            random_pitching_runs(pgs, g, tgs2)
+        else:
+            random_pitching_runs(pgs, g, tgs1)
+    print("Done Game")
+'''
+def random_pitching_runs(pgs, tgs1, tgs2):
     """
     Params:
         pgs - List of all PlayerPitchingGameStats for a team in a game.
@@ -387,44 +408,29 @@ def random_pitching_runs_decision(pgs, tgs1, tgs2):
     inning_outs = {0:0, 0.1:1, 0.2:2, 1:3, 1.1:4, 1.2:5, 2:6, 2.1:7, 2.2:8, 3:9,
         3.1:10, 3.2:11, 4:12, 4.1:13, 4.2:14, 5:15, 5.1:16, 5.2:17, 6:18,
         6.1:19, 6.2:20, 7:21, 7.1:22, 7.2:23, 8:24, 8.1:25, 8.2:26, 9:27}
-    outs_inning = {0: 0, 1: 0.1, 2: 0.2, 3: 1, 4: 1.1, 5: 1.2, 6: 2, 7: 2.1,
-        8: 2.2, 9: 3, 10: 3.1, 11: 3.2, 12: 4, 13: 4.1, 14: 4.2, 15: 5, 16: 5.1,
-        17: 5.2, 18: 6, 19: 6.1, 20: 6.2, 21: 7, 22: 7.1, 23: 7.2, 24: 8,
-        25: 8.1, 26: 8.2, 27: 9}
 
-    total_outs = outs_left = 27
-    pitchers = len(pgs)
-    win = False
-    loss = False
-    tie = False
-    lead = False
-    pitcher_of_record = 0
+    outs_left = 27
 
     t1_linescore = tgs1.teamgamelinescore_set.get()
     tls1 = [
         t1_linescore.first,   t1_linescore.second, t1_linescore.third,
         t1_linescore.fourth,  t1_linescore.fifth,  t1_linescore.sixth,
-        t1_linescore.seventh, t1_linescore.eigth,  t1_linescore.ninth
+        t1_linescore.seventh, t1_linescore.eighth,  t1_linescore.ninth
         ]
 
     t2_linescore = tgs2.teamgamelinescore_set.get()
     tls2 = [
         t2_linescore.first,   t2_linescore.second, t2_linescore.third,
         t2_linescore.fourth,  t2_linescore.fifth,  t2_linescore.sixth,
-        t2_linescore.seventh, t2_linescore.eigth,  t2_linescore.ninth
+        t2_linescore.seventh, t2_linescore.eighth,  t2_linescore.ninth
         ]
     ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
     total_runs = runs_left = ths2["runs"]
-    total_hr = hr_left = ths2["homeruns"]
+    total_homeruns = hr_left = ths2["homeruns"]
 
 
-    last_player = pgs.last()
     outs = 0
-    player_index = 0
-    winning_pitcher = None
-    deciding_pitcher = None
-    trf = 0
-    tra = 0
+    last_player = pgs.last()
     for player in pgs:
         pitch_outs = inning_outs[player.innings_pitched]
         outs_left -= pitch_outs
@@ -435,33 +441,17 @@ def random_pitching_runs_decision(pgs, tgs1, tgs2):
             inning_index = index//3
             rf += tls1[inning_index]
             ra += tls2[inning_index]
-            trf += rf
-            tra += ra
             tls1[inning_index] = tls2[inning_index] = 0
         outs+= pitch_outs
-
-        if rf > ra:
-            if lead:
-                lead = True
-            else:
-                deciding_pitcher = player
-                lead = True
-        elif rf < ra:
-            if lead:
-                losing_pitcher = player
-            else:
-                pass
-        elif rf == ra:
-            pass
-
-
 
         player.runs_allowed = ra
         player.earned_runs = ra
         runs_left -= ra
 
-        if hr_left:
-            hr = floor((ra/total_runs))
+        if player == last_player:
+            hr = hr_left
+        elif hr_left:
+            hr = floor((ra/total_runs)* total_homeruns)
             hr_left -= hr
         else:
             hr = 0
