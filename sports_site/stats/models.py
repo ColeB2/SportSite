@@ -138,9 +138,6 @@ class PlayerPitchingGameStats(models.Model):
     runners_caught_stealing = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="CS")
     pick_offs = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="PK")
     balk = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="Balk")
-    average = models.FloatField(null=True, blank=True, verbose_name='AVG')
-    whip = models.FloatField(null=True, blank=True, verbose_name='WHIP')
-    era = models.FloatField(null=True, blank=True, verbose_name='ERA')
 
 
     class Meta:
