@@ -153,11 +153,7 @@ class PitchingOrderTable(tables.Table):
         model = PlayerPitchingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
         fields = ("player__player", "innings_pitched", "runs_allowed",
-        "earned_runs", "walks_allowed", "strikeouts", "homeruns_allowed", "era")
-
-    def render_era(self, record):
-        print(f"record {record.era}")
-        return _convert_to_str_pitching(record.era)
+        "earned_runs", "walks_allowed", "strikeouts", "homeruns_allowed")
 
 
 
