@@ -166,6 +166,8 @@ class PlayerPitchingGameStatsTable(tables.Table):
         fields = ("player__player", "game_started","save_converted", "save_op",
             "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
             "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
+
+            "win", "loss"
             )
 
 

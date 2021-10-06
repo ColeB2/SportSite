@@ -468,7 +468,7 @@ For random_pitching_decision: Copy base into bash, tabs are spaces.
 
 from stats.models import TeamGameStats
 from league.models import SeasonStage, Game
-from stats.database_filler import random_pitching_runs
+from stats.database_filler import random_pitching_decision
 ss = SeasonStage.objects.all()[2]
 games = Game.objects.all().filter(season=ss, date__year=2021)
 for game in games:
@@ -479,9 +479,9 @@ for game in games:
         print(g, end='')
         pgs = g.playerpitchinggamestats_set.all()
         if g == tgs1:
-            random_pitching_runs(pgs, g, tgs2)
+            random_pitching_decision(pgs, g, tgs2)
         else:
-            random_pitching_runs(pgs, g, tgs1)
+            random_pitching_decision(pgs, g, tgs1)
     print("Done Game")
 '''
 def random_pitching_decision(pgs, tgs1, tgs2):
@@ -499,11 +499,6 @@ def random_pitching_decision(pgs, tgs1, tgs2):
         3.1:10, 3.2:11, 4:12, 4.1:13, 4.2:14, 5:15, 5.1:16, 5.2:17, 6:18,
         6.1:19, 6.2:20, 7:21, 7.1:22, 7.2:23, 8:24, 8.1:25, 8.2:26, 9:27}
 
-    outs_inning = {0: 0, 1: 0.1, 2: 0.2, 3: 1, 4: 1.1, 5: 1.2, 6: 2, 7: 2.1,
-        8: 2.2, 9: 3, 10: 3.1, 11: 3.2, 12: 4, 13: 4.1, 14: 4.2, 15: 5, 16: 5.1,
-        17: 5.2, 18: 6, 19: 6.1, 20: 6.2, 21: 7, 22: 7.1, 23: 7.2, 24: 8,
-        25: 8.1, 26: 8.2, 27: 9}
-
     outs_left = 27
 
     t1_linescore = tgs1.teamgamelinescore_set.get()
@@ -519,17 +514,12 @@ def random_pitching_decision(pgs, tgs1, tgs2):
         t2_linescore.fourth,  t2_linescore.fifth,  t2_linescore.sixth,
         t2_linescore.seventh, t2_linescore.eighth,  t2_linescore.ninth
         ]
-    ths2 = total_hitting_stats(tgs2.playerhittinggamestats_set.all())
-    total_runs = runs_left = ths2["runs"]
-    total_homeruns = hr_left = ths2["homeruns"]
-
 
     outs = 0
-    last_player = pgs.last()
-    W = L = T = None
     lead = None
     tied = None
     deciding_pitcher = pgs.first()
+    pitcher_save = None
     cur_rf = 0
     cur_ra = 0
     for player in pgs:
@@ -544,6 +534,9 @@ def random_pitching_decision(pgs, tgs1, tgs2):
             rf += tls1[inning_index]
             ra += tls2[inning_index]
             tls1[inning_index] = tls2[inning_index] = 0
+
+
+
         outs+= pitch_outs
         cur_rf += rf
         cur_ra += ra
@@ -576,3 +569,39 @@ def random_pitching_decision(pgs, tgs1, tgs2):
 
             lead = False
             tied = False
+
+        if inning_index == 8 and player.innings_pitched >= 1 and 1 <= cur_rf - cur_ra <= 3:
+            if player != deciding_pitcher:
+                player.save_op += 1
+                pitcher_save = player
+                player.save()
+        elif inning_index == 8 and player.innings_pitched >= 0.2 and 1 <= cur_rf - cur_ra >= 2:
+            if player != deciding_pitcher:
+                player.save_op += 1
+                pitcher_save = player
+                player.save()
+        elif inning_index == 7 and player.innings_pitched >= 1.1 and 1 <= cur_rf - cur_ra <= 3:
+            if player != deciding_pitcher:
+                player.save_op += 1
+                pitcher_save = player
+                player.save()
+        else:
+            player.save_op = 0
+
+    if tgs1.runs_for == tgs1.runs_against:
+        deciding_pitcher.win = 0
+        deciding_pitcher.loss = 0
+    elif lead:
+        deciding_pitcher.win = 1
+        deciding_pitcher.save_op = 0
+    elif not lead:
+        deciding_pitcher.loss = 1
+
+    deciding_pitcher.save()
+
+    if pitcher_save and pitcher_save != deciding_pitcher:
+        if tgs1.runs_for > tgs1.runs_against:
+            pitcher_save.save_converted = 1
+            pitcher_save.save()
+
+
