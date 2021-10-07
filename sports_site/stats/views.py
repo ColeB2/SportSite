@@ -90,9 +90,10 @@ def team_game_stats_create_view(request, game_pk, team_season_pk,
                         f"{hitting_stats.player.player} hitting stats "
                         f"created for {game}")
                 else:
-                    messages.info(request,
-                        f"{hitting_stats.player.player} already has "
-                        f"stats for {game}.")
+                    if hitting_stats:
+                        messages.info(request,
+                            f"{hitting_stats.player.player} already has "
+                            f"stats for {game}.")
 
 
 
@@ -216,11 +217,10 @@ def team_game_pitching_stats_create_view(request, game_pk, team_season_pk,
                         f"{pitching_stats.player.player} pitching stats "
                         f"created for {game}")
                 else:
-                    messages.info(request,
-                        f"{pitching_stats.player.player} already has "
-                        f"stats for {game}.")
-
-
+                    if pitching_stats:
+                        messages.info(request,
+                            f"{pitching_stats.player.player} already has "
+                            f"stats for {game}.")
 
         if 'create' in request.POST:
             return redirect('stats-team-game-stats', game_pk, team_season_pk)

@@ -163,7 +163,6 @@ def get_all_season_pitching_stats(league, featured_stage):
         shutout = Sum('shutout'),
         save_converted = Sum('save_converted'),
         save_op = Sum('save_op'),
-        innings_pitched = Sum('innings_pitched'),
         hits_allowed = Sum('hits_allowed'),
         runs_allowed = Sum('runs_allowed'),
         earned_runs = Sum('earned_runs'),
@@ -171,6 +170,7 @@ def get_all_season_pitching_stats(league, featured_stage):
         hit_batters = Sum('hit_batters'),
         walks_allowed = Sum('walks_allowed'),
         strikeouts = Sum('strikeouts'),
+        innings_pitched = Sum('innings_pitched'),
         era = (
             Cast(F('earned_runs'),FloatField()) * 9 /
             Cast(F('innings_pitched'), FloatField())

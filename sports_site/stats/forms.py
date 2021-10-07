@@ -36,11 +36,14 @@ class PlayerStatsCreateForm(forms.Form):
 
     def process(self):
         _player = self.cleaned_data.get("player")
-        hitting_stats, created = PlayerHittingGameStats.objects.get_or_create(
-                                            team_stats=self._team_game_stats,
-                                            season=self._team_season.season,
-                                            player=_player)
-        hitting_stats.save()
+        if _player:
+            hitting_stats, created = PlayerHittingGameStats.objects.get_or_create(
+                team_stats=self._team_game_stats,
+                season=self._team_season.season,
+                player=_player)
+            hitting_stats.save()
+        else:
+            return None, None
         return hitting_stats, created
 
 
@@ -74,11 +77,14 @@ class PlayerPitchingStatsCreateForm(forms.Form):
 
     def process(self):
         _player = self.cleaned_data.get("player")
-        pitching_stats, created = PlayerPitchingGameStats.objects.get_or_create(
-                                            team_stats=self._team_game_stats,
-                                            season=self._team_season.season,
-                                            player=_player)
-        pitching_stats.save()
+        if _player:
+            pitching_stats, created = PlayerPitchingGameStats.objects.get_or_create(
+                team_stats=self._team_game_stats,
+                season=self._team_season.season,
+                player=_player)
+            pitching_stats.save()
+        else:
+            return None, None
         return pitching_stats, created
 
 
@@ -196,6 +202,7 @@ class PPGSFHelper(FormHelper):
                 Column("save_converted"),
                 Column("save_op"),
                 Column("innings_pitched"),
+                Column("outs"),
                 css_class="form-row"),
             Row(
                 Column("hits_allowed"),
@@ -210,6 +217,9 @@ class PPGSFHelper(FormHelper):
 
 
 class PlayerPitchingGameStatsForm(forms.ModelForm):
+    outs = forms.IntegerField(label="Outs",
+        help_text="Extra outs gotten after the full inning ie. 6 2/3 -- 2 outs",
+        max_value=2, min_value=0, required=False)
     class Meta:
         model = PlayerPitchingGameStats
         exclude = ['team_stats', 'season', 'average','game', 'whip', 'era',
@@ -237,6 +247,7 @@ class PlayerPitchingGameStatsForm(forms.ModelForm):
                 Column("save"),
                 Column("save_op"),
                 Column("innings_pitched"),
+                Column("outs"),
                 css_class="form-row"),
             Row(
                 Column("hits_allowed"),
@@ -252,7 +263,10 @@ class PlayerPitchingGameStatsForm(forms.ModelForm):
 
 
     def process(self):
+        outs = self.cleaned_data["outs"]
+        innings_pitched = self.cleaned_data["innings_pitched"]
         player_stats = self.save()
+        player_stats._innings = innings_pitched + round((outs/3),2)
         player_stats.save()
         return player_stats
 
