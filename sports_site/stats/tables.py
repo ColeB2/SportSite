@@ -47,6 +47,25 @@ class PlayerHittingStatsTable(tables.Table):
         return _convert_to_str(record['on_base_percentage'])
 
 
+class PlayerPitchingStatsTable(tables.Table):
+    """Table used to display pitching stats for season."""
+    class Meta:
+        model = PlayerPitchingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("first", "last", "win", "loss", "era", "game", "game_started",
+            "complete_game", "shutout", "save_converted", "save_op",
+            "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
+            "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
+            "whip")
+
+
+    def render_era(self, record):
+        return _convert_to_str(record['era'])
+
+    def render_whip(self, record):
+        return _convert_to_str(record['whip'])
+
+
 class TeamGameLineScoreTable(tables.Table):
     """Table used to display linescore of a game."""
     def __init__(self, *args, **kwargs):

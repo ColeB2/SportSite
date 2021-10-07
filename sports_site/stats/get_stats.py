@@ -1,7 +1,8 @@
 from django.db.models import  F, FloatField, Sum, Count, Case, When
 from django.db.models.functions import Cast
 from django.forms.models import model_to_dict
-from .models import PlayerHittingGameStats, TeamGameStats
+from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
+    TeamGameStats)
 from league.models import SeasonStage
 
 
@@ -130,6 +131,56 @@ def get_all_season_hitting_stats(league, featured_stage):
             Cast(F('walks'), FloatField()) +
             Cast(F('hit_by_pitch'), FloatField()) +
             Cast(F('sacrifice_flies'), FloatField())
+            )
+        )
+    return return_stats
+
+
+def get_all_season_pitching_stats(league, featured_stage):
+    """
+    Gets all pitching stats for all player, and returns them in
+    a usable fashion for the main stats page.
+
+    Params:
+        league - League model object
+        featured_stage - The SeasonStage model object to be used
+        for the gathering of stats.
+
+    View - stats/views.py - stats_display_view
+    Template - stats/pitching_stats_page.html
+    """
+    pitching_stats = PlayerPitchingGameStats.objects.all().filter(
+                                                player__player__league=league,
+                                                season=featured_stage)
+    return_stats = pitching_stats.values("player").annotate(
+        first = F("player__player__first_name"),
+        last = F("player__player__last_name"),
+        win = Sum('win'),
+        loss = Sum('loss'),
+        game = Sum('game'),
+        game_started = Sum('game_started'),
+        complete_game = Sum('complete_game'),
+        shutout = Sum('shutout'),
+        saves_converted = Sum('saves_converted'),
+        save_op = Sum('save_op'),
+        innings_pitched = Sum('innings_pitched'),
+        hits_allowed = Sum('hits_allowed'),
+        runs_allowed = Sum('runs_allowed'),
+        earned_runs = Sum('earned_runs'),
+        homeruns_allowed = Sum('homeruns_allowed'),
+        hit_batters = Sum('hit_batters'),
+        walks_allowed = Sum('walks_allowed'),
+        strikeouts = Sum('strikeouts'),
+        era = (
+            Cast(F('earned_runs'),FloatField()) * 9 /
+            Cast(F('innings_pitched'), FloatField())
+            ),
+        whip = (
+            Cast(F('walks_allowed'), FloatField()) +
+            Cast(F('hits_allowed'), FloatField())
+            ) /
+            (
+            Cast(F('innings_pitched'), FloatField())
             )
         )
     return return_stats
