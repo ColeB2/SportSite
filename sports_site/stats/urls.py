@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.stats_display_view, name='stats-page'),
+    path('pitching/', views.pitching_stats_display_view, name='pitching-stats-page'),
     path('standings/', views.standings_display_view, name="standings-page"),
     path('game/<int:game_pk>/team/<int:team_season_pk>/lineup/<int:team_game_stats_pk>/create', views.team_game_stats_create_view, name='stats-game-stats-create'),
     path('game/<int:game_pk>/team/<int:team_season_pk>/pitching/<int:team_game_stats_pk>/create', views.team_game_pitching_stats_create_view, name='stats-game-pitching-stats-create'),

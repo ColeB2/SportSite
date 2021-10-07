@@ -161,7 +161,7 @@ def get_all_season_pitching_stats(league, featured_stage):
         game_started = Sum('game_started'),
         complete_game = Sum('complete_game'),
         shutout = Sum('shutout'),
-        saves_converted = Sum('saves_converted'),
+        save_converted = Sum('save_converted'),
         save_op = Sum('save_op'),
         innings_pitched = Sum('innings_pitched'),
         hits_allowed = Sum('hits_allowed'),
