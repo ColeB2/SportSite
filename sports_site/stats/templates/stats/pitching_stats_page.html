@@ -13,7 +13,18 @@
         {% endif %}
 
 
-        <h4>{{ featured_stage }} Stats</h4><br>
+        <h3>{{ featured_stage }} Stats</h3>
+        <br>
+
+        <h4 class="stat-headline">
+            <a href="{% url 'stats-page' %}?league={{request.GET.league}}"
+               class="stat-headline">
+                    Hitting
+            </a>
+        </h4>
+        <h4 class="stat-headline stat-headline-active">Pitching</h4>
+        <br><br>
+
 
         <div class="table-responsive">
             {% render_table table %}

@@ -125,3 +125,21 @@ background-color: #425766;
     background-color: #15476a;
     color: rgb(204,210,217);
 }
+
+
+/*Stats Page*/
+.stat-headline {
+    text-decoration: none;
+    color: rgb(0,0,0);
+    display: inline;
+}
+
+.stat-headline:hover {
+    color: #1a4ea6;
+}
+
+.stat-headline-active {
+    text-decoration: underline;
+    text-decoration-color: #1a4ea6;
+
+}
