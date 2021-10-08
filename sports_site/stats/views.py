@@ -99,8 +99,6 @@ def team_game_stats_create_view(request, game_pk, team_season_pk,
 
         if 'create' in request.POST:
             return redirect('stats-team-game-stats', game_pk, team_season_pk)
-        elif 'create-and-continue' in request.POST:
-            return redirect('stats-team-game-stats', game_pk, team_season_pk)
 
     context = {
         "game":game,
@@ -168,9 +166,10 @@ def team_game_stats_delete_info_view(request, game_pk, team_season_pk,
     if request.method == 'POST':
         for stat_obj in hitting_stats:
             stat_obj.delete()
-        messages.success(request,
-            f"{hitting_stats} and all releated "
-            f"object were deleted")
+
+            messages.success(request,
+                f"{stat_obj} and all releated "
+                f"object were deleted")
 
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
 
@@ -223,8 +222,6 @@ def team_game_pitching_stats_create_view(request, game_pk, team_season_pk,
                             f"stats for {game}.")
 
         if 'create' in request.POST:
-            return redirect('stats-team-game-stats', game_pk, team_season_pk)
-        elif 'create-and-continue' in request.POST:
             return redirect('stats-team-game-stats', game_pk, team_season_pk)
 
     context = {
@@ -295,8 +292,8 @@ def team_game_pitching_stats_delete_info_view(request, game_pk, team_season_pk,
     if request.method == 'POST':
         for stat_obj in pitching_stats:
             stat_obj.delete()
-        messages.success(request,
-            f"{pitching_stats} and all releated object were deleted")
+            messages.success(request,
+                f"{stat_obj} and all releated object were deleted")
 
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
     else:
