@@ -60,10 +60,10 @@ class PlayerPitchingStatsTable(tables.Table):
 
 
     def render_era(self, record):
-        return _convert_to_str(record['era'])
+        return _convert_to_str_pitching(record['era'])
 
     def render_whip(self, record):
-        return _convert_to_str(record['whip'])
+        return _convert_to_str_pitching(record['whip'])
 
 
 class TeamGameLineScoreTable(tables.Table):
