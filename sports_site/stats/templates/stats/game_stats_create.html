@@ -3,16 +3,6 @@
 {% block content %}
 <div class="container">
     <div class="content-section">
-
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-
-
         {% if perms.league.league_admin %}
         <h2>Game: {{game.date}} {{team_season.team}}</h2>
         <br><br>
@@ -29,7 +19,7 @@
             <br><br>
 
             <input type="submit" name="create" value="Create" class="btn btn-primary">
-            <input type="submit" name="create-and-continue" value="Create and Edit" class="btn btn-primary">
+            <br><br>
 
         </form>
         {% else %}
