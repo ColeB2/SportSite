@@ -3,16 +3,6 @@
 {% block content %}
 <div class="container">
     <div class="content-section">
-
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-
-
         {% if perms.league.league_admin %}
         <h2>Game: {{game_stats.game}}</h2>
         <h2>Team:  {{game_stats.team.team}}</h2>

@@ -4,16 +4,6 @@
 <div class="container">
     <div class="content-section">
         <h2>{{game}}</h2>
-
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-
-
         <legend>Warning: Deleting this lineup will delete all objects listed below.</legend>
 
         {{piching_stats|unordered_list}}
