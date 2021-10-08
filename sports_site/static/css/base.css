@@ -130,7 +130,7 @@ background-color: #425766;
 /*Stats Page*/
 .stat-headline {
     text-decoration: none;
-    color: rgb(0,0,0);
+    color: rgb(127,131,135);
     display: inline;
 }
 
@@ -139,6 +139,7 @@ background-color: #425766;
 }
 
 .stat-headline-active {
+    color: rgb(0,0,0);
     text-decoration: underline;
     text-decoration-color: #1a4ea6;
 
