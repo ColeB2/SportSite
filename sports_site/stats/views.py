@@ -9,7 +9,7 @@ from django_tables2 import RequestConfig
 from league.models import Game, League, Roster, TeamSeason, SeasonStage
 from .get_stats import (get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
-    get_extra_innings, get_team_hitting_stats)
+    get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
 from .models import (TeamGameLineScore, TeamGameStats,)
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PitchingGameStatsFormset, PlayerPitchingStatsCreateForm,
@@ -18,7 +18,7 @@ from .decorators import user_owns_game
 from .tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
     PlayerPitchingStatsTable, StandingsTable, TeamGameLineScoreTable,
-    TeamHittingStatsTable)
+    TeamHittingStatsTable, TeamPitchingStatsTable)
 
 
 
@@ -443,13 +443,12 @@ def pitching_stats_display_view(request):
     return render(request, "stats/pitching_stats_page.html", context)
 
 def team_pitching_stats_display_view(request):
-    #configure for pitching
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
     featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
-    hitting_stats = get_team_hitting_stats(league, featured_stage)
-    table = TeamHittingStatsTable(hitting_stats)
+    pitching_stats = get_team_pitching_stats(league, featured_stage)
+    table = TeamPitchingStatsTable(pitching_stats)
     RequestConfig(request).configure(table)
 
     context = {
@@ -457,7 +456,7 @@ def team_pitching_stats_display_view(request):
         "table": table,
         "featured_stage": featured_stage,
         }
-    return render(request, "stats/team_stats_page.html", context)
+    return render(request, "stats/team_pitching_stats_page.html", context)
 
 
 """Standings Display View"""
