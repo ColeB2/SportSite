@@ -29,6 +29,17 @@ class ASPlayerPitchingGameStatsTable(tables.Table):
             "whip")
 
 
+class TeamHittingStatsTable(tables.Table):
+    """Table used to display hitting stats aggregates for giben team."""
+    class Meta:
+        model = PlayerHittingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("games", "at_bats", "plate_appearances",
+            "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
+            "walks", "strikeouts", "stolen_bases",  "caught_stealing",
+            "hit_by_pitch", "sacrifice_flies", "average", "on_base_percentage")
+
+
 class PlayerHittingStatsTable(tables.Table):
     """Table used to display stats for given game"""
     class Meta:
