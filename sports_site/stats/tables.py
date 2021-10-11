@@ -49,6 +49,8 @@ class PlayerHittingStatsTable(tables.Table):
 
 class PlayerPitchingStatsTable(tables.Table):
     """Table used to display pitching stats for season."""
+    era = tables.Column(verbose_name="ERA")
+    whip = tables.Column(verbose_name="WHIP")
     class Meta:
         model = PlayerPitchingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
