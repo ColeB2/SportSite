@@ -179,25 +179,16 @@ def get_all_season_hitting_stats(league, featured_stage):
     return return_stats
 
 
-def get_all_season_pitching_stats(league, featured_stage):
+def get_team_pitching_stats(league, featured_stage):
     """
-    Gets all pitching stats for all player, and returns them in
-    a usable fashion for the main stats page.
-
-    Params:
-        league - League model object
-        featured_stage - The SeasonStage model object to be used
-        for the gathering of stats.
-
-    View - stats/views.py - stats_display_view
-    Template - stats/pitching_stats_page.html
+    Gets all piatching stats and totals them for each team, and
+    returns them in a usable fashion for main stats page/Team.
     """
     pitching_stats = PlayerPitchingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
-    return_stats = pitching_stats.values("player").annotate(
-        first = F("player__player__first_name"),
-        last = F("player__player__last_name"),
+    return_stats = pitching_stats.values("team_stats__team").annotate(
+        team = F("team_stats__team__team__name"),
         win = Sum('win'),
         loss = Sum('loss'),
         game = Sum('game'),
@@ -229,16 +220,25 @@ def get_all_season_pitching_stats(league, featured_stage):
     return return_stats
 
 
-def get_team_pitching_stats(league, featured_stage):
+def get_all_season_pitching_stats(league, featured_stage):
     """
-    Gets all piatching stats and totals them for each team, and
-    returns them in a usable fashion for main stats page/Team.
+    Gets all pitching stats for all player, and returns them in
+    a usable fashion for the main stats page.
+
+    Params:
+        league - League model object
+        featured_stage - The SeasonStage model object to be used
+        for the gathering of stats.
+
+    View - stats/views.py - stats_display_view
+    Template - stats/pitching_stats_page.html
     """
     pitching_stats = PlayerPitchingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
     return_stats = pitching_stats.values("player").annotate(
-        team = F("team_stats__team__team__name"),
+        first = F("player__player__first_name"),
+        last = F("player__player__last_name"),
         win = Sum('win'),
         loss = Sum('loss'),
         game = Sum('game'),
