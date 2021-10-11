@@ -65,6 +65,7 @@ def get_league_leaders(league, featured_stage):
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
+
     return_stats = hitting_stats.values("player").annotate(
         player_id = F("player__player__pk"),
         first = F("player__player__first_name"),
@@ -92,6 +93,7 @@ def get_team_hitting_stats(league, featured_stage):
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
+
     return_stats = hitting_stats.values("team_stats__team").annotate(
         team = F("team_stats__team__team__name"),
         at_bats = Sum('at_bats'),
@@ -143,6 +145,7 @@ def get_all_season_hitting_stats(league, featured_stage):
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
+
     return_stats = hitting_stats.values("player").annotate(
         first = F("player__player__first_name"),
         last = F("player__player__last_name"),
@@ -237,6 +240,7 @@ def get_all_season_pitching_stats(league, featured_stage):
     pitching_stats = PlayerPitchingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
+
     return_stats = pitching_stats.values("player").annotate(
         first = F("player__player__first_name"),
         last = F("player__player__last_name"),
@@ -290,6 +294,7 @@ def get_player_season_hitting_stats(player, league, featured_stage):
                                                 player__player=player,
                                                 player__player__league=league,
                                                 season=featured_stage)
+
     return_stats = hitting_stats.values("player").annotate(
         year = F("season__season__year"),
         at_bats = Sum('at_bats'),
@@ -344,6 +349,7 @@ def get_player_last_x_hitting_stats(player, league, num_games):
                                     season__featured=True).order_by(
                                         "-team_stats__game__date"
                                         )[:num_games]
+
     return_stats = hitting_stats.values("team_stats__game__date").annotate(
         date = F("team_stats__game__date"),
         at_bats = Sum('at_bats'),
@@ -452,6 +458,7 @@ def get_all_player_season_hitting_stats(player, league,
                                                 player__player=player,
                                                 player__player__league=league,
                                                 season__stage=stage_type)
+
     return_stats = hitting_stats.values("season__season__year").annotate(
         year = F("season__season__year"),
         at_bats = Sum('at_bats'),
@@ -510,6 +517,7 @@ def get_player_career_hitting_stats(player,
                                                 player__player=player,
                                                 player__player__league=league,
                                                 season__stage=stage_type)
+
     return_stats = hitting_stats.aggregate(
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
@@ -600,6 +608,7 @@ def _get_extra_stat_totals(player):
                         player__player=player.player.player,
                         season=game.season,
                         team_stats__game__date__range=["2021-05-14",game.date])
+
     return_stats = hitting_stats.values("player").aggregate(
         doubles = Sum('doubles'),
         triples = Sum('triples'),
