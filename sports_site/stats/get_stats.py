@@ -187,11 +187,12 @@ def get_team_pitching_stats(league, featured_stage):
     pitching_stats = PlayerPitchingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
+
     return_stats = pitching_stats.values("team_stats__team").annotate(
         team = F("team_stats__team__team__name"),
         win = Sum('win'),
         loss = Sum('loss'),
-        game = Sum('game'),
+        game = Count('team_stats__game'),
         game_started = Sum('game_started'),
         complete_game = Sum('complete_game'),
         shutout = Sum('shutout'),
