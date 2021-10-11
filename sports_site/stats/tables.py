@@ -86,6 +86,27 @@ class PlayerPitchingStatsTable(tables.Table):
         return _convert_to_str_pitching(record['whip'])
 
 
+class TeamPitchingStatsTable(tables.Table):
+    """Table used to display pitching stats for season."""
+    era = tables.Column(verbose_name="ERA")
+    whip = tables.Column(verbose_name="WHIP")
+    class Meta:
+        model = PlayerPitchingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("team", "win", "loss", "era", "game", "game_started",
+            "complete_game", "shutout", "save_converted", "save_op",
+            "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
+            "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
+            "whip")
+
+
+    def render_era(self, record):
+        return _convert_to_str_pitching(record['era'])
+
+    def render_whip(self, record):
+        return _convert_to_str_pitching(record['whip'])
+
+
 class TeamGameLineScoreTable(tables.Table):
     """Table used to display linescore of a game."""
     def __init__(self, *args, **kwargs):
