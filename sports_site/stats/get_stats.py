@@ -229,6 +229,47 @@ def get_all_season_pitching_stats(league, featured_stage):
     return return_stats
 
 
+def get_team_pitching_stats(league, featured_stage):
+    """
+    Gets all piatching stats and totals them for each team, and
+    returns them in a usable fashion for main stats page/Team.
+    """
+    pitching_stats = PlayerPitchingGameStats.objects.all().filter(
+                                                player__player__league=league,
+                                                season=featured_stage)
+    return_stats = pitching_stats.values("player").annotate(
+        team = F("team_stats__team__team__name"),
+        win = Sum('win'),
+        loss = Sum('loss'),
+        game = Sum('game'),
+        game_started = Sum('game_started'),
+        complete_game = Sum('complete_game'),
+        shutout = Sum('shutout'),
+        save_converted = Sum('save_converted'),
+        save_op = Sum('save_op'),
+        hits_allowed = Sum('hits_allowed'),
+        runs_allowed = Sum('runs_allowed'),
+        earned_runs = Sum('earned_runs'),
+        homeruns_allowed = Sum('homeruns_allowed'),
+        hit_batters = Sum('hit_batters'),
+        walks_allowed = Sum('walks_allowed'),
+        strikeouts = Sum('strikeouts'),
+        innings_pitched = Sum('innings_pitched'),
+        era = (
+            Cast(F('earned_runs'),FloatField()) * 9 /
+            Cast(F('innings_pitched'), FloatField())
+            ),
+        whip = (
+            Cast(F('walks_allowed'), FloatField()) +
+            Cast(F('hits_allowed'), FloatField())
+            ) /
+            (
+            Cast(F('innings_pitched'), FloatField())
+            )
+        )
+    return return_stats
+
+
 """Player Page Stats Functions"""
 def get_player_season_hitting_stats(player, league, featured_stage):
     """
