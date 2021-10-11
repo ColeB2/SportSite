@@ -40,6 +40,13 @@ class TeamHittingStatsTable(tables.Table):
             "hit_by_pitch", "sacrifice_flies", "average", "on_base_percentage")
 
 
+    def render_average(self, record):
+        return _convert_to_str(record['average'])
+
+    def render_on_base_percentage(self, record):
+        return _convert_to_str(record['on_base_percentage'])
+
+
 class PlayerHittingStatsTable(tables.Table):
     """Table used to display stats for given game"""
     class Meta:
