@@ -423,7 +423,7 @@ def team_stats_display_view(request):
         "table": table,
         "featured_stage": featured_stage,
         }
-    return render(request, "stats/stats_page.html", context)
+    return render(request, "stats/team_stats_page.html", context)
 
 
 def pitching_stats_display_view(request):
