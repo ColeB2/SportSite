@@ -442,6 +442,23 @@ def pitching_stats_display_view(request):
         }
     return render(request, "stats/pitching_stats_page.html", context)
 
+def team_pitching_stats_display_view(request):
+    #configure for pitching
+    league_slug = request.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
+    featured_stage = SeasonStage.objects.get(season__league=league,
+                                             featured=True)
+    hitting_stats = get_team_hitting_stats(league, featured_stage)
+    table = TeamHittingStatsTable(hitting_stats)
+    RequestConfig(request).configure(table)
+
+    context = {
+        "league": league,
+        "table": table,
+        "featured_stage": featured_stage,
+        }
+    return render(request, "stats/team_stats_page.html", context)
+
 
 """Standings Display View"""
 def standings_display_view(request):

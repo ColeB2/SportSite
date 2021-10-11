@@ -3,9 +3,17 @@
 {% block content %}
 <div class="container-fluid">
     <div class="content-section">
-        <h4>{{ featured_stage }} Stats</h4>
         <br>
+        <h2 class="stat-headline stat-headline-active">Player</h2>
+        <h2 class="stat-headline">
+            <a href="{% url 'team-stats-page' %}?league={{request.GET.league}}"
+               class="stat-headline">
+                    Team
+            </a>
+        </h2>
 
+
+        <br><br>
         <h4 class="stat-headline stat-headline-active">Hitting</h4>
         <h4 class="stat-headline">
             <a href="{% url 'pitching-stats-page' %}?league={{request.GET.league}}"
