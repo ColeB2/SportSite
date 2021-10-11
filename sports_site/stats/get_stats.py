@@ -84,15 +84,22 @@ def get_league_leaders(league, featured_stage):
     return return_stats
 
 
+def get_team_hitting_stats(league, featured_stage):
+    """
+    Gets all hittings stats and totals them for each team, and
+    returns them in a usable fashion for main stats page/Team.
+    """
+
+
 def get_all_season_hitting_stats(league, featured_stage):
     """
-    Gets all hitting stats for all player, and returns them in a usable fashion
-    for the main stats page.
+    Gets all hitting stats for all player, and returns them
+    in a usable fashion for the main stats page.
 
     Params:
         league - League model object
-        featured_stage - The SeasonStage model object to be used for the
-            gathering of stats.
+        featured_stage - The SeasonStage model object to be used
+            for the gathering of stats.
 
     View - stats/views.py - stats_display_view
     Template - stats/stats_page.html
