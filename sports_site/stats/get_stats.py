@@ -1,4 +1,4 @@
-from django.db.models import  F, FloatField, Sum, Count, Case, When
+from django.db.models import  F, FloatField, Sum, Count, Case, When, Value
 from django.db.models.functions import Cast
 from django.forms.models import model_to_dict
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
@@ -221,6 +221,21 @@ def get_team_pitching_stats(league, featured_stage):
             Cast(F('innings_pitched'), FloatField())
             )
         )
+
+    test = TeamGameStats.objects.all().filter(
+        season=featured_stage,
+        team__team__league=league)
+    x = test.values("team").annotate(
+        game = Count("game"),
+        games = Count(
+            Case(
+                When(win=True, then=Value(1))
+                ) )
+        )
+    print(f"-----------------test------- {x}")
+    print(f"-----------------testty2 ------- {return_stats}")
+
+
     return return_stats
 
 
