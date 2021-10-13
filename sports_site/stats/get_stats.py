@@ -208,7 +208,7 @@ def get_team_pitching_stats(league, featured_stage):
         hit_batters = Sum('hit_batters'),
         walks_allowed = Sum('walks_allowed'),
         strikeouts = Sum('strikeouts'),
-        innings_pitched = Sum('innings_pitched'),
+        innings_pitched = Sum('_innings'),
         era = (
             Cast(F('earned_runs'),FloatField()) * 9 /
             Cast(F('innings_pitched'), FloatField())

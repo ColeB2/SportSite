@@ -264,6 +264,8 @@ class PlayerPitchingGameStatsForm(forms.ModelForm):
 
     def process(self):
         outs = self.cleaned_data["outs"]
+        if outs == None:
+            outs = 0
         innings_pitched = self.cleaned_data["innings_pitched"]
         player_stats = self.save()
         player_stats._innings = innings_pitched + round((outs/3),2)
