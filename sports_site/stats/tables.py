@@ -1,7 +1,7 @@
 import django_tables2 as tables
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore, TeamGameStats)
-from .stat_calc import _convert_to_str, _convert_to_str_pitching
+from .stat_calc import _convert_to_str, _convert_to_str_pitching, _convert_to_str_ip
 
 class ASPlayerHittingGameStatsTable(tables.Table):
     """Table used to display stats for given game on admin pages for editing
@@ -82,12 +82,13 @@ class PlayerPitchingStatsTable(tables.Table):
     def render_era(self, record):
         return _convert_to_str_pitching(record['era'])
 
+
     def render_whip(self, record):
         return _convert_to_str_pitching(record['whip'])
 
 
     def render_innings_pitched(self, record):
-        return str(round(record['innings_pitched'], 2))
+        return _convert_to_str_ip(record['innings_pitched'])
 
 
 class TeamPitchingStatsTable(tables.Table):
@@ -107,11 +108,13 @@ class TeamPitchingStatsTable(tables.Table):
     def render_era(self, record):
         return _convert_to_str_pitching(record['era'])
 
+
     def render_whip(self, record):
         return _convert_to_str_pitching(record['whip'])
 
+
     def render_innings_pitched(self, record):
-        return str(round(record['innings_pitched'], 2))
+        return _convert_to_str_ip(record['innings_pitched'])
 
 
 class TeamGameLineScoreTable(tables.Table):

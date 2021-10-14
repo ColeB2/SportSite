@@ -1,3 +1,5 @@
+from math import floor
+
 def _convert_to_int(string_value):
     if '.' in string_value:
         ret_val = ''
@@ -41,6 +43,24 @@ def _convert_to_str_pitching(float_val):
         str_value = str_value[1:]
         str_value = _normalize_str_length(str_value, 3)
     return str_value
+
+
+def _convert_to_str_ip(float_val):
+    if float_val == 0:
+        return "0.0"
+
+    remainder = str(round(float_val % 1, 2))
+    full_inn = floor(float_val)
+
+    if remainder == '0.33':
+        return f"{full_inn}.1"
+    elif remainder == '0.67':
+        return f"{full_inn}.2"
+    else:
+        return f"{full_inn}.0"
+
+
+
 
 
 def _calc_average(hits, at_bats):
