@@ -225,12 +225,12 @@ def random_pitching_innings(pgs):
             player.game = 1
             starter = True
             starter_outs = inning_outs[player.innings_pitched]
-            player._innings = round((starter_outs/3), 2)
+            player._innings = starter_outs/3
             totals_outs -= starter_outs
             pitchers -= 1
         elif pitchers == 1:
             player.innings_pitched = outs_inning[totals_outs]
-            player._innings = round((totals_outs/3),2)
+            player._innings = totals_outs/3
 
             player.game = 1
         else:
@@ -238,10 +238,10 @@ def random_pitching_innings(pgs):
             if possible_outs > 1:
                 random_outs = randint(1,possible_outs)
                 player.innings_pitched = outs_inning[random_outs]
-                player._innings = round((random_outs/3),2)
+                player._innings = random_outs/3
             elif possible_outs == 1:
                 player.innings_pitched = possible_outs
-                player._innings = round((possible_outs/3),2)
+                player._innings = possible_outs/3
             else:
                 pass
 
