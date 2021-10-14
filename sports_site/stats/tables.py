@@ -86,6 +86,10 @@ class PlayerPitchingStatsTable(tables.Table):
         return _convert_to_str_pitching(record['whip'])
 
 
+    def render_innings_pitched(self, record):
+        return str(round(record['innings_pitched'], 2))
+
+
 class TeamPitchingStatsTable(tables.Table):
     """Table used to display pitching stats for season."""
     era = tables.Column(verbose_name="ERA")
