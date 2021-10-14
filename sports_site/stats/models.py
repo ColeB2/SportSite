@@ -1,14 +1,6 @@
 from django.db import models
 from league.models import PlayerSeason, TeamSeason, SeasonStage, Game
-from .validators import validate_innings_pitched
 
-
-class PlayerHittingStats(models.Model):
-    player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True)
-
-
-class PlayerPitchingStats(models.Model):
-    player = models.ForeignKey(PlayerSeason, on_delete=models.CASCADE, null=True)
 
 
 """Game Related Models"""

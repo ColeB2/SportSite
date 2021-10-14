@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from .models import (PlayerHittingStats, PlayerPitchingStats,
-    TeamGameStats, PlayerHittingGameStats, PlayerPitchingGameStats)
+from .models import (TeamGameStats, PlayerHittingGameStats,
+    PlayerPitchingGameStats)
 from .vars import SeasonStageYear
 
 
