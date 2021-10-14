@@ -110,6 +110,9 @@ class TeamPitchingStatsTable(tables.Table):
     def render_whip(self, record):
         return _convert_to_str_pitching(record['whip'])
 
+    def render_innings_pitched(self, record):
+        return str(round(record['innings_pitched'], 2))
+
 
 class TeamGameLineScoreTable(tables.Table):
     """Table used to display linescore of a game."""
