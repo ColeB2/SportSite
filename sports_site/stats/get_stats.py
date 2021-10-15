@@ -232,6 +232,7 @@ def get_team_pitching_stats(league, featured_stage):
                 When(tie=True, then=Value(1))
                 ) )
         )
+
     print(f"-----------------test------- {x}")
     print(f"-----------------testty2 ------- {return_stats}")
 
