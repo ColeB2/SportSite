@@ -18,7 +18,9 @@
 
         <!--LineScore and Extra Info-->
         <div class="d-flex justify-content-center table-responsive">
+            {% if boxscore_table %}
             {% render_table boxscore_table %}
+            {% endif %}
         </div>
 
         <div class="row">

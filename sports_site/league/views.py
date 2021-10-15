@@ -127,7 +127,7 @@ def game_boxscore_page_view(request, game_pk):
             get_extra_innings(home_linescore)
         ]
         boxscore_table = TeamGameLineScoreTable(table_data)
-    except ObjectDoesNotExist:
+    except (ObjectDoesNotExist, IndexError) as e:
         home_linescore = None
         away_linescore = None
         table_data = None
