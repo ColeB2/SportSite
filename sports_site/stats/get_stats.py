@@ -195,7 +195,6 @@ def get_team_pitching_stats(league, featured_stage):
         team = F("team_stats__team__team__name"),
         win = Sum('win'),
         loss = Sum('loss'),
-        game = Count('team_stats__game'),
         game_started = Sum('game_started'),
         complete_game = Sum('complete_game'),
         shutout = Sum('shutout'),
@@ -226,10 +225,11 @@ def get_team_pitching_stats(league, featured_stage):
         season=featured_stage,
         team__team__league=league)
     x = test.values("team").annotate(
-        game = Count("game"),
-        games = Count(
+        game = Count(
             Case(
-                When(win=True, then=Value(1))
+                When(win=True, then=Value(1)),
+                When(loss=True, then=Value(1)),
+                When(tie=True, then=Value(1))
                 ) )
         )
     print(f"-----------------test------- {x}")
