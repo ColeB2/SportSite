@@ -233,10 +233,6 @@ def get_team_pitching_stats(league, featured_stage):
                 ) )
         )
 
-    print(f"-----------------test------- {x}")
-    print(f"-----------------testty2 ------- {return_stats}")
-
-
     return return_stats
 
 
