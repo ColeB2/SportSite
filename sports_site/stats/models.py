@@ -15,8 +15,6 @@ class TeamGameStats(models.Model):
     loss = models.BooleanField(null=True, default=None)
     tie = models.BooleanField(null=True, default=None)
 
-    linescore = models.CharField(max_length=50, null=True, default="0-0-0-0-0-0-0-0-0", blank=True, help_text="Line score formatted with dashes, - to separate innings.")
-
 
     def __str__(self):
         return f"{self.game} Game Stats"
