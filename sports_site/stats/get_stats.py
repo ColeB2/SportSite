@@ -195,6 +195,7 @@ def get_team_pitching_stats(league, featured_stage):
         team = F("team_stats__team__team__name"),
         win = Sum('win'),
         loss = Sum('loss'),
+        game = Sum('game_started'),
         game_started = Sum('game_started'),
         complete_game = Sum('complete_game'),
         shutout = Sum('shutout'),
@@ -221,17 +222,17 @@ def get_team_pitching_stats(league, featured_stage):
             )
         )
 
-    test = TeamGameStats.objects.all().filter(
-        season=featured_stage,
-        team__team__league=league)
-    x = test.values("team").annotate(
-        game = Count(
-            Case(
-                When(win=True, then=Value(1)),
-                When(loss=True, then=Value(1)),
-                When(tie=True, then=Value(1))
-                ) )
-        )
+    # test = TeamGameStats.objects.all().filter(
+    #     season=featured_stage,
+    #     team__team__league=league)
+    # x = test.values("team").annotate(
+    #     game = Count(
+    #         Case(
+    #             When(win=True, then=Value(1)),
+    #             When(loss=True, then=Value(1)),
+    #             When(tie=True, then=Value(1))
+    #             ) )
+    #     )
 
     return return_stats
 
