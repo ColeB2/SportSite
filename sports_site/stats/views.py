@@ -11,10 +11,12 @@ from .get_stats import (get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
 from .models import (TeamGameLineScore, TeamGameStats,)
+from .decorators import user_owns_game
+from .filters import HittingSeasonFilter
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PitchingGameStatsFormset, PlayerPitchingStatsCreateForm,
     PlayerStatsCreateForm, PHGSFHelper, PPGSFHelper)
-from .decorators import user_owns_game
+
 from .tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
     PlayerPitchingStatsTable, StandingsTable, TeamGameLineScoreTable,
@@ -393,6 +395,24 @@ def team_game_linescore_delete_info_view(request, game_pk, team_season_pk,
 
 """Stats Display Views"""
 def stats_display_view(request):
+    league_slug = request.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
+    featured_stage = SeasonStage.objects.get(season__league=league,
+                                             featured=True)
+    hitting_stats = get_all_season_hitting_stats(league, featured_stage)
+    table = PlayerHittingStatsTable(hitting_stats)
+    RequestConfig(request).configure(table)
+
+    context = {
+        "league": league,
+        "table": table,
+        "featured_stage": featured_stage,
+        }
+    return render(request, "stats/stats_page.html", context)
+
+
+def stats_display_view(request):
+    #Filter Test
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
     featured_stage = SeasonStage.objects.get(season__league=league,
