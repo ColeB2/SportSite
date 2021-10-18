@@ -222,6 +222,8 @@ def get_team_pitching_stats(league, featured_stage):
             )
         )
 
+    ##Future Fix: Combine bottom code with top, probably by
+    ##Converting to model-to-dict and adding in game counter.
     # test = TeamGameStats.objects.all().filter(
     #     season=featured_stage,
     #     team__team__league=league)
