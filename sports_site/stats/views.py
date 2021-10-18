@@ -399,13 +399,17 @@ def stats_display_view(request):
     league = League.objects.get(url=league_slug)
     featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
-    hitting_stats = get_all_season_hitting_stats(league, featured_stage)
+
+
+    hitting_stats = get_all_season_hitting_stats(league)
+    f = HittingSeasonFilter(request.GET, queryset = hitting_stats)
     table = PlayerHittingStatsTable(hitting_stats)
     RequestConfig(request).configure(table)
 
     context = {
         "league": league,
         "table": table,
+        "filter": f,
         "featured_stage": featured_stage,
         }
     return render(request, "stats/stats_page.html", context)
