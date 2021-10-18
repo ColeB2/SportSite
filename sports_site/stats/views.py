@@ -411,24 +411,6 @@ def stats_display_view(request):
     return render(request, "stats/stats_page.html", context)
 
 
-def stats_display_view(request):
-    #Filter Test
-    league_slug = request.GET.get('league', None)
-    league = League.objects.get(url=league_slug)
-    featured_stage = SeasonStage.objects.get(season__league=league,
-                                             featured=True)
-    hitting_stats = get_all_season_hitting_stats(league, featured_stage)
-    table = PlayerHittingStatsTable(hitting_stats)
-    RequestConfig(request).configure(table)
-
-    context = {
-        "league": league,
-        "table": table,
-        "featured_stage": featured_stage,
-        }
-    return render(request, "stats/stats_page.html", context)
-
-
 def team_stats_display_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)

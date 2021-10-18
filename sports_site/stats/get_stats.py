@@ -813,3 +813,5 @@ def get_all_season_standings_stats(league, featured_stage):
             ),
         )
     return standings_stats
+
+
