@@ -12,7 +12,7 @@ from .get_stats import (get_all_season_hitting_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
 from .models import (TeamGameLineScore, TeamGameStats,)
 from .decorators import user_owns_game
-from .filters import HittingSeasonFilter
+from .filters import HittingSeasonFilter, SeasonFilterForm
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PitchingGameStatsFormset, PlayerPitchingStatsCreateForm,
     PlayerStatsCreateForm, PHGSFHelper, PPGSFHelper)
@@ -400,13 +400,17 @@ def stats_display_view(request):
     featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
 
-    season = Season.objects.get(league=league)
+    season = Season.objects.all().filter(league=league)
+    if request.method == "POST":
+        s = SeasonFilterForm(data = request.POST, form_kwargs={"season":season})
+    else:
+        s = SeasonFilterForm({"season":season})
 
 
 
 
     hitting_stats = get_all_season_hitting_stats(league)
-    f = HittingSeasonFilter(request.GET, season, queryset=hitting_stats)
+    f = HittingSeasonFilter(request.GET, hitting_stats)
     table = PlayerHittingStatsTable(hitting_stats)
     RequestConfig(request).configure(table)
 
@@ -414,6 +418,7 @@ def stats_display_view(request):
         "league": league,
         "table": table,
         "filter": f,
+        "s":s,
         "featured_stage": featured_stage,
         }
     return render(request, "stats/stats_page.html", context)
