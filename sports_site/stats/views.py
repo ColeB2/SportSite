@@ -6,7 +6,7 @@ from django.db import router
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
-from league.models import Game, League, Roster, TeamSeason, SeasonStage
+from league.models import Game, League, Roster, TeamSeason, Season, SeasonStage
 from .get_stats import (get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
@@ -400,9 +400,13 @@ def stats_display_view(request):
     featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
 
+    season = Season.objects.get(league=league)
+
+
+
 
     hitting_stats = get_all_season_hitting_stats(league)
-    f = HittingSeasonFilter(request.GET, queryset = hitting_stats)
+    f = HittingSeasonFilter(request.GET, season, queryset=hitting_stats)
     table = PlayerHittingStatsTable(hitting_stats)
     RequestConfig(request).configure(table)
 
