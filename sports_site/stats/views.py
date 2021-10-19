@@ -401,23 +401,23 @@ def stats_display_view(request):
                                              featured=True)
 
     season = Season.objects.all().filter(league=league)
-    if request.method == "POST":
-        s = SeasonFilterForm(data = request.POST, form_kwargs={"season":season})
-    else:
-        s = SeasonFilterForm({"season":season})
-
-
-
+    # s = SeasonFilterForm()
+    # print(f"------------------------------{season}")
+    # if request.method == "GET":
+    #     print(request.GET)
+    #     s = SeasonFilterForm(data=request.GET, season=season)
+    #     hitting_stats = get_all_season_hitting_stats(league, season=season)
+    # else:
+    #     s = SeasonFilterForm(season=season)
+    s = SeasonFilterForm(season=season)
 
     hitting_stats = get_all_season_hitting_stats(league)
-    f = HittingSeasonFilter(request.GET, hitting_stats)
     table = PlayerHittingStatsTable(hitting_stats)
     RequestConfig(request).configure(table)
 
     context = {
         "league": league,
         "table": table,
-        "filter": f,
         "s":s,
         "featured_stage": featured_stage,
         }

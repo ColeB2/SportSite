@@ -129,7 +129,7 @@ def get_team_hitting_stats(league, featured_stage):
     return return_stats
 
 
-def get_all_season_hitting_stats(league):
+def get_all_season_hitting_stats(league, **kwargs):
     """
     Gets all hitting stats for all player, and returns them
     in a usable fashion for the main stats page.
@@ -142,8 +142,11 @@ def get_all_season_hitting_stats(league):
     View - stats/views.py - stats_display_view
     Template - stats/stats_page.html
     """
+    season = kwargs.pop("season", None)
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
-                                                player__player__league=league)
+                                                player__player__league=league,
+                                                season__season=season)
+    print(f"hitting_stats---------------{hitting_stats}")
 
     return_stats = hitting_stats.values("player").annotate(
         first = F("player__player__first_name"),

@@ -8,16 +8,10 @@ class HittingSeasonFilter(django_filters.FilterSet):
         model = PlayerHittingGameStats
         fields = ["season"]
 
-    @property
-    def qs(self):
-        parent = super().qs
-        league = getattr(self.request, 'league', None)
-
-        return parent.filter(league=league)
-
 
 class SeasonFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        print(f"+++++++++++++++++++++{kwargs}")
         season_queryset = kwargs.pop("season", None)
         super(SeasonFilterForm, self).__init__(*args, **kwargs)
         self.fields['Season'] = forms.ModelChoiceField(
