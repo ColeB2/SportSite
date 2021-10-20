@@ -410,18 +410,18 @@ class StatsView(SingleTableMixin, FilterView):
 
 
 
-    def get_context_data(self, **kwargs):
-        data = super().get_context_data(**kwargs)
+    # def get_context_data(self, **kwargs):
+    #     data = super().get_context_data(**kwargs)
 
-        league_slug = self.request.GET.get('league', None)
-        data['league'] = League.objects.get(url = league_slug)
+    #     league_slug = self.request.GET.get('league', None)
+    #     data['league'] = League.objects.get(url = league_slug)
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        l = League.objects.get(url=self.request.GET.get('league',None))
-        hitting_stats = get_all_season_hitting_stats(l)
-        print(hitting_stats)
-        return hitting_stats
+    # def get_queryset(self):
+    #     qs = super().get_queryset()
+    #     # l = League.objects.get(url=self.request.GET.get('league',None))
+    #     # hitting_stats = get_all_season_hitting_stats(l)
+    #     # print(hitting_stats)
+    #     return qs
 
 def stats_display_view(request):
     league_slug = request.GET.get('league', None)

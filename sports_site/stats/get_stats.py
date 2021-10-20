@@ -142,10 +142,9 @@ def get_all_season_hitting_stats(league, **kwargs):
     View - stats/views.py - stats_display_view
     Template - stats/stats_page.html
     """
-    season = kwargs.pop("season", None)
+    # season = kwargs.pop("season", None)
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
-                                                player__player__league=league,
-                                                season__season=season)
+                                                player__player__league=league)
     print(f"hitting_stats---------------{hitting_stats}")
 
     return_stats = hitting_stats.values("player").annotate(
