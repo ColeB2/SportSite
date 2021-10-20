@@ -65,6 +65,25 @@ class PlayerHittingStatsTable(tables.Table):
         return _convert_to_str(record['on_base_percentage'])
 
 
+"""TEST TABLE for CLASS BASED VIEW"""
+class PlayerHittingStatsTable2(tables.Table):
+    """Table used to display stats for given game"""
+    class Meta:
+        model = PlayerHittingGameStats
+        template_name = "django_tables2/bootstrap-responsive.html"
+        fields = ("first", "last", "at_bats", "plate_appearances",
+            "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
+            "walks", "strikeouts", "stolen_bases",  "caught_stealing",
+            "hit_by_pitch", "sacrifice_flies", "average", "on_base_percentage")
+
+
+    # def render_average(self, record):
+    #     return _convert_to_str(record['average'])
+
+    # def render_on_base_percentage(self, record):
+    #     return _convert_to_str(record['on_base_percentage'])
+
+
 class PlayerPitchingStatsTable(tables.Table):
     """Table used to display pitching stats for season."""
     era = tables.Column(verbose_name="ERA")

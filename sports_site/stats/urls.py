@@ -1,8 +1,10 @@
 from django.urls import path
 from . import views
+from .views import StatsView
 
 urlpatterns = [
     path('', views.stats_display_view, name='stats-page'),
+    path('test/', StatsView.as_view(), name='stats-page-test'),
     path('pitching/', views.pitching_stats_display_view, name='pitching-stats-page'),
     path('team/hitting/', views.team_stats_display_view, name='team-stats-page'),
     path('team/pitching/', views.team_pitching_stats_display_view, name='team-pitching-stats-page'),

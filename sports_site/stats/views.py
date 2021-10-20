@@ -10,7 +10,7 @@ from league.models import Game, League, Roster, TeamSeason, Season, SeasonStage
 from .get_stats import (get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
-from .models import (TeamGameLineScore, TeamGameStats,)
+from .models import (TeamGameLineScore, TeamGameStats, PlayerHittingGameStats)
 from .decorators import user_owns_game
 from .filters import HittingSeasonFilter, SeasonFilterForm
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
@@ -22,6 +22,11 @@ from .tables import (ASPlayerHittingGameStatsTable,
     PlayerPitchingStatsTable, StandingsTable, TeamGameLineScoreTable,
     TeamHittingStatsTable, TeamPitchingStatsTable)
 
+
+from django_filters.views import FilterView
+from django_tables2.views import SingleTableMixin, MultiTableMixin
+from django_tables2 import SingleTableView
+from .tables import PlayerHittingStatsTable2
 
 
 
@@ -394,31 +399,46 @@ def team_game_linescore_delete_info_view(request, game_pk, team_season_pk,
 
 
 """Stats Display Views"""
+class StatsView(SingleTableMixin, FilterView):
+    model = PlayerHittingGameStats
+    table_class = PlayerHittingStatsTable2
+    template_name = "stats/stats_page.html"
+
+    filterset_class = HittingSeasonFilter
+    paginate_by = 25
+
+
+
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        league_slug = self.request.GET.get('league', None)
+        data['league'] = League.objects.get(url = league_slug)
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        l = League.objects.get(url=self.request.GET.get('league',None))
+        hitting_stats = get_all_season_hitting_stats(l)
+        print(hitting_stats)
+        return hitting_stats
+
 def stats_display_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
     featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
 
-    season = Season.objects.all().filter(league=league)
-    # s = SeasonFilterForm()
-    # print(f"------------------------------{season}")
-    # if request.method == "GET":
-    #     print(request.GET)
-    #     s = SeasonFilterForm(data=request.GET, season=season)
-    #     hitting_stats = get_all_season_hitting_stats(league, season=season)
-    # else:
-    #     s = SeasonFilterForm(season=season)
-    s = SeasonFilterForm(season=season)
 
     hitting_stats = get_all_season_hitting_stats(league)
+    f = HittingSeasonFilter(request.GET, queryset=hitting_stats)
     table = PlayerHittingStatsTable(hitting_stats)
     RequestConfig(request).configure(table)
 
     context = {
         "league": league,
         "table": table,
-        "s":s,
+        "filter":f,
         "featured_stage": featured_stage,
         }
     return render(request, "stats/stats_page.html", context)
