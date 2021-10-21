@@ -6,7 +6,7 @@ from league.models import Season, SeasonStage
 class HittingSeasonFilter(django_filters.FilterSet):
     class Meta:
         model = PlayerHittingGameStats
-        fields = ["season"]
+        fields = ["season__season", "season__stage"]
 
 
 class SeasonFilterForm(forms.Form):
