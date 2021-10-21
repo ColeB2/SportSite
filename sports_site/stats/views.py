@@ -424,6 +424,7 @@ class StatsView(SingleTableMixin, FilterView):
         print(hitting_stats)
         return hitting_stats
 
+
 def stats_display_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
