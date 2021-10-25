@@ -409,11 +409,11 @@ class StatsView(SingleTableMixin, FilterView):
     paginate_by = 25
 
 
-    # def get(self, request, *args, **kwargs):
-    #     print("ROAMING INSIDE .get() method------------------")
-    #     super().get(request, *args, **kwargs)
-
-    #     return self.render_to_response(context)
+    def get(self, request, *args, **kwargs):
+        print("ROAMING INSIDE .get() method------------------")
+        print("TEST TEST TEST GET GTEST?")
+        print(f"----stuff: args: {args}----------------- kwargs: {kwargs}")
+        super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
