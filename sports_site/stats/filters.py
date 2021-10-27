@@ -15,9 +15,21 @@ from league.models import Season, SeasonStage, League
         # queryset=League.objects.all())
 
 class HittingSeasonFilter(django_filters.FilterSet):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        print(f"HITTING SEASON FILTERS----- KWARGS---- {kwargs.keys()} ")
+        print(f"args --- {args}")
+
     class Meta:
         model = PlayerHittingGameStats
         fields = ["season__season", "season__stage"]
+
+    @property
+    def qs(self):
+        parent = super().qs
+        league = getattr(self.request, 'league', None)
+
+        return parent.filter(league_slug=self.league)
 
 
 class SeasonFilterForm(forms.Form):

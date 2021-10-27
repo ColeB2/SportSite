@@ -408,30 +408,43 @@ class StatsView(SingleTableMixin, FilterView):
     # filter = HittingSeasonFilter(request.GET, request=request)
     paginate_by = 25
 
+    def dispatch(self, request, *args, **kwargs):
+        self.league_slug = self.request.GET.get('league', None)
+
+        return super(StatsView, self).dispatch(request, *args, **kwargs)
+
 
     def get(self, request, *args, **kwargs):
         print("ROAMING INSIDE .get() method------------------")
         print("TEST TEST TEST GET GTEST?")
         print(f"----stuff: args: {args}----------------- kwargs: {kwargs}")
-        super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
         league_slug = self.request.GET.get('league', None)
-        data['league'] = League.objects.get(url = league_slug)
-        # data['league'] = League.objects.get(pk=league_slug)
+        data['league'] = League.objects.get(url=self.league_slug)
         return data
 
     def get_queryset(self):
         qs = super().get_queryset()
         l = League.objects.get(url=self.request.GET.get('league',None))
+        l = League.objects.get(url=self.league_slug)
         season = Season.objects.get(pk=self.request.GET.get("season__season", None))
         stage = SeasonStage.objects.get(pk=self.request.GET.get("season__stage", None))
         hitting_stats = get_all_season_hitting_stats(l, season=season, stage=stage)
         print(hitting_stats)
         return hitting_stats
 
+    def get_filterset_kwargs(self, filterset_class):
+        """
+        redefining get_filterset found here
+        https://github.com/carltongibson/django-filter/blob/main/django_filters/views.py
+        """
+        kwargs = super(StatsView, self).get_filterset_kwargs(filterset_class)
+        kwargs['league'] = self.league_slug
+        return kwargs
 
 def stats_display_view(request):
     league_slug = request.GET.get('league', None)
