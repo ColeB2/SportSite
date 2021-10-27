@@ -426,7 +426,9 @@ class StatsView(SingleTableMixin, FilterView):
     def get_queryset(self):
         qs = super().get_queryset()
         l = League.objects.get(url=self.request.GET.get('league',None))
-        hitting_stats = get_all_season_hitting_stats(l)
+        season = Season.objects.get(pk=self.request.GET.get("season__season", None))
+        stage = SeasonStage.objects.get(pk=self.request.GET.get("season__stage", None))
+        hitting_stats = get_all_season_hitting_stats(l, season=season, stage=stage)
         print(hitting_stats)
         return hitting_stats
 
