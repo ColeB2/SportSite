@@ -21,7 +21,6 @@ def LeagueStage(request):
     league = request.GET.get("league", None)
     return SeasonStage.objects.filter(season__league__url=league)
 
-
 class HittingAdvancedFilter(django_filters.FilterSet):
     season = django_filters.ModelChoiceFilter(
         field_name="season__season",
@@ -49,7 +48,7 @@ class HittingAdvancedFilter(django_filters.FilterSet):
 
 class HittingSimpleFilter(django_filters.FilterSet):
     season = django_filters.ModelChoiceFilter(
-        field_name="season__stage",
+        field_name="season",
         label="Stage",
         queryset = LeagueStage
             )
