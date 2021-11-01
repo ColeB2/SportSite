@@ -144,21 +144,18 @@ def get_all_season_hitting_stats(league, **kwargs):
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league)
-    season = kwargs.pop("season", None)
-    stage = kwargs.pop("stage", None)
-    print(season, stage)
-    if season:
-        hitting_stats = hitting_stats.filter(season__season=season)
-    if stage:
-        hitting_stats = hitting_stats.filter(season=stage)
-
-    if not season and not stage:
-        print('not not')
+    season_stage = kwargs.pop("season_stage", None)
+    print(f"-------getallseasonstats query params kwargs -- {season_stage}")
+    if season_stage:
+        print("IF IS TRUE -- run the filter")
+        hitting_stats = hitting_stats.filter(season=season_stage)
+        print(f"IF TRUE STATS HITTING_STATS {hitting_stats}")
+    else:
+        print("ELSE RUN THIS")
         featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
         hitting_stats = hitting_stats.filter(season=featured_stage)
-
-    print(f"hitting_stats---------------{hitting_stats}")
+        print(f"ELSE RUN HITTING STATS {hitting_stats}")
 
     return_stats = hitting_stats.values("player").annotate(
         first = F("player__player__first_name"),
@@ -193,6 +190,7 @@ def get_all_season_hitting_stats(league, **kwargs):
             Cast(F('sacrifice_flies'), FloatField())
             )
         )
+    print(f"STATS TO RETURN HERE -----  {return_stats}")
     return return_stats
 
 

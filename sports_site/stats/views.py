@@ -405,8 +405,6 @@ class StatsView(SingleTableMixin, FilterView):
     template_name = "stats/stats_page.html"
 
     filterset_class = HittingSimpleFilter
-    print(f"f------------------{filterset_class}")
-    # filter = HittingSeasonFilter(request.GET, request=request)
     paginate_by = 25
 
     def dispatch(self, request, *args, **kwargs):
@@ -422,12 +420,11 @@ class StatsView(SingleTableMixin, FilterView):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        # l = League.objects.get(url=self.request.GET.get('league',None))
-        l = League.objects.get(url=self.league_slug)
+        league = League.objects.get(url=self.league_slug)
         # season = Season.objects.get(pk=self.request.GET.get("season__season", None))
         # stage = SeasonStage.objects.get(pk=self.request.GET.get("season__stage", None))
-        season=stage=None
-        hitting_stats = get_all_season_hitting_stats(l, season=season, stage=stage)
+        season_stage = self.request.GET.get("season", None)
+        hitting_stats = get_all_season_hitting_stats(league, season_stage=season_stage)
         print(hitting_stats)
         return hitting_stats
 
