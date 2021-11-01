@@ -5,31 +5,58 @@ from league.models import Season, SeasonStage, League
 
 
 
-# def league(request):
-#     league_slug = request.GET.get('league', None)
-#     league = League.objects.all().filter(url=league_slug)
-#     print(league)
-#     return league
-# season__season__league = django_filters.ModelChoiceFilter(queryset=league)
-    # league = django_filters.ModelChoiceFilter(field_name='season__season__league',
-        # queryset=League.objects.all())
 
-class HittingSeasonFilter(django_filters.FilterSet):
-    # def __init__(self, *args, **kwargs):
-    #     # super().__init__(*args, **kwargs)
-    #     print(f"HITTING SEASON FILTERS----- KWARGS---- {kwargs.keys()} ")
-    #     print(f"args --- {args}")
+def LeagueSeason(request):
+    if request is None:
+        return Season.objects.none()
+
+    league = request.GET.get("league", None)
+    return Season.objects.filter(league__url=league)
+
+
+def LeagueStage(request):
+    if request is None:
+        return SeasonStage.objects.none()
+
+    league = request.GET.get("league", None)
+    return SeasonStage.objects.filter(season__league__url=league)
+
+
+class HittingAdvancedFilter(django_filters.FilterSet):
+    season = django_filters.ModelChoiceFilter(
+        field_name="season__season",
+        label="Season",
+        queryset = LeagueSeason
+            )
+
+    stage = django_filters.ModelChoiceFilter(
+        field_name="season__stage",
+        label="Stage",
+        queryset = LeagueStage
+            )
+
+    def __init__(self, *args, **kwargs):
+        self.league = kwargs.pop('league')
+        # season.queryset = Season.objects.all().filter(league__url=self.league)
+        super(HittingSeasonFilter, self).__init__(*args, **kwargs)
+        print(args, kwargs)
+
 
     class Meta:
         model = PlayerHittingGameStats
-        fields = ["season__season", "season__stage"]
+        fields = ["season", "stage"]
 
-    # @property
-    # def qs(self):
-    #     parent = super().qs
-    #     league = getattr(self.request, 'league', None)
 
-    #     return parent.filter(league_slug=self.league)
+class HittingSimpleFilter(django_filters.FilterSet):
+    season = django_filters.ModelChoiceFilter(
+        field_name="season__stage",
+        label="Stage",
+        queryset = LeagueStage
+            )
+
+    class Meta:
+        model = PlayerHittingGameStats
+        fields = ["season",]
 
 
 class SeasonFilterForm(forms.Form):

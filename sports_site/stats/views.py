@@ -12,7 +12,7 @@ from .get_stats import (get_all_season_hitting_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
 from .models import (TeamGameLineScore, TeamGameStats, PlayerHittingGameStats)
 from .decorators import user_owns_game
-from .filters import HittingSeasonFilter, SeasonFilterForm
+from .filters import HittingSimpleFilter, HittingAdvancedFilter
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PitchingGameStatsFormset, PlayerPitchingStatsCreateForm,
     PlayerStatsCreateForm, PHGSFHelper, PPGSFHelper)
@@ -404,7 +404,7 @@ class StatsView(SingleTableMixin, FilterView):
     table_class = PlayerHittingStatsTable2
     template_name = "stats/stats_page.html"
 
-    filterset_class = HittingSeasonFilter
+    filterset_class = HittingSimpleFilter
     print(f"f------------------{filterset_class}")
     # filter = HittingSeasonFilter(request.GET, request=request)
     paginate_by = 25
@@ -417,8 +417,6 @@ class StatsView(SingleTableMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-
-        # league_slug = self.request.GET.get('league', None)
         data['league'] = League.objects.get(url=self.league_slug)
         return data
 
@@ -433,17 +431,6 @@ class StatsView(SingleTableMixin, FilterView):
         print(hitting_stats)
         return hitting_stats
 
-    def get_filterset_kwargs(self, filterset_class):
-        """
-        redefining get_filterset found here
-        https://github.com/carltongibson/django-filter/blob/main/django_filters/views.py
-        """
-        kwargs = super(StatsView, self).get_filterset_kwargs(filterset_class)
-        #kwargs['league'] = self.league_slug
-        kwargs['TESTER'] = "TESTER MC TESTERSON"
-
-        print(f"returning kwargs here ---------{kwargs}")
-        return kwargs
 
 def stats_display_view(request):
     league_slug = request.GET.get('league', None)
@@ -456,7 +443,7 @@ def stats_display_view(request):
 
 
     hitting_stats = get_all_season_hitting_stats(league)
-    f = HittingSeasonFilter(request.GET, queryset=hitting_stats)
+    f = HittingSimpleFilter(request.GET, queryset=hitting_stats)
     table = PlayerHittingStatsTable(hitting_stats)
     RequestConfig(request).configure(table)
 
