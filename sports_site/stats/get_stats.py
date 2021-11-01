@@ -136,26 +136,23 @@ def get_all_season_hitting_stats(league, **kwargs):
 
     Params:
         league - League model object
-        featured_stage - The SeasonStage model object to be used
-            for the gathering of stats.
 
-    View - stats/views.py - stats_display_view
+    Kwargs:
+        season_stage: season stage object to pass to
+        filter by.
+
+    View - stats/views.py - StatsView
     Template - stats/stats_page.html
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league)
     season_stage = kwargs.pop("season_stage", None)
-    print(f"-------getallseasonstats query params kwargs -- {season_stage}")
     if season_stage:
-        print("IF IS TRUE -- run the filter")
         hitting_stats = hitting_stats.filter(season=season_stage)
-        print(f"IF TRUE STATS HITTING_STATS {hitting_stats}")
     else:
-        print("ELSE RUN THIS")
         featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
         hitting_stats = hitting_stats.filter(season=featured_stage)
-        print(f"ELSE RUN HITTING STATS {hitting_stats}")
 
     return_stats = hitting_stats.values("player").annotate(
         first = F("player__player__first_name"),

@@ -6,13 +6,13 @@ from django.db import router
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from django_tables2 import RequestConfig
-from league.models import Game, League, Roster, TeamSeason, Season, SeasonStage
+from league.models import Game, League, Roster, TeamSeason, SeasonStage
 from .get_stats import (get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
 from .models import (TeamGameLineScore, TeamGameStats, PlayerHittingGameStats)
 from .decorators import user_owns_game
-from .filters import HittingSimpleFilter, HittingAdvancedFilter
+from .filters import HittingSimpleFilter
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PitchingGameStatsFormset, PlayerPitchingStatsCreateForm,
     PlayerStatsCreateForm, PHGSFHelper, PPGSFHelper)
@@ -24,9 +24,7 @@ from .tables import (ASPlayerHittingGameStatsTable,
 
 
 from django_filters.views import FilterView
-from django_tables2.views import SingleTableMixin, MultiTableMixin
-from django_tables2 import SingleTableView
-from .tables import PlayerHittingStatsTable2
+from django_tables2.views import SingleTableMixin
 
 
 
@@ -401,11 +399,12 @@ def team_game_linescore_delete_info_view(request, game_pk, team_season_pk,
 """Stats Display Views"""
 class StatsView(SingleTableMixin, FilterView):
     model = PlayerHittingGameStats
-    table_class = PlayerHittingStatsTable2
+    table_class = PlayerHittingStatsTable
     template_name = "stats/stats_page.html"
 
     filterset_class = HittingSimpleFilter
     paginate_by = 25
+
 
     def dispatch(self, request, *args, **kwargs):
         self.league_slug = self.request.GET.get('league', None)
@@ -418,18 +417,19 @@ class StatsView(SingleTableMixin, FilterView):
         data['league'] = League.objects.get(url=self.league_slug)
         return data
 
+
     def get_queryset(self):
-        qs = super().get_queryset()
+        super().get_queryset()
         league = League.objects.get(url=self.league_slug)
-        # season = Season.objects.get(pk=self.request.GET.get("season__season", None))
-        # stage = SeasonStage.objects.get(pk=self.request.GET.get("season__stage", None))
         season_stage = self.request.GET.get("season", None)
-        hitting_stats = get_all_season_hitting_stats(league, season_stage=season_stage)
-        print(hitting_stats)
+        hitting_stats = get_all_season_hitting_stats(
+            league,
+            season_stage=season_stage)
         return hitting_stats
 
 
 def stats_display_view(request):
+    """Currently deprecated"""
     league_slug = request.GET.get('league', None)
     try:
         league = League.objects.get(url=league_slug)
