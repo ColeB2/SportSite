@@ -21,13 +21,6 @@ def LeagueStage(request):
     league = request.GET.get("league", None)
     return SeasonStage.objects.filter(season__league__url=league)
 
-def Test(request):
-    if request is None:
-        return SeasonStage.objects.none()
-
-    league = request.GET.get("league", None)
-    return SeasonStage.objects.get(season__league=league,
-                                             featured=True)
 
 class HittingAdvancedFilter(django_filters.FilterSet):
     season = django_filters.ModelChoiceFilter(
