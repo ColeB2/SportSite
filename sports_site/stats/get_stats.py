@@ -132,7 +132,8 @@ def get_team_hitting_stats(league, featured_stage):
 def get_all_season_hitting_stats(league, **kwargs):
     """
     Gets all hitting stats for all player, and returns them
-    in a usable fashion for the main stats page.
+    in a usable fashion for the main stats page. Currently used
+    for the simple stats filter.
 
     Params:
         league - League model object
