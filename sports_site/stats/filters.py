@@ -59,3 +59,16 @@ class HittingSimpleFilter(django_filters.FilterSet):
         model = PlayerHittingGameStats
         fields = ["season",]
 
+
+class PitchingSimpleFilter(django_filters.FilterSet):
+    season = django_filters.ModelChoiceFilter(
+        field_name="season",
+        label=False,
+        empty_label="Stage",
+        queryset = LeagueStage
+            )
+
+    class Meta:
+        model = PlayerPitchingGameStats
+        fields = ["season",]
+

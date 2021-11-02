@@ -10,9 +10,10 @@ from league.models import Game, League, Roster, TeamSeason, SeasonStage
 from .get_stats import (get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
-from .models import (TeamGameLineScore, TeamGameStats, PlayerHittingGameStats)
+from .models import (TeamGameLineScore, TeamGameStats, PlayerHittingGameStats,
+    PlayerPitchingGameStats)
 from .decorators import user_owns_game
-from .filters import HittingSimpleFilter
+from .filters import HittingSimpleFilter, PitchingSimpleFilter
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PitchingGameStatsFormset, PlayerPitchingStatsCreateForm,
     PlayerStatsCreateForm, PHGSFHelper, PPGSFHelper)
@@ -428,6 +429,39 @@ class StatsView(SingleTableMixin, FilterView):
             league,
             season_stage=season_stage)
         return hitting_stats
+
+
+class PitchingStatsView(SingleTableMixin, FilterView):
+    model = PlayerPitchingGameStats
+    table_class = PlayerPitchingStatsTable
+    template_name = "stats/pitching_stats_page.html"
+
+    filterset_class = PitchingSimpleFilter
+    paginate_by = 25
+
+
+    def dispatch(self, request, *args, **kwargs):
+        self.league_slug = self.request.GET.get('league', None)
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['league'] = League.objects.get(url=self.league_slug)
+        data['stage'] = SeasonStage.objects.get(season__league__url=self.league_slug,
+            featured=True)
+        return data
+
+
+    def get_queryset(self):
+        super().get_queryset()
+        league = League.objects.get(url=self.league_slug)
+        season_stage = self.request.GET.get("season", None)
+        pitching_stats = get_all_season_pitching_stats(
+            league,
+            season_stage=season_stage)
+        return pitching_stats
 
 
 def stats_display_view(request):

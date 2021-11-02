@@ -188,7 +188,6 @@ def get_all_season_hitting_stats(league, **kwargs):
             Cast(F('sacrifice_flies'), FloatField())
             )
         )
-    print(f"STATS TO RETURN HERE -----  {return_stats}")
     return return_stats
 
 
@@ -249,7 +248,7 @@ def get_team_pitching_stats(league, featured_stage):
     return return_stats
 
 
-def get_all_season_pitching_stats(league, featured_stage):
+def get_all_season_pitching_stats(league, **kwargs):
     """
     Gets all pitching stats for all player, and returns them in
     a usable fashion for the main stats page.
@@ -263,8 +262,14 @@ def get_all_season_pitching_stats(league, featured_stage):
     Template - stats/pitching_stats_page.html
     """
     pitching_stats = PlayerPitchingGameStats.objects.all().filter(
-                                                player__player__league=league,
-                                                season=featured_stage)
+                                                player__player__league=league)
+    season_stage = kwargs.pop("season_stage", None)
+    if season_stage:
+        pitching_stats = pitching_stats.filter(season=season_stage)
+    else:
+        featured_stage = SeasonStage.objects.get(season__league=league,
+                                             featured=True)
+        pitching_stats = pitching_stats.filter(season=featured_stage)
 
     return_stats = pitching_stats.values("player").annotate(
         first = F("player__player__first_name"),
