@@ -415,6 +415,8 @@ class StatsView(SingleTableMixin, FilterView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         data['league'] = League.objects.get(url=self.league_slug)
+        data['stage'] = SeasonStage.objects.get(season__league__url=self.league_slug,
+            featured=True)
         return data
 
 
