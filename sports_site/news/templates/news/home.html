@@ -3,32 +3,85 @@
 {% block head %}
     <!--Swiper CSS-->
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <style>
+    .swiper {
+        /*width: 600px;*/
+        height: auto;
+    }
+    .swiper-slide {
+        height: auto;
+        width: auto;
+    }
+    </style>
+
 
     <!--BxSlider Jquery CSS-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.css" rel="stylesheet" />
 
 {% endblock head %}
 
-
-
 {% block content %}
-<!--SWIPER TEST-->
-
 
 <!--Swiper JS-->
 <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
-<style>
-.swiper {
-    width: 600px;
-    height: 300px;
-}
-</style>
 
+
+<!-- Slider main container -->
+{% regroup schedule by date as schedy %}
+<div class="swiper mySwiper">
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    {% for date in schedy %}
+    <div class="swiper-slide swiper-ticker-date">
+        <h6 class="text-center" id="{{date.grouper}}">
+            <b>{{date.grouper|date:"D"}}</b><br>
+            <b>{{date.grouper|date:"M d"}}</b><br>
+            <b>{{date.grouper.year}}</b><br>
+        </h6>
+    </div>
+        {% for game in date.list %}
+        <div class="swiper-slide">
+            <table class="">
+                <tr>
+                    {% if game.home_score %}
+                        <th colspan="2">
+                            <a href="{% url 'game-boxscore-page' game.pk %}"
+                                class="sport-ticker-link">
+                                FINAL
+                            </a>
+                            </th>
+                    {% else %}
+                        <th colspan="2"><a>{{game.start_time}}</a></th>
+                    {% endif %}
+
+                </tr>
+                <tr>
+                    <td>{{game.away_team.team.abbreviation}}</td>
+                    <td>{{game.away_score}}</td>
+                </tr>
+                <tr>
+                    <td>{{game.home_team.team.abbreviation}}</td>
+                    <td>{{game.home_score}}</td>
+                </tr>
+            </table>
+        </div>
+        {% endfor %}
+    {% endfor %}
+    <div class="swiper-slide">See All Games</div>
+  </div>
+  <!-- If we need pagination -->
+  <!--<div class="swiper-pagination"></div>-->
+
+  <!-- If we need navigation buttons -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+</div>
 <script>
     const swiper = new Swiper('.swiper', {
         // Optional parameters
         direction: 'horizontal',
-        loop: true,
+        freeMode: true,
 
         // If we need pagination
         pagination: {
@@ -41,39 +94,59 @@
             prevEl: '.swiper-button-prev',
         },
 
-        // And if we need scrollbar
-        scrollbar: {
-            el: '.swiper-scrollbar',
-        },
+        // Default
+        slidesPerView: 5,
+        slidesPerGroup: 5,
+        spaceBetween: 1,
+
+
+        // BreakPoints
+        breakpoints: {
+            320: {
+                slidesPerView: 3,
+                slidesPerGroup: 3,
+                spaceBetween: 1
+            },
+            480: {
+                slidesPerView: 4,
+                slidesPerGroup: 4,
+                spaceBetween: 1
+            },
+
+            640: {
+                slidesPerView: 5,
+                slidesPerGroup: 5,
+                spaceBetween: 1
+            },
+
+            800:{
+                slidesPerView: 6,
+                slidesPerGroup: 6,
+                spaceBetween: 1
+            },
+
+            960: {
+                slidesPerView: 7,
+                slidesPerGroup: 7,
+                spaceBetween: 1
+            },
+
+            1120: {
+                slidesPerView: 8,
+                slidesPerGroup: 8,
+                spaceBetween: 1
+            }
+        }
 
     });
 </script>
-<!-- Slider main container -->
-<div class="swiper mySwiper">
-  <!-- Additional required wrapper -->
-  <div class="swiper-wrapper">
-    <!-- Slides -->
-    <div class="swiper-slide">Slide 1 Information Here</div>
-    <div class="swiper-slide">Slide 2 Info Her</div>
-    <div class="swiper-slide">Slide 3 I H</div>
-    ...
-  </div>
-  <!-- If we need pagination -->
-  <div class="swiper-pagination"></div>
 
-  <!-- If we need navigation buttons -->
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
 
-  <!-- If we need scrollbar -->
-  <div class="swiper-scrollbar"></div>
-</div>
 
 <br><br><br>
 <!--TEST JQUERY BX SLIDER-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.css" rel="stylesheet" />
 <script type="text/javascript">
     $(document).ready(function(){
         $('.bxslider').bxSlider({
