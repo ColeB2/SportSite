@@ -1,5 +1,133 @@
 {% extends "news/base.html" %}
 {% block content %}
+<!--SWIPER TEST-->
+<link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
+<!--Swiper JS-->
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+<style>
+.swiper {
+    width: 600px;
+    height: 300px;
+}
+</style>
+
+<script>
+    const swiper = new Swiper('.swiper', {
+        // Optional parameters
+        direction: 'horizontal',
+        loop: true,
+
+        // If we need pagination
+        pagination: {
+            el: '.swiper-pagination',
+        },
+
+        // Navigation arrows
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+
+        // And if we need scrollbar
+        scrollbar: {
+            el: '.swiper-scrollbar',
+        },
+
+    });
+</script>
+<!-- Slider main container -->
+<div class="swiper mySwiper">
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    <div class="swiper-slide">Slide 1 Information Here</div>
+    <div class="swiper-slide">Slide 2 Info Her</div>
+    <div class="swiper-slide">Slide 3 I H</div>
+    ...
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
+
+  <!-- If we need navigation buttons -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+
+  <!-- If we need scrollbar -->
+  <div class="swiper-scrollbar"></div>
+</div>
+
+<br><br><br>
+<!--TEST JQUERY BX SLIDER-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.css" rel="stylesheet" />
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.bxslider').bxSlider({
+            infiniteLoop: false,
+            hideControlOnEnd: true,
+            pager: false,
+            });
+
+    });
+</script>
+
+{% regroup schedule by date as schedy %}
+<ul class="bxslider">
+    {% for date in schedy %}
+    <li>
+        <div class="row justify-content-center">
+            <div class="col-auto">
+        <table id="{{date.grouper}}" class="sport-ticker">
+            <tr>
+                <th class="sport-ticker" colspan="1">{{date.grouper}}</th>
+            </tr>
+
+            <tr>
+                <td>
+                    <table class="sport-ticker-inside">
+                        <tr>
+                        {% for game in date.list %}
+                            {% if game.home_score %}
+                                <th class="sport-ticker-inside" colspan="2">
+                                    <a href="{% url 'game-boxscore-page' game.pk %}"
+                                       class="sport-ticker-link">
+                                        FINAL
+                                    </a>
+                                </th>
+                            {% else %}
+                                <th class-"sport-ticker-inside" colspan="2"><a>{{game.start_time}}</a></td>
+                            {% endif %}
+
+                        {% endfor %}
+                        </tr>
+
+                        <tr>
+                        {% for game in date.list %}
+                            <td class="sport-ticker-inside">{{game.away_team.team.abbreviation}}</td>
+                            <td class="sport-ticker-inside">{{game.away_score}}</td>
+                        {% endfor %}
+                        </tr>
+                        <tr>
+                        {% for game in date.list %}
+                            <td class="sport-ticker-inside">{{game.home_team.team.abbreviation}}</td>
+                            <td class="sport-ticker-inside">{{game.home_score}}</td>
+                        {% endfor %}
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </table>
+        </div>
+        </div>
+
+    </li>
+    {% endfor %}
+</ul>
+
+
 <a href="#June 27, 2021">Link</a>
 {% regroup schedule by date as schedy %}
 <div class="sport-ticker">
