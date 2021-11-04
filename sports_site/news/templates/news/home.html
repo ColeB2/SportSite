@@ -31,7 +31,7 @@
     </div>
         {% for game in date.list %}
         <div class="swiper-slide">
-            <table class="swiper-table">
+            <table class="swiper-table" data-href="{% url 'game-boxscore-page' game.pk %}">
                 <tr>
                     {% if game.home_score %}
                         <th colspan="2">
@@ -73,6 +73,8 @@
         // Optional parameters
         direction: 'horizontal',
         freeMode: true,
+        slidesPerView: 'auto',
+        slidesPerGroup: 5,
 
         // If we need pagination
         pagination: {
@@ -84,173 +86,8 @@
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
-
-        // Default
-        slidesPerView: 'auto',
-        slidesPerGroup: 5,
-
-
-        // BreakPoints
-        // breakpoints: {
-        //     320: {
-        //         slidesPerView: 2,
-        //         slidesPerGroup: 2,
-        //         spaceBetween: 1
-        //     },
-        //     480: {
-        //         slidesPerView: 4,
-        //         slidesPerGroup: 2,
-        //         spaceBetween: 1
-        //     },
-
-        //     640: {
-        //         slidesPerView: 6,
-        //         slidesPerGroup: 4,
-        //         spaceBetween: 1
-        //     },
-
-        //     800:{
-        //         slidesPerView: 'auto',
-        //         slidesPerGroup: 6,
-        //     },
-
-        //     960: {
-        //         slidesPerView: 10,
-        //         slidesPerGroup: 8,
-        //         spaceBetween: 1
-        //     },
-
-        //     1120: {
-        //         slidesPerView: 12,
-        //         slidesPerGroup: 10,
-        //         spaceBetween: 1
-        //     }
-        // }
-
     });
 </script>
-
-
-
-<br><br><br>
-<!--TEST JQUERY BX SLIDER-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $('.bxslider').bxSlider({
-            infiniteLoop: false,
-            hideControlOnEnd: true,
-            pager: false,
-            });
-
-    });
-</script>
-
-{% regroup schedule by date as schedy %}
-<ul class="bxslider">
-    {% for date in schedy %}
-    <li>
-        <div class="row justify-content-center">
-            <div class="col-auto">
-        <table id="{{date.grouper}}" class="sport-ticker">
-            <tr>
-                <th class="sport-ticker" colspan="1">{{date.grouper}}</th>
-            </tr>
-
-            <tr>
-                <td>
-                    <table class="sport-ticker-inside">
-                        <tr>
-                        {% for game in date.list %}
-                            {% if game.home_score %}
-                                <th class="sport-ticker-inside" colspan="2">
-                                    <a href="{% url 'game-boxscore-page' game.pk %}"
-                                       class="sport-ticker-link">
-                                        FINAL
-                                    </a>
-                                </th>
-                            {% else %}
-                                <th class-"sport-ticker-inside" colspan="2"><a>{{game.start_time}}</a></td>
-                            {% endif %}
-
-                        {% endfor %}
-                        </tr>
-
-                        <tr>
-                        {% for game in date.list %}
-                            <td class="sport-ticker-inside">{{game.away_team.team.abbreviation}}</td>
-                            <td class="sport-ticker-inside">{{game.away_score}}</td>
-                        {% endfor %}
-                        </tr>
-                        <tr>
-                        {% for game in date.list %}
-                            <td class="sport-ticker-inside">{{game.home_team.team.abbreviation}}</td>
-                            <td class="sport-ticker-inside">{{game.home_score}}</td>
-                        {% endfor %}
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-        </table>
-        </div>
-        </div>
-
-    </li>
-    {% endfor %}
-</ul>
-
-
-<a href="#June 27, 2021">Link</a>
-{% regroup schedule by date as schedy %}
-<div class="sport-ticker">
-    {% for date in schedy %}
-        <table id="{{date.grouper}}" class="sport-ticker">
-            <tr>
-                <th class="sport-ticker" colspan="1">{{date.grouper}}</th>
-            </tr>
-
-            <tr>
-                <td>
-                    <table class="sport-ticker-inside">
-                        <tr>
-                        {% for game in date.list %}
-                            {% if game.home_score %}
-                                <th class="sport-ticker-inside" colspan="2">
-                                    <a href="{% url 'game-boxscore-page' game.pk %}"
-                                       class="sport-ticker-link">
-                                        FINAL
-                                    </a>
-                                </th>
-                            {% else %}
-                                <th class-"sport-ticker-inside" colspan="2"><a>{{game.start_time}}</a></td>
-                            {% endif %}
-
-                        {% endfor %}
-                        </tr>
-
-                        <tr>
-                        {% for game in date.list %}
-                            <td class="sport-ticker-inside">{{game.away_team.team.abbreviation}}</td>
-                            <td class="sport-ticker-inside">{{game.away_score}}</td>
-                        {% endfor %}
-                        </tr>
-                        <tr>
-                        {% for game in date.list %}
-                            <td class="sport-ticker-inside">{{game.home_team.team.abbreviation}}</td>
-                            <td class="sport-ticker-inside">{{game.home_score}}</td>
-                        {% endfor %}
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-
-        </table>
-    {% endfor %}
-</div>
-
-
 
 <div class="container-lg">
     <div class="row justify-content-center">

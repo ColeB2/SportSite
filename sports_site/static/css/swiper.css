@@ -6,7 +6,7 @@
 .swiper-slide {
     height: 100px;
     width: 160px;
-    border: 1px solid gray;
+    border: 1px solid lightgray;
     background-color: rgb(255,255,255);
 }
 
@@ -25,4 +25,5 @@
     /*height: 100%;*/
     /*border: 2px solid black;*/
 }
+
 
