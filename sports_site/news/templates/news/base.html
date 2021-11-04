@@ -101,6 +101,7 @@
                 </button>
 
                 <div class="dropdown-menu dropdown_custom" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="{% url 'news-home' %}?league={{user.userprofile.league.url}}">Home</a>
                     <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="{% url 'roster-select' %}">Roster Edit</a>
                     <a class="dropdown-item text-white drop-item navbar-text header-link p-2" href="#">Add Stats</a>
                 </div>
