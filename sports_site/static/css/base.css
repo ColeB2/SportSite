@@ -33,13 +33,6 @@ a.sport-ticker-link:hover {
     color: #1a4ea6;
 }
 
-.swiper-ticker-date {
-    background-color: rgb(235,235,235);
-    /*border-bottom: 2px solid gray;*/
-    /*border-top: 2px solid gray;*/
-    /*border-right: 2px solid gray;*/
-    /*border-left: 2px solid gray;*/
-}
 
 .border-right {
     border-right: 1px solid black;

@@ -3,18 +3,7 @@
 {% block head %}
     <!--Swiper CSS-->
     <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
-    <style>
-    .swiper {
-        /*width: 600px;*/
-        height: auto;
-    }
-    .swiper-slide {
-        height: auto;
-        width: auto;
-    }
-    </style>
-
-
+    <link rel="stylesheet" type="text/css" href="/static/css/swiper.css">
     <!--BxSlider Jquery CSS-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.css" rel="stylesheet" />
 
@@ -33,7 +22,7 @@
   <div class="swiper-wrapper">
     <!-- Slides -->
     {% for date in schedy %}
-    <div class="swiper-slide swiper-ticker-date">
+    <div class="swiper-slide swiper-ticker-date d-flex flex-column justify-content-center">
         <h6 class="text-center" id="{{date.grouper}}">
             <b>{{date.grouper|date:"D"}}</b><br>
             <b>{{date.grouper|date:"M d"}}</b><br>
@@ -42,7 +31,7 @@
     </div>
         {% for game in date.list %}
         <div class="swiper-slide">
-            <table class="">
+            <table class="swiper-table">
                 <tr>
                     {% if game.home_score %}
                         <th colspan="2">
@@ -50,19 +39,21 @@
                                 class="sport-ticker-link">
                                 FINAL
                             </a>
-                            </th>
+                        </th>
+                        <td></td>
                     {% else %}
                         <th colspan="2"><a>{{game.start_time}}</a></th>
+                        <td></td>
                     {% endif %}
 
                 </tr>
                 <tr>
                     <td>{{game.away_team.team.abbreviation}}</td>
-                    <td>{{game.away_score}}</td>
+                    <td class="text-end">{{game.away_score}}</td>
                 </tr>
                 <tr>
                     <td>{{game.home_team.team.abbreviation}}</td>
-                    <td>{{game.home_score}}</td>
+                    <td class="text-end">{{game.home_score}}</td>
                 </tr>
             </table>
         </div>
@@ -95,48 +86,46 @@
         },
 
         // Default
-        slidesPerView: 5,
+        slidesPerView: 'auto',
         slidesPerGroup: 5,
-        spaceBetween: 1,
 
 
         // BreakPoints
-        breakpoints: {
-            320: {
-                slidesPerView: 3,
-                slidesPerGroup: 3,
-                spaceBetween: 1
-            },
-            480: {
-                slidesPerView: 4,
-                slidesPerGroup: 4,
-                spaceBetween: 1
-            },
+        // breakpoints: {
+        //     320: {
+        //         slidesPerView: 2,
+        //         slidesPerGroup: 2,
+        //         spaceBetween: 1
+        //     },
+        //     480: {
+        //         slidesPerView: 4,
+        //         slidesPerGroup: 2,
+        //         spaceBetween: 1
+        //     },
 
-            640: {
-                slidesPerView: 5,
-                slidesPerGroup: 5,
-                spaceBetween: 1
-            },
+        //     640: {
+        //         slidesPerView: 6,
+        //         slidesPerGroup: 4,
+        //         spaceBetween: 1
+        //     },
 
-            800:{
-                slidesPerView: 6,
-                slidesPerGroup: 6,
-                spaceBetween: 1
-            },
+        //     800:{
+        //         slidesPerView: 'auto',
+        //         slidesPerGroup: 6,
+        //     },
 
-            960: {
-                slidesPerView: 7,
-                slidesPerGroup: 7,
-                spaceBetween: 1
-            },
+        //     960: {
+        //         slidesPerView: 10,
+        //         slidesPerGroup: 8,
+        //         spaceBetween: 1
+        //     },
 
-            1120: {
-                slidesPerView: 8,
-                slidesPerGroup: 8,
-                spaceBetween: 1
-            }
-        }
+        //     1120: {
+        //         slidesPerView: 12,
+        //         slidesPerGroup: 10,
+        //         spaceBetween: 1
+        //     }
+        // }
 
     });
 </script>
