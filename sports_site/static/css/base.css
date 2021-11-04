@@ -50,6 +50,7 @@ body {
 
 .navbar {
   background-image: none;
+  /*height: 100px;*/
 }
 .navbar-default .navbar-nav > li > .dropdown-menu {
 background-color: #69899f;
