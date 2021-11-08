@@ -28,7 +28,7 @@ urlpatterns = [
     # path('password-reset/', auth_views.PasswordResetView.as_view(template_name='user/password_reset.html'), name='password-reset'),
     path('password-reset/', ResetPasswordView.as_view(), name='password-reset'),
     path('password-reset/confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='user/password_reset_confirm.html'), name='password_reset_confirm'),
-    path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(template_name='user/password_reset_complete.html'), name='password_reset_done'),
+    path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(template_name='user/password_reset_complete.html'), name='password_reset_complete'),
     path('league/', include("news.urls")),
     path('league/roster/', include("user.urls")),
     path('league/admin/', include("league_admin.urls")),
