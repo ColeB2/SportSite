@@ -19,13 +19,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
+from user.views import ResetPasswordView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(template_name='user/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='user/logout.html'), name='logout'),
-    path('password-reset/', auth_views.PasswordResetView.as_view(template_name='user/password_reset.html'), name='password-reset'),
+    # path('password-reset/', auth_views.PasswordResetView.as_view(template_name='user/password_reset.html'), name='password-reset'),
+    path('password-reset/', sResetPasswordView.as_view(), name='password-reset'),
     path('password-reset/confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='user/password_reset_confirm.html'), name='password_reset_confirm'),
-    path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(template_name='user/password_reset_complete.html'), name='password_reset_complete'),
+    path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(template_name='user/password_reset_complete.html'), name='password_reset_done'),
     path('league/', include("news.urls")),
     path('league/roster/', include("user.urls")),
     path('league/admin/', include("league_admin.urls")),
