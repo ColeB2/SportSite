@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'league',
     'league_admin',
     'user',
-    'user_auth'
+    'user_auth',
     'crispy_forms',
     'crispy_bootstrap5',
     'taggit',
