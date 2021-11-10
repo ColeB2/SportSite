@@ -24,7 +24,7 @@ class UserRegistrationForm(UserCreationForm):
         league = self.cleaned_data['league']
         league_url = self.cleaned_data['league_url']
         
-        user_league = League(league=league, admin=user, url=league_url)
+        user_league = League(name=league, admin=user, url=league_url)
         user_league.save()
         user_profile = UserProfile(user=user, league=user_league)
         user_profile.save()
