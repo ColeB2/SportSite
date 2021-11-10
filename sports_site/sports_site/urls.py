@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from django.urls import path, include
 
 from user_auth.views import ResetPasswordView
+from user_auth import views as user_auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +30,8 @@ urlpatterns = [
     path('password-reset/', ResetPasswordView.as_view(), name='password-reset'),
     path('password-reset/confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='user_auth/password_reset_confirm.html'), name='password_reset_confirm'),
     path('password-reset/complete/', auth_views.PasswordResetCompleteView.as_view(template_name='user_auth/password_reset_complete.html'), name='password_reset_complete'),
+    path('register/',user_auth_views.register, name='register'),
+
     path('league/', include("news.urls")),
     path('league/roster/', include("user.urls")),
     path('league/admin/', include("league_admin.urls")),

@@ -1,8 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.urls import reverse_lazy
+from django.contrib.auth import login
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
+
+from .forms import UserRegistrationForm
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     template_name = 'user_auth/password_reset.html'
@@ -16,6 +19,21 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
 
 
 
-# class RegisterView(CreateView):
-#     pass
+
+
+
+# Create your views here.
+def register(request):
+    if request.method == "POST":
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('news-home')
+    else:
+        form = UserRegistrationForm()
+    context = {
+        "form" : form
+    }
+    return render(request, "user_auth/register.html", context)
 
