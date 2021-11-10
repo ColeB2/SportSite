@@ -28,8 +28,8 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
-            return redirect('news-home')
+            # login(request, user)
+            return redirect('landing')
     else:
         form = UserRegistrationForm()
     context = {
