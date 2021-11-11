@@ -33,7 +33,7 @@ urlpatterns = [
     path('register/',user_auth_views.register, name='register'),
 
     path('league/', include("news.urls")),
-    path('league/roster/', include("user.urls")),
+    path('league/dashboard/', include("user.urls")),
     path('league/admin/', include("league_admin.urls")),
     path('league/stats/', include("stats.urls")),
     path('league/', include("league.urls")),

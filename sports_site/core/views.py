@@ -14,6 +14,7 @@ def find_league(request, league_url):
 
 
 def login_redirect(request):
-    league_url = request.user.userprofile.league.url
-    login_url = f"/league/?league={league_url}"
-    return redirect(login_url)
+    if request.user.has_perm('league.league_admin'):
+        return redirect("league-admin-dashboard")
+    else:
+        return redirect("user-dashboard")
