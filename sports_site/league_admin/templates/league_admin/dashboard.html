@@ -1,32 +1,16 @@
 {% extends "news/base.html" %}
-
 {% block content %}
-<div class="container">
-    <div class="row">
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-
-        <h1>League Dashboard</h1>
-        <h2><a href="{% url 'league-admin-users' %}">League Admin Accounts</a></h2>
-        <h2><a href="{% url 'league-admin-news-select' %}">News</a></h2>
-        <h2><a href="{% url 'league-admin-team-select' %}">Teams</a></h2>
-        <h2><a href="{% url 'league-admin-season' %}">Seasons</a></h2>
-        <h2><a href="{% url 'league-admin-schedule-select' %}">Schedules</a></h2>
-        <h2><a href="{% url 'league-admin-player-select' %}">Players</a></h2>
-        <h2><a href="{% url 'league-admin-roster-select' %}">Rosters</a></h2>
-
-
-
-
-
-
-
+    <div class="container">
+        <div class="row">
+            <h1>League Dashboard</h1>
+            <h2><a href="{% url 'league-admin-users' %}">League Admin Accounts</a></h2>
+            <h2><a href="{% url 'league-admin-news-select' %}">News</a></h2>
+            <h2><a href="{% url 'league-admin-team-select' %}">Teams</a></h2>
+            <h2><a href="{% url 'league-admin-season' %}">Seasons</a></h2>
+            <h2><a href="{% url 'league-admin-schedule-select' %}">Schedules</a></h2>
+            <h2><a href="{% url 'league-admin-player-select' %}">Players</a></h2>
+            <h2><a href="{% url 'league-admin-roster-select' %}">Rosters</a></h2>
+        </div>
     </div>
-</div>
 
 {% endblock content %}
