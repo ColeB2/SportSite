@@ -14,7 +14,6 @@ from league.models import Roster, PlayerSeason, Player, Team, TeamSeason, Season
 
 
 @login_required
-# @permission_required('league.league_admin')
 def user_dashboard_view(request):
     context = {}
     return render(request, "user/dashboard.html",context)
