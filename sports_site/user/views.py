@@ -51,18 +51,11 @@ def roster_edit_copy(request, team_name, season, roster_pk):
     if request.method == 'POST':
         form = RosterSelectForm(data=request.POST, roster_queryset=rosters)
         if form.is_valid():
-            roster_data = form.cleaned_data.get("roster")
-            if roster_data:
-                season_data = roster.team.season
-
-                roster_copy = roster_data.playerseason_set.all()
-                for player in roster_copy:
-                    new_playerseason, playerseason_created = PlayerSeason.objects.get_or_create(
-                        player=player.player, team=roster, season=season_data)
-                    if playerseason_created:
-                        new_playerseason.save()
-                        messages.success(request,
-                            f"{new_playerseason} created and added to {roster}")
+            return_data = form.process(current_roster=roster)
+            if return_data:
+                for data in return_data:
+                    messages.success(request,
+                        f"{data} created and added to {roster}")
 
             return redirect('user-roster-view', team_name=team_name,
                             season=season, roster_pk=roster_pk)

@@ -77,6 +77,9 @@ class PlayerSeasonForm(forms.ModelForm):
 
 
 class RosterSelectForm(forms.Form):
+    """
+    Used: roster_edit_copy --> users/views.py view.
+    """
     def __init__(self,roster_queryset, *args, **kwargs):
         super(RosterSelectForm, self).__init__(*args, **kwargs)
         self.fields['roster'] = forms.ModelChoiceField(
@@ -84,6 +87,25 @@ class RosterSelectForm(forms.Form):
             label="Select Roster:",
             required=False,
             )
+
+    def process(self, current_roster):
+        _roster_data = self.cleaned_data.get("roster")
+        return_data = []
+
+        if _roster_data:
+            season_data = current_roster.team.season
+            _roster_copy = _roster_data.playerseason_set.all()
+            for player in _roster_copy:
+                playerseason, created = PlayerSeason.objects.get_or_create(
+                    player=player.player,
+                    team=current_roster,
+                    season=season_data)
+                if created:
+                    playerseason.save()
+                    return_data.append(playerseason)
+        return return_data
+
+
 
 class RosterCreateForm(forms.Form):
     def __init__(self, season_queryset, roster_queryset, *args, **kwargs):
