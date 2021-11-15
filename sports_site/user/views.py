@@ -133,7 +133,8 @@ def roster_edit_create(request, team_name, season, roster_pk):
     players = roster.playerseason_set.all()
     PlayerFormset = formset_factory(PlayerSelectForm)
     player_formset = PlayerFormset()
-    CreatePlayerFormset = formset_factory(PlayerCreateForm, extra=(21-len(players)) )
+    CreatePlayerFormset = formset_factory(PlayerCreateForm,
+                                          extra=(21-len(players)) )
 
 
     if request.method == 'POST':
