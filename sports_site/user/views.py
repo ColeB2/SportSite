@@ -200,10 +200,6 @@ def roster_edit_remove(request, team_name, season, roster_pk):
     return render(request, 'user/roster_edit_remove.html', context)
 
 
-
-
-
-
 @login_required
 def roster_create(request, team_name):
     user_team = Team.objects.get(owner=request.user)
