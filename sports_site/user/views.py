@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from league.models import (Player, PlayerSeason, Roster, SeasonStage, Team,
     TeamSeason)
 from .decorators import user_owns_roster
-from .forms import ( PlayerCreateForm, PlayerDeleteForm, PlayerSelectForm,
+from .forms import ( PlayerCreateForm, PlayerRemoveForm, PlayerSelectForm,
     RosterCreateForm, RosterSelectForm)
 
 
@@ -171,7 +171,7 @@ def roster_edit_remove(request, team_name, season, roster_pk):
     players = roster.playerseason_set.all()
 
 
-    PlayerFormset = formset_factory(PlayerDeleteForm, extra=len(players))
+    PlayerFormset = formset_factory(PlayerRemoveForm, extra=len(players))
 
 
     if request.method == 'POST':

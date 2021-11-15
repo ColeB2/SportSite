@@ -48,9 +48,9 @@ class PlayerCreateForm(forms.Form):
             playerseason.save()
 
 
-class PlayerDeleteForm(forms.Form):
+class PlayerRemoveForm(forms.Form):
     def __init__(self, roster_queryset, *args, **kwargs):
-        super(PlayerDeleteForm,self).__init__(*args, **kwargs)
+        super(PlayerRemoveForm,self).__init__(*args, **kwargs)
         self.fields['players'] = forms.ModelChoiceField(
             # queryset=Player.objects.all(),
             queryset=roster_queryset,
