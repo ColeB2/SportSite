@@ -2,6 +2,7 @@ from django import forms
 from league.models import Roster, TeamSeason, PlayerSeason, Player
 
 
+
 class RosterForm(forms.ModelForm):
     class Meta:
         model = Roster
@@ -30,6 +31,21 @@ class PlayerCreateForm(forms.Form):
         super(PlayerCreateForm, self).__init__(*args, **kwargs)
         self.fields['first_name'] = forms.CharField(max_length=35)
         self.fields['last_name'] = forms.CharField(max_length=35)
+
+
+    def process(self, league, roster):
+        _first = self.cleaned_data.get('first_name')
+        _last = self.cleaned_data.get('last_name')
+
+        if _first and _last:
+            player = Player(first_name=_first, last_name=_last, league=league)
+            player.save()
+
+            playerseason, created = PlayerSeason.objects.get_or_create(
+                player=player,
+                team=roster,
+                season=roster.team.season)
+            playerseason.save()
 
 
 class PlayerDeleteForm(forms.Form):

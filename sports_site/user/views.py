@@ -137,29 +137,14 @@ def roster_edit_create(request, team_name, season, roster_pk):
     PlayerFormset = formset_factory(PlayerSelectForm)
     player_formset = PlayerFormset()
     CreatePlayerFormset = formset_factory(PlayerCreateForm,
-                                          extra=(21-len(players)) )
+                                          extra=(21-len(players)))
 
 
     if request.method == 'POST':
         formset = CreatePlayerFormset(request.POST)
         if formset.is_valid():
             for form in formset:
-                first = form.cleaned_data.get('first_name')
-                last = form.cleaned_data.get('last_name')
-
-                # Create player object
-                if first and last:
-                    player = Player(first_name=first, last_name=last,
-                                    league=roster.team.team.league)
-                    player.save()
-
-                # Create player season
-                if first and last:
-                    playerseason, created = PlayerSeason.objects.get_or_create(
-                        player=player,
-                        team=roster,
-                        season=roster.team.season)
-                    playerseason.save()
+                form.process(league=roster.team.team.league, roster=roster)
 
             return redirect('roster-view',
                             team_name=team_name,
