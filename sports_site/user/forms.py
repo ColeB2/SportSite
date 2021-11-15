@@ -92,6 +92,29 @@ class RosterCreateForm(forms.Form):
             )
 
 
+    def process(self, user_team):
+        _season_data = self.cleaned_data.get("seasons")
+        _roster_data = self.cleaned_data.get("roster")
+
+        if _roster_data:
+            new_teamseason, teamseason_created = TeamSeason.objects.get_or_create(
+                season=_season_data, team=user_team)
+            new_teamseason.save()
+            if teamseason_created:
+                new_roster = Roster.objects.get(team=new_teamseason)
+
+                _roster = _roster_data.playerseason_set.all()
+                for player in _roster:
+                    new_playerseason = PlayerSeason(player=player.player,
+                                                    team=new_roster,
+                                                    season=_season_data)
+                    new_playerseason.save()
+        else:
+            new_teamseason, teamseason_created = TeamSeason.objects.get_or_create(
+                season=_season_data, team=user_team)
+            new_teamseason.save()
+
+
 
 
 
