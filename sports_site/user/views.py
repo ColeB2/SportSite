@@ -1,15 +1,14 @@
 from django.contrib import messages
 from django.contrib.admin.utils import NestedObjects
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.db import router
-from django.shortcuts import render, redirect
-from .forms import (PlayerSelectForm, PlayerCreateForm, PlayerDeleteForm,
-    RosterCreateForm, RosterSelectForm)
-
-from .decorators import user_owns_roster
-
 from django.forms import formset_factory
-from league.models import Roster, PlayerSeason, Player, Team, TeamSeason, SeasonStage
+from django.shortcuts import render, redirect
+from league.models import (Player, PlayerSeason, Roster, SeasonStage, Team,
+    TeamSeason)
+from .decorators import user_owns_roster
+from .forms import ( PlayerCreateForm, PlayerDeleteForm, PlayerSelectForm,
+    RosterCreateForm, RosterSelectForm)
 
 
 
