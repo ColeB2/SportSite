@@ -64,7 +64,7 @@ def roster_edit_copy(request, team_name, season, roster_pk):
                         messages.success(request,
                             f"{new_playerseason} created and added to {roster}")
 
-            return redirect('roster-view', team_name=team_name,
+            return redirect('user-roster-view', team_name=team_name,
                             season=season, roster_pk=roster_pk)
     else:
         form = RosterSelectForm(roster_queryset=rosters)
@@ -110,10 +110,10 @@ def roster_edit_add(request, team_name, season, roster_pk):
                         season=roster.team.season)
                     playerseason.save()
 
-            return redirect('roster-view',
+            return redirect('user-roster-view',
                             team_name=team_name,
                             season=season,
-                            pk=roster_pk)
+                            roster_pk=roster_pk)
 
     else:
         formset = PlayerFormset(form_kwargs={
@@ -146,10 +146,10 @@ def roster_edit_create(request, team_name, season, roster_pk):
             for form in formset:
                 form.process(league=roster.team.team.league, roster=roster)
 
-            return redirect('roster-view',
+            return redirect('user-roster-view',
                             team_name=team_name,
                             season=season,
-                            pk=roster_pk)
+                            roster_pk=roster_pk)
 
     else:
         formset = CreatePlayerFormset()
@@ -187,8 +187,8 @@ def roster_edit_remove(request, team_name, season, roster_pk):
                         data.delete()
 
             if 'remove' in request.POST:
-                return redirect('roster-view', team_name=team_name,
-                                season=season, pk=roster_pk)
+                return redirect('user-roster-view', team_name=team_name,
+                                season=season, roster_pk=roster_pk)
             elif 'remove_and_continue' in request.POST:
                 return redirect('roster-edit-remove', team_name=team_name,
                                 season=season, pk=roster_pk)
