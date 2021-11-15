@@ -60,6 +60,14 @@ class PlayerDeleteForm(forms.Form):
 
         self.fields['players'].widget.attrs.update(style='max-width: 24em')
 
+    def process(self):
+        _player = self.cleaned_data.get('players')
+
+        if _player:
+            if type(PlayerSeason()) == type(_player):
+                _player.delete()
+
+
 
 class PlayerSeasonForm(forms.ModelForm):
 

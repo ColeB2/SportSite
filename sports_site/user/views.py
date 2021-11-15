@@ -180,11 +180,7 @@ def roster_edit_remove(request, team_name, season, roster_pk):
 
         if formset.is_valid():
             for form in formset:
-                data = form.cleaned_data.get('players')
-                # Delete Player Season
-                if data is not None:
-                    if type(PlayerSeason()) == type(data):
-                        data.delete()
+                form.process()
 
             if 'remove' in request.POST:
                 return redirect('user-roster-view', team_name=team_name,
