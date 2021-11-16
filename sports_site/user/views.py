@@ -126,8 +126,6 @@ def roster_edit_create(request, team_name, season, roster_pk):
     """Create New Player Object, and Player Season."""
     roster = Roster.objects.get(pk=roster_pk)
     players = roster.playerseason_set.all()
-    PlayerFormset = formset_factory(PlayerSelectForm)
-    player_formset = PlayerFormset()
     CreatePlayerFormset = formset_factory(PlayerCreateForm,
                                           extra=(21-len(players)))
 
@@ -150,7 +148,6 @@ def roster_edit_create(request, team_name, season, roster_pk):
         'roster': roster,
         'players': players,
         'formset':formset,
-        'player_formset':player_formset
         }
     return render(request, 'user/roster_edit_create.html', context)
 
