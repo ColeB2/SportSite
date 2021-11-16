@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import router
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
-from league.models import Player, Roster, SeasonStage, Team
+from league.models import Player, PlayerSeason, Roster, SeasonStage, Team
 from .decorators import user_owns_roster
 from .forms import ( PlayerCreateForm, PlayerRemoveForm, PlayerSelectForm,
     RosterCreateForm, RosterSelectForm)
@@ -180,7 +180,7 @@ def roster_edit_remove(request, team_name, season, roster_pk):
                                 season=season, roster_pk=roster_pk)
             elif 'remove_and_continue' in request.POST:
                 return redirect('roster-edit-remove', team_name=team_name,
-                                season=season, pk=roster_pk)
+                                season=season, roster_pk=roster_pk)
 
     else:
         formset = PlayerFormset(form_kwargs={'roster_queryset':players})
@@ -191,6 +191,33 @@ def roster_edit_remove(request, team_name, season, roster_pk):
         'formset':formset
         }
     return render(request, 'user/roster_edit_remove.html', context)
+
+
+
+@login_required
+@user_owns_roster
+def roster_playerseason_delete_info(request, team_name, season, roster_pk, playerseason_pk):
+    playerseason = PlayerSeason.objects.get(pk=playerseason_pk)
+
+    using = router.db_for_write(playerseason._meta.model)
+    nested_object = NestedObjects(using)
+    nested_object.collect([playerseason])
+
+    if request.method == 'POST':
+        playerseason.delete()
+        messages.success(request,
+                         f"{playerseason} and all releated object were deleted")
+        return redirect('roster-edit-remove',
+                        team_name=team_name,
+                        season=season, roster_pk=roster_pk,
+                        playerseason_pk=playerseason_pk)
+
+    context = {
+        'playerseason':playerseason,
+        'nested_object':nested_object,
+    }
+    return render(request, "user/playerseason_delete.html", context)
+
 
 
 @login_required

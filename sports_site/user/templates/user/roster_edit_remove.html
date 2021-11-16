@@ -1,38 +1,18 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-
-        <h2>{{ roster }}</h2>
-        {% for player in players %}
-        <h6>{{player}}</h6>
-        {% endfor %}
-        <br>
-        {% if perms.league.user_roster_remove or perms.league.league_admin %}
-        <h2>Remove Players</h2><br>
-
-        <legend><small>
-            Select Players you want to remove from the roster.
-        </small></legend>
-        <legend><small>
-            WARNING: Removing a player will delete all stats tied to that player
-            for that particular season stage.
-        </small></legend>
-
-        <form method="post">
-            {% csrf_token %}
-            {{formset.management_form}}
-            {% for form in formset %}
-                {{ form|crispy }}
+    <div class="container">
+        <div class="content-section">
+            <h2>{{ roster }}</h2>
+            <legend><small>Select a player you want to remove from the roster.</small></legend>
+            {% for player in players %}
+            <h6>
+                <a href="{% url 'roster-edit-delete-playerseason' roster.team.team.name roster.team.season.season.year roster.pk player.pk %}">
+                    {{player}}
+                </a>
+                </h6>
             {% endfor %}
-
-            <input type="submit" name="remove"value="Remove and Exit" class="btn btn-danger">
-            <input type="submit" name="remove_and_continue" value="Remove and Continue" class="btn btn-danger">
-            <br><br>
-        </form>
-        {% endif %}
+            <br>
+        </div>
     </div>
-</div>
-
 {% endblock content %}
