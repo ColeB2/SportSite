@@ -196,7 +196,9 @@ def roster_edit_remove(request, team_name, season, roster_pk):
 
 @login_required
 @user_owns_roster
-def roster_playerseason_delete_info(request, team_name, season, roster_pk, playerseason_pk):
+def roster_playerseason_delete_info(request, team_name, season, roster_pk,
+                                                            playerseason_pk):
+
     playerseason = PlayerSeason.objects.get(pk=playerseason_pk)
 
     using = router.db_for_write(playerseason._meta.model)
