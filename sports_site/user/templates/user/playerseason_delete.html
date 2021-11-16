@@ -17,11 +17,7 @@
 
                 <input class="btn btn-danger"type="submit" value="Delete"/>
 
-                {% if perms.league.league_admin %}
-                <a class="btn btn-primary" href="{% url 'league-admin-season-stage-info' roster.team.season.season.year roster.team.season.season.pk roster.team.season.pk %}">Cancel</a>
-                {% else %}
-                <a class="btn btn-primary" href="{% url 'roster-select' %}">Cancel</a>
-                {% endif %}
+                <a class="btn btn-primary" href="{% url 'roster-edit-remove' playerseason.team.team.team.name playerseason.team.team.season.season.year playerseason.team.pk %}">Cancel</a>
             </form>
 
             {% endif %}
