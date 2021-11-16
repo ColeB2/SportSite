@@ -15,6 +15,17 @@ class RosterForm(forms.ModelForm):
 
 
 class PlayerSelectForm(forms.Form):
+    """
+    Form used in the roster_edit_add view in users/views.py.
+    Displays a list of all players apart of the league with
+    exceptions for players that are currently on the viewed roster.
+
+    form_kwarg={
+        'player_qs': qs of all players in the league
+        'exclude_list': list of all players currently on the roster,
+            so as to exclude them from the seletion list.
+
+    """
     def __init__(self, player_qs, exclude_list=[], *args, **kwargs):
         super(PlayerSelectForm,self).__init__(*args, **kwargs)
         self.fields['players'] = forms.ModelChoiceField(
@@ -24,6 +35,19 @@ class PlayerSelectForm(forms.Form):
             )
 
         self.fields['players'].widget.attrs.update(style='max-width: 24em')
+
+
+    def process(self, roster):
+        player_data = self.cleaned_data.get("players")
+
+        if player_data:
+            playerseason, created = PlayerSeason.objects.get_or_create(
+                player=player_data,
+                team = roster,
+                season = roster.team.season)
+            playerseason.save()
+
+            return playerseason
 
 
 class PlayerCreateForm(forms.Form):

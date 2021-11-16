@@ -73,7 +73,11 @@ def roster_edit_copy(request, team_name, season, roster_pk):
 @login_required
 @user_owns_roster
 def roster_edit_add(request, team_name, season, roster_pk):
-    """Creates PlayerSeason object based on existing Player"""
+    """
+    View used to create a brand new PlayerSeason object
+    for the season the roster is a part of.
+    Used as a part of the "Add Existing Players" functionality.
+    """
     roster = Roster.objects.get(pk=roster_pk)
     league = roster.team.team.league
     players = roster.playerseason_set.all().filter(player__league=league)
@@ -93,14 +97,9 @@ def roster_edit_add(request, team_name, season, roster_pk):
             'exclude_list':exclude_list})
         if formset.is_valid():
             for form in formset:
-                data = form.cleaned_data.get('players')
-                # Create player season
-                if data is not None:
-                    playerseason, created = PlayerSeason.objects.get_or_create(
-                        player=data,
-                        team=roster,
-                        season=roster.team.season)
-                    playerseason.save()
+                playerseason = form.process(roster=roster)
+                messages.success(request,
+                    f"{playerseason.player} added to {roster}")
 
             return redirect('user-roster-view',
                             team_name=team_name,
