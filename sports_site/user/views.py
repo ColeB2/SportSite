@@ -123,7 +123,12 @@ def roster_edit_add(request, team_name, season, roster_pk):
 @login_required
 @user_owns_roster
 def roster_edit_create(request, team_name, season, roster_pk):
-    """Create New Player Object, and Player Season."""
+    """
+    View used to create a brand new Player object, and a
+    PlayerSeason object for the season the roster is a part
+    of.
+    Used as a part of the "Add New Players" functionality.
+    """
     roster = Roster.objects.get(pk=roster_pk)
     players = roster.playerseason_set.all()
     CreatePlayerFormset = formset_factory(PlayerCreateForm,
