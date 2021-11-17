@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render#, redirect
+from django.shortcuts import render
 from ..filters import RosterFilter, ArticleFilter
 from league.models import (League, Roster)
 from news.models import Article
@@ -13,10 +13,12 @@ def league_admin_dashboard_view(request):
     context = {}
     return render(request, "league_admin/dashboard.html",context)
 
+
 @login_required
 @permission_required('league.league_admin')
 def league_admin_roster_select(request):
-    roster_qs = Roster.objects.all().filter(team__team__league=request.user.userprofile.league)
+    roster_qs = Roster.objects.all().filter(
+        team__team__league=request.user.userprofile.league)
     f = RosterFilter(request.GET, request=request, queryset=roster_qs)
     roster_list = f.qs
 

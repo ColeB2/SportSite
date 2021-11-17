@@ -19,7 +19,7 @@
 
         {% for roster in all_rosters %}
             <h6>
-                <a href="{% url 'roster-view' roster.team.team.name roster.team.season.season.year roster.pk %}">
+                <a href="{% url 'user-roster-view' roster.team.team.name roster.team.season.season.year roster.pk %}">
                     {{roster}}
                 </a>
             </h6>
