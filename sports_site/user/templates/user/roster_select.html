@@ -8,12 +8,6 @@
                 <a href="{% url 'user-roster-view' roster.team.team.name roster.team.season.season.year roster.pk %}">{{roster}}</a>
             </h4>
             {% endfor %}
-
-            {% if perms.league.user_roster_create or perms.league.league_admin %}
-            <h6>
-                <a href="{% url 'roster-create' user.team_set.all.0.name %}">New Roster</a>
-            </h6>
-            {% endif %}
         </div>
     </div>
 {% endblock content %}
