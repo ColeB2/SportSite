@@ -93,10 +93,9 @@ def league_admin_player_delete_info_view(request, player_pk):
 
     if request.method == 'POST':
         player.delete()
-        messages.success(request, f"{player} and all releated object were deleted")
+        messages.success(request,
+                         f"{player} and all releated object were deleted")
         return redirect('league-admin-player-select')
-    else:
-        pass
 
     context = {
         'player':player,
