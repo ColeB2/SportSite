@@ -6,14 +6,14 @@ from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from ..forms import (CreateGameForm, EditGameForm)
 from league.models import (SeasonStage, Game, TeamSeason)
-from stats.models import TeamGameStats
 from ..decorators import user_owns_season_stage
 
 
 
 @permission_required('league.league_admin')
 def league_admin_schedule_select_view(request):
-    stages = SeasonStage.objects.all().filter(season__league__admin=request.user)
+    stages = SeasonStage.objects.all().filter(
+        season__league__admin=request.user)
 
     context = {
         "stages":stages,
@@ -44,7 +44,8 @@ def league_admin_schedule_create_view(request, season_year, season_stage_pk):
     current_stage = SeasonStage.objects.get(pk=season_stage_pk)
     teamseason_query = TeamSeason.objects.all().filter(season=current_stage)
 
-    formset = GameFormset(data=request.POST or None, form_kwargs={'team_queryset':teamseason_query})
+    formset = GameFormset(data=request.POST or None,
+                          form_kwargs={'team_queryset':teamseason_query})
 
     if request.method == 'POST':
 
@@ -53,15 +54,16 @@ def league_admin_schedule_create_view(request, season_year, season_stage_pk):
                 if form.is_valid():
                     ng = form.process(current_stage=current_stage)
                     if ng:
-                        messages.success(request, f"{ng} created and added to {current_stage}")
+                        messages.success(request,
+                            f"{ng} created and added to {current_stage}")
 
         if 'create' in request.POST:
-            return redirect('league-admin-schedule', season_year, season_stage_pk)
-        elif 'create-and-continue' in request.POST:
-            return redirect('league-admin-schedule-create', season_year, season_stage_pk)
+            return redirect('league-admin-schedule',
+                            season_year, season_stage_pk)
 
-    else:
-        pass
+        elif 'create-and-continue' in request.POST:
+            return redirect('league-admin-schedule-create',
+                            season_year, season_stage_pk)
 
     context={
         "formset": formset,
@@ -73,8 +75,11 @@ def league_admin_schedule_create_view(request, season_year, season_stage_pk):
 @permission_required('league.league_admin')
 @user_owns_season_stage
 def league_admin_schedule_delete_info_view(request, season_year, season_stage_pk):
-    """ To Do: Delete schedule. Different from other deletes, as schedule isn't
-    and object/model. So will need to delete all games in a given season stage."""
+    """
+    To Do: Delete schedule. Different from other deletes,
+    as schedule isn't and object/model. So will need to
+    delete all games in a given season stage.
+    """
     stage = SeasonStage.objects.get(pk=season_stage_pk)
     nested_games = []
     games = stage.game_set.all()
@@ -88,10 +93,9 @@ def league_admin_schedule_delete_info_view(request, season_year, season_stage_pk
     if request.method == 'POST':
         for game in games:
             game.delete()
-            messages.success(request, f"{game} and all releated object were deleted")
+            messages.success(request,
+                             f"{game} and all releated object were deleted")
         return redirect('league-admin-schedule', season_year, season_stage_pk)
-    else:
-        pass
 
     context = {
         'season_year': season_year,
@@ -101,10 +105,6 @@ def league_admin_schedule_delete_info_view(request, season_year, season_stage_pk
         'nested_games':nested_games,
     }
     return render(request, "league_admin/schedule_delete.html", context)
-
-
-
-
 
 
 """League Admin Game Views"""
@@ -117,8 +117,10 @@ def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
     if request.method == "POST":
         form = EditGameForm(data=request.POST, instance=game_instance)
 
-        form.fields["home_team"].queryset = TeamSeason.objects.all().filter(season__pk=season_stage_pk)
-        form.fields["away_team"].queryset = TeamSeason.objects.all().filter(season__pk=season_stage_pk)
+        form.fields["home_team"].queryset = TeamSeason.objects.all().filter(
+            season__pk=season_stage_pk)
+        form.fields["away_team"].queryset = TeamSeason.objects.all().filter(
+            season__pk=season_stage_pk)
 
         if form.is_valid():
             game = form.process()
@@ -127,9 +129,10 @@ def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
         return redirect('league-admin-schedule', season_year, season_stage_pk)
     else:
         form = EditGameForm(instance=game_instance)
-        form.fields["home_team"].queryset = TeamSeason.objects.all().filter(season__pk=season_stage_pk)
-        form.fields["away_team"].queryset = TeamSeason.objects.all().filter(season__pk=season_stage_pk)
-
+        form.fields["home_team"].queryset = TeamSeason.objects.all().filter(
+            season__pk=season_stage_pk)
+        form.fields["away_team"].queryset = TeamSeason.objects.all().filter(
+            season__pk=season_stage_pk)
 
     context = {
         "form":form,
@@ -151,10 +154,9 @@ def league_admin_delete_game_info_view(request, season_year, season_stage_pk, ga
 
     if request.method == 'POST':
         game.delete()
-        messages.success(request, f"{game} and all releated object were deleted")
+        messages.success(request,
+                         f"{game} and all releated object were deleted")
         return redirect('league-admin-schedule', season_year, season_stage_pk)
-    else:
-        pass
 
     context = {
         "season_year":season_year,
