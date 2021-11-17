@@ -15,13 +15,11 @@ from ..decorators import (user_owns_season, user_owns_season_stage,
 
 
 
-
-
-"""Season Views"""
 @permission_required('league.league_admin')
 def league_admin_season_view(request):
     seasons = Season.objects.all().filter(league__admin=request.user)
-    stages = SeasonStage.objects.all().filter(season__league__admin=request.user)
+    stages = SeasonStage.objects.all().filter(
+        season__league__admin=request.user)
 
     context = {
         'seasons':seasons,
@@ -37,7 +35,8 @@ def league_admin_create_season_view(request):
     if request.method == 'POST':
         form = SeasonForm(data = request.POST)
         if form.is_valid():
-            new_season, created = form.process(league=request.user.userprofile.league)
+            new_season, created = form.process(
+                league=request.user.userprofile.league)
 
             if created:
                 messages.success(request, f"{new_season} created.")
@@ -66,7 +65,8 @@ def league_admin_season_delete_info_view(request, season_year, season_pk):
 
     if request.method == 'POST':
         season.delete()
-        messages.success(request, f"{season} and all releated object were deleted")
+        messages.success(request,
+                         f"{season} and all releated object were deleted")
         return redirect('league-admin-season')
 
     context = {
@@ -89,7 +89,8 @@ class SeasonEditView(PermissionRequiredMixin, UpdateView):
 
 
     def get_success_url(self):
-        url = reverse('league-admin-season-stage', args=[self.object.year, self.object.pk])
+        url = reverse('league-admin-season-stage',
+                      args=[self.object.year, self.object.pk])
         return url
 
 
@@ -118,7 +119,8 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
     TeamFormset = formset_factory(TeamSelectForm, extra=len(teams))
 
     if request.method == 'POST':
-        formset = TeamFormset(data=request.POST, form_kwargs={'team_queryset':teams})
+        formset = TeamFormset(data=request.POST,
+                              form_kwargs={'team_queryset':teams})
         form = SeasonStageCreateForm(data = request.POST)
         if form.is_valid():
             new_stage, created = form.process(season=season)
@@ -132,14 +134,17 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
 
                         if new_teamseason:
                             if created:
-                                messages.success(request, f"{new_teamseason} created")
+                                messages.success(request,
+                                                 f"{new_teamseason} created")
                             else:
-                                messages.info(request, f"{new_teamseason} already exists")
+                                messages.info(request,
+                                    f"{new_teamseason} already exists")
             else:
                 messages.info(request, f"{new_stage} already exists.")
 
 
         return redirect('league-admin-season-stage', season_year, season_pk)
+
     else:
         form = SeasonStageCreateForm()
         formset = TeamFormset(form_kwargs={'team_queryset':teams})
@@ -156,10 +161,14 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
 
 @permission_required('league.league_admin')
 @user_owns_season_stage
-def league_admin_season_stage_info_view(request, season_year, season_pk, season_stage_pk):
+def league_admin_season_stage_info_view(request, season_year, season_pk,
+                                                               season_stage_pk):
+
     league = League.objects.get(admin=request.user)
     stage = SeasonStage.objects.get(pk=season_stage_pk)
-    teams = TeamSeason.objects.all().filter(team__league=league, season__pk=season_stage_pk)
+    teams = TeamSeason.objects.all().filter(team__league=league,
+                                            season__pk=season_stage_pk)
+
     context = {
         'stage': stage,
         'teams': teams,
@@ -169,7 +178,9 @@ def league_admin_season_stage_info_view(request, season_year, season_pk, season_
 
 @permission_required('league.league_admin')
 @user_owns_season_stage
-def league_admin_season_stage_delete_info_view(request, season_year, season_pk, season_stage_pk):
+def league_admin_season_stage_delete_info_view(request, season_year, season_pk,
+                                                               season_stage_pk):
+
     stage = SeasonStage.objects.get(pk=season_stage_pk)
 
     using = router.db_for_write(stage._meta.model)
@@ -178,10 +189,9 @@ def league_admin_season_stage_delete_info_view(request, season_year, season_pk, 
 
     if request.method == 'POST':
         stage.delete()
-        messages.success(request, f"{stage} and all releated object were deleted")
+        messages.success(request,
+                         f"{stage} and all releated object were deleted")
         return redirect('league-admin-season-stage', season_year, season_pk)
-    else:
-        pass
 
     context = {
         'stage':stage,
@@ -192,7 +202,8 @@ def league_admin_season_stage_delete_info_view(request, season_year, season_pk, 
 
 @permission_required('league.league_admin')
 @user_owns_season_stage
-def league_admin_season_stage_add_teams_view(request, season_year, season_pk, season_stage_pk):
+def league_admin_season_stage_add_teams_view(request, season_year, season_pk,
+                                                               season_stage_pk):
     season = Season.objects.get(pk=season_pk)
     stage = SeasonStage.objects.get(pk=season_stage_pk)
 
@@ -203,7 +214,8 @@ def league_admin_season_stage_add_teams_view(request, season_year, season_pk, se
     TeamFormset = formset_factory(TeamSelectForm, extra=len(teams))
 
     if request.method == 'POST':
-        formset = TeamFormset(data=request.POST, form_kwargs={'team_queryset':teams})
+        formset = TeamFormset(data=request.POST,
+                              form_kwargs={'team_queryset':teams})
         if formset.is_valid():
             for form in formset:
                 new_teamseason, created = form.process(season=stage)
@@ -212,10 +224,13 @@ def league_admin_season_stage_add_teams_view(request, season_year, season_pk, se
                     if created:
                         messages.success(request, f"{new_teamseason} created")
                     else:
-                        messages.info(request, f"{new_teamseason} already exists")
+                        messages.info(request,
+                                      f"{new_teamseason} already exists")
 
 
-        return redirect('league-admin-season-stage-info', season_year, season_pk, season_stage_pk)
+        return redirect('league-admin-season-stage-info', season_year,
+                        season_pk, season_stage_pk)
+
     else:
         formset = TeamFormset(form_kwargs={'team_queryset':teams})
 
@@ -231,19 +246,24 @@ def league_admin_season_stage_add_teams_view(request, season_year, season_pk, se
 
 @permission_required('league.league_admin')
 @user_owns_season_stage
-def league_admin_season_stage_set_featured_view(request,season_year, season_pk, season_stage_pk):
-    stage = SeasonStage.objects.get(pk=season_stage_pk)
+def league_admin_season_stage_set_featured_view(request,season_year, season_pk,
+                                                               season_stage_pk):
 
+    stage = SeasonStage.objects.get(pk=season_stage_pk)
     stage.featured = True
     stage.save()
 
-    return redirect('league-admin-season-stage-info', season_year, season_pk, season_stage_pk)
+    return redirect('league-admin-season-stage-info', season_year, season_pk,
+                    season_stage_pk)
+
 
 
 """Team Season"""
 @permission_required('league.league_admin')
 @user_owns_team_season
-def league_admin_team_season_info_view(request, season_year, season_pk, season_stage_pk, team_name, team_season_pk):
+def league_admin_team_season_info_view(request, season_year, season_pk,
+                                    season_stage_pk, team_name, team_season_pk):
+
     team = TeamSeason.objects.get(pk=team_season_pk)
     roster = team.roster_set.get(team__pk=team_season_pk)
     players = roster.playerseason_set.all()
@@ -262,7 +282,9 @@ def league_admin_team_season_info_view(request, season_year, season_pk, season_s
 
 @permission_required('league.league_admin')
 @user_owns_season_stage
-def league_admin_team_season_delete_info_view(request, season_year, season_pk, season_stage_pk, team_name, team_season_pk):
+def league_admin_team_season_delete_info_view(request, season_year, season_pk,
+                                    season_stage_pk, team_name, team_season_pk):
+
     teamseason = TeamSeason.objects.get(pk=team_season_pk)
 
     using = router.db_for_write(teamseason._meta.model)
@@ -271,10 +293,10 @@ def league_admin_team_season_delete_info_view(request, season_year, season_pk, s
 
     if request.method == 'POST':
         teamseason.delete()
-        messages.success(request, f"{teamseason} and all releated object were deleted")
+        messages.success(request,
+                         f"{teamseason} and all releated object were deleted")
+
         return redirect('league-admin-season-stage', season_year, season_pk)
-    else:
-        pass
 
     context = {
         'season_year':season_year,
