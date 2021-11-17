@@ -5,12 +5,11 @@ from django.db import router
 from django.shortcuts import render, redirect
 from django.forms import formset_factory
 from ..forms import SeasonStageCreateForm, TeamSelectForm
-from league.models import (League, Season, SeasonStage, Team, TeamSeason)
-from ..decorators import (user_owns_season, user_owns_season_stage,
-    user_owns_team_season)
+from league.models import League, Season, SeasonStage, Team, TeamSeason
+from ..decorators import user_owns_season, user_owns_season_stage
 
 
-"""SeasonStage Views"""
+
 @permission_required('league.league_admin')
 @user_owns_season
 def league_admin_season_stage_select_view(request, season_year, season_pk):

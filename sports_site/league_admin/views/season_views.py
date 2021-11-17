@@ -4,14 +4,12 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import router
 from django.shortcuts import render, redirect
-from django.forms import formset_factory
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views.generic import UpdateView
-from ..forms import SeasonStageCreateForm, TeamSelectForm, SeasonForm
-from league.models import (League, Season, SeasonStage, Team, TeamSeason)
-from ..decorators import (user_owns_season, user_owns_season_stage,
-    user_owns_team_season)
+from ..forms import SeasonForm
+from league.models import Season, SeasonStage
+from ..decorators import user_owns_season
 
 
 
