@@ -3,9 +3,8 @@ from django.contrib.admin.utils import NestedObjects
 from django.contrib.auth.decorators import permission_required
 from django.db import router
 from django.shortcuts import render, redirect
-from django.forms import formset_factory
-from ..forms import (CreateGameForm, EditGameForm)
-from league.models import (SeasonStage, Game, TeamSeason)
+from ..forms import EditGameForm
+from league.models import Game, TeamSeason
 from ..decorators import user_owns_season_stage
 
 
