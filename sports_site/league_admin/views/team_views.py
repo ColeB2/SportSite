@@ -27,6 +27,7 @@ def league_admin_team_create_view(request):
     else:
         form = TeamCreateForm()
         form.fields['owner'].queryset=league_users
+
     context = {
         "form": form,
         "lu":league_users
@@ -42,7 +43,8 @@ def league_admin_team_edit_view(request, team_pk):
 
 
     if request.method == 'POST':
-        form = TeamCreateForm(data=request.POST, files=request.FILES, instance=team_instance)
+        form = TeamCreateForm(data=request.POST, files=request.FILES,
+                              instance=team_instance)
         form.fields['owner'].queryset=league_users
         if form.is_valid():
             team = form.process_edit()
@@ -53,6 +55,7 @@ def league_admin_team_edit_view(request, team_pk):
     else:
         form = TeamCreateForm(instance=team_instance)
         form.fields['owner'].queryset=league_users
+
     context = {
         "form": form,
         "lu":league_users,
@@ -97,7 +100,8 @@ def league_admin_team_delete_info_view(request, team_pk):
 
     if request.method == 'POST':
         team.delete()
-        messages.success(request, f"{team} and all releated object were deleted")
+        messages.success(request,
+                         f"{team} and all releated object were deleted")
         return redirect('league-admin-team-select')
     else:
         pass
