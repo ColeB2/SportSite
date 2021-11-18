@@ -8,17 +8,6 @@ from stats.models import TeamGameStats
 
 
 
-class SeasonSelectForm(forms.ModelForm):
-    class Meta:
-        model = SeasonStage
-        fields = ['season', 'stage',]
-
-    def __init__(self, *args, **kwargs):
-        super(SeasonSelectForm, self).__init__(*args, **kwargs)
-        self.fields['season'].required = False
-        self.fields['stage'].required = False
-
-
 class SeasonForm(forms.ModelForm):
     """
     Form that creates a Season model object, takes a year input and
