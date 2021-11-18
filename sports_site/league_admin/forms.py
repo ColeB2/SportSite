@@ -27,7 +27,8 @@ class SeasonForm(forms.ModelForm):
     def process(self, league):
         year_data = self.cleaned_data.get('year')
 
-        new_season, created = Season.objects.get_or_create(year=year_data, league=league)
+        new_season, created = Season.objects.get_or_create(year=year_data,
+                                                           league=league)
 
         if created:
             new_season.save()
@@ -47,8 +48,11 @@ class SeasonStageCreateForm(forms.ModelForm):
         featured_data = self.cleaned_data.get('featured')
         stage_name_data = self.cleaned_data.get('stage_name')
 
-        new_stage, created = SeasonStage.objects.get_or_create(stage=stage_data,
-            season=season,featured=featured_data, stage_name=stage_name_data)
+        new_stage, created = SeasonStage.objects.get_or_create(
+            stage=stage_data,
+            season=season,
+            featured=featured_data,
+            stage_name=stage_name_data)
 
         if created:
             new_stage.save()
@@ -72,7 +76,9 @@ class TeamSelectForm(forms.Form):
         team_data = self.cleaned_data.get('teams')
 
         if team_data:
-            new_teamseason, created = TeamSeason.objects.get_or_create(season=season, team=team_data)
+            new_teamseason, created = TeamSeason.objects.get_or_create(
+                season=season,
+                team=team_data)
 
             if created:
                 new_teamseason.save()
@@ -94,7 +100,7 @@ class PlayerCreateForm(forms.ModelForm):
         super(PlayerCreateForm, self).__init__(*args, **kwargs)
         self.fields["birthdate"].label = "Birthdate - YYYY-MM-DD format"
         self.fields["height_feet"].label = "Height, feet, ie 5,6, etc."
-        self.fields["height_feet"].label = "Height, inches, ie 1,2,3,4... etc."
+        self.fields["height_inches"].label = "Height, inches, ie 1,2,3... etc."
         self.fields["weight"].label = "Weight, lbs"
 
 
@@ -102,15 +108,15 @@ class PlayerCreateForm(forms.ModelForm):
         first_name = self.cleaned_data.get('first_name')
         last_name = self.cleaned_data.get('last_name')
 
-        new_player = Player(league=league, first_name=first_name, last_name=last_name)
+        new_player = Player(league=league, first_name=first_name,
+                            last_name=last_name)
         new_player.save()
 
         return new_player
 
 
     def process_edit(self):
-        player = self.save(commit=False)
-        player.save()
+        player = self.save(commit=True)
 
         return player
 
@@ -139,8 +145,7 @@ class TeamCreateForm(forms.ModelForm):
         return new_team
 
     def process_edit(self):
-        team = self.save(commit=False)
-        team.save()
+        team = self.save(commit=True)
 
         return team
 
@@ -151,9 +156,11 @@ class EditGameForm(forms.ModelForm):
         fields = ['home_team', 'away_team','location', 'date' , 'start_time',
             'stats_entered', 'home_score', 'away_score',]
         cur_date = datetime.today()
-        year_range = tuple([i for i in range(cur_date.year - 5, cur_date.year + 5)])
+        year_range = tuple(
+            [i for i in range(cur_date.year - 5, cur_date.year + 5) ] )
         widgets = {
-            'date': forms.SelectDateWidget(empty_label=('Year', 'Month', 'Day'), years=(year_range) )
+            'date': forms.SelectDateWidget(
+                empty_label=('Year', 'Month', 'Day'), years=(year_range) )
             }
 
     def __init__(self, *args, **kwargs):
@@ -169,7 +176,8 @@ class EditGameForm(forms.ModelForm):
                 ),
             Row(
                 Column(
-                    MultiWidgetField('date', attrs=({'style': 'width: 33%; display: inline-block; '})),
+                    MultiWidgetField('date', attrs=(
+                        {'style': 'width: 33%; display: inline-block; '})),
                     css_class='form-group col-md-8'
                     ),
                 Column('start_time', css_class='form-group col-md-4'),
@@ -184,7 +192,6 @@ class EditGameForm(forms.ModelForm):
             )
 
         self.helper.form_method = 'post'
-        # self.helper.add_input(Submit('submit', 'Save'))
         self.helper.layout.append(HTML("""
             <input type="submit" value="Save" class="btn btn-primary">
 
@@ -194,11 +201,8 @@ class EditGameForm(forms.ModelForm):
             </a>"""))
 
 
-
-
     def process(self):
-        game = self.save(commit=False)
-        game.save()
+        game = self.save(commit=True)
 
         return game
 
@@ -216,14 +220,17 @@ class CreateGameForm(forms.Form):
             required = False)
 
         cur_date = datetime.today()
-        year_range = tuple([i for i in range(cur_date.year - 5, cur_date.year + 5)])
-        self.fields['date'] = forms.DateField(initial=cur_date, widget=forms.SelectDateWidget(
-            empty_label=("Year", "Month", "Day"), years=(year_range)
-            ))
+        year_range = tuple(
+            [i for i in range(cur_date.year - 5, cur_date.year + 5)])
+        self.fields['date'] = forms.DateField(initial=cur_date,
+            widget=forms.SelectDateWidget(
+                empty_label=("Year", "Month", "Day"), years=(year_range) ) )
         self.fields['date'].required = False
 
-        self.fields['start_time'] = forms.TimeField(label='Start Time (24:00 clock)', required=False)
-        self.fields['location'] = forms.CharField(max_length=20, required=False, label='Location (default: Home)')
+        self.fields['start_time'] = forms.TimeField(
+            label='Start Time (24:00 clock)', required=False)
+        self.fields['location'] = forms.CharField(max_length=20, required=False,
+            label='Location (default: Home)')
 
         #crispylayout
         self.helper = FormHelper()
@@ -237,7 +244,8 @@ class CreateGameForm(forms.Form):
                 ),
             Row(
                 Column(
-                    MultiWidgetField('date', attrs=({'style': 'width: 33%; display: inline-block; '})),
+                    MultiWidgetField('date', attrs=(
+                        {'style': 'width: 33%; display: inline-block; '})),
                     css_class='form-group col-md-8'
                     ),
                 Column('start_time', css_class='form-group col-md-4'),
