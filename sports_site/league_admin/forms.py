@@ -159,6 +159,13 @@ class TeamCreateForm(forms.ModelForm):
 
 
 class EditGameForm(forms.ModelForm):
+    """
+    Used to edit the Game model.
+
+    Used: league_admin/views/games_views.py
+        league_admin_edit_game_view()
+
+    """
     class Meta:
         model = Game
         fields = ['home_team', 'away_team','location', 'date' , 'start_time',
