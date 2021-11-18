@@ -20,6 +20,14 @@ class SeasonSelectForm(forms.ModelForm):
 
 
 class SeasonForm(forms.ModelForm):
+    """
+    Form that creates a Season model object, takes a year input and
+    automatically inputs the league value depending on user.
+
+    Used: league_admin/views/season/views.py
+        league_admin_create_season_view()
+        SeasonEditView()
+    """
     class Meta:
         model = Season
         fields = ['year',]
