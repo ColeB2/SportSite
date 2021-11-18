@@ -336,6 +336,12 @@ class CreateGameForm(forms.Form):
 
 
 class EditUserRosterPermissionsForm(forms.Form):
+    """
+    Used to edit a League's team admins roster permissions
+
+    Used: league_admin/views/user_views.py
+        league_admin_user_edit_perms_view()
+    """
     def __init__(self, selected_user, *args, **kwargs):
         self.selected_user = selected_user
         super(EditUserRosterPermissionsForm, self).__init__(*args, **kwargs)
