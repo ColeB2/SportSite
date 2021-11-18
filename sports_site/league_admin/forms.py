@@ -46,6 +46,12 @@ class SeasonForm(forms.ModelForm):
 
 
 class SeasonStageCreateForm(forms.ModelForm):
+    """
+    Used to create a SeasonStage model object.
+
+    Used: league_admin/views/season_stage_views.py
+        league_admin_create_season_stage_view()
+    """
     class Meta:
         model = SeasonStage
         fields = ['stage', 'stage_name', 'featured']
