@@ -230,6 +230,13 @@ class EditGameForm(forms.ModelForm):
 
 
 class CreateGameForm(forms.Form):
+    """
+    Used to create a Game model object via a formset factory to create
+    multiple game objects at the same time.
+
+    Used: league_admin/views/schedule_views.py
+        league_admin_schedule_create_view()
+    """
     def __init__(self, team_queryset=None, *args, **kwargs):
         super(CreateGameForm, self).__init__(*args, **kwargs)
 
