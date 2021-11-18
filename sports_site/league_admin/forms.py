@@ -98,6 +98,13 @@ class TeamSelectForm(forms.Form):
 
 
 class PlayerCreateForm(forms.ModelForm):
+    """
+    Used to created a Player model object.
+
+    Used: league_admin/views/player_views.py
+        league_admin_player_create_view()
+        league_admin_player_edit_view()
+    """
     class Meta:
         model = Player
         fields = ['first_name', 'last_name', "birthdate", "bats", "throw",
