@@ -151,6 +151,13 @@ class PlayerCreateForm(forms.ModelForm):
 
 
 class TeamCreateForm(forms.ModelForm):
+    """
+    Used to create a Team model object.
+
+    Used: league_admin/views/team_views.py
+        league_admin_team_create_view()
+        league_admin_team_edit_view()
+    """
     class Meta:
         model = Team
         fields = ['owner', 'name', 'place', 'abbreviation']
