@@ -251,7 +251,7 @@ class CreateGameForm(forms.Form):
                 Column('start_time', css_class='form-group col-md-4'),
                 css_class='form-row'
                 )
-                )
+            )
 
     def process(self, current_stage=None):
         """To be called only after form.is_valid() method has been called"""
