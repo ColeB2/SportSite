@@ -69,6 +69,14 @@ class SeasonStageCreateForm(forms.ModelForm):
 
 
 class TeamSelectForm(forms.Form):
+    """
+    Used as a select form for select teams that will participate in a
+    new season stage.
+
+    Used: league_admin/views/season_stage_views.py
+        league_admin_create_season_stage_view()
+        league_admin_season_stage_add_teams_view()
+    """
     def __init__(self, team_queryset, *args, **kwargs):
         super(TeamSelectForm,self).__init__(*args, **kwargs)
         self.fields['teams'] = forms.ModelChoiceField(
