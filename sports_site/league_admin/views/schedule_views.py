@@ -17,7 +17,9 @@ def league_admin_schedule_select_view(request):
     context = {
         "stages":stages,
         }
-    return render(request, "league_admin/schedule_templates/schedule_select.html", context)
+    return render(request,
+                  "league_admin/schedule_templates/schedule_select.html",
+                  context)
 
 
 @permission_required('league.league_admin')
@@ -32,7 +34,8 @@ def league_admin_schedule_view(request, season_year, season_stage_pk):
         "stage":stage,
         }
 
-    return render(request, "league_admin/schedule_templates/schedule_view.html", context)
+    return render(request, "league_admin/schedule_templates/schedule_view.html",
+                  context)
 
 
 @permission_required('league.league_admin')
@@ -68,12 +71,15 @@ def league_admin_schedule_create_view(request, season_year, season_stage_pk):
         "formset": formset,
         "current_stage": current_stage,
         }
-    return render(request, "league_admin/schedule_templates/schedule_create.html", context)
+    return render(request,
+                  "league_admin/schedule_templates/schedule_create.html",
+                  context)
 
 
 @permission_required('league.league_admin')
 @user_owns_season_stage
-def league_admin_schedule_delete_info_view(request, season_year, season_stage_pk):
+def league_admin_schedule_delete_info_view(request, season_year,
+                                                               season_stage_pk):
     """
     To Do: Delete schedule. Different from other deletes,
     as schedule isn't and object/model. So will need to
@@ -103,4 +109,6 @@ def league_admin_schedule_delete_info_view(request, season_year, season_stage_pk
         'stage':stage,
         'nested_games':nested_games,
     }
-    return render(request, "league_admin/schedule_templates/schedule_delete.html", context)
+    return render(request,
+                  "league_admin/schedule_templates/schedule_delete.html",
+                  context)
