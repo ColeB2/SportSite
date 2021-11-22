@@ -6,12 +6,13 @@ urlpatterns = [
     path('', views.league_admin_dashboard_view, name='league-admin-dashboard'),
     path('roster/',views.league_admin_roster_select, name='league-admin-roster-select'),
     path('news/',views.league_admin_news_select, name='league-admin-news-select'),
+
     path('season/',views.league_admin_season_view, name='league-admin-season'),
     path('season/add/new', views.league_admin_create_season_view, name='league-admin-season-create'),
-
     path('season/<int:season_year>/<season_pk>', views.league_admin_season_stage_select_view, name='league-admin-season-stage'),
     path('season/<int:season_year>/<season_pk>/<int:pk>/edit/season', SeasonEditView.as_view(), name='league-admin-season-edit'),
     path('season/<int:season_year>/<season_pk>/delete', views.league_admin_season_delete_info_view, name='league-admin-season-delete'),
+
     path('season/<int:season_year>/<season_pk>/add/new', views.league_admin_create_season_stage_view, name='league-admin-season-stage-create'),
     path('season/<int:season_year>/<season_pk>/<season_stage_pk>', views.league_admin_season_stage_info_view, name='league-admin-season-stage-info'),
     path('season/<int:season_year>/<season_pk>/<season_stage_pk>/delete', views.league_admin_season_stage_delete_info_view, name='league-admin-season-stage-delete'),
