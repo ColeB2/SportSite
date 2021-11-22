@@ -42,7 +42,7 @@ def league_admin_edit_game_view(request, season_year, season_stage_pk, game_pk):
         "season_year": season_year,
         "season_stage_pk":season_stage_pk
         }
-    return render(request, "league_admin/game_edit.html", context)
+    return render(request, "league_admin/game_templates/game_edit.html", context)
 
 
 @permission_required('league.league_admin')
@@ -66,5 +66,5 @@ def league_admin_delete_game_info_view(request, season_year, season_stage_pk, ga
         "game":game,
         "nested_object":nested_object,
     }
-    return render(request, "league_admin/game_delete.html", context)
+    return render(request, "league_admin/game_templates/game_delete.html", context)
 
