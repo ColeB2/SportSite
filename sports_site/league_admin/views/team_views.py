@@ -32,7 +32,7 @@ def league_admin_team_create_view(request):
         "form": form,
         "lu":league_users
     }
-    return render(request, "league_admin/team_create.html", context)
+    return render(request, "league_admin/team_templates/team_create.html", context)
 
 
 @permission_required('league.league_admin')
@@ -62,7 +62,7 @@ def league_admin_team_edit_view(request, team_pk):
         "team_instance": team_instance,
         "league": league,
     }
-    return render(request, "league_admin/team_edit.html", context)
+    return render(request, "league_admin/team_templates/team_edit.html", context)
 
 
 @permission_required('league.league_admin')
@@ -73,7 +73,7 @@ def league_admin_team_select_view(request):
     context = {
         "teams":teams
     }
-    return render(request, "league_admin/team_select.html",context)
+    return render(request, "league_admin/team_templates/team_select.html",context)
 
 
 @permission_required('league.league_admin')
@@ -86,7 +86,7 @@ def league_admin_team_info_view(request, team_pk):
         "team":team,
         "team_seasons": team_seasons,
     }
-    return render(request, "league_admin/team_page.html",context)
+    return render(request, "league_admin/team_templates/team_page.html",context)
 
 
 @permission_required('league.league_admin')
@@ -110,4 +110,5 @@ def league_admin_team_delete_info_view(request, team_pk):
         'team':team,
         'nested_object':nested_object,
     }
-    return render(request, "league_admin/team_delete.html", context)
+    return render(request, "league_admin/team_templates/team_delete.html", context)
+
