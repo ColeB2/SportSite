@@ -1,8 +1,8 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (Layout, Row, Column, MultiWidgetField, HTML)
+from crispy_forms.layout import Column, HTML, Layout, MultiWidgetField, Row
+from datetime import datetime
 from django import forms
 from django.contrib.auth.models import Permission
-from datetime import datetime
 from league.models import Game, Player, Season, SeasonStage, Team, TeamSeason
 from stats.models import TeamGameStats
 
