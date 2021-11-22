@@ -157,9 +157,6 @@ class EditGameForm(forms.ModelForm):
         return game
 
 
-
-
-
 class EditUserRosterPermissionsForm(forms.Form):
     """
     Used to edit a League's team admins roster permissions
@@ -273,7 +270,6 @@ class SeasonForm(forms.ModelForm):
             new_season.save()
 
         return new_season, created
-
 
 
 class SeasonStageCreateForm(forms.ModelForm):
