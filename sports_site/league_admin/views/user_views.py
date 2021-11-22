@@ -17,7 +17,8 @@ def league_admin_users_view(request):
         'league':league,
         'teams':teams,
         }
-    return render(request, "league_admin/user_templates/users_page.html", context)
+    return render(request, "league_admin/user_templates/users_page.html",
+                  context)
 
 
 @permission_required('league.league_admin')
@@ -29,7 +30,8 @@ def league_admin_user_info_view(request, user_name, user_pk):
         'user_viewed': user_viewed,
         'team': team,
         }
-    return render(request, "league_admin/user_templates/user_info.html", context)
+    return render(request, "league_admin/user_templates/user_info.html",
+                  context)
 
 
 @permission_required('league.league_admin')
@@ -62,4 +64,6 @@ def league_admin_user_edit_perms_view(request, user_name, user_pk):
         'roster_permissions': roster_permissions,
         'user_perms': user_permissions,
         }
-    return render(request, "league_admin/user_templates/user_edit_perms.html", context)
+    return render(request, "league_admin/user_templates/user_edit_perms.html",
+                  context)
+
