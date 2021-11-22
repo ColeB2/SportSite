@@ -21,7 +21,7 @@ def league_admin_season_stage_select_view(request, season_year, season_pk):
         'season_year': season_year,
         'stages':stages,
         }
-    return render(request, "league_admin/season_stage_select_page.html", context)
+    return render(request, "league_admin/season_stage_templates/season_stage_select_page.html", context)
 
 
 @permission_required('league.league_admin')
@@ -71,7 +71,7 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
         "form": form,
         "formset": formset,
     }
-    return render(request, "league_admin/season_stage_create.html", context)
+    return render(request, "league_admin/season_stage_templates/season_stage_create.html", context)
 
 
 @permission_required('league.league_admin')
@@ -88,7 +88,7 @@ def league_admin_season_stage_info_view(request, season_year, season_pk,
         'stage': stage,
         'teams': teams,
         }
-    return render(request, "league_admin/season_stage_page.html", context)
+    return render(request, "league_admin/season_stage_templates/season_stage_page.html", context)
 
 
 @permission_required('league.league_admin')
@@ -112,7 +112,7 @@ def league_admin_season_stage_delete_info_view(request, season_year, season_pk,
         'stage':stage,
         'nested_object':nested_object,
     }
-    return render(request, "league_admin/season_stage_delete.html", context)
+    return render(request, "league_admin/season_stage_templates/season_stage_delete.html", context)
 
 
 @permission_required('league.league_admin')
@@ -156,7 +156,7 @@ def league_admin_season_stage_add_teams_view(request, season_year, season_pk,
         'teams': existing_teams,
         'formset': formset,
     }
-    return render(request, "league_admin/season_stage_add_teams.html", context)
+    return render(request, "league_admin/season_stage_templates/season_stage_add_teams.html", context)
 
 
 @permission_required('league.league_admin')
