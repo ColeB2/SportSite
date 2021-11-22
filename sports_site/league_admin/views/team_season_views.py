@@ -26,7 +26,10 @@ def league_admin_team_season_info_view(request, season_year, season_pk,
         'roster':roster,
         'players': players,
         }
-    return render(request, "league_admin/team_season_info.html", context)
+    return render(
+        request,
+        "league_admin/team_season_templates/team_season_info.html",
+        context)
 
 
 @permission_required('league.league_admin')
@@ -55,4 +58,8 @@ def league_admin_team_season_delete_info_view(request, season_year, season_pk,
         'teamseason':teamseason,
         'nested_object':nested_object,
     }
-    return render(request, "league_admin/team_season_delete.html", context)
+    return render(
+        request,
+        "league_admin/team_season_templates/team_season_delete.html",
+        context)
+
