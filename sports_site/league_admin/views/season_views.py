@@ -23,7 +23,8 @@ def league_admin_season_view(request):
         'seasons':seasons,
         'stages':stages,
         }
-    return render(request, "league_admin/season_templates/season_page.html", context)
+    return render(request, "league_admin/season_templates/season_page.html",
+                  context)
 
 
 @permission_required('league.league_admin')
@@ -49,7 +50,8 @@ def league_admin_create_season_view(request):
         'seasons':seasons,
         "form": form
     }
-    return render(request, "league_admin/season_templates/season_create.html", context)
+    return render(request, "league_admin/season_templates/season_create.html",
+                  context)
 
 
 @permission_required('league.league_admin')
@@ -71,7 +73,8 @@ def league_admin_season_delete_info_view(request, season_year, season_pk):
         'season':season,
         'nested_object':nested_object,
     }
-    return render(request, "league_admin/season_templates/season_delete.html", context)
+    return render(request, "league_admin/season_templates/season_delete.html",
+                  context)
 
 
 class SeasonEditView(PermissionRequiredMixin, UpdateView):
