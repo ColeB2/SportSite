@@ -1,45 +1,31 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
+    <div class="container">
+        <div class="content-section">
+            {% if perms.league.league_admin and current_stage.season.league == request.user.userprofile.league %}
 
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
+            <h2>Create Schedule for: {{current_stage}}:</h2>
+            <br><br>
 
+            <h2>Games:</h2>
+            <legend><small>Add games using forms below</small></legend>
+            <form method="post">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                {% for form in formset %}
+                <h5>Game:</h5>
+                    {% crispy form %}
+                {% endfor %}
 
-        {% if perms.league.league_admin and current_stage.season.league == request.user.userprofile.league %}
+                <input type="submit" name="create" value="Create Games" class="btn btn-primary">
+                <input type="submit" name="create-and-continue" value="Create Games and Continue" class="btn btn-primary">
+            </form>
 
-        <h2>Create Schedule for: {{current_stage}}:</h2>
-        <br><br>
-
-        <h2>Games:</h2>
-        <legend><small>Add games using forms below</small></legend>
-        <form method="post">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            {% for form in formset %}
-            <h5>Game:</h5>
-                {% crispy form %}
-            {% endfor %}
-
-            <input type="submit" name="create" value="Create Games" class="btn btn-primary">
-            <input type="submit" name="create-and-continue" value="Create Games and Continue" class="btn btn-primary">
-        </form>
-
-        {% else %}
-        <h2>Access Denied</h2>
-        <h3>You Don't Own <b>{{current_stage.season.league}}</b>'s <b>{{current_stage}}</b></h3>
-
-
-        {% endif %}
-
+            {% else %}
+            <h2>Access Denied</h2>
+            <h3>You Don't Own <b>{{current_stage.season.league}}</b>'s <b>{{current_stage}}</b></h3>
+            {% endif %}
+        </div>
     </div>
-</div>
-
 {% endblock content %}
