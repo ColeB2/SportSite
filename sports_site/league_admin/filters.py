@@ -1,5 +1,5 @@
 import django_filters
-from league.models import Roster, Player, SeasonStage
+from league.models import Player, Roster, SeasonStage
 from news.models import Article
 
 
