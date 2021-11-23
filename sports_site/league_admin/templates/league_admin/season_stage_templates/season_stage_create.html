@@ -1,30 +1,28 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-        <h2>Existing Stages for {{season_year}}:</h2>
-        {% for stage in stages %}
-        <h4>{{stage}}</h4>
-        {% endfor %}
-        <br><br>
-        <h2>Create a Season Stage:</h2>
+    <div class="container">
+        <div class="content-section">
+            <h2>Existing Stages for {{season_year}}:</h2>
+            {% for stage in stages %}
+            <h4>{{stage}}</h4>
+            {% endfor %}
+            <br><br>
+            <h2>Create a Season Stage:</h2>
 
+            <form method="post">
+                {% csrf_token %}
+                {{form|crispy}}
 
+                <h2>Teams:</h2>
+                <legend><small>
+                    Select teams to add/teams that qualify for the season stage.
+                </small></legend>
+                {{formset|crispy}}
 
-
-        <form method="post">
-            {% csrf_token %}
-            {{form|crispy}}
-
-            <h2>Teams:</h2>
-            <legend><small>Select teams to add/teams that qualify for the season stage.</small></legend>
-            {{formset|crispy}}
-
-            <input type="submit" value="Create Season Stage" class="btn btn-primary">
-        </form>
-
+                <input type="submit" value="Create Season Stage" class="btn btn-primary">
+            </form>
+            <br><br>
+        </div>
     </div>
-</div>
-
 {% endblock content %}
