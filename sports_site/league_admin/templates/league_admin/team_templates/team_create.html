@@ -1,21 +1,20 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-        <h2>Create a Team:</h2>
-        <legend><small>To add player to a team/roster, use roster menu.</small></legend>
+    <div class="container">
+        <div class="content-section">
+            <h2>Create a Team:</h2>
+            <legend><small>To add player to a team/roster, use roster menu.</small></legend>
 
-
-        <form method="post">
-            {% csrf_token %}
-            {{form|crispy}}
+            <form method="post">
+                {% csrf_token %}
+                {{form|crispy}}
             {% block teamcontent%}
-            <input type="hidden" name="next" value="{{ request.path }}">
-            <input type="submit" value="Create Team" class="btn btn-primary">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <input type="submit" value="Create Team" class="btn btn-primary">
             {% endblock teamcontent %}
-        </form>
+            </form>
+            <br><br>
+        </div>
     </div>
-</div>
-
 {% endblock content %}
