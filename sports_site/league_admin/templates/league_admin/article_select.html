@@ -1,29 +1,17 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
+    <div class="container">
+        <div class="content-section">
+            <legend><small>
+                Use form below to search for a news article in your league.
+            </small></legend>
 
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-
-
-        <legend><small>Use form below to search for a news article in your league.</small></legend>
-
-
-        <form method="get">
-            {{filter.form|crispy}}
-            <input type="submit" value="Submit" class="btn btn-primary">
-        </form>
-
-
-        <br><br>
-
+            <form method="get">
+                {{filter.form|crispy}}
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </form>
+            <br><br>
 
         {% for article in all_articles %}
             <h6>
@@ -32,35 +20,32 @@
                 </a>
             </h6>
         {% endfor %}
-
-
-        <br><br>
+            <br><br>
 
         {% if all_articles.has_other_pages %}
-                <ul class="pagination">
-                {% if all_articles.has_previous %}
-                    <li class="page-item"><a class="page-link" href="?page={{ all_articles.previous_page_number }}">&laquo;</a></li>
-                {% else %}
-                    <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
-                {% endif %}
+            <ul class="pagination">
+            {% if all_articles.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page={{ all_articles.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            {% endif %}
 
-                {% for i in all_articles.paginator.page_range %}
-                    {% if all_articles.number == i %}
-                        <li class="page-item active"><span class="page-link">{{ i }}</span></li>
-                    {% else %}
-                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-                    {% endif %}
-                {% endfor %}
-
-                {% if all_articles.has_next %}
-                    <li class="page-item"><a class="page-link "href="?page={{ all_articles.next_page_number }}">&raquo;</a></li>
+            {% for i in all_articles.paginator.page_range %}
+                {% if all_articles.number == i %}
+                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
                 {% else %}
-                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                 {% endif %}
-                </ul>
+            {% endfor %}
+
+            {% if all_articles.has_next %}
+                <li class="page-item"><a class="page-link "href="?page={{ all_articles.next_page_number }}">&raquo;</a></li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            {% endif %}
+            </ul>
         {% endif %}
-
-
+            <br><br>
+        </div>
     </div>
-</div>
 {% endblock content %}
