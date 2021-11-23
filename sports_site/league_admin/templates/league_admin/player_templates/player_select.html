@@ -1,49 +1,33 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
+    <div class="container">
+        <div class="content-section">
+            <legend><small>Use form below to search for a Player in your league.</small></legend>
 
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
+            <form method="get">
+                {{filter.form|crispy}}
+                <input type="submit" value="Submit" class="btn btn-primary">
 
-
-        <legend><small>Use form below to search for a Player in your league.</small></legend>
-
-
-        <form method="get">
-            {{filter.form|crispy}}
-            <input type="submit" value="Submit" class="btn btn-primary">
-
-            <a class="btn btn-primary"
-                href="{% url 'league-admin-player-create' %}">Create Player
-            </a>
-        </form>
-
-
-        <br><br>
-
-
-        <h1>Players:</h1>
-
-
-        {% for player in all_players %}
-            <h6>
-                <a href="{% url 'league-admin-player-edit' player.pk %}">
-                    {{player}}
+                <a class="btn btn-primary"
+                    href="{% url 'league-admin-player-create' %}">Create Player
                 </a>
-            </h6>
-        {% endfor %}
+            </form>
+            <br><br>
 
+            <h1>Players:</h1>
 
-        <br><br>
+            {% for player in all_players %}
+                <h6>
+                    <a href="{% url 'league-admin-player-edit' player.pk %}">
+                        {{player}}
+                    </a>
+                </h6>
+            {% endfor %}
 
-        {% if all_players.has_other_pages %}
+            <br><br>
+
+            {% if all_players.has_other_pages %}
                 <ul class="pagination">
                 {% if all_players.has_previous %}
                     <li class="page-item"><a class="page-link" href="?page={{ all_players.previous_page_number }}">&laquo;</a></li>
@@ -65,9 +49,7 @@
                     <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
                 {% endif %}
                 </ul>
-        {% endif %}
-
-
+            {% endif %}
+        </div>
     </div>
-</div>
 {% endblock content %}
