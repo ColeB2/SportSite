@@ -1,31 +1,25 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-        {% block player_title %}
-        <h2>Create a Player:</h2>
-        <legend><small>
-            To add player to a team/roster, use roster menu.
-        To add vitals (birthday, height, weight etc. Use edit form after creating player)
-        </small></legend>
-        {% endblock player_title %}
+    <div class="container">
+        <div class="content-section">
+            {% block player_title %}
+            <h2>Create a Player:</h2>
+            <legend><small>
+                To add player to a team/roster, use roster menu.
+            </small></legend>
+            {% endblock player_title %}
 
-
-
-
-        <form method="post">
-            {% csrf_token %}
-            {{form|crispy}}
+            <form method="post">
+                {% csrf_token %}
+                {{form|crispy}}
 
             {% block player_button_content %}
             <input type="submit"value="Create Player" class="btn btn-primary">
-            <a class="btn btn-primary "href="{% url 'league-admin-player-select' %}">Back</a>
-            <br><br>
+                <a class="btn btn-primary "href="{% url 'league-admin-player-select' %}">Back</a>
+                <br><br>
             {% endblock player_button_content %}
-
-        </form>
-
+            </form>
+        </div>
     </div>
-</div>
 {% endblock content %}
