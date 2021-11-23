@@ -1,32 +1,22 @@
 {% extends "news/base.html" %}
 {% load league_admin_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-        <h2>{{stage}}</h2>
+    <div class="container">
+        <div class="content-section">
+            <h2>{{stage}}</h2>
 
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
+            <legend>Warning: Deleting {{stage}} will delete all object related to it.</legend>
 
+            {{nested_object.nested|unordered_list }}
+            <form method="POST">
+                {% csrf_token %}
 
-        <legend>Warning: Deleting {{stage}} will delete all object related to it.</legend>
+                <legend>Are You Sure you want to delete this item, and all related items?</legend>
 
-        {{nested_object.nested|unordered_list }}
-        <form method="POST">
-            {% csrf_token %}
-
-            <legend>Are You Sure you want to delete this item, and all related items?</legend>
-
-            <input class="btn btn-danger"type="submit" value="Delete"/>
-            <a class="btn btn-primary" href="{% url 'league-admin-season-stage' stage.season.year stage.season.pk %}">Cancel</a>
-        </form>
-
+                <input class="btn btn-danger"type="submit" value="Delete"/>
+                <a class="btn btn-primary" href="{% url 'league-admin-season-stage' stage.season.year stage.season.pk %}">Cancel</a>
+            </form>
+            <br><br>
+        </div>
     </div>
-</div>
-
 {% endblock content %}
