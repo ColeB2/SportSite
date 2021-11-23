@@ -1,46 +1,28 @@
 {% extends "news/base.html" %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-        <h2>{{season_year}} Season</h2>
-        <h4>Season Stages:</h4>
+    <div class="container">
+        <div class="content-section">
+            <h2>{{season_year}} Season</h2>
+            <h4>Season Stages:</h4>
+            {% for stage in stages %}
+            <h6>
+                <a href="{% url 'league-admin-season-stage-info' season_year season.pk stage.pk %}">{{stage}}</a>
+            </h6>
+            {% endfor %}
 
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
+            <br><br>
 
+            <a class="btn btn-primary" href="{% url 'league-admin-season-edit' season_year season.pk season.pk %}">
+                Edit {{season_year}} Season
+            </a>
+            <a class="btn btn-primary" href="{% url 'league-admin-season-stage-create' season_year season.pk %}">
+                New Season Stage
+            </a>
 
-        {% for stage in stages %}
-        <h6>
-            <a href="{% url 'league-admin-season-stage-info' season_year season.pk stage.pk %}">{{stage}}</a>
-        </h6>
-        {% endfor %}
-
-        <br><br>
-
-        <a class="btn btn-primary" href="{% url 'league-admin-season-edit' season_year season.pk season.pk %}">
-            Edit {{season_year}} Season
-        </a>
-
-
-        <a class="btn btn-primary" href="{% url 'league-admin-season-stage-create' season_year season.pk %}">
-            New Season Stage
-        </a>
-
-        <a class="btn btn-danger" href="{% url 'league-admin-season-delete' season_year season.pk %}">
-            Delete {{season_year }} Season
-        </a>
-
-
-
-
-
-
+            <a class="btn btn-danger" href="{% url 'league-admin-season-delete' season_year season.pk %}">
+                Delete {{season_year }} Season
+            </a>
+            <br><br>
+        </div>
     </div>
-</div>
-
 {% endblock content %}
