@@ -1,16 +1,15 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
+    <div class="container">
+        <div class="content-section">
 
-        <h2>Game:</h2>
-        <legend><small>Edit Game Fields:</small></legend>
+            <h2>Game:</h2>
+            <legend><small>Edit Game Fields:</small></legend>
 
-            {% crispy form %}
-        <br><br>
+                {% crispy form %}
+            <br><br>
 
+        </div>
     </div>
-</div>
-
 {% endblock content %}
