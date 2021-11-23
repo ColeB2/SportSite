@@ -9,6 +9,7 @@ def league_seasons(request):
     league = request.user.userprofile.league
     return SeasonStage.objects.filter(season__league=league)
 
+
 class RosterFilter(django_filters.FilterSet):
     team__season = django_filters.ModelChoiceFilter(queryset=league_seasons)
     class Meta:
