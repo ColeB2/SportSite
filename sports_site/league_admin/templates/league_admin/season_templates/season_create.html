@@ -1,9 +1,8 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-
+    <div class="container">
+        <div class="content-section">
         {% block season_content %}
             <h2>Existing Seasons:</h2>
             {% for season in seasons %}
@@ -12,17 +11,15 @@
             <br><br>
             <h2>Create a Season:</h2>
         {% endblock season_content %}
-
-        <form method="post">
-            {% csrf_token %}
-            {{form|crispy}}
+            <form method="post">
+                {% csrf_token %}
+                {{form|crispy}}
 
             {% block season_button %}
-            <input type="submit" value="Create Season" class="btn btn-primary">
+                <input type="submit" value="Create Season" class="btn btn-primary">
             {% endblock season_button %}
-        </form>
-
+            </form>
+            <br><br>
+        </div>
     </div>
-</div>
-
 {% endblock content %}
