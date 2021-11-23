@@ -1,26 +1,18 @@
 {% extends "news/base.html" %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-
-        <h3>Teams:</h3>
-        {% for team in teams %}
-        <h6>
-            <a href="{% url 'league-admin-team-info' team.pk %}">{{team}}</a>
-        </h6>
-        {% endfor %}
-
-        <br><br>
-        <a class="btn btn-primary" href="{% url 'league-admin-team-create' %}">Create Team</a>
+    <div class="container">
+        <div class="content-section">
+            <h3>Teams:</h3>
+            {% for team in teams %}
+            <h6>
+                <a href="{% url 'league-admin-team-info' team.pk %}">{{team}}</a>
+            </h6>
+            {% endfor %}
+            <br><br>
+            <a class="btn btn-primary" href="{% url 'league-admin-team-create' %}">
+                Create Team
+            </a>
+            <br><br>
+        </div>
     </div>
-</div>
-
 {% endblock content %}
