@@ -1,33 +1,26 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
+    <div class="container">
+        <div class="content-section">
+            <legend><small>
+                Use form below to search for a Roster in your league.
+            </small></legend>
 
+            <form method="get">
+                {{filter.form|crispy}}
+                <input type="submit" value="Submit" class="btn btn-primary">
+            </form>
+            <br><br>
 
-        <legend><small>Use form below to search for a Roster in your league.</small></legend>
-
-
-        <form method="get">
-            {{filter.form|crispy}}
-            <input type="submit" value="Submit" class="btn btn-primary">
-        </form>
-
-
-        <br><br>
-
-
-        {% for roster in all_rosters %}
+            {% for roster in all_rosters %}
             <h6>
                 <a href="{% url 'user-roster-view' roster.team.team.name roster.team.season.season.year roster.pk %}">
                     {{roster}}
                 </a>
             </h6>
-        {% endfor %}
-
-
-        <br><br>
-
+            {% endfor %}
+            <br><br>
 
         {% if all_rosters.has_other_pages %}
             <ul class="pagination">
@@ -39,19 +32,19 @@
 
             {% for i in all_rosters.paginator.page_range %}
                 {% if all_rosters.number == i %}
-                    <li class="page-item active"><span class="page-link">{{ i }}</span></li>
-               {% else %}
-                    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                <li class="page-item active"><span class="page-link">{{ i }}</span></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
                 {% endif %}
             {% endfor %}
 
             {% if all_rosters.has_next %}
                 <li class="page-item"><a class="page-link "href="?page={{ all_rosters.next_page_number }}">&raquo;</a></li>
-            {% else %}
-                <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+        {% else %}
+                    <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
             {% endif %}
             </ul>
         {% endif %}
+        </div>
     </div>
-</div>
 {% endblock content %}
