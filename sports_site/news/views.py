@@ -1,25 +1,28 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.db.models.query import QuerySet
 from django.http import HttpResponseRedirect
-from django.shortcuts import render#, redirect
+from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from league.models import Game, League, SeasonStage
 from stats.get_stats import get_league_leaders
 from stats.stat_calc import _convert_to_str
 from .decorators import user_owns_article
 from .forms import ArticleCreateForm
 from .models import Article
-from django.db.models.query import QuerySet
+
 
 
 
 def home(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
-    Article_data = Article.objects.all().filter(league__url=league_slug).order_by('-id')[:10]
+    Article_data = Article.objects.all().filter(
+        league__url=league_slug).order_by('-id')[:10]
 
     """Leaders"""
-    featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
+    featured_stage = SeasonStage.objects.get(season__league=league,
+                                             featured=True)
     stats = get_league_leaders(league, featured_stage)
     if stats:
         avg = stats.order_by('-average')[0]
