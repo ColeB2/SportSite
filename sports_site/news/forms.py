@@ -1,10 +1,11 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Row, Column, MultiWidgetField
+from crispy_forms.layout import Column, Layout, MultiWidgetField, Row
+from datetime import datetime
 from django import forms
 from django.forms import SelectDateWidget
 from news.models import Article
 
-from datetime import datetime
+
 
 class ArticleCreateForm(forms.ModelForm):
     class Meta:
