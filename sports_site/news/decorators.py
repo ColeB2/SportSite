@@ -1,6 +1,7 @@
 from django.core.exceptions import PermissionDenied
-from news.models import Article
 from functools import wraps
+from news.models import Article
+
 
 
 def user_owns_article(function):
