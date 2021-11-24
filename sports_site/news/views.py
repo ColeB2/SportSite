@@ -13,7 +13,6 @@ from .models import Article
 
 
 
-
 def home(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
@@ -38,14 +37,10 @@ def home(request):
         runs = None
         stolen_bases = None
 
-
     """Games"""
     schedule_query = Game.objects.all().filter(season=featured_stage).query
     schedule_query.group_by = ["date"]
     schedule = QuerySet(query=schedule_query, model=Game)
-
-
-
 
     context = {
         "articles": Article_data,
