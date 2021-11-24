@@ -6,88 +6,84 @@
     <link rel="stylesheet" type="text/css" href="/static/css/swiper.css">
     <!--BxSlider Jquery CSS-->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.css" rel="stylesheet" />
-
 {% endblock head %}
 
 {% block content %}
-
-<!--Swiper JS-->
-<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
-
-
-<!-- Slider main container -->
-{% regroup schedule by date as schedy %}
-<div class="swiper mySwiper">
-  <!-- Additional required wrapper -->
-  <div class="swiper-wrapper">
-    <!-- Slides -->
-    {% for date in schedy %}
-    <div class="swiper-slide swiper-ticker-date d-flex flex-column justify-content-center">
-        <h6 class="text-center" id="{{date.grouper}}">
-            <b>{{date.grouper|date:"D"}}</b><br>
-            <b>{{date.grouper|date:"M d"}}</b><br>
-            <b>{{date.grouper.year}}</b><br>
-        </h6>
-    </div>
-        {% for game in date.list %}
-        <div class="swiper-slide">
-            <table class="swiper-table" data-href="{% url 'game-boxscore-page' game.pk %}">
-                <tr>
-                    {% if game.home_score %}
+    <!--Swiper JS-->
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+    <!-- Slider main container -->
+    {% regroup schedule by date as schedy %}
+    <div class="swiper mySwiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            {% for date in schedy %}
+            <div class="swiper-slide swiper-ticker-date d-flex flex-column justify-content-center">
+                <h6 class="text-center" id="{{date.grouper}}">
+                    <b>{{date.grouper|date:"D"}}</b><br>
+                    <b>{{date.grouper|date:"M d"}}</b><br>
+                    <b>{{date.grouper.year}}</b><br>
+                </h6>
+            </div>
+            {% for game in date.list %}
+            <div class="swiper-slide">
+                <table class="swiper-table" data-href="{% url 'game-boxscore-page' game.pk %}">
+                    <tr>
+                        {% if game.home_score %}
                         <th colspan="2">
                             <a href="{% url 'game-boxscore-page' game.pk %}"
                                 class="sport-ticker-link">
-                                FINAL
+                                    FINAL
                             </a>
                         </th>
                         <td></td>
-                    {% else %}
+                        {% else %}
                         <th colspan="2"><a>{{game.start_time}}</a></th>
                         <td></td>
-                    {% endif %}
-
-                </tr>
-                <tr>
-                    <td>{{game.away_team.team.abbreviation}}</td>
-                    <td class="text-end">{{game.away_score}}</td>
-                </tr>
-                <tr>
-                    <td>{{game.home_team.team.abbreviation}}</td>
-                    <td class="text-end">{{game.home_score}}</td>
-                </tr>
-            </table>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td>{{game.away_team.team.abbreviation}}</td>
+                        <td class="text-end">{{game.away_score}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{game.home_team.team.abbreviation}}</td>
+                        <td class="text-end">{{game.home_score}}</td>
+                    </tr>
+                </table>
+            </div>
+            {% endfor %}
+            {% endfor %}
+            <div class="swiper-slide">
+                <a href="{% url 'schedule-page' %}?league={{request.GET.league}}">See All Games</a>
+            </div>
         </div>
-        {% endfor %}
-    {% endfor %}
-    <div class="swiper-slide">See All Games</div>
-  </div>
-  <!-- If we need pagination -->
-  <!--<div class="swiper-pagination"></div>-->
+        <!-- If we need pagination -->
+        <!--<div class="swiper-pagination"></div>-->
+        <!-- If we need navigation buttons -->
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+    <script>
+        const swiper = new Swiper('.swiper', {
+            // Optional parameters
+            direction: 'horizontal',
+            freeMode: true,
+            slidesPerView: 'auto',
+            slidesPerGroup: 5,
 
-  <!-- If we need navigation buttons -->
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
-</div>
-<script>
-    const swiper = new Swiper('.swiper', {
-        // Optional parameters
-        direction: 'horizontal',
-        freeMode: true,
-        slidesPerView: 'auto',
-        slidesPerGroup: 5,
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+            },
 
-        // If we need pagination
-        pagination: {
-            el: '.swiper-pagination',
-        },
-
-        // Navigation arrows
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-    });
-</script>
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    </script>
 
 <div class="container-lg">
     <div class="row justify-content-center">
@@ -142,21 +138,26 @@
         <!--Spacing Purposes right side///LEAGUE LEADERS-->
         {% if stats %}
         <div id="LeagueLeaders" class="align-self-start border ms-md-2 my-md-2 col-12 col-md-3 bg-light">
-            <h6 class="border-bottom"><a class="article-headline"
-                href="{% url 'stats-page' %}?league={{request.GET.league}}">LEAGUE LEADERS</a></h6>
-
+            <h6 class="border-bottom">
+                <a class="article-headline" href="{% url 'stats-page' %}?league={{request.GET.league}}">
+                    LEAGUE LEADERS
+                </a>
+            </h6>
             <div class="">
+
+
                 <div class="row">
                     <div class="col-12">
                         <p>Batting Average</p>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' avg.player_id %}?league={{request.GET.league}}">{{avg.first}} {{avg.last}}</a>
+                                href="{% url 'player-page' avg.player_id %}?league={{request.GET.league}}">
+                                    {{avg.first}} {{avg.last}}
+                            </a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -169,17 +170,19 @@
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-12">
                         <p>Home Runs</p>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' homeruns.player_id %}?league={{request.GET.league}}">{{homeruns.first}} {{homeruns.last}}</a>
+                                href="{% url 'player-page' homeruns.player_id %}?league={{request.GET.league}}">
+                                    {{homeruns.first}} {{homeruns.last}}
+                            </a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -192,17 +195,19 @@
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-12">
                         <p>Runs Batted In</p>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' runs_batted_in.player_id %}?league={{request.GET.league}}">{{runs_batted_in.first}} {{runs_batted_in.last}}</a>
+                                href="{% url 'player-page' runs_batted_in.player_id %}?league={{request.GET.league}}">
+                                    {{runs_batted_in.first}} {{runs_batted_in.last}}
+                            </a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -215,17 +220,19 @@
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-12">
                         <p>Stolen Bases</p>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' stolen_bases.player_id %}?league={{request.GET.league}}">{{stolen_bases.first}} {{stolen_bases.last}}</a>
+                                href="{% url 'player-page' stolen_bases.player_id %}?league={{request.GET.league}}">
+                                    {{stolen_bases.first}} {{stolen_bases.last}}
+                            </a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -238,17 +245,19 @@
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-12">
                         <p>Runs</p>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="col-8">
                         <h6>
                             <a class="article-headline"
-                               href="{% url 'player-page' runs.player_id %}?league={{request.GET.league}}">{{runs.first}} {{runs.last}}</a>
+                                href="{% url 'player-page' runs.player_id %}?league={{request.GET.league}}">
+                                    {{runs.first}} {{runs.last}}
+                            </a>
                         </h6>
                     </div>
                     <div class="col-4">
@@ -260,14 +269,10 @@
                         <p>{{runs.team}}</p>
                     </div>
                 </div>
-
-
             </div>
         </div>
         {% endif %}
-
     </div>
 </div>
 <br><br><br><br>
-
 {% endblock content %}
