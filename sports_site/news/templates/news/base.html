@@ -54,10 +54,17 @@
 
             <!--Navbar Logo-->
             <div class="d-flex flex-row justify-content-center">
+                {% if league.name %}
                 <a class="navbar-text header-link p-2"
                     href="{% url 'news-home' %}?league={{league.url}}" title="Home">
-                        {{request.GET.league.name}}
+                        {{league.name}}
                 </a>
+                {% else %}
+                <a class="navbar-text header-link p-2"
+                    href="{% url 'news-home' %}?league={{league.url}}" title="Home">
+                        {{request.GET.league}}
+                </a>
+                {% endif %}
             </div>
 
 
