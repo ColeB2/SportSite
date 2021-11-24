@@ -1,48 +1,36 @@
 {% extends "news/base.html" %}
-
 {% block content %}
-<!--<br><br><br>-->
-<div class="container-lg mt-5">
-    <div class="row">
-
-        <div class="col-lg-2"></div>
-
-        <div class="col-lg-8 bg-light">
-            <h1>{{article.title}}</h1>
-            <h6>{{article.date_posted}}</h6>
-            {% if article.author %}
-            <h5>{{article.author}}</h5>
-            {% endif %}
-            <br>
-            <p>{{article.body|linebreaks}}</p>
+    <div class="container-lg mt-5">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-8 bg-light">
+                <h1>{{article.title}}</h1>
+                <h6>{{article.date_posted}}</h6>
+                {% if article.author %}
+                <h5>{{article.author}}</h5>
+                {% endif %}
+                <br>
+                <p>{{article.body|linebreaks}}</p>
+            </div>
+            <div class="col-lg-2"></div>
         </div>
-
-        <div class="col-lg-2"></div>
-
     </div>
-</div>
-
-
-
-
-<div class="mt-5 ms-2">
-    <a class="btn btn-primary" href="{{request.META.HTTP_REFERER|escape}}">Back</a>
-    <a class="btn btn-primary" href="{% url 'news-home' %}?league={{request.GET.league}}" title="Home">Home</a>
-
-
-    {% if perms.league.league_admin and user.userprofile.league == article.league %}
-        <a class="btn btn-primary"
-            href="{% url 'news-edit' article.slug %}?league={{request.GET.league}}">
-            Edit
-            </a>
+    <div class="mt-5 ms-2">
+        <a class="btn btn-primary" href="{{request.META.HTTP_REFERER|escape}}">
+            Back
+        </a>
+        <a class="btn btn-primary" href="{% url 'news-home' %}?league={{request.GET.league}}" title="Home">
+            Home
+        </a>
+        {% if perms.league.league_admin and user.userprofile.league == article.league %}
+            <a class="btn btn-primary"
+                href="{% url 'news-edit' article.slug %}?league={{request.GET.league}}">
+                    Edit
+                </a>
         <a class="btn btn-danger"
-            href="{% url 'news-delete' article.slug %}?league={{request.GET.league}}">
-            Delete
+                    href="{% url 'news-delete' article.slug %}?league={{request.GET.league}}">
+                    Delete
             </a>
-    {% endif %}
-
-
-</div>
-
-
+        {% endif %}
+    </div>
 {% endblock content %}
