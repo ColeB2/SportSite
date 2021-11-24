@@ -1,25 +1,22 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container-lg mt-5">
-  <div class="row">
+    <div class="container-lg mt-5">
+        <div class="row">
+            {% if perms.league.league_admin and user.userprofile.league == article.league %}
+            <h2>Are you sure you want to delete "{{object}}"?</h2>
 
-    {% if perms.league.league_admin and user.userprofile.league == article.league %}
-    <h2>Are you sure you want to delete "{{object}}"?</h2>
-
-    <form method="post">
-        {% csrf_token %}
-
-        <input class="btn btn-danger "type="submit" value="Delete" class="btn btn-primary">
-        <!--todo: change from news-home to news page once url configured properly-->
-        <a class="btn btn-primary" href="{% url 'news-home' %}?league={{request.GET.league}}">Cancel</a>
-        <br><br>
-    </form>
-    {% else%}
-        <h2>Access Denied</h2>
-    {% endif %}
-
-
-  </div>
-</div>
+            <form method="post">
+                {% csrf_token %}
+                <input class="btn btn-danger "type="submit" value="Delete" class="btn btn-primary">
+                <a class="btn btn-primary" href="{% url 'news-home' %}?league={{request.GET.league}}">
+                    Cancel
+                </a>
+            </form>
+            {% else%}
+                <h2>Access Denied</h2>
+            {% endif %}
+            <br><br>
+        </div>
+    </div>
 {% endblock content %}
