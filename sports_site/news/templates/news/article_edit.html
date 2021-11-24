@@ -1,22 +1,18 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container-lg mt-5">
-  <div class="row">
-
-
-    {% if perms.league.league_admin and user.userprofile.league == article.league %}
-    <form method="post">
-        {% csrf_token %}
-        {% crispy form %}
-        <input type="submit" value="Save" class="btn btn-primary">
-        <br><br>
-    </form>
-    {% else %}
-    <h2>Access Denied</h2>
-    {% endif %}
-
-
-  </div>
-</div>
+    <div class="container-lg mt-5">
+        <div class="row">
+            {% if perms.league.league_admin and user.userprofile.league == article.league %}
+            <form method="post">
+                {% csrf_token %}
+                {% crispy form %}
+                <input type="submit" value="Save" class="btn btn-primary">
+            </form>
+            {% else %}
+            <h2>Access Denied</h2>
+            {% endif %}
+            <br><br>
+        </div>
+    </div>
 {% endblock content %}
