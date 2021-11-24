@@ -10,13 +10,11 @@ class ArticleCreateForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ['title', 'body', 'author', 'date_posted', 'image',
-            'image_description',
-            ]
+            'image_description']
 
 
     def __init__(self, *args, **kwargs):
         super(ArticleCreateForm, self).__init__(*args, **kwargs)
-        #self.fields['date_posted'].widget=SelectDateWidget()
         self.fields['image'].required=False
 
         cur_date = datetime.today()
