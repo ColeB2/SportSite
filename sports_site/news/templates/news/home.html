@@ -85,14 +85,12 @@
         });
     </script>
 
-<div class="container-lg">
-    <div class="row justify-content-center">
-
-
-        <!--CENTER COLUMN: Main News Column-->
-        <div class="align-self-start border me-md-2 mb-2 col-12 col-md-8 bg-light">
+    <div class="container-lg">
+        <div class="row justify-content-center">
+            <!--CENTER COLUMN: Main News Column-->
+            <div class="align-self-start border me-md-2 mb-2 col-12 col-md-8 bg-light">
                 {% if articles %}
-                    <img class="img-fluid" height="300" width="300" src="{{ articles.0.image.url }}">
+                <img class="img-fluid" height="300" width="300" src="{{ articles.0.image.url }}">
                     <h1>
                         <a href="{% url 'news-detail' articles.0.slug %}?league={{request.GET.league}}" class="article-headline">
                             {{articles.0.title}}
@@ -101,178 +99,177 @@
                     <h6>{{articles.0.date_posted}}</h6>
                     <p>{{articles.0.body|truncatewords:20}}</p>
                 {% endif %}
-        </div>
-
-
-        <!--RIGHT COLUMN: Latest News Column-->
-        <div class="align-self-start border ms-md-2 mb-2 col-12 col-md-3 bg-light">
-            <h6 class="border-bottom"><a class="article-headline"
-                href="{% url 'news-page' %}?league={{request.GET.league}}">LATEST NEWS</a></h6>
-            <ul>
-            {% for article in articles %}
-                <li>
-                    <a href="{% url 'news-detail' article.slug %}?league={{request.GET.league}}" class="article-headline">
-                        {{article.title}}
-                    </a>
-                </li>
-            {% endfor %}
-            </ul>
-        </div>
-
-        <!--Rest of the News Column Articles-->
-        <div class="align-self-start border me-md-2 mb-2 col-12 col-md-8 bg-light">
-            {% for article in articles|slice:"1:6" %}
-            <div class="border-bottom">
-                <img class="img-fluid" height="300" width="300" src="{{article.image.url}}">
-                <h1>
-                    <a href="{% url 'news-detail' article.slug %}?league={{request.GET.league}}" class="article-headline">
-                        {{article.title}}
-                    </a>
-                </h1>
-                <h6>{{article.date_posted}}</h6>
-                <p>{{article.body|truncatewords:20}}</p>
             </div>
-            {% endfor %}
-        </div>
 
-        <!--Spacing Purposes right side///LEAGUE LEADERS-->
-        {% if stats %}
-        <div id="LeagueLeaders" class="align-self-start border ms-md-2 my-md-2 col-12 col-md-3 bg-light">
-            <h6 class="border-bottom">
-                <a class="article-headline" href="{% url 'stats-page' %}?league={{request.GET.league}}">
-                    LEAGUE LEADERS
-                </a>
-            </h6>
-            <div class="">
+            <!--RIGHT COLUMN: Latest News Column-->
+            <div class="align-self-start border ms-md-2 mb-2 col-12 col-md-3 bg-light">
+                <h6 class="border-bottom"><a class="article-headline"
+                    href="{% url 'news-page' %}?league={{request.GET.league}}">LATEST NEWS</a></h6>
+                <ul>
+                {% for article in articles %}
+                    <li>
+                        <a href="{% url 'news-detail' article.slug %}?league={{request.GET.league}}" class="article-headline">
+                            {{article.title}}
+                        </a>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
 
-
-                <div class="row">
-                    <div class="col-12">
-                        <p>Batting Average</p>
-                    </div>
+            <!--Rest of the News Column Articles-->
+            <div class="align-self-start border me-md-2 mb-2 col-12 col-md-8 bg-light">
+                {% for article in articles|slice:"1:6" %}
+                <div class="border-bottom">
+                    <img class="img-fluid" height="300" width="300" src="{{article.image.url}}">
+                    <h1>
+                        <a href="{% url 'news-detail' article.slug %}?league={{request.GET.league}}" class="article-headline">
+                            {{article.title}}
+                        </a>
+                    </h1>
+                    <h6>{{article.date_posted}}</h6>
+                   <p>{{article.body|truncatewords:20}}</p>
                 </div>
-                <div class="row">
-                    <div class="col-8">
-                        <h6>
-                            <a class="article-headline"
-                                href="{% url 'player-page' avg.player_id %}?league={{request.GET.league}}">
-                                    {{avg.first}} {{avg.last}}
+                {% endfor %}
+            </div>
+
+            <!--Spacing Purposes right side///LEAGUE LEADERS-->
+            {% if stats %}
+            <div id="LeagueLeaders" class="align-self-start border ms-md-2 my-md-2 col-12 col-md-3 bg-light">
+                <h6 class="border-bottom">
+                    <a class="article-headline" href="{% url 'stats-page' %}?league={{request.GET.league}}">
+                        LEAGUE LEADERS
+                    </a>
+                </h6>
+                <div class="">
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Batting Average</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <h6>
+                                <a class="article-headline"
+                                    href="{% url 'player-page' avg.player_id %}?league={{request.GET.league}}">
+                                        {{avg.first}} {{avg.last}}
+                                </a>
+                            </h6>
+                        </div>
+                        <div class="col-4">
+                            <h3>{{avg.average}}</h3>
+                        </div>
+                    </div>
+                    <div class="row  border-bottom">
+                        <div class="col-12">
+                            <p>{{avg.team}}</p>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Home Runs</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <h6>
+                                <a class="article-headline"
+                                    href="{% url 'player-page' homeruns.player_id %}?league={{request.GET.league}}">
+                                        {{homeruns.first}} {{homeruns.last}}
+                                </a>
+                            </h6>
+                        </div>
+                        <div class="col-4">
+                            <h3>{{homeruns.homeruns}}</h3>
+                        </div>
+                    </div>
+                    <div class="row  border-bottom">
+                        <div class="col-12">
+                            <p>{{homeruns.team}}</p>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Runs Batted In</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <h6>
+                                <a class="article-headline"
+                                    href="{% url 'player-page' runs_batted_in.player_id %}?league={{request.GET.league}}">
+                                        {{runs_batted_in.first}} {{runs_batted_in.last}}
+                                </a>
+                            </h6>
+                        </div>
+                        <div class="col-4">
+                            <h3>{{runs_batted_in.runs_batted_in}}</h3>
+                        </div>
+                    </div>
+                    <div class="row  border-bottom">
+                        <div class="col-12">
+                            <p>{{runs_batted_in.team}}</p>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Stolen Bases</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-8">
+                            <h6>
+                                <a class="article-headline"
+                                    href="{% url 'player-page' stolen_bases.player_id %}?league={{request.GET.league}}">
+                                        {{stolen_bases.first}} {{stolen_bases.last}}
                             </a>
-                        </h6>
+                            </h6>
+                        </div>
+                        <div class="col-4">
+                            <h3>{{stolen_bases.stolen_bases}}</h3>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <h3>{{avg.average}}</h3>
+                    <div class="row  border-bottom">
+                        <div class="col-12">
+                            <p>{{stolen_bases.team}}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="row  border-bottom">
-                    <div class="col-12">
-                        <p>{{avg.team}}</p>
-                    </div>
-                </div>
 
 
-                <div class="row">
-                    <div class="col-12">
-                        <p>Home Runs</p>
+                    <div class="row">
+                        <div class="col-12">
+                            <p>Runs</p>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-8">
-                        <h6>
-                            <a class="article-headline"
-                                href="{% url 'player-page' homeruns.player_id %}?league={{request.GET.league}}">
-                                    {{homeruns.first}} {{homeruns.last}}
-                            </a>
-                        </h6>
-                    </div>
-                    <div class="col-4">
-                        <h3>{{homeruns.homeruns}}</h3>
-                    </div>
-                </div>
-                <div class="row  border-bottom">
-                    <div class="col-12">
-                        <p>{{homeruns.team}}</p>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-12">
-                        <p>Runs Batted In</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-8">
-                        <h6>
-                            <a class="article-headline"
-                                href="{% url 'player-page' runs_batted_in.player_id %}?league={{request.GET.league}}">
-                                    {{runs_batted_in.first}} {{runs_batted_in.last}}
-                            </a>
-                        </h6>
-                    </div>
-                    <div class="col-4">
-                        <h3>{{runs_batted_in.runs_batted_in}}</h3>
-                    </div>
-                </div>
-                <div class="row  border-bottom">
-                    <div class="col-12">
-                        <p>{{runs_batted_in.team}}</p>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-12">
-                        <p>Stolen Bases</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-8">
-                        <h6>
-                            <a class="article-headline"
-                                href="{% url 'player-page' stolen_bases.player_id %}?league={{request.GET.league}}">
-                                    {{stolen_bases.first}} {{stolen_bases.last}}
-                            </a>
-                        </h6>
-                    </div>
-                    <div class="col-4">
-                        <h3>{{stolen_bases.stolen_bases}}</h3>
-                    </div>
-                </div>
-                <div class="row  border-bottom">
-                    <div class="col-12">
-                        <p>{{stolen_bases.team}}</p>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-12">
-                        <p>Runs</p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-8">
-                        <h6>
-                            <a class="article-headline"
-                                href="{% url 'player-page' runs.player_id %}?league={{request.GET.league}}">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6>
+                                <a class="article-headline"
+                                    href="{% url 'player-page' runs.player_id %}?league={{request.GET.league}}">
                                     {{runs.first}} {{runs.last}}
-                            </a>
-                        </h6>
+                                </a>
+                            </h6>
+                        </div>
+                        <div class="col-4">
+                            <h3>{{runs.runs}}</h3>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <h3>{{runs.runs}}</h3>
-                    </div>
-                </div>
-                <div class="row  border-bottom">
-                    <div class="col-12">
-                        <p>{{runs.team}}</p>
+                    <div class="row  border-bottom">
+                        <div class="col-12">
+                            <p>{{runs.team}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
-</div>
-<br><br><br><br>
+    <br><br><br><br>
 {% endblock content %}
