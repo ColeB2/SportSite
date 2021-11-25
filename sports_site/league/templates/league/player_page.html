@@ -1,60 +1,45 @@
 {% extends "news/base.html" %}
 {% load render_table from django_tables2 %}
 {% block content %}
-<div class="container-fluid">
-    <div class="content-section">
+    <div class="container-fluid">
+        <div class="content-section">
+            <div class="row">
+                <h1 class="text-center">{{player.first_name}} {{player.last_name}}</h1>
+            </div>
 
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
+            <div class="row">
+                <p class="text-center">
+                {% if player.birthdate %}
+                    Birthdate: {{player.birthdate}} <br>
+                {% endif %}
+                {% if player.height_feet %}
+                    Height: {{player.height_feet}}' {{player.height_inches}}" <br>
+                {% endif %}
+                {% if player.weight %}
+                    Weight: {{player.weight}}lbs <br>
+                {% endif %}
+                {% if player.bats and player.throw %}
+                    B/T: {{player.bats}}/{{player.throw}} <br>
+                {% endif %}
+                </p>
+            </div>
 
+            <br>
+            <h3 class="text-center"> Career </h3>
+            <div class="row">
+                {% render_table table %}
+            </div>
 
+            <br>
+            <h3 class="text-center"> Splits </h3>
+            <div class="row">
+                {% render_table last_x_table %}
+            </div>
+            <br>
+            <div class="row">
+                {% render_table split_table %}
+            </div>
 
-        <div class="row">
-            <h1 class="text-center">{{player.first_name}} {{player.last_name}}</h1>
         </div>
-
-        <div class="row">
-            <p class="text-center">
-            {% if player.birthdate %}
-                Birthdate: {{player.birthdate}} <br>
-            {% endif %}
-            {% if player.height_feet %}
-                Height: {{player.height_feet}}' {{player.height_inches}}" <br>
-            {% endif %}
-            {% if player.weight %}
-                Weight: {{player.weight}}lbs <br>
-            {% endif %}
-            {% if player.bats and player.throw %}
-                B/T: {{player.bats}}/{{player.throw}} <br>
-            {% endif %}
-            </p>
-        </div>
-
-        <br>
-        <h3 class="text-center"> Career </h3>
-        <div class="row">
-            {% render_table table %}
-        </div>
-
-        <br>
-        <h3 class="text-center"> Splits </h3>
-        <div class="row">
-            {% render_table last_x_table %}
-        </div>
-        <br>
-        <div class="row">
-            {% render_table split_table %}
-        </div>
-
-
-
-
-
     </div>
-</div>
 {% endblock content %}
