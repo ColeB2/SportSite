@@ -1,7 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render, get_object_or_404
-from django_tables2 import RequestConfig
-from .models import Game, League, Player, PlayerSeason, SeasonStage, Team
+from django.shortcuts import get_object_or_404, render
 from stats.get_stats import (format_stats, get_all_player_season_hitting_stats,
     get_extra_innings, get_player_career_hitting_stats,
     get_player_last_x_hitting_stats, get_player_last_x_hitting_stats_totals,
@@ -11,6 +9,7 @@ from stats.tables import (BattingOrderTable, PitchingOrderTable,
     PlayerHittingGameStatsTable, PlayerPageGameHittingStatsSplitsTable,
     PlayerPageHittingStatsTable, PlayerPageHittingStatsSplitsTable,
     PlayerPitchingGameStatsTable, TeamGameLineScoreTable,)
+from .models import Game, League, Player, PlayerSeason, SeasonStage, Team
 
 
 
@@ -127,7 +126,7 @@ def game_boxscore_page_view(request, game_pk):
             get_extra_innings(home_linescore)
         ]
         boxscore_table = TeamGameLineScoreTable(table_data)
-    except (ObjectDoesNotExist, IndexError) as e:
+    except (ObjectDoesNotExist, IndexError):
         home_linescore = None
         away_linescore = None
         table_data = None
