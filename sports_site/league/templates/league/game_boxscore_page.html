@@ -1,97 +1,88 @@
 {% extends "news/base.html" %}
 {% load render_table from django_tables2 %}
 {% block content %}
-<div class="container-fluid">
-    <div class="content-section">
+    <div class="container-fluid">
+        <div class="content-section">
+            <div class="d-flex justify-content-center">
+                <h1>{{ game }}</h1>
+            </div>
 
-        {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-
-        <div class="d-flex justify-content-center">
-            <h1>{{ game }}</h1>
-        </div>
-
-        <!--LineScore and Extra Info-->
-        <div class="d-flex justify-content-center table-responsive">
-            {% if boxscore_table %}
-            {% render_table boxscore_table %}
-            {% endif %}
-        </div>
-
-        <div class="row">
-            <div class="col-6">
-                <div class="table-responsive">
-                    {% render_table away_boxscore %}
-                </div>
-            {% for stat in away_extra %}
-                {% if stat.1 %}
-                    <b>{{stat.0}}</b>{{stat.1}}<br>
+            <!--LineScore and Extra Info-->
+            <div class="d-flex justify-content-center table-responsive">
+                {% if boxscore_table %}
+                {% render_table boxscore_table %}
                 {% endif %}
-            {% endfor %}
             </div>
 
-            <div class="col-6">
-                <div class="table-responsive">
-                    {% render_table home_boxscore %}
-                </div>
-            {% for stat in home_extra %}
-                {% if stat.1 %}
-                    <b>{{stat.0}}</b>{{stat.1}}<br>
-                {% endif %}
-            {% endfor %}
-            </div>
-        </div>
-
-
-        <!--Pitching Stats-->
-        <div class="row">
-            <div class="col-6">
-                <div class="table-responsive">
-                    {% render_table away_pitching %}
+            <div class="row">
+                <div class="col-6">
+                    <div class="table-responsive">
+                        {% render_table away_boxscore %}
+                    </div>
+                {% for stat in away_extra %}
+                    {% if stat.1 %}
+                        <b>{{stat.0}}</b>{{stat.1}}<br>
+                   {% endif %}
+                {% endfor %}
                 </div>
 
-            </div>
-
-            <div class="col-6">
-                <div class="table-responsive">
-                    {% render_table home_pitching %}
+                <div class="col-6">
+                    <div class="table-responsive">
+                        {% render_table home_boxscore %}
+                    </div>
+                {% for stat in home_extra %}
+                    {% if stat.1 %}
+                        <b>{{stat.0}}</b>{{stat.1}}<br>
+                    {% endif %}
+                {% endfor %}
                 </div>
             </div>
+
+
+            <!--Pitching Stats-->
+            <div class="row">
+                <div class="col-6">
+                    <div class="table-responsive">
+                        {% render_table away_pitching %}
+                    </div>
+
+                </div>
+
+                <div class="col-6">
+                    <div class="table-responsive">
+                        {% render_table home_pitching %}
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!--Home Team Stats-->
+            <h2>Hitting Stats</h2>
+            <h3>{{game.home_team.team}}</h3>
+            <div class="table-responsive">
+                {% render_table home_stats_table %}
+            </div>
+
+
+            <!--Away Team Stats-->
+            <h3>{{game.away_team.team}}</h3>
+            <div class="table-responsive">
+                {% render_table away_stats_table %}
+            </div>
+
+            <!--Home Team Pitching-->
+            <h3>{{game.home_team.team}}</h3>
+            <div class="table-responsive">
+                {% render_table home_pitching_stats_table %}
+            </div>
+
+            <!--Away Team Pitching-->
+            <h3>{{game.away_team.team}}</h3>
+            <div class="table-responsive">
+                {% render_table away_pitching_stats_table %}
+            </div>
+
         </div>
-
-
-
-        <!--Home Team Stats-->
-        <h2>Hitting Stats</h2>
-        <h3>{{game.home_team.team}}</h3>
-        <div class="table-responsive">
-            {% render_table home_stats_table %}
-        </div>
-
-
-        <!--Away Team Stats-->
-        <h3>{{game.away_team.team}}</h3>
-        <div class="table-responsive">
-            {% render_table away_stats_table %}
-        </div>
-
-        <!--Home Team Pitching-->
-        <h3>{{game.home_team.team}}</h3>
-        <div class="table-responsive">
-            {% render_table home_pitching_stats_table %}
-        </div>
-
-        <!--Away Team Pitching-->
-        <h3>{{game.away_team.team}}</h3>
-        <div class="table-responsive">
-            {% render_table away_pitching_stats_table %}
-        </div>
-
     </div>
-</div>
 {% endblock content %}
