@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-# Create your views here.
+
 def landing(request):
     context = {
         }
@@ -9,7 +9,6 @@ def landing(request):
 
 def find_league(request, league_url):
     re_url = f"/league/?league={league_url}"
-    print(re_url)
     return redirect(re_url)
 
 
