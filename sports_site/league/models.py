@@ -1,7 +1,8 @@
-from django.db import models
-from django.utils.timezone import now
-from django.contrib.auth.models import User
 import datetime
+from django.db import models
+from django.contrib.auth.models import User
+from django.utils.timezone import now
+
 
 
 
@@ -188,7 +189,6 @@ class PlayerSeason(models.Model):
 
     def save(self, *args, **kwargs):
         super(PlayerSeason, self).save(*args, **kwargs)
-
 
 
 class Game(models.Model):
