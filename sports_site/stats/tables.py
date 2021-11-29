@@ -7,7 +7,8 @@ from .stat_calc import (_convert_to_str, _convert_to_str_ip,
 
 
 class ASPlayerHittingGameStatsTable(tables.Table):
-    """Table used to display stats for given game on admin pages for editing
+    """
+    Table used to display stats for given game on admin pages for editing
     stats. Omits Team"""
     class Meta:
         model = PlayerHittingGameStats
@@ -20,7 +21,8 @@ class ASPlayerHittingGameStatsTable(tables.Table):
 
 
 class ASPlayerPitchingGameStatsTable(tables.Table):
-    """Table used to display stats for given game on admin pages for editing
+    """
+    Table used to display stats for given game on admin pages for editing
     stats. Omits Team"""
     class Meta:
         model = PlayerPitchingGameStats
@@ -273,9 +275,9 @@ class PlayerPageHittingStatsTable(tables.Table):
     class Meta:
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive-custom.html"
-        fields = ("year", "at_bats", "plate_appearances", "runs", "hits", "doubles",
-            "triples", "homeruns", "runs_batted_in", "walks", "strikeouts",
-            "stolen_bases",  "caught_stealing", "hit_by_pitch",
+        fields = ("year", "at_bats", "plate_appearances", "runs", "hits",
+            "doubles", "triples", "homeruns", "runs_batted_in", "walks",
+            "strikeouts", "stolen_bases",  "caught_stealing", "hit_by_pitch",
             "sacrifice_flies", "average", "on_base_percentage")
 
 
@@ -296,9 +298,9 @@ class PlayerPageHittingStatsSplitsTable(tables.Table):
     class Meta:
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive-custom.html"
-        fields = ("duration", "at_bats", "plate_appearances", "runs", "hits", "doubles",
-            "triples", "homeruns", "runs_batted_in", "walks", "strikeouts",
-            "stolen_bases",  "caught_stealing", "hit_by_pitch",
+        fields = ("duration", "at_bats", "plate_appearances", "runs", "hits",
+            "doubles", "triples", "homeruns", "runs_batted_in", "walks",
+            "strikeouts", "stolen_bases",  "caught_stealing", "hit_by_pitch",
             "sacrifice_flies", "average", "on_base_percentage")
 
 
