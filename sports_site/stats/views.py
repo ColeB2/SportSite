@@ -1,19 +1,12 @@
-from django.contrib import messages
-from django.contrib.admin.utils import NestedObjects
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.db import router
-from django.forms import formset_factory
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django_filters.views import FilterView
 from django_tables2 import RequestConfig
 from django_tables2.views import SingleTableMixin
-from league.models import Game, League, Roster, SeasonStage, TeamSeason
+from league.models import League, SeasonStage
 from .decorators import user_owns_game
 from .filters import HittingSimpleFilter, PitchingSimpleFilter
-from .forms import (LinescoreEditForm, HittingGameStatsFormset,
-    PitchingGameStatsFormset, PlayerPitchingStatsCreateForm,
-    PlayerStatsCreateForm, PHGSFHelper, PPGSFHelper)
 from .get_stats import (get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
@@ -60,9 +53,6 @@ def team_game_stats_info_view(request, game_pk, team_season_pk):
     return render(request, "stats/game_stats_info.html", context)
 
 
-"""Team Game Stats -- Hitting"""
-"""Team Game Stats -- Pitching """
-"""Linescore Views"""
 """Stats Display Views"""
 class StatsView(SingleTableMixin, FilterView):
     model = PlayerHittingGameStats
