@@ -3,9 +3,9 @@ from django.contrib.auth.decorators import permission_required
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
 from league.models import Game, Roster, TeamSeason
-from .decorators import user_owns_game
-from .forms import HittingGameStatsFormset, PlayerStatsCreateForm, PHGSFHelper
-from .models import TeamGameStats
+from ..decorators import user_owns_game
+from ..forms import HittingGameStatsFormset, PlayerStatsCreateForm, PHGSFHelper
+from ..models import TeamGameStats
 
 
 
