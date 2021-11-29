@@ -48,6 +48,10 @@ class HittingAdvancedFilter(django_filters.FilterSet):
 
 
 class HittingSimpleFilter(django_filters.FilterSet):
+    """
+    Used stats/views/views.py
+        StatsView()
+    """
     season = django_filters.ModelChoiceFilter(
         field_name="season",
         label=False,
@@ -61,6 +65,10 @@ class HittingSimpleFilter(django_filters.FilterSet):
 
 
 class PitchingSimpleFilter(django_filters.FilterSet):
+    """
+    Used stats/views/views.py
+        PitchingStatsView()
+    """
     season = django_filters.ModelChoiceFilter(
         field_name="season",
         label=False,
