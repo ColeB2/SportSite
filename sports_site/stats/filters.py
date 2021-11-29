@@ -11,7 +11,11 @@ def LeagueSeason(request):
     return Season.objects.filter(league__url=league)
 
 
-def LeagueStage(request):
+def _league_stage(request):
+    """
+    Filters SeasonStage objects by the league.
+    Used in HittingAdvancedFilter, Hitting/PitchingSimpleFilter
+    """
     if request is None:
         return SeasonStage.objects.none()
 
@@ -29,7 +33,7 @@ class HittingAdvancedFilter(django_filters.FilterSet):
     stage = django_filters.ModelChoiceFilter(
         field_name="season__stage",
         label="Stage",
-        queryset = LeagueStage
+        queryset = _league_stage
             )
 
     def __init__(self, *args, **kwargs):
@@ -53,7 +57,7 @@ class HittingSimpleFilter(django_filters.FilterSet):
         field_name="season",
         label=False,
         empty_label="Stage",
-        queryset = LeagueStage
+        queryset = _league_stage
             )
 
     class Meta:
@@ -70,7 +74,7 @@ class PitchingSimpleFilter(django_filters.FilterSet):
         field_name="season",
         label=False,
         empty_label="Stage",
-        queryset = LeagueStage
+        queryset = _league_stage
             )
 
     class Meta:
