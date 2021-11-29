@@ -1,10 +1,11 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import (Layout, Row, Column)
+from crispy_forms.layout import Column, Layout, Row
 from django import forms
 from django.forms.models import inlineformset_factory
+from league.models import PlayerSeason
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore, TeamGameStats)
-from league.models import PlayerSeason
+
 
 
 class PlayerStatsCreateForm(forms.Form):
