@@ -1,9 +1,6 @@
 import django_filters
-from django import forms
+from league.models import Season, SeasonStage
 from .models import PlayerHittingGameStats, PlayerPitchingGameStats
-from league.models import Season, SeasonStage, League
-
-
 
 
 def LeagueSeason(request):
