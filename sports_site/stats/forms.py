@@ -19,7 +19,8 @@ class PlayerStatsCreateForm(forms.Form):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('team_game_stats')
         super(PlayerStatsCreateForm, self).__init__(*args, **kwargs)
-        self.player_queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+        self.player_queryset = PlayerSeason.objects.all().filter(
+            team__team=self._team_season)
 
         self.fields["player"] = forms.ModelChoiceField(
             queryset=self.player_queryset,
@@ -65,7 +66,8 @@ class PlayerPitchingStatsCreateForm(forms.Form):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('team_game_stats')
         super(PlayerPitchingStatsCreateForm, self).__init__(*args, **kwargs)
-        self.player_queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+        self.player_queryset = PlayerSeason.objects.all().filter(
+            team__team=self._team_season)
 
         self.fields["player"] = forms.ModelChoiceField(
             queryset=self.player_queryset,
@@ -154,7 +156,8 @@ class PHGSFHelper(FormHelper):
 
 class PlayerHittingGameStatsForm(forms.ModelForm):
     """
-    Used to edit player hitting game stats. Used in inline form factory below.
+    Used to edit player hitting game stats.
+    Used in inline form factory below.
     """
     class Meta:
         model = PlayerHittingGameStats
@@ -166,7 +169,8 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('game_stats')
         super(PlayerHittingGameStatsForm, self).__init__(*args, **kwargs)
-        self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+        self.fields['player'].queryset = PlayerSeason.objects.all().filter(
+            team__team=self._team_season)
         self.fields['player'].label = False
 
         self.helper = FormHelper()
@@ -249,7 +253,6 @@ class PPGSFHelper(FormHelper):
 class PlayerPitchingGameStatsForm(forms.ModelForm):
     """
     Used to edit player pitching game stats.
-
     Used in the inline form below.
     """
     outs = forms.IntegerField(label="Outs",
@@ -264,7 +267,8 @@ class PlayerPitchingGameStatsForm(forms.ModelForm):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('game_stats')
         super(PlayerPitchingGameStatsForm, self).__init__(*args, **kwargs)
-        self.fields['player'].queryset = PlayerSeason.objects.all().filter(team__team=self._team_season)
+        self.fields['player'].queryset = PlayerSeason.objects.all().filter(
+            team__team=self._team_season)
         self.fields['player'].label = False
 
         self.helper = FormHelper()
