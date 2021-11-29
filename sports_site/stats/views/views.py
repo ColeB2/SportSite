@@ -5,14 +5,14 @@ from django_filters.views import FilterView
 from django_tables2 import RequestConfig
 from django_tables2.views import SingleTableMixin
 from league.models import League, SeasonStage
-from .decorators import user_owns_game
-from .filters import HittingSimpleFilter, PitchingSimpleFilter
-from .get_stats import (get_all_season_hitting_stats,
+from ..decorators import user_owns_game
+from ..filters import HittingSimpleFilter, PitchingSimpleFilter
+from ..get_stats import (get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
-from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
+from ..models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore, TeamGameStats)
-from .tables import (ASPlayerHittingGameStatsTable,
+from ..tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
     PlayerPitchingStatsTable, StandingsTable, TeamGameLineScoreTable,
     TeamHittingStatsTable, TeamPitchingStatsTable)
