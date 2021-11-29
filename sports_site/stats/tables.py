@@ -1,7 +1,10 @@
 import django_tables2 as tables
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore, TeamGameStats)
-from .stat_calc import _convert_to_str, _convert_to_str_pitching, _convert_to_str_ip
+from .stat_calc import (_convert_to_str, _convert_to_str_ip,
+    _convert_to_str_pitching)
+
+
 
 class ASPlayerHittingGameStatsTable(tables.Table):
     """Table used to display stats for given game on admin pages for editing
