@@ -5,27 +5,24 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import router
 from django.forms import formset_factory
 from django.shortcuts import render, redirect
+from django_filters.views import FilterView
 from django_tables2 import RequestConfig
-from league.models import Game, League, Roster, TeamSeason, SeasonStage
-from .get_stats import (get_all_season_hitting_stats,
-    get_all_season_pitching_stats, get_all_season_standings_stats,
-    get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
-from .models import (TeamGameLineScore, TeamGameStats, PlayerHittingGameStats,
-    PlayerPitchingGameStats)
+from django_tables2.views import SingleTableMixin
+from league.models import Game, League, Roster, SeasonStage, TeamSeason
 from .decorators import user_owns_game
 from .filters import HittingSimpleFilter, PitchingSimpleFilter
 from .forms import (LinescoreEditForm, HittingGameStatsFormset,
     PitchingGameStatsFormset, PlayerPitchingStatsCreateForm,
     PlayerStatsCreateForm, PHGSFHelper, PPGSFHelper)
-
+from .get_stats import (get_all_season_hitting_stats,
+    get_all_season_pitching_stats, get_all_season_standings_stats,
+    get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
+from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
+    TeamGameLineScore, TeamGameStats)
 from .tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
     PlayerPitchingStatsTable, StandingsTable, TeamGameLineScoreTable,
     TeamHittingStatsTable, TeamPitchingStatsTable)
-
-
-from django_filters.views import FilterView
-from django_tables2.views import SingleTableMixin
 
 
 
