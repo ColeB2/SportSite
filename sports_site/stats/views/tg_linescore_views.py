@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import router
 from django.shortcuts import render, redirect
-from .decorators import user_owns_game
-from .forms import LinescoreEditForm
-from .models import TeamGameLineScore, TeamGameStats
+from ..decorators import user_owns_game
+from ..forms import LinescoreEditForm
+from ..models import TeamGameLineScore, TeamGameStats
 
 
 
