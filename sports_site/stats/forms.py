@@ -9,7 +9,12 @@ from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
 
 
 class PlayerStatsCreateForm(forms.Form):
-    """Creates all player stats objects to be edited later"""
+    """
+    Creates all player stats objects to be edited later
+
+    Used: views/tgs_hitting_views.py
+       team_game_stats_create_view()
+    """
     def __init__(self, *args, **kwargs):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('team_game_stats')
@@ -50,7 +55,12 @@ class PlayerStatsCreateForm(forms.Form):
 
 
 class PlayerPitchingStatsCreateForm(forms.Form):
-    """Creates all player pitching stats objects to be edited later"""
+    """
+    Creates all player pitching stats objects to be edited later
+
+    Used: tgs_pitching_views.py
+        team_game_pitching_stats_create_view()
+    """
     def __init__(self, *args, **kwargs):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('team_game_stats')
@@ -90,6 +100,10 @@ class PlayerPitchingStatsCreateForm(forms.Form):
 
 
 class LinescoreEditForm(forms.ModelForm):
+    """
+    Used: views/tg_linescore_views.py
+        team_game_linescore_edit_view()
+    """
     class Meta:
         model = TeamGameLineScore
         exclude = ["game",]
@@ -101,6 +115,11 @@ class LinescoreEditForm(forms.ModelForm):
 
 
 class PHGSFHelper(FormHelper):
+    """
+    Helper form used in HittingGameStatsFormset
+    Used: tgs_hitting_views.py
+        team_game_stats_edit_view()
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.form_method = 'post'
@@ -134,6 +153,9 @@ class PHGSFHelper(FormHelper):
             )
 
 class PlayerHittingGameStatsForm(forms.ModelForm):
+    """
+    Used to edit player hitting game stats. Used in inline form factory below.
+    """
     class Meta:
         model = PlayerHittingGameStats
         exclude = ['team_stats', 'season', 'average','on_base_percentage',
@@ -185,6 +207,13 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
 
 
 class PPGSFHelper(FormHelper):
+    """
+    Helper form used in to help PitchingGameStatsFormset
+
+    Used: tgs_pitching_views.py
+        team_game_pitching_stats_edit_view()
+
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.form_method = 'post'
@@ -218,6 +247,11 @@ class PPGSFHelper(FormHelper):
 
 
 class PlayerPitchingGameStatsForm(forms.ModelForm):
+    """
+    Used to edit player pitching game stats.
+
+    Used in the inline form below.
+    """
     outs = forms.IntegerField(label="Outs",
         help_text="Extra outs gotten after the full inning ie. 6 2/3 -- 2 outs",
         max_value=2, min_value=0, required=False)
