@@ -9,7 +9,11 @@ from .stat_calc import (_convert_to_str, _convert_to_str_ip,
 class ASPlayerHittingGameStatsTable(tables.Table):
     """
     Table used to display stats for given game on admin pages for editing
-    stats. Omits Team"""
+    stats. Omits Team
+
+    Used: stats/views/views.py
+        team_game_stats_info_view()
+    """
     class Meta:
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
@@ -23,7 +27,11 @@ class ASPlayerHittingGameStatsTable(tables.Table):
 class ASPlayerPitchingGameStatsTable(tables.Table):
     """
     Table used to display stats for given game on admin pages for editing
-    stats. Omits Team"""
+    stats. Omits Team
+
+    Used: stats/views/views.py
+        team_game_stats_info_view()
+    """
     class Meta:
         model = PlayerPitchingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
@@ -35,7 +43,12 @@ class ASPlayerPitchingGameStatsTable(tables.Table):
 
 
 class TeamHittingStatsTable(tables.Table):
-    """Table used to display hitting stats aggregates for giben team."""
+    """
+    Table used to display hitting stats aggregates for given team.
+
+    Used: stats/views/views.py
+        team_stats_display_view()
+    """
     class Meta:
         model = PlayerHittingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
@@ -90,7 +103,12 @@ class PlayerHittingStatsTable2(tables.Table):
 
 
 class PlayerPitchingStatsTable(tables.Table):
-    """Table used to display pitching stats for season."""
+    """
+    Table used to display pitching stats for season.
+
+    Used stats/views/views.py
+        PitchingStatsView()
+    """
     era = tables.Column(verbose_name="ERA")
     whip = tables.Column(verbose_name="WHIP")
     class Meta:
@@ -116,7 +134,12 @@ class PlayerPitchingStatsTable(tables.Table):
 
 
 class TeamPitchingStatsTable(tables.Table):
-    """Table used to display pitching stats for season."""
+    """
+    Table used to display pitching stats for season.
+
+    Used: stats/views/views.py
+        team_pitching_stats_display_view()
+    """
     era = tables.Column(verbose_name="ERA")
     whip = tables.Column(verbose_name="WHIP")
     class Meta:
@@ -192,6 +215,10 @@ class TeamGameLineScoreTable(tables.Table):
 
 
 class StandingsTable(tables.Table):
+    """
+    Used: stats/views/views.py
+        standings_display_view()
+    """
     class Meta:
         model = TeamGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
@@ -253,7 +280,9 @@ class PitchingOrderTable(tables.Table):
 
 
 class PlayerPitchingGameStatsTable(tables.Table):
-    """Table used to display pitching stats for given game"""
+    """
+    Table used to display pitching stats for given game
+    """
     class Meta:
         model = PlayerPitchingGameStats
         template_name = "django_tables2/bootstrap-responsive.html"
