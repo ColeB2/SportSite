@@ -1,33 +1,25 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-        {% if perms.league.league_admin %}
-        <h2>Game: {{game_stats.game}}</h2>
-        <h2>Team:  {{game_stats.team.team}}</h2>
-        <br><br>
-        <legend><small>Update the score for each given inning.</small></legend>
-        <form method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-
-
-
-
+    <div class="container">
+        <div class="content-section">
+            {% if perms.league.league_admin %}
+            <h2>Game: {{game_stats.game}}</h2>
+            <h2>Team:  {{game_stats.team.team}}</h2>
             <br><br>
+            <legend><small>Update the score for each given inning.</small></legend>
 
-            <input type="submit" value="Save" class="btn btn-primary">
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="Save" class="btn btn-primary">
+            </form>
 
-        </form>
-        {% else %}
-        <h2>Access Denied</h2>
-        <h3>You Don't Own <b>{{game_stats.game.season.season.league}}</b>'s <b>{{game_stats}}</b></h3>
-
-
-        {% endif %}
-
+            {% else %}
+            <h2>Access Denied</h2>
+            <h3>You Don't Own <b>{{game_stats.game.season.season.league}}</b>'s <b>{{game_stats}}</b></h3>
+            {% endif %}
+            <br><br>
+        </div>
     </div>
-</div>
-
 {% endblock content %}
