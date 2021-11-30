@@ -1,35 +1,29 @@
 {% extends "news/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-<div class="container">
-    <div class="content-section">
-        {% if perms.league.league_admin %}
-        <h2>Game: {{game.date}} {{team_season.team}}</h2>
-        <br><br>
-        <legend><small>Select all players who participated in listed game.</small></legend>
-        <form method="post">
-            {% csrf_token %}
-            {{ formset.management_form }}
-            {% for form in formset %}
-                {% crispy form %}
-            {% endfor %}
-
-
-
+    <div class="container">
+        <div class="content-section">
+            {% if perms.league.league_admin %}
+            <h2>Game: {{game.date}} {{team_season.team}}</h2>
             <br><br>
+            <legend><small>Select all players who participated in listed game.</small></legend>
+            <form method="post">
+                {% csrf_token %}
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    {% crispy form %}
+                {% endfor %}
 
-            <input type="submit" name="create" value="Create" class="btn btn-primary">
+                <br><br>
+                <input type="submit" name="create" value="Create" class="btn btn-primary">
+            </form>
+
+            {% else %}
+            <h2>Access Denied</h2>
+            <h3>You Don't Own <b>{{game.season.season.league}}</b>'s <b>{{game}}</b></h3>
+
+            {% endif %}
             <br><br>
-
-        </form>
-        {% else %}
-        <h2>Access Denied</h2>
-        <h3>You Don't Own <b>{{game.season.season.league}}</b>'s <b>{{game}}</b></h3>
-
-
-        {% endif %}
-
+        </div>
     </div>
-</div>
-
 {% endblock content %}
