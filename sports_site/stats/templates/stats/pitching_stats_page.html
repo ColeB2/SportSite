@@ -3,48 +3,46 @@
 {% load crispy_forms_tags %}
 {% load stats_tags %}
 {% block content %}
-<div class="container-fluid">
-    <div class="content-section">
-        <br>
-        <h2 class="stat-headline stat-headline-active">Player</h2>
-        <h2 class="stat-headline">
-            <a href="{% url 'team-pitching-stats-page' %}?league={{request.GET.league}}"
-               class="stat-headline">
-                    Team
-            </a>
-        </h2>
+    <div class="container-fluid">
+        <div class="content-section">
+            <br>
+            <h2 class="stat-headline stat-headline-active">Player</h2>
+            <h2 class="stat-headline">
+                <a href="{% url 'team-pitching-stats-page' %}?league={{request.GET.league}}"
+                   class="stat-headline">
+                        Team
+                </a>
+            </h2>
 
-        <br><br>
-        <h4 class="stat-headline">
-            <a href="{% url 'stats-page' %}?league={{request.GET.league}}"
-               class="stat-headline">
-                    Hitting
-            </a>
-        </h4>
-        <h4 class="stat-headline stat-headline-active">Pitching</h4>
-        <br><br>
+            <br><br>
+            <h4 class="stat-headline">
+                <a href="{% url 'stats-page' %}?league={{request.GET.league}}"
+                   class="stat-headline">
+                        Hitting
+                </a>
+            </h4>
+            <h4 class="stat-headline stat-headline-active">Pitching</h4>
+            <br><br>
 
+            <form method="get">
+                {{filter.form|crispy}}
+                <input type="submit" value="Submit" class="btn btn-primary">
+                <input type="hidden" id="?league" name="league" value="{{request.GET.league}}">
+            </form>
 
-        <form method="get">
-            {{filter.form|crispy}}
-            <input type="submit" value="Submit" class="btn btn-primary">
-            <input type="hidden" id="?league" name="league" value="{{request.GET.league}}">
-        </form>
+            <h3 class="text-center">
+            {% if request.GET.season %}
+                {{request.GET.season|get_stage}}
+            {% else %}
+                {{stage}}
+            {% endif %}
+            </h3>
 
+            <div class="table-responsive">
+                {% render_table table %}
 
-        <h3 class="text-center">
-        {% if request.GET.season %}
-            {{request.GET.season|get_stage}}
-        {% else %}
-            {{stage}}
-        {% endif %}
-        </h3>
-
-
-        <div class="table-responsive">
-            {% render_table table %}
+            </div>
+            <br>
         </div>
-
     </div>
-</div>
 {% endblock content %}
