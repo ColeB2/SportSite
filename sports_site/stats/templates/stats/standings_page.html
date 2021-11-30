@@ -1,14 +1,14 @@
 {% extends "news/base.html" %}
 {% load render_table from django_tables2 %}
 {% block content %}
-<div class="container-fluid">
-    <div class="content-section">
-        <h4>{{ featured_stage }} Standings</h4><br>
+    <div class="container-fluid">
+        <div class="content-section">
+            <h4>{{ featured_stage }} Standings</h4><br>
 
-        <div class="table-responsive">
-            {% render_table table %}
+            <div class="table-responsive">
+                {% render_table table %}
+            </div>
+            <br>
         </div>
-
     </div>
-</div>
 {% endblock content %}
