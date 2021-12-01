@@ -55,6 +55,18 @@ class ASPlayerPitchingGameStatsTable(tables.Table):
             "whip")
 
 
+    def render_era(self, record):
+        return _convert_to_str_pitching(record.era)
+
+
+    def render_whip(self, record):
+        return _convert_to_str_pitching(record.whip)
+
+
+    def render_innings_pitched(self, record):
+        return _convert_to_str_ip(record.innings_pitched)
+
+
 class TeamHittingStatsTable(tables.Table):
     """
     Table used to display hitting stats aggregates for given team.
