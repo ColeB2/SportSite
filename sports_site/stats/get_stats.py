@@ -6,46 +6,6 @@ from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
 from league.models import SeasonStage
 
 
-def annotate_stats(stats_queryset, annotate_value="player"):
-    """
-    WIP - function to reuse the often reused parts of annotate taken in all
-    below querysets.
-
-    TODO:
-    - optional stats to grab
-    - do the common ones, and combine it based on need of uncommon needs?
-    """
-    stats_queryset.values(annotate_value).annotate(
-        at_bats = Sum('at_bats'),
-        plate_appearances = Sum('plate_appearances'),
-        runs = Sum('runs'),
-        hits = Sum('hits'),
-        doubles = Sum('doubles'),
-        triples = Sum('triples'),
-        homeruns = Sum('homeruns'),
-        runs_batted_in = Sum('runs_batted_in'),
-        walks = Sum('walks'),
-        strikeouts = Sum('strikeouts'),
-        stolen_bases = Sum('stolen_bases'),
-        caught_stealing = Sum('caught_stealing'),
-        hit_by_pitch = Sum('hit_by_pitch'),
-        sacrifice_flies = Sum('sacrifice_flies'),
-        average = (
-            Cast(F('hits'),FloatField()) /
-            Cast(F('at_bats'), FloatField())
-            ),
-        on_base_percentage = (
-            Cast(F('hits'), FloatField()) +
-            Cast(F('walks'), FloatField()) +
-            Cast(F('hit_by_pitch'), FloatField())
-            ) /
-            (
-            Cast(F('at_bats'), FloatField()) +
-            Cast(F('walks'), FloatField()) +
-            Cast(F('hit_by_pitch'), FloatField()) +
-            Cast(F('sacrifice_flies'), FloatField())
-            )
-        )
 
 
 def get_league_leaders(league, featured_stage):
@@ -144,6 +104,8 @@ def get_all_season_hitting_stats(league, **kwargs):
 
     View - stats/views.py - StatsView
     Template - stats/stats_page.html
+
+    --->TESTY
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league)
@@ -158,6 +120,24 @@ def get_all_season_hitting_stats(league, **kwargs):
     return_stats = hitting_stats.values("player").annotate(
         first = F("player__player__first_name"),
         last = F("player__player__last_name"),
+        )
+    ret2 = annotate_stats(return_stats, "player")
+#test https://stackoverflow.com/questions/57524903/django-annotate-taking-a-dictionary
+    print(f"return stats: {return_stats} \n")
+    print(f"ret2 {ret2}")
+    return return_stats
+
+
+def annotate_stats(stats_queryset, annotate_value="player"):
+    """
+    WIP - function to reuse the often reused parts of annotate taken in all
+    below querysets.
+
+    TODO:
+    - optional stats to grab
+    - do the common ones, and combine it based on need of uncommon needs?
+    """
+    return_stats = stats_queryset.values(annotate_value).annotate(
         at_bats = Sum('at_bats'),
         plate_appearances = Sum('plate_appearances'),
         runs = Sum('runs'),
