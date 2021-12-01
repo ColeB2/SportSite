@@ -24,6 +24,13 @@ class ASPlayerHittingGameStatsTable(tables.Table):
             "on_base_plus_slugging")
 
 
+    def render_average(self, record):
+        return _convert_to_str(record.average)
+
+    def render_on_base_percentage(self, record):
+        return _convert_to_str(record.on_base_percentage)
+
+
 class ASPlayerPitchingGameStatsTable(tables.Table):
     """
     Table used to display stats for given game on admin pages for editing
