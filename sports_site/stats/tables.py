@@ -30,6 +30,12 @@ class ASPlayerHittingGameStatsTable(tables.Table):
     def render_on_base_percentage(self, record):
         return _convert_to_str(record.on_base_percentage)
 
+    def render_slugging_percentage(self, record):
+        return _convert_to_str(record.slugging_percentage)
+
+    def render_on_base_plus_slugging(self, record):
+        return _convert_to_str(record.on_base_plus_slugging)
+
 
 class ASPlayerPitchingGameStatsTable(tables.Table):
     """
