@@ -7,6 +7,52 @@ from league.models import SeasonStage
 
 
 
+def stats_dict(initial_dict):
+    initial_dict
+    initial_dict['at_bats'] = Sum('at_bats')
+    initial_dict['plate_appearances'] = Sum('plate_appearances')
+    initial_dict['runs'] = Sum('runs')
+    initial_dict['hits'] = Sum('hits')
+    initial_dict['doubles'] = Sum('doubles')
+    initial_dict['triples'] = Sum('triples')
+    initial_dict['homeruns'] = Sum('homeruns')
+    initial_dict['runs_batted_in'] = Sum('runs_batted_in')
+    initial_dict['walks'] = Sum('walks')
+    initial_dict['strikeouts'] = Sum('strikeouts')
+    initial_dict['stolen_bases'] = Sum('stolen_bases')
+    initial_dict['caught_stealing'] = Sum('caught_stealing')
+    initial_dict['hit_by_pitch'] = Sum('hit_by_pitch')
+    initial_dict['sacrifice_flies'] = Sum('sacrifice_flies')
+    initial_dict['average'] = (
+        Cast(F('hits'),FloatField()) /
+        Cast(F('at_bats'), FloatField())
+        )
+    initial_dict['on_base_percentage'] = ((
+        Cast(F('hits'), FloatField()) +
+        Cast(F('walks'), FloatField()) +
+        Cast(F('hit_by_pitch'), FloatField())
+        ) /
+        (
+        Cast(F('at_bats'), FloatField()) +
+        Cast(F('walks'), FloatField()) +
+        Cast(F('hit_by_pitch'), FloatField()) +
+        Cast(F('sacrifice_flies'), FloatField())
+        ))
+
+    return initial_dict
+
+
+def annotate_stats(stats_queryset, annotate_dict, annotate_value="player"):
+    """
+    WIP - function to reuse the often reused parts of annotate taken in all
+    below querysets.
+
+    TODO:
+    - optional stats to grab
+    - do the common ones, and combine it based on need of uncommon needs?
+    """
+    return_stats = stats_queryset.values(annotate_value).annotate(**annotate_dict)
+    return return_stats
 
 def get_league_leaders(league, featured_stage):
     """
@@ -123,53 +169,6 @@ def get_all_season_hitting_stats(league, **kwargs):
     annotate_dict = stats_dict(initial)
     return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
 
-    return return_stats
-
-def stats_dict(initial_dict):
-    initial_dict
-    initial_dict['at_bats'] = Sum('at_bats')
-    initial_dict['plate_appearances'] = Sum('plate_appearances')
-    initial_dict['runs'] = Sum('runs')
-    initial_dict['hits'] = Sum('hits')
-    initial_dict['doubles'] = Sum('doubles')
-    initial_dict['triples'] = Sum('triples')
-    initial_dict['homeruns'] = Sum('homeruns')
-    initial_dict['runs_batted_in'] = Sum('runs_batted_in')
-    initial_dict['walks'] = Sum('walks')
-    initial_dict['strikeouts'] = Sum('strikeouts')
-    initial_dict['stolen_bases'] = Sum('stolen_bases')
-    initial_dict['caught_stealing'] = Sum('caught_stealing')
-    initial_dict['hit_by_pitch'] = Sum('hit_by_pitch')
-    initial_dict['sacrifice_flies'] = Sum('sacrifice_flies')
-    initial_dict['average'] = (
-        Cast(F('hits'),FloatField()) /
-        Cast(F('at_bats'), FloatField())
-        )
-    initial_dict['on_base_percentage'] = ((
-        Cast(F('hits'), FloatField()) +
-        Cast(F('walks'), FloatField()) +
-        Cast(F('hit_by_pitch'), FloatField())
-        ) /
-        (
-        Cast(F('at_bats'), FloatField()) +
-        Cast(F('walks'), FloatField()) +
-        Cast(F('hit_by_pitch'), FloatField()) +
-        Cast(F('sacrifice_flies'), FloatField())
-        ))
-
-    return initial_dict
-
-
-def annotate_stats(stats_queryset, annotate_dict, annotate_value="player"):
-    """
-    WIP - function to reuse the often reused parts of annotate taken in all
-    below querysets.
-
-    TODO:
-    - optional stats to grab
-    - do the common ones, and combine it based on need of uncommon needs?
-    """
-    return_stats = stats_queryset.values(annotate_value).annotate(**annotate_dict)
     return return_stats
 
 
