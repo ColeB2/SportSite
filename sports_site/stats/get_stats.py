@@ -117,14 +117,46 @@ def get_all_season_hitting_stats(league, **kwargs):
                                              featured=True)
         hitting_stats = hitting_stats.filter(season=featured_stage)
 
-    return_stats = hitting_stats.values("player").annotate(
-        first = F("player__player__first_name"),
-        last = F("player__player__last_name"),
+
+
+    ret = {}
+    ret['first'] = F("player__player__first_name")
+    ret['last'] = F("player__player__last_name")
+    ret['at_bats'] = Sum('at_bats')
+    ret['plate_appearances'] = Sum('plate_appearances')
+    ret['runs'] = Sum('runs')
+    ret['hits'] = Sum('hits')
+    ret['doubles'] = Sum('doubles')
+    ret['triples'] = Sum('triples')
+    ret['homeruns'] = Sum('homeruns')
+    ret['runs_batted_in'] = Sum('runs_batted_in')
+    ret['walks'] = Sum('walks')
+    ret['strikeouts'] = Sum('strikeouts')
+    ret['stolen_bases'] = Sum('stolen_bases')
+    ret['caught_stealing'] = Sum('caught_stealing')
+    ret['hit_by_pitch'] = Sum('hit_by_pitch')
+    ret['sacrifice_flies'] = Sum('sacrifice_flies')
+    ret['average'] = (
+        Cast(F('hits'),FloatField()) /
+        Cast(F('at_bats'), FloatField())
         )
-    ret2 = annotate_stats(return_stats, "player")
-#test https://stackoverflow.com/questions/57524903/django-annotate-taking-a-dictionary
+    ret['on_base_percentage'] = ((
+        Cast(F('hits'), FloatField()) +
+        Cast(F('walks'), FloatField()) +
+        Cast(F('hit_by_pitch'), FloatField())
+        ) /
+        (
+        Cast(F('at_bats'), FloatField()) +
+        Cast(F('walks'), FloatField()) +
+        Cast(F('hit_by_pitch'), FloatField()) +
+        Cast(F('sacrifice_flies'), FloatField())
+        ))
+
+    print(ret)
+    return_stats = hitting_stats.values("player").annotate(**ret)
+    #ret2 = annotate_stats(return_stats, "player")
     print(f"return stats: {return_stats} \n")
-    print(f"ret2 {ret2}")
+    #print(f"ret2 {ret2}")
     return return_stats
 
 
