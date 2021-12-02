@@ -122,25 +122,37 @@ def get_all_season_hitting_stats(league, **kwargs):
     ret = {}
     ret['first'] = F("player__player__first_name")
     ret['last'] = F("player__player__last_name")
-    ret['at_bats'] = Sum('at_bats')
-    ret['plate_appearances'] = Sum('plate_appearances')
-    ret['runs'] = Sum('runs')
-    ret['hits'] = Sum('hits')
-    ret['doubles'] = Sum('doubles')
-    ret['triples'] = Sum('triples')
-    ret['homeruns'] = Sum('homeruns')
-    ret['runs_batted_in'] = Sum('runs_batted_in')
-    ret['walks'] = Sum('walks')
-    ret['strikeouts'] = Sum('strikeouts')
-    ret['stolen_bases'] = Sum('stolen_bases')
-    ret['caught_stealing'] = Sum('caught_stealing')
-    ret['hit_by_pitch'] = Sum('hit_by_pitch')
-    ret['sacrifice_flies'] = Sum('sacrifice_flies')
-    ret['average'] = (
+    ret_dict = stats_dict(ret)
+
+
+    # print(ret)
+    # return_stats = hitting_stats.values("player").annotate(**ret)
+    return_stats = annotate_stats(hitting_stats, ret_dict, "player")
+    # print(f"return stats: {return_stats} \n")
+    #print(f"ret2 {ret2}")
+    return return_stats
+
+def stats_dict(initial_dict):
+    initial_dict
+    initial_dict['at_bats'] = Sum('at_bats')
+    initial_dict['plate_appearances'] = Sum('plate_appearances')
+    initial_dict['runs'] = Sum('runs')
+    initial_dict['hits'] = Sum('hits')
+    initial_dict['doubles'] = Sum('doubles')
+    initial_dict['triples'] = Sum('triples')
+    initial_dict['homeruns'] = Sum('homeruns')
+    initial_dict['runs_batted_in'] = Sum('runs_batted_in')
+    initial_dict['walks'] = Sum('walks')
+    initial_dict['strikeouts'] = Sum('strikeouts')
+    initial_dict['stolen_bases'] = Sum('stolen_bases')
+    initial_dict['caught_stealing'] = Sum('caught_stealing')
+    initial_dict['hit_by_pitch'] = Sum('hit_by_pitch')
+    initial_dict['sacrifice_flies'] = Sum('sacrifice_flies')
+    initial_dict['average'] = (
         Cast(F('hits'),FloatField()) /
         Cast(F('at_bats'), FloatField())
         )
-    ret['on_base_percentage'] = ((
+    initial_dict['on_base_percentage'] = ((
         Cast(F('hits'), FloatField()) +
         Cast(F('walks'), FloatField()) +
         Cast(F('hit_by_pitch'), FloatField())
@@ -152,15 +164,10 @@ def get_all_season_hitting_stats(league, **kwargs):
         Cast(F('sacrifice_flies'), FloatField())
         ))
 
-    print(ret)
-    return_stats = hitting_stats.values("player").annotate(**ret)
-    #ret2 = annotate_stats(return_stats, "player")
-    print(f"return stats: {return_stats} \n")
-    #print(f"ret2 {ret2}")
-    return return_stats
+    return initial_dict
 
 
-def annotate_stats(stats_queryset, annotate_value="player"):
+def annotate_stats(stats_queryset, annotate_dict, annotate_value="player"):
     """
     WIP - function to reuse the often reused parts of annotate taken in all
     below querysets.
@@ -169,37 +176,7 @@ def annotate_stats(stats_queryset, annotate_value="player"):
     - optional stats to grab
     - do the common ones, and combine it based on need of uncommon needs?
     """
-    return_stats = stats_queryset.values(annotate_value).annotate(
-        at_bats = Sum('at_bats'),
-        plate_appearances = Sum('plate_appearances'),
-        runs = Sum('runs'),
-        hits = Sum('hits'),
-        doubles = Sum('doubles'),
-        triples = Sum('triples'),
-        homeruns = Sum('homeruns'),
-        runs_batted_in = Sum('runs_batted_in'),
-        walks = Sum('walks'),
-        strikeouts = Sum('strikeouts'),
-        stolen_bases = Sum('stolen_bases'),
-        caught_stealing = Sum('caught_stealing'),
-        hit_by_pitch = Sum('hit_by_pitch'),
-        sacrifice_flies = Sum('sacrifice_flies'),
-        average = (
-            Cast(F('hits'),FloatField()) /
-            Cast(F('at_bats'), FloatField())
-            ),
-        on_base_percentage = (
-            Cast(F('hits'), FloatField()) +
-            Cast(F('walks'), FloatField()) +
-            Cast(F('hit_by_pitch'), FloatField())
-            ) /
-            (
-            Cast(F('at_bats'), FloatField()) +
-            Cast(F('walks'), FloatField()) +
-            Cast(F('hit_by_pitch'), FloatField()) +
-            Cast(F('sacrifice_flies'), FloatField())
-            )
-        )
+    return_stats = stats_queryset.values(annotate_value).annotate(**annotate_dict)
     return return_stats
 
 
