@@ -107,38 +107,7 @@ def get_team_hitting_stats(league, featured_stage):
 
     annotate_dict = stats_dict({"team" : F("team_stats__team__team__name")})
     return_stats = annotate_stats(hitting_stats, annotate_dict, "team_stats__team")
-    # return_stats = hitting_stats.values("team_stats__team").annotate(
-    #     team = F("team_stats__team__team__name"),
-    #     at_bats = Sum('at_bats'),
-    #     plate_appearances = Sum('plate_appearances'),
-    #     runs = Sum('runs'),
-    #     hits = Sum('hits'),
-    #     doubles = Sum('doubles'),
-    #     triples = Sum('triples'),
-    #     homeruns = Sum('homeruns'),
-    #     runs_batted_in = Sum('runs_batted_in'),
-    #     walks = Sum('walks'),
-    #     strikeouts = Sum('strikeouts'),
-    #     stolen_bases = Sum('stolen_bases'),
-    #     caught_stealing = Sum('caught_stealing'),
-    #     hit_by_pitch = Sum('hit_by_pitch'),
-    #     sacrifice_flies = Sum('sacrifice_flies'),
-    #     average = (
-    #         Cast(F('hits'),FloatField()) /
-    #         Cast(F('at_bats'), FloatField())
-    #         ),
-    #     on_base_percentage = (
-    #         Cast(F('hits'), FloatField()) +
-    #         Cast(F('walks'), FloatField()) +
-    #         Cast(F('hit_by_pitch'), FloatField())
-    #         ) /
-    #         (
-    #         Cast(F('at_bats'), FloatField()) +
-    #         Cast(F('walks'), FloatField()) +
-    #         Cast(F('hit_by_pitch'), FloatField()) +
-    #         Cast(F('sacrifice_flies'), FloatField())
-    #         )
-    #     )
+
     return return_stats
 
 
