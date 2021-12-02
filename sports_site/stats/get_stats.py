@@ -104,8 +104,6 @@ def get_all_season_hitting_stats(league, **kwargs):
 
     View - stats/views.py - StatsView
     Template - stats/stats_page.html
-
-    --->TESTY
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league)
@@ -119,17 +117,12 @@ def get_all_season_hitting_stats(league, **kwargs):
 
 
 
-    ret = {}
-    ret['first'] = F("player__player__first_name")
-    ret['last'] = F("player__player__last_name")
-    ret_dict = stats_dict(ret)
+    initial = {'first': F("player__player__first_name"),
+               'last': F("player__player__last_name")
+    }
+    annotate_dict = stats_dict(initial)
+    return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
 
-
-    # print(ret)
-    # return_stats = hitting_stats.values("player").annotate(**ret)
-    return_stats = annotate_stats(hitting_stats, ret_dict, "player")
-    # print(f"return stats: {return_stats} \n")
-    #print(f"ret2 {ret2}")
     return return_stats
 
 def stats_dict(initial_dict):
