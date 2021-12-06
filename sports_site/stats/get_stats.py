@@ -13,7 +13,6 @@ def stats_dict(initial_dict):
     goals: Instead of hard coding values, create them from a list of
     boolean options created by each league to display what they want.
     """
-    initial_dict
     initial_dict['at_bats'] = Sum('at_bats')
     initial_dict['plate_appearances'] = Sum('plate_appearances')
     initial_dict['runs'] = Sum('runs')
