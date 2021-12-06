@@ -283,36 +283,7 @@ def get_player_season_hitting_stats(player, league, featured_stage):
 
     initial = {"year" : F("season__season__year")}
     return_stats = annotate_stats(hitting_stats, initial, "player")
-    # return_stats = hitting_stats.values("player").annotate(
-    #     year = F("season__season__year"),
-    #     at_bats = Sum('at_bats'),
-    #     plate_appearances = Sum('plate_appearances'),
-    #     runs = Sum('runs'),
-    #     hits = Sum('hits'),
-    #     doubles = Sum('doubles'),
-    #     triples = Sum('triples'),
-    #     homeruns = Sum('homeruns'),
-    #     runs_batted_in = Sum('runs_batted_in'),
-    #     walks = Sum('walks'),
-    #     strikeouts = Sum('strikeouts'),
-    #     stolen_bases = Sum('stolen_bases'),
-    #     caught_stealing = Sum('caught_stealing'),
-    #     hit_by_pitch = Sum('hit_by_pitch'),
-    #     sacrifice_flies = Sum('sacrifice_flies'),
-    #     average = Cast(F('hits'),FloatField()) /
-    #               Cast(F('at_bats'), FloatField()),
-    #     on_base_percentage = (
-    #         Cast(F('hits'), FloatField()) +
-    #         Cast(F('walks'), FloatField()) +
-    #         Cast(F('hit_by_pitch'), FloatField())
-    #         ) /
-    #         (
-    #         Cast(F('at_bats'), FloatField()) +
-    #         Cast(F('walks'), FloatField()) +
-    #         Cast(F('hit_by_pitch'), FloatField()) +
-    #         Cast(F('sacrifice_flies'), FloatField())
-    #         )
-    #     )
+
     return return_stats
 
 
@@ -340,38 +311,7 @@ def get_player_last_x_hitting_stats(player, league, num_games):
 
     initial = {"date": F("team_stats__game__date")}
     return_stats = annotate_stats(hitting_stats, initial, "team_stats__game__date")
-    # return_stats = hitting_stats.values("team_stats__game__date").annotate(
-    #     date = F("team_stats__game__date"),
-    #     at_bats = Sum('at_bats'),
-    #     plate_appearances = Sum('plate_appearances'),
-    #     runs = Sum('runs'),
-    #     hits = Sum('hits'),
-    #     doubles = Sum('doubles'),
-    #     triples = Sum('triples'),
-    #     homeruns = Sum('homeruns'),
-    #     runs_batted_in = Sum('runs_batted_in'),
-    #     walks = Sum('walks'),
-    #     strikeouts = Sum('strikeouts'),
-    #     stolen_bases = Sum('stolen_bases'),
-    #     caught_stealing = Sum('caught_stealing'),
-    #     hit_by_pitch = Sum('hit_by_pitch'),
-    #     sacrifice_flies = Sum('sacrifice_flies'),
-    #     average = (
-    #         Cast(F('hits'),FloatField()) /
-    #         Cast(F('at_bats'), FloatField())
-    #         ),
-    #     on_base_percentage = (
-    #         Cast(F('hits'), FloatField()) +
-    #         Cast(F('walks'), FloatField()) +
-    #         Cast(F('hit_by_pitch'), FloatField())
-    #         ) /
-    #         (
-    #         Cast(F('at_bats'), FloatField()) +
-    #         Cast(F('walks'), FloatField()) +
-    #         Cast(F('hit_by_pitch'), FloatField()) +
-    #         Cast(F('sacrifice_flies'), FloatField())
-    #         )
-    #     )
+
     return return_stats
 
 

@@ -142,6 +142,46 @@ class PlayerPitchingGameStats(models.Model):
 
 
 
+"""Testing -- Model Bools for optional stats"""
+class PlayerHittingStatsChoice(models.Model):
+    batting_order_position = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="Order Position")
+    starter = models.BooleanField(null=True, default=True, verbose_name="Starter")
+    substitute = models.BooleanField(null=True, default=False, verbose_name="Sub")
+
+    at_bats = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="AB")
+    plate_appearances = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="PA")
+    hits = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="H")
+    runs = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="R")
+    strikeouts = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SO")
+    walks = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="BB")
+    singles = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="1B")
+    doubles = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="2B")
+    triples = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="3B")
+    homeruns = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="HR")
+    stolen_bases = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SB")
+    caught_stealing = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="CS")
+    runs_batted_in = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="RBI")
+    hit_by_pitch = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="HBP")
+    sacrifice_flies = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SF")
+    sacrifice_bunts = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="SAC")
+    average = models.FloatField(null=True, blank=True, verbose_name="AVG")
+    on_base_percentage = models.FloatField(null=True, blank=True, verbose_name="OBP")
+    slugging_percentage = models.FloatField(null=True, blank=True, verbose_name="SLG")
+    on_base_plus_slugging = models.FloatField(null=True, blank=True, verbose_name="OPS",  help_text="On-Base Plus Slugging\nCombined rate of OBP and SLG.\nOBP+SLG")
+    reached_on_error = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="ROE")
+    fielders_choice = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="FC")
+
+    intentional_walks = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="IBB")
+    left_on_base = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="LOB")
+    picked_off = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="PO")
+    ground_into_double_play = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name= "GIDP")
+    two_out_runs_batted_in = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="2-out-RBI")
+
+
+
+
+
+
 
 
 
