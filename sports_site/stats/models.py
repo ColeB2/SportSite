@@ -1,5 +1,5 @@
 from django.db import models
-from league.models import League, PlayerSeason, TeamSeason, SeasonStage, Game
+from league.models import Game, League, PlayerSeason, SeasonStage, TeamSeason
 
 
 
