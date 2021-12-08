@@ -1,5 +1,5 @@
 from django.db import models
-from league.models import PlayerSeason, TeamSeason, SeasonStage, Game
+from league.models import League, PlayerSeason, TeamSeason, SeasonStage, Game
 
 
 
@@ -144,6 +144,7 @@ class PlayerPitchingGameStats(models.Model):
 
 """Testing -- Model Bools for optional stats"""
 class PlayerHittingStatsChoice(models.Model):
+    league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     batting_order_position = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="Order Position")
     starter = models.BooleanField(null=True, default=True, verbose_name="Starter")
     substitute = models.BooleanField(null=True, default=False, verbose_name="Sub")
