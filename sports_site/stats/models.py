@@ -171,7 +171,7 @@ class PlayerHittingStatsChoice(models.Model):
     reached_on_error = models.BooleanField(default=True, verbose_name="ROE")
     fielders_choice = models.BooleanField(default=True, verbose_name="FC")
 
-    intentional_walks = models.BooleanField(ndefault=True, verbose_name="IBB")
+    intentional_walks = models.BooleanField(default=True, verbose_name="IBB")
     left_on_base = models.BooleanField(default=True, verbose_name="LOB")
     picked_off = models.BooleanField(default=True, verbose_name="PO")
     ground_into_double_play = models.BooleanField(default=True, verbose_name= "GIDP")
