@@ -121,7 +121,7 @@ def get_all_season_hitting_stats(league, **kwargs):
 
     Kwargs:
         season_stage: season stage object to pass to
-        filter by.
+        filter by, typically featured stage.
 
     View - stats/views.py - StatsView
     Template - stats/stats_page.html
