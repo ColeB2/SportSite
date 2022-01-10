@@ -128,13 +128,10 @@ def get_all_season_hitting_stats(league, **kwargs):
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league)
-    season_stage = kwargs.pop("season_stage", None)
-    if season_stage:
-        hitting_stats = hitting_stats.filter(season=season_stage)
-    else:
-        featured_stage = SeasonStage.objects.get(season__league=league,
-                                             featured=True)
-        hitting_stats = hitting_stats.filter(season=featured_stage)
+    season_stage = kwargs.pop("season_stage", SeasonStage.objects.get(
+        season__league=league, featured=True))
+
+    hitting_stats = hitting_stats.filter(season=season_stage)
 
 
 
