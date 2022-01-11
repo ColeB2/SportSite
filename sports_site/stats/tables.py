@@ -94,7 +94,7 @@ class PlayerHittingStatsTable(tables.Table):
     """Table used to display stats for given game"""
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap-responsive.html"
+        template_name = "django_tables2/bootstrap4-responsive-custom.html"
         fields = ("first", "last", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
             "walks", "strikeouts", "stolen_bases",  "caught_stealing",

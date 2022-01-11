@@ -125,15 +125,16 @@ def get_all_season_hitting_stats(league, **kwargs):
 
     View - stats/views.py - StatsView
     Template - stats/stats_page.html
+
     """
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league)
-    season_stage = kwargs.pop("season_stage", SeasonStage.objects.get(
-        season__league=league, featured=True))
 
-    hitting_stats = hitting_stats.filter(season=season_stage)
+    season_stage = kwargs.pop("season_stage", None)
+    stage = (season_stage if season_stage
+             else SeasonStage.objects.get(season__league=league, featured=True))
 
-
+    hitting_stats = hitting_stats.filter(season=stage)
 
     initial = {'first': F("player__player__first_name"),
                'last': F("player__player__last_name")
