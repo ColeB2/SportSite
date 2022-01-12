@@ -5,7 +5,16 @@ from django import forms
 from django.contrib.auth.models import Permission
 from league.models import Game, Player, Season, SeasonStage, Team, TeamSeason
 from stats.models import TeamGameStats
+from .models import LeagueOptions
 
+
+class LeagueOptionsForm(forms.ModelForm):
+    """
+    Used to select League Options, which stats to use, how to display, etc.
+    """
+    class Meta:
+        model = LeagueOptions
+        fields = ["stat_options"]
 
 
 class CreateGameForm(forms.Form):

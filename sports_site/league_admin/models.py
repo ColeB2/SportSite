@@ -3,16 +3,22 @@ from league.models import League
 
 # Create your models here.
 """Testing -- Model Bools for optional stats"""
-class LeagueChoice(models.Model):
+class LeagueOptions(models.Model):
+    SIMPLE = 'S'
+    ADVANCED = 'ADV'
+    CUSTOM = 'C'
+    STAT_OPTIONS = [
+        (SIMPLE, 'Simple'),
+        (ADVANCED, 'Advanced'),
+        (CUSTOM, 'Custom')
+    ]
+    stat_options = models.CharField(max_length=3, choices=STAT_OPTIONS, default=SIMPLE)
 
-    batting_order_position = models.PositiveIntegerField(null=True, blank=True, default=0, verbose_name="Order Position")
-    starter = models.BooleanField(null=True, default=True, verbose_name="Starter")
-    substitute = models.BooleanField(null=True, default=False, verbose_name="Sub")
 
 
-class LeagueHittingStatsChoice(models.Model):
+class LeagueHittingStatsOptions(models.Model):
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
-    league_choice = models.ForeignKey(LeagueChoice, on_delete=models.CASCADE, null=True)
+    league_options = models.ForeignKey(LeagueOptions, on_delete=models.CASCADE, null=True)
 
     at_bats = models.BooleanField(default=True, verbose_name="AB")
     plate_appearances = models.BooleanField(default=True, verbose_name="PA")
