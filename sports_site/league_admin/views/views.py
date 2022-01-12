@@ -6,7 +6,7 @@ from django.views.generic.edit import FormView
 from league.models import (League, Roster)
 from news.models import Article
 from ..filters import RosterFilter, ArticleFilter
-from .forms import LeagueOptionsForm
+from ..forms import LeagueOptionsForm
 
 
 
