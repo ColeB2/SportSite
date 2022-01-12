@@ -1,11 +1,12 @@
 from django.urls import path
 from . import views
-from .views import SeasonEditView
+from .views import SeasonEditView, OptionsFormView
 
 urlpatterns = [
     path('', views.league_admin_dashboard_view, name='league-admin-dashboard'),
     path('roster/',views.league_admin_roster_select, name='league-admin-roster-select'),
     path('news/',views.league_admin_news_select, name='league-admin-news-select'),
+    path('options/', OptionsFormView.as_view(), name='league-admin-options'),
 
 
     path('players/',
