@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
-from ..filters import RosterFilter, ArticleFilter
+from django.urls import reverse_lazy
+from django.views.generic.edit import FormView
 from league.models import (League, Roster)
 from news.models import Article
+from ..filters import RosterFilter, ArticleFilter
+from .forms import LeagueOptionsForm
 
 
 
@@ -64,6 +67,16 @@ def league_admin_news_select(request):
         "all_articles":all_articles
         }
     return render(request, "league_admin/article_select.html", context)
+
+
+class OptionsFormView(FormView):
+    template_name = "league_admin/options.html"
+    form_class = LeagueOptionsForm
+    success_url = reverse_lazy("league-admin-dashboard")
+
+    def form_valid(self, form):
+        form.process()
+        return super().form_valid(form)
 
 
 

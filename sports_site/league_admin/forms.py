@@ -16,6 +16,11 @@ class LeagueOptionsForm(forms.ModelForm):
         model = LeagueOptions
         fields = ["stat_options"]
 
+    def process(self):
+        league_options = self.save(commit=True)
+
+        return league_options
+
 
 class CreateGameForm(forms.Form):
     """
