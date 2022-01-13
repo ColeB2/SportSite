@@ -12,6 +12,7 @@ class LeagueOptions(models.Model):
         (ADVANCED, 'Advanced'),
         (CUSTOM, 'Custom')
     ]
+    league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     stat_options = models.CharField(max_length=3, choices=STAT_OPTIONS, default=SIMPLE)
 
 
