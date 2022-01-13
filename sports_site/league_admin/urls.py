@@ -1,13 +1,16 @@
 from django.urls import path
 from . import views
-from .views import SeasonEditView, OptionsFormView
+from .views import SeasonEditView, OptionsFormView, OptionsUpdateView
 
 urlpatterns = [
     path('', views.league_admin_dashboard_view, name='league-admin-dashboard'),
     path('roster/',views.league_admin_roster_select, name='league-admin-roster-select'),
     path('news/',views.league_admin_news_select, name='league-admin-news-select'),
-    path('options/', OptionsFormView.as_view(), name='league-admin-options'),
 
+
+
+    path('options/', OptionsFormView.as_view(), name='league-admin-options'),
+    path('options/<int:pk>/edit', OptionsUpdateView.as_view(), name='league-admin-options-update'),
 
     path('players/',
         views.league_admin_player_select_view,

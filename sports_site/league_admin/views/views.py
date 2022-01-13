@@ -1,12 +1,15 @@
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
+from django.views.generic import UpdateView
 from league.models import (League, Roster)
 from news.models import Article
 from ..filters import RosterFilter, ArticleFilter
 from ..forms import LeagueOptionsForm
+from ..models import LeagueOptions
 
 
 
@@ -77,6 +80,13 @@ class OptionsFormView(FormView):
     def form_valid(self, form):
         form.process()
         return super().form_valid(form)
+
+class OptionsUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'league.league_admin'
+    template_name = "league_admin/option_templates/options_update.html"
+    form_class = LeagueOptionsForm
+    model = LeagueOptions
+    success_url = reverse_lazy("league-admin-dashboard")
 
 
 
