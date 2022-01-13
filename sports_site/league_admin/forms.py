@@ -15,7 +15,9 @@ class LeagueOptionsForm(forms.ModelForm):
     class Meta:
         model = LeagueOptions
         fields = ["stat_options"]
-        widgets = {"stats_options": forms.RadioSelect}
+        widgets = {"stat_options": forms.RadioSelect}
+
+
 
     def process(self):
         league_options = self.save(commit=True)
