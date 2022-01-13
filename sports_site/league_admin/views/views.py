@@ -4,7 +4,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.edit import FormView
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, TemplateView
 from league.models import (League, Roster)
 from news.models import Article
 from ..filters import RosterFilter, ArticleFilter
@@ -70,6 +70,28 @@ def league_admin_news_select(request):
         "all_articles":all_articles
         }
     return render(request, "league_admin/article_select.html", context)
+
+def league_admin_options_view(request):
+    league = League.objects.get(admin=request.User)
+    options = LeagueOptions.objects.get(league = league)
+
+    context = {
+        "league": league,
+        "options": options,
+        }
+    return render(request, "league_admin/options.html", context)
+
+class OptionsView(TemplateView):
+    template_name = "league_admin/options.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        self.league = League.objects.get(admin=self.request.user)
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['options'] = LeagueOptions.objects.get(league=self.league)
 
 
 class OptionsFormView(FormView):
