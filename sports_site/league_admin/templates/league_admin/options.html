@@ -4,10 +4,13 @@
     <div class="container">
         <div class="content-section">
             <h2>League Stats Options</h2>
+            {{ context }}
+            {% if options %}
             <a class="btn btn-primary"
                     href="{% url 'league-admin-options-update' 1 %}">
                     Edit
             </a>
+            {% endif %}
             <br><br>
         </div>
     </div>
