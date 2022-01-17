@@ -109,7 +109,7 @@ class OptionsUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = "league_admin/option_templates/options_update.html"
     form_class = LeagueOptionsForm
     model = LeagueOptions
-    success_url = reverse_lazy("league-admin-dashboard")
+    success_url = reverse_lazy("league-admin-options")
 
 
 
