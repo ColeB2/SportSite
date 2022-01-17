@@ -5,7 +5,7 @@ from django import forms
 from django.contrib.auth.models import Permission
 from league.models import Game, Player, Season, SeasonStage, Team, TeamSeason
 from stats.models import TeamGameStats
-from .models import LeagueOptions
+from .models import LeagueHittingStatsOptions, LeagueOptions
 
 
 class LeagueOptionsForm(forms.ModelForm):
@@ -23,6 +23,24 @@ class LeagueOptionsForm(forms.ModelForm):
         league_options = self.save(commit=True)
 
         return league_options
+
+
+class LeagueHittingStatsOptionsForm(forms.ModelForm):
+    """
+    Used to select particular stat for use
+    """
+
+    class Meta:
+        model = LeagueOptions
+        exclude = ["league", "league_options"]
+
+    def process(self):
+        hitting_options = self.save(commit=True)
+
+        return hitting_options
+
+
+
 
 
 class CreateGameForm(forms.Form):
