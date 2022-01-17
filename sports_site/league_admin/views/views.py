@@ -116,6 +116,10 @@ class HittingOptionsUpdateView(PermissionRequiredMixin, UpdateView):
 
 """hitting stat options"""
 class HittingStatOptionsUpdateView(PermissionRequiredMixin, UpdateView):
+    """
+    Used for custom stats, gives options to turn on specific stats
+    for a more customizable website.
+    """
     permission_required = 'league.league_admin'
     template_name = "league_admin/option_templates/options_update.html"
     form_class = LeagueHittingStatsOptionsForm
