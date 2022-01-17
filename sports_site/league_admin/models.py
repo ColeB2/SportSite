@@ -4,16 +4,18 @@ from league.models import League
 # Create your models here.
 """Testing -- Model Bools for optional stats"""
 class LeagueOptions(models.Model):
-    SIMPLE = 'S'
-    ADVANCED = 'ADV'
-    CUSTOM = 'C'
+    SIMPLE = 'Simple'
+    ADVANCED = 'Advanced'
+    CUSTOM = 'Custom'
     STAT_OPTIONS = [
         (SIMPLE, 'Simple'),
         (ADVANCED, 'Advanced'),
         (CUSTOM, 'Custom')
     ]
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
-    stat_options = models.CharField(max_length=3, choices=STAT_OPTIONS, default=SIMPLE)
+    stat_options = models.CharField(max_length=8, choices=STAT_OPTIONS, default=SIMPLE)
+
+
 
 
 
