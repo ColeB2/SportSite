@@ -5,15 +5,15 @@ from django import forms
 from django.contrib.auth.models import Permission
 from league.models import Game, Player, Season, SeasonStage, Team, TeamSeason
 from stats.models import TeamGameStats
-from .models import LeagueHittingStatsOptions, LeagueOptions
+from .models import LeagueHittingStatsOptions, LeagueHittingOptions
 
 
-class LeagueOptionsForm(forms.ModelForm):
+class LeagueHittingOptionsForm(forms.ModelForm):
     """
     Used to select League Options, which stats to use, how to display, etc.
     """
     class Meta:
-        model = LeagueOptions
+        model = LeagueHittingOptions
         fields = ["stat_options"]
         widgets = {"stat_options": forms.RadioSelect}
 
@@ -31,7 +31,7 @@ class LeagueHittingStatsOptionsForm(forms.ModelForm):
     """
 
     class Meta:
-        model = LeagueOptions
+        model = LeagueHittingStatsOptions
         exclude = ["league", "league_options"]
 
     def process(self):

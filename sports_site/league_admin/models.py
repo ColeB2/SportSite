@@ -3,7 +3,7 @@ from league.models import League
 
 # Create your models here.
 """Testing -- Model Bools for optional stats"""
-class LeagueOptions(models.Model):
+class LeagueHittingOptions(models.Model):
     SIMPLE = 'Simple'
     ADVANCED = 'Advanced'
     CUSTOM = 'Custom'
@@ -16,12 +16,9 @@ class LeagueOptions(models.Model):
     stat_options = models.CharField(max_length=8, choices=STAT_OPTIONS, default=SIMPLE)
 
 
-
-
-
 class LeagueHittingStatsOptions(models.Model):
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
-    league_options = models.ForeignKey(LeagueOptions, on_delete=models.CASCADE, null=True)
+    league_options = models.ForeignKey(LeagueHittingOptions, on_delete=models.CASCADE, null=True)
 
     at_bats = models.BooleanField(default=True, verbose_name="AB")
     plate_appearances = models.BooleanField(default=True, verbose_name="PA")

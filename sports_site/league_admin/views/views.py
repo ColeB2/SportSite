@@ -8,8 +8,8 @@ from django.views.generic import UpdateView, TemplateView
 from league.models import (League, Roster)
 from news.models import Article
 from ..filters import RosterFilter, ArticleFilter
-from ..forms import LeagueOptionsForm
-from ..models import LeagueOptions
+from ..forms import LeagueHittingOptionsForm
+from ..models import LeagueHittingOptions
 
 
 
@@ -73,7 +73,7 @@ def league_admin_news_select(request):
 
 def league_admin_options_view(request):
     league = League.objects.get(admin=request.User)
-    options = LeagueOptions.objects.get(league = league)
+    options = LeagueHittingOptions.objects.get(league = league)
 
     context = {
         "league": league,
@@ -81,6 +81,9 @@ def league_admin_options_view(request):
         }
     return render(request, "league_admin/options.html", context)
 
+
+
+"""Options Views --> move own folder in future"""
 class OptionsView(TemplateView):
     template_name = "league_admin/options.html"
 
@@ -91,24 +94,24 @@ class OptionsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['options'] = LeagueOptions.objects.get(league=self.league)
+        context['options'] = LeagueHittingOptions.objects.get(league=self.league)
         return context
 
 
-class OptionsFormView(FormView):
+class HittingOptionsFormView(FormView):
     template_name = "league_admin/options.html"
-    form_class = LeagueOptionsForm
+    form_class = LeagueHittingOptionsForm
     success_url = reverse_lazy("league-admin-options")
 
     def form_valid(self, form):
         form.process()
         return super().form_valid(form)
 
-class OptionsUpdateView(PermissionRequiredMixin, UpdateView):
+class HittingOptionsUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'league.league_admin'
     template_name = "league_admin/option_templates/options_update.html"
-    form_class = LeagueOptionsForm
-    model = LeagueOptions
+    form_class = LeagueHittingOptionsForm
+    model = LeagueHittingOptions
     success_url = reverse_lazy("league-admin-options")
 
 
