@@ -10,7 +10,7 @@ urlpatterns = [
 
 
     path('options/', OptionsView.as_view(), name='league-admin-options'),
-    path('options/<int:pk>/edit', HittingOptionsUpdateView.as_view(), name='league-admin-options-update'),
+    path('options/hitting/<int:pk>/edit', HittingOptionsUpdateView.as_view(), name='league-admin-hitting-options-update'),
 
     path('players/',
         views.league_admin_player_select_view,

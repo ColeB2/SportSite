@@ -8,8 +8,8 @@ from django.views.generic import UpdateView, TemplateView
 from league.models import (League, Roster)
 from news.models import Article
 from ..filters import RosterFilter, ArticleFilter
-from ..forms import LeagueHittingOptionsForm
-from ..models import LeagueHittingOptions
+from ..forms import LeagueHittingOptionsForm, LeagueHittingStatsOptionsForm
+from ..models import LeagueHittingOptions, LeagueHittingStatsOptions
 
 
 
@@ -113,6 +113,15 @@ class HittingOptionsUpdateView(PermissionRequiredMixin, UpdateView):
     form_class = LeagueHittingOptionsForm
     model = LeagueHittingOptions
     success_url = reverse_lazy("league-admin-options")
+
+"""hitting stat options"""
+class HittingStatOptionsUpdateView(PermissionRequiredMixin, UpdateView):
+    permission_required = 'league.league_admin'
+    template_name = "league_admin/option_templates/options_update.html"
+    form_class = LeagueHittingStatsOptionsForm
+    model = LeagueHittingStatsOptions
+    success_url = reverse_lazy("league-admin-options")
+
 
 
 

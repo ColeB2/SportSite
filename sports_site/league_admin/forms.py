@@ -27,7 +27,7 @@ class LeagueHittingOptionsForm(forms.ModelForm):
 
 class LeagueHittingStatsOptionsForm(forms.ModelForm):
     """
-    Used to select particular stat for use
+    Used to select particular stat for use to save in db from game stats.
     """
 
     class Meta:
