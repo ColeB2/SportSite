@@ -98,7 +98,7 @@ class OptionsView(TemplateView):
 class OptionsFormView(FormView):
     template_name = "league_admin/options.html"
     form_class = LeagueOptionsForm
-    success_url = reverse_lazy("league-admin-dashboard")
+    success_url = reverse_lazy("league-admin-options")
 
     def form_valid(self, form):
         form.process()
