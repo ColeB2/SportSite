@@ -9,7 +9,7 @@
             <br>
             {% if options %}
             <a class="btn btn-primary"
-                    href="{% url 'league-admin-options-update' 1 %}">
+                    href="{% url 'league-admin-options-update' options.pk %}">
                     Edit
             </a>
             {% else %}
