@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
-from .views import SeasonEditView, OptionsView, HittingOptionsUpdateView
+from .views import (SeasonEditView, OptionsView, HittingOptionsUpdateView,
+    HittingStatsOptionsUpdateView)
 
 urlpatterns = [
     path('', views.league_admin_dashboard_view, name='league-admin-dashboard'),
@@ -10,7 +11,12 @@ urlpatterns = [
 
 
     path('options/', OptionsView.as_view(), name='league-admin-options'),
-    path('options/hitting/<int:pk>/edit', HittingOptionsUpdateView.as_view(), name='league-admin-hitting-options-update'),
+    path('options/hitting/<int:pk>/edit',
+        HittingOptionsUpdateView.as_view(),
+        name='league-admin-hitting-options-update'),
+    path('options/hitting/stats/<int:pk>/edit',
+        HittingStatsOptionsUpdateView.as_view(),
+        name='league-admin-hitting-stats-options-update'),
 
     path('players/',
         views.league_admin_player_select_view,
