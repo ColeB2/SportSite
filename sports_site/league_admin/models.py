@@ -20,6 +20,8 @@ class LeagueHittingStatsOptions(models.Model):
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     league_options = models.ForeignKey(LeagueHittingOptions, on_delete=models.CASCADE, null=True)
 
+    ordered_lineup = models.BooleanField(default=False, verbose_name="Ordered")
+
     at_bats = models.BooleanField(default=True, verbose_name="AB")
     plate_appearances = models.BooleanField(default=True, verbose_name="PA")
     hits = models.BooleanField(default=True, verbose_name="H")

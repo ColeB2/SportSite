@@ -115,7 +115,7 @@ class HittingOptionsUpdateView(PermissionRequiredMixin, UpdateView):
     success_url = reverse_lazy("league-admin-options")
 
 """hitting stat options"""
-class HittingStatOptionsUpdateView(PermissionRequiredMixin, UpdateView):
+class HittingStatsOptionsUpdateView(PermissionRequiredMixin, UpdateView):
     """
     Used for custom stats, gives options to turn on specific stats
     for a more customizable website.
