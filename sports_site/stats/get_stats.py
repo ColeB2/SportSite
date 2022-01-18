@@ -5,43 +5,25 @@ from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameStats)
 from league.models import SeasonStage
 
+from .stats_defaults import basic_stat_sums, ratio_stats
+
+
 
 
 def stats_dict(initial_dict):
     """
-    WIP:
-    goals: Instead of hard coding values, create them from a list of
-    boolean options created by each league to display what they want.
+    Uses a defaults option to populate dictionary used to display stats
+    for stats tables.
+    Currently only hard coded for Simple/Advanced options in use,
+    Need to toggle between simple/advanced, and work on the
+    custom option
     """
-    initial_dict['at_bats'] = Sum('at_bats')
-    initial_dict['plate_appearances'] = Sum('plate_appearances')
-    initial_dict['runs'] = Sum('runs')
-    initial_dict['hits'] = Sum('hits')
-    initial_dict['doubles'] = Sum('doubles')
-    initial_dict['triples'] = Sum('triples')
-    initial_dict['homeruns'] = Sum('homeruns')
-    initial_dict['runs_batted_in'] = Sum('runs_batted_in')
-    initial_dict['walks'] = Sum('walks')
-    initial_dict['strikeouts'] = Sum('strikeouts')
-    initial_dict['stolen_bases'] = Sum('stolen_bases')
-    initial_dict['caught_stealing'] = Sum('caught_stealing')
-    initial_dict['hit_by_pitch'] = Sum('hit_by_pitch')
-    initial_dict['sacrifice_flies'] = Sum('sacrifice_flies')
-    initial_dict['average'] = (
-        Cast(F('hits'),FloatField()) /
-        Cast(F('at_bats'), FloatField())
-        )
-    initial_dict['on_base_percentage'] = ((
-        Cast(F('hits'), FloatField()) +
-        Cast(F('walks'), FloatField()) +
-        Cast(F('hit_by_pitch'), FloatField())
-        ) /
-        (
-        Cast(F('at_bats'), FloatField()) +
-        Cast(F('walks'), FloatField()) +
-        Cast(F('hit_by_pitch'), FloatField()) +
-        Cast(F('sacrifice_flies'), FloatField())
-        ))
+
+    for val in basic_stat_sums:
+        initial_dict[val] = Sum(val)
+    for k, v in ratio_stats.items():
+        initial_dict[k] = v
+
 
     return initial_dict
 

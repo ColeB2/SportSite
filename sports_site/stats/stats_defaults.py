@@ -19,19 +19,27 @@ basic_stat_defaults = {
     'sacrifice_flies': {"function": Sum, "args": "sacrifice_flies"},
     }
 
-basic_stat_sums = ["at_bats", "plate_appearances",
-            "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
-            "walks", "strikeouts", "stolen_bases", "caught_stealing",
+average = (
+        Cast(F('hits'),FloatField()) /
+        Cast(F('at_bats'), FloatField())
+        )
+
+on_base_percentage = ((
+        Cast(F('hits'), FloatField()) +
+        Cast(F('walks'), FloatField()) +
+        Cast(F('hit_by_pitch'), FloatField())
+        ) /
+        (
+        Cast(F('at_bats'), FloatField()) +
+        Cast(F('walks'), FloatField()) +
+        Cast(F('hit_by_pitch'), FloatField()) +
+        Cast(F('sacrifice_flies'), FloatField())
+        ))
+
+
+ratio_stats = {"average": average, "on_base_percentage" : on_base_percentage}
+basic_stat_sums = ["at_bats", "plate_appearances", "runs",
+            "hits", "doubles", "triples", "homeruns",
+            "runs_batted_in", "walks", "strikeouts",
+            "stolen_bases", "caught_stealing",
             "hit_by_pitch", "sacrifice_flies"]
-
-basic = {
-    "Sum" : Sum
-    }
-
-ratio_stats = {
-    'average' : {
-        "function": Cast,
-        "args":
-            [{"function": F, "args": "hits" }, FloatField]
-            }
-    }
