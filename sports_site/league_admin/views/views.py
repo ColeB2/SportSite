@@ -124,7 +124,7 @@ class HittingStatOptionsUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = "league_admin/option_templates/options_update.html"
     form_class = LeagueHittingStatsOptionsForm
     model = LeagueHittingStatsOptions
-    success_url = reverse_lazy("league-admin--hitting-options")
+    success_url = reverse_lazy("league-admin-hitting-options")
 
 
 
