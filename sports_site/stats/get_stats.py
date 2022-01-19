@@ -10,18 +10,26 @@ from .stats_defaults import basic_stat_sums, ratio_stats
 
 
 
-def stats_dict(initial_dict):
+def stats_dict(initial_dict, sum_stat_list=basic_stat_sums,
+                                                   ratio_stat_dict=ratio_stats):
+
     """
-    Uses a defaults option to populate dictionary used to display stats
-    for stats tables.
-    Currently only hard coded for Simple/Advanced options in use,
-    Need to toggle between simple/advanced, and work on the
-    custom option
+    Uses a list/dict combo to populate an initial dictionary of stats,
+    to be passed to annotate_stats to annotate on.
+
+    Params:
+        sum_stat_list: A list of stats in which Sum function is to be
+            used in the annotation, ex, hits, at_bats, etc.
+            Default: basic_stat_sums from stats_default.py
+
+        ratio_stat_dict: A dictionary of ratio stats (batting average, OBP,
+            etc.) to be used in the annotation.
+            Default: ratio_stats from stats_default.py
     """
 
-    for val in basic_stat_sums:
+    for val in sum_stat_list:
         initial_dict[val] = Sum(val)
-    for k, v in ratio_stats.items():
+    for k, v in ratio_stat_dict.items():
         initial_dict[k] = v
 
 
