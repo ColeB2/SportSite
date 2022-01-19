@@ -74,25 +74,10 @@ def get_league_leaders(league, featured_stage):
             "first": F("player__player__first_name"),
             "last": F("player__player__last_name"),
             "team": F("player__team__team__team__name")}
-    annotate_dict = stats_dict(initial)
+    annotate_dict = stats_dict(initial, default_league_leader_sums,
+        default_league_leader_ratios)
     return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
 
-    return_stats = hitting_stats.values("player").annotate(
-        player_id = F("player__player__pk"),
-        first = F("player__player__first_name"),
-        last = F("player__player__last_name"),
-        team = F("player__team__team__team__name"),
-        at_bats = Sum('at_bats'),
-        runs = Sum('runs'),
-        hits = Sum('hits'),
-        homeruns = Sum('homeruns'),
-        runs_batted_in = Sum('runs_batted_in'),
-        stolen_bases = Sum('stolen_bases'),
-        average = (
-            Cast(F('hits'),FloatField()) /
-            Cast(F('at_bats'), FloatField())
-            )
-        )
     return return_stats
 
 
@@ -140,8 +125,7 @@ def get_all_season_hitting_stats(league, **kwargs):
     initial = {'first': F("player__player__first_name"),
                'last': F("player__player__last_name")
         }
-    annotate_dict = stats_dict(initial, default_league_leader_sums,
-        default_league_leader_ratios)
+    annotate_dict = stats_dict(initial)
     return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
 
     return return_stats
