@@ -52,9 +52,6 @@ whip = (
     (
     Cast(F('innings_pitched'), FloatField())
     ))
-innings_pitched = Sum("_innings")
-
-
 
 #Note --> Ratio stats must include the stats that create the ratio.
 default_league_leader_sums = [
