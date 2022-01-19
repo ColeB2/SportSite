@@ -52,6 +52,7 @@ whip = (
     (
     Cast(F('innings_pitched'), FloatField())
     ))
+innings_pitched = Sum("_innings")
 
 
 
@@ -66,8 +67,8 @@ basic_stat_sums = [
     "caught_stealing","hit_by_pitch", "sacrifice_flies"]
 
 basic_pitching_sums = [
-    "win", "loss", "game", "game_started", "complete_game", "shutout",
+    "win", "loss", ("game", "game_started"), "game_started", "complete_game", "shutout",
     "save_converted", "save_op", "hits_allowed", "runs_allowed", "earned_runs",
     "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
-    "innings_pitched"]
+    ("innings_pitched", "_innings")]
 basic_pitching_ratios = {"era": era, "whip": whip}

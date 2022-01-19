@@ -30,7 +30,10 @@ def stats_dict(initial_dict, sum_stat_list=basic_stat_sums,
     """
 
     for val in sum_stat_list:
-        initial_dict[val] = Sum(val)
+        if type(val) == tuple:
+            initial_dict[val[0]] = Sum(val[1])
+        else:
+            initial_dict[val] = Sum(val)
     for k, v in ratio_stat_dict.items():
         initial_dict[k] = v
 
@@ -154,36 +157,7 @@ def get_team_pitching_stats(league, featured_stage):
     return_stats = annotate_stats(pitching_stats, annotate_dict,
         "team_stats__team")
 
-    # return_stats = pitching_stats.values("team_stats__team").annotate(
-    #     team = F("team_stats__team__team__name"),
-    #     win = Sum('win'),
-    #     loss = Sum('loss'),
-    #     game = Sum('game_started'),
-    #     game_started = Sum('game_started'),
-    #     complete_game = Sum('complete_game'),
-    #     shutout = Sum('shutout'),
-    #     save_converted = Sum('save_converted'),
-    #     save_op = Sum('save_op'),
-    #     hits_allowed = Sum('hits_allowed'),
-    #     runs_allowed = Sum('runs_allowed'),
-    #     earned_runs = Sum('earned_runs'),
-    #     homeruns_allowed = Sum('homeruns_allowed'),
-    #     hit_batters = Sum('hit_batters'),
-    #     walks_allowed = Sum('walks_allowed'),
-    #     strikeouts = Sum('strikeouts'),
-    #     innings_pitched = Sum('_innings'),
-    #     era = (
-    #         Cast(F('earned_runs'),FloatField()) * 9 /
-    #         Cast(F('innings_pitched'), FloatField())
-    #         ),
-    #     whip = (
-    #         Cast(F('walks_allowed'), FloatField()) +
-    #         Cast(F('hits_allowed'), FloatField())
-    #         ) /
-    #         (
-    #         Cast(F('innings_pitched'), FloatField())
-    #         )
-    #     )
+
 
     ##Future Fix: Combine bottom code with top, probably by
     ##Converting to model-to-dict and adding in game counter.
