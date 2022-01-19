@@ -1,4 +1,4 @@
-from django.db.models import  F, FloatField, CharField, Sum, Count, Case, When, Value
+from django.db.models import  F, FloatField, Sum, Count, Case, When
 from django.db.models.functions import Cast
 from django.forms.models import model_to_dict
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
