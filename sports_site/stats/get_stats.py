@@ -30,12 +30,14 @@ def stats_dict(initial_dict):
 
 def annotate_stats(stats_queryset, annotate_dict, annotate_value="player"):
     """
-    WIP - function to reuse the often reused parts of annotate taken in all
-    below querysets.
+    Annotates a stats based on given dict, from stats_dict
 
-    TODO:
-    - optional stats to grab
-    - do the common ones, and combine it based on need of uncommon needs?
+    Params:
+        stats_queryset - queryset to call .values and .annotate on.
+        annotate_dict - Dictionary of (from stats_dict) of all operations
+            to be annotated on, ie Sum, Count etc.
+        annotate_value - Value that is being annotated on.
+            Default: "player"
     """
     return_stats = stats_queryset.values(annotate_value).annotate(**annotate_dict)
     return return_stats
