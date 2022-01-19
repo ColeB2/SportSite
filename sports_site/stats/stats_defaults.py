@@ -19,22 +19,40 @@ basic_stat_defaults = {
     'sacrifice_flies': {"function": Sum, "args": "sacrifice_flies"},
     }
 
-average = (
-        Cast(F('hits'),FloatField()) /
-        Cast(F('at_bats'), FloatField())
-        )
 
-on_base_percentage = ((
-        Cast(F('hits'), FloatField()) +
-        Cast(F('walks'), FloatField()) +
-        Cast(F('hit_by_pitch'), FloatField())
-        ) /
-        (
-        Cast(F('at_bats'), FloatField()) +
-        Cast(F('walks'), FloatField()) +
-        Cast(F('hit_by_pitch'), FloatField()) +
-        Cast(F('sacrifice_flies'), FloatField())
-        ))
+
+average = (
+    Cast(F('hits'),FloatField()) /
+    Cast(F('at_bats'), FloatField())
+    )
+
+on_base_percentage = (
+    (
+    Cast(F('hits'), FloatField()) +
+    Cast(F('walks'), FloatField()) +
+    Cast(F('hit_by_pitch'), FloatField())
+    ) /
+    (
+    Cast(F('at_bats'), FloatField()) +
+    Cast(F('walks'), FloatField()) +
+    Cast(F('hit_by_pitch'), FloatField()) +
+    Cast(F('sacrifice_flies'), FloatField())
+    ))
+
+
+era = (
+            Cast(F('earned_runs'),FloatField()) * 9 /
+            Cast(F('innings_pitched'), FloatField())
+            )
+whip = (
+    (
+    Cast(F('walks_allowed'), FloatField()) +
+    Cast(F('hits_allowed'), FloatField())
+    ) /
+    (
+    Cast(F('innings_pitched'), FloatField())
+    ))
+
 
 
 #Note --> Ratio stats must include the stats that create the ratio.
@@ -46,3 +64,10 @@ basic_stat_sums = [
     "at_bats", "plate_appearances", "runs", "hits", "doubles", "triples",
     "homeruns", "runs_batted_in", "walks", "strikeouts", "stolen_bases",
     "caught_stealing","hit_by_pitch", "sacrifice_flies"]
+
+basic_pitching_sums = [
+    "win", "loss", "game", "game_started", "complete_game", "shutout",
+    "save_converted", "save_op", "hits_allowed", "runs_allowed", "earned_runs",
+    "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
+    "innings_pitched"]
+basic_pitching_ratios = {"era": era, "whip": whip}
