@@ -33,6 +33,8 @@ def stats_dict(initial_dict, sum_stat_list=basic_stat_sums,
     for k, v in ratio_stat_dict.items():
         initial_dict[k] = v
 
+    print(initial_dict)
+
 
     return initial_dict
 
@@ -70,10 +72,13 @@ def get_league_leaders(league, featured_stage):
                                                 season=featured_stage)
 
 
-    initial = {"player": F("player__player__pk"),
-            "first": F("player__player__first_name"),
-            "last": F("player__player__last_name"),
-            "team": F("player__team__team__team__name")}
+    initial = {
+        "player_id": F("player__player__pk"),
+        "first": F("player__player__first_name"),
+        "last": F("player__player__last_name"),
+        "team": F("player__team__team__team__name"),
+        }
+
     annotate_dict = stats_dict(initial, default_league_leader_sums,
         default_league_leader_ratios)
     return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
