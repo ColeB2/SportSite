@@ -36,9 +36,9 @@ on_base_percentage = ((
         Cast(F('sacrifice_flies'), FloatField())
         ))
 
-default_League_leaders_sums = [
+default_league_leader_sums = [
     "homeruns", "runs_batted_in", "stolen_bases", "runs"]
-default_league_leaders_ratios = {"average": average}
+default_league_leader_ratios = {"average": average}
 ratio_stats = {"average": average, "on_base_percentage" : on_base_percentage}
 basic_stat_sums = [
     "at_bats", "plate_appearances", "runs", "hits", "doubles", "triples",

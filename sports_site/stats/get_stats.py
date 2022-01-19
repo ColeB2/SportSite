@@ -5,7 +5,8 @@ from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameStats)
 from league.models import SeasonStage
 
-from .stats_defaults import basic_stat_sums, ratio_stats
+from .stats_defaults import (basic_stat_sums, ratio_stats,
+    default_league_leader_sums, default_league_leader_ratios)
 
 
 
@@ -67,6 +68,14 @@ def get_league_leaders(league, featured_stage):
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
+
+
+    initial = {"player": F("player__player__pk"),
+            "first": F("player__player__first_name"),
+            "last": F("player__player__last_name"),
+            "team": F("player__team__team__team__name")}
+    annotate_dict = stats_dict(initial)
+    return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
 
     return_stats = hitting_stats.values("player").annotate(
         player_id = F("player__player__pk"),
@@ -131,7 +140,8 @@ def get_all_season_hitting_stats(league, **kwargs):
     initial = {'first': F("player__player__first_name"),
                'last': F("player__player__last_name")
         }
-    annotate_dict = stats_dict(initial)
+    annotate_dict = stats_dict(initial, default_league_leader_sums,
+        default_league_leader_ratios)
     return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
 
     return return_stats
