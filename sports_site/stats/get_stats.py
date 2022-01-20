@@ -191,13 +191,13 @@ def get_all_season_pitching_stats(league, **kwargs):
     """
     pitching_stats = PlayerPitchingGameStats.objects.all().filter(
                                                 player__player__league=league)
+
     season_stage = kwargs.pop("season_stage", None)
-    if season_stage:
-        pitching_stats = pitching_stats.filter(season=season_stage)
-    else:
-        featured_stage = SeasonStage.objects.get(season__league=league,
-                                             featured=True)
-        pitching_stats = pitching_stats.filter(season=featured_stage)
+
+    stage = (season_stage if season_stage
+             else SeasonStage.objects.get(season__league=league, featured=True))
+
+    pitching_stats = pitching_stats.filter(season=stage)
 
     return_stats = pitching_stats.values("player").annotate(
         first = F("player__player__first_name"),
