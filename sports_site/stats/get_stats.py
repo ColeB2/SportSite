@@ -37,9 +37,6 @@ def stats_dict(initial_dict, sum_stat_list=basic_stat_sums,
     for k, v in ratio_stat_dict.items():
         initial_dict[k] = v
 
-    print(initial_dict)
-
-
     return initial_dict
 
 
@@ -55,6 +52,11 @@ def annotate_stats(stats_queryset, annotate_dict, annotate_value="player"):
             Default: "player"
     """
     return_stats = stats_queryset.values(annotate_value).annotate(**annotate_dict)
+    return return_stats
+
+
+def aggregate_stats(stats_queryset, aggregate_dict):
+    return_stats = stats_queryset.aggregate(**aggregate_dict)
     return return_stats
 
 def get_league_leaders(league, featured_stage):
@@ -284,22 +286,8 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
                                     season__featured=True).order_by(
                                         "-team_stats__game__date")[:num_games]
 
-    return_stats = hitting_stats.aggregate(
-        at_bats = Sum('at_bats'),
-        plate_appearances = Sum('plate_appearances'),
-        runs = Sum('runs'),
-        hits = Sum('hits'),
-        doubles = Sum('doubles'),
-        triples = Sum('triples'),
-        homeruns = Sum('homeruns'),
-        runs_batted_in = Sum('runs_batted_in'),
-        walks = Sum('walks'),
-        strikeouts = Sum('strikeouts'),
-        stolen_bases = Sum('stolen_bases'),
-        caught_stealing = Sum('caught_stealing'),
-        hit_by_pitch = Sum('hit_by_pitch'),
-        sacrifice_flies = Sum('sacrifice_flies'),
-        )
+    aggregate_dict = stats_dict({}, ratio_stat_dict={})
+    return_stats = aggregate_stats(hitting_stats, aggregate_dict)
 
     return_stats["duration"] = f"Last {num_games} Games"
     try:
@@ -322,9 +310,9 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
     except:
         return_stats["on_base_percentage"] = .000
 
-    # print(f"return stats {return_stats}")
 
     return return_stats
+
 
 
 
