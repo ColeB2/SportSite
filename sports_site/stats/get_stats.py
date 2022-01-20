@@ -382,19 +382,7 @@ def get_player_career_hitting_stats(player,
     return_stats = aggregate_stats(hitting_stats, aggregate_dict)
 
     return_stats["year"] = "Career"
-    return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
-    return_stats["on_base_percentage"] = (
-        (
-        return_stats["hits"] +
-        return_stats["walks"] +
-        return_stats["hit_by_pitch"]
-        ) /
-        (
-        return_stats["at_bats"] +
-        return_stats["walks"] +
-        return_stats["hit_by_pitch"] +
-        return_stats["sacrifice_flies"]
-        ))
+    aggregate_ratios(return_stats)
 
     return return_stats
 
