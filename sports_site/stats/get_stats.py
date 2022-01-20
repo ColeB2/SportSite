@@ -59,6 +59,44 @@ def aggregate_stats(stats_queryset, aggregate_dict):
     return_stats = stats_queryset.aggregate(**aggregate_dict)
     return return_stats
 
+
+def average(aggregated_dict):
+    try:
+        aggregated_dict["average"] = aggregated_dict["hits"] / aggregated_dict["at_bats"]
+    except:
+        aggregated_dict["average"] = .000
+    return aggregated_dict
+
+
+def obp(aggregated_dict):
+    try:
+        aggregated_dict["on_base_percentage"] = (
+            (
+            aggregated_dict["hits"] +
+            aggregated_dict["walks"] +
+            aggregated_dict["hit_by_pitch"]
+            ) /
+            (
+            aggregated_dict["at_bats"] +
+            aggregated_dict["walks"] +
+            aggregated_dict["hit_by_pitch"] +
+            aggregated_dict["sacrifice_flies"]
+            ))
+    except:
+        aggregated_dict["on_base_percentage"] = .000
+
+
+def aggregate_ratios(aggregated_dict):
+    """
+    Adds the common ratio stats needed
+    """
+
+    average(aggregated_dict)
+    obp(aggregated_dict)
+
+    return aggregated_dict
+
+
 def get_league_leaders(league, featured_stage):
     """
     Returns league leaders in Avg, HomeRuns, RBI, SB and Runs in use for the
@@ -290,25 +328,7 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
     return_stats = aggregate_stats(hitting_stats, aggregate_dict)
 
     return_stats["duration"] = f"Last {num_games} Games"
-    try:
-        return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
-    except:
-        return_stats["average"] = .000
-    try:
-        return_stats["on_base_percentage"] = (
-            (
-            return_stats["hits"] +
-            return_stats["walks"] +
-            return_stats["hit_by_pitch"]
-            ) /
-            (
-            return_stats["at_bats"] +
-            return_stats["walks"] +
-            return_stats["hit_by_pitch"] +
-            return_stats["sacrifice_flies"]
-            ))
-    except:
-        return_stats["on_base_percentage"] = .000
+    aggregate_ratios(return_stats)
 
 
     return return_stats
@@ -358,22 +378,8 @@ def get_player_career_hitting_stats(player,
                                                 player__player__league=league,
                                                 season__stage=stage_type)
 
-    return_stats = hitting_stats.aggregate(
-        at_bats = Sum('at_bats'),
-        plate_appearances = Sum('plate_appearances'),
-        runs = Sum('runs'),
-        hits = Sum('hits'),
-        doubles = Sum('doubles'),
-        triples = Sum('triples'),
-        homeruns = Sum('homeruns'),
-        runs_batted_in = Sum('runs_batted_in'),
-        walks = Sum('walks'),
-        strikeouts = Sum('strikeouts'),
-        stolen_bases = Sum('stolen_bases'),
-        caught_stealing = Sum('caught_stealing'),
-        hit_by_pitch = Sum('hit_by_pitch'),
-        sacrifice_flies = Sum('sacrifice_flies'),
-        )
+    aggregate_dict = stats_dict({}, ratio_stat_dict={})
+    return_stats = aggregate_stats(hitting_stats, aggregate_dict)
 
     return_stats["year"] = "Career"
     return_stats["average"] = return_stats["hits"] / return_stats["at_bats"]
