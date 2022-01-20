@@ -259,7 +259,8 @@ def get_player_last_x_hitting_stats(player, league, num_games):
                                         )[:num_games]
 
     initial = {"date": F("team_stats__game__date")}
-    return_stats = annotate_stats(hitting_stats, initial, "team_stats__game__date")
+    annotate_dict = stats_dict(initial)
+    return_stats = annotate_stats(hitting_stats, annotate_dict, "team_stats__game__date")
 
     return return_stats
 
@@ -321,7 +322,7 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
     except:
         return_stats["on_base_percentage"] = .000
 
-    print(f"return stats {return_stats}")
+    # print(f"return stats {return_stats}")
 
     return return_stats
 

@@ -54,6 +54,7 @@ whip = (
     ))
 
 #Note --> Ratio stats must include the stats that create the ratio.
+#Hitting Defaults
 default_league_leader_sums = [
     "homeruns", "runs_batted_in", "stolen_bases", "runs", "at_bats", "hits"]
 default_league_leader_ratios = {"average": average}
@@ -62,7 +63,12 @@ basic_stat_sums = [
     "at_bats", "plate_appearances", "runs", "hits", "doubles", "triples",
     "homeruns", "runs_batted_in", "walks", "strikeouts", "stolen_bases",
     "caught_stealing","hit_by_pitch", "sacrifice_flies"]
+last_x_defaults = [
+    ]
 
+
+
+#Pitching Defaults
 basic_pitching_sums_team = [
     "win", "loss", ("game", "game_started"), "game_started", "complete_game", "shutout",
     "save_converted", "save_op", "hits_allowed", "runs_allowed", "earned_runs",
@@ -73,4 +79,5 @@ basic_pitching_sums_league = [
     "save_converted", "save_op", "hits_allowed", "runs_allowed", "earned_runs",
     "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
     ("innings_pitched", "_innings")]
+#Need to fix to add earned runs, innings pitched, walk, hits for league leader pages
 basic_pitching_ratios = {"era": era, "whip": whip}
