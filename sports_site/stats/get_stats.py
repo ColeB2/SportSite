@@ -436,6 +436,8 @@ def _get_extra_stat_totals(player):
 
     Params:
         player - PlayerHittingGameStats object
+
+    TODO: Remove hard coded date.
     """
     game = player.team_stats.game
     hitting_stats = PlayerHittingGameStats.objects.all().filter(
