@@ -63,8 +63,13 @@ basic_stat_sums = [
     "homeruns", "runs_batted_in", "walks", "strikeouts", "stolen_bases",
     "caught_stealing","hit_by_pitch", "sacrifice_flies"]
 
-basic_pitching_sums = [
+basic_pitching_sums_team = [
     "win", "loss", ("game", "game_started"), "game_started", "complete_game", "shutout",
+    "save_converted", "save_op", "hits_allowed", "runs_allowed", "earned_runs",
+    "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
+    ("innings_pitched", "_innings")]
+basic_pitching_sums_league = [
+    "win", "loss", "game", "game_started", "complete_game", "shutout",
     "save_converted", "save_op", "hits_allowed", "runs_allowed", "earned_runs",
     "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
     ("innings_pitched", "_innings")]
