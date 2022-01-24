@@ -98,6 +98,7 @@ def aggregate_ratios(aggregated_dict):
     return aggregated_dict
 
 def get_stats(league, stage, stats_to_retrieve):
+    ##todo: Fleshout how to make this all work and abstract
     stats_choice = {}
     stats = stats_choice["stats_to_retrieve"]
 

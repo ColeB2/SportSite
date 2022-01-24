@@ -78,10 +78,11 @@ win = Count(Case(When(win=True, then=1)))
 loss = Count(Case(When(loss=True, then=1)))
 tie = Count(Case(When(tie=True, then=1)))
 
-
+#OO 746 JJ 8 AA 13 LL 7 TT 24
 stats_page_defaults = {
     "qs": PlayerHittingGameStats,
-    "filters": "player__player__league"
+    "league": "player__player__league",
+    "stage": "season",
     }
 
 
