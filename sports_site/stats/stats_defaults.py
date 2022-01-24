@@ -28,15 +28,15 @@ average = (
 
 on_base_percentage = (
     (
-    Cast(F('hits'), FloatField()) +
-    Cast(F('walks'), FloatField()) +
-    Cast(F('hit_by_pitch'), FloatField())
+    Cast(F('hits'), FloatField())
+    + Cast(F('walks'), FloatField())
+    + Cast(F('hit_by_pitch'), FloatField())
     ) /
     (
-    Cast(F('at_bats'), FloatField()) +
-    Cast(F('walks'), FloatField()) +
-    Cast(F('hit_by_pitch'), FloatField()) +
-    Cast(F('sacrifice_flies'), FloatField())
+    Cast(F('at_bats'), FloatField())
+    + Cast(F('walks'), FloatField())
+    + Cast(F('hit_by_pitch'), FloatField())
+    + Cast(F('sacrifice_flies'), FloatField())
     ))
 
 
@@ -46,12 +46,18 @@ era = (
             )
 whip = (
     (
-    Cast(F('walks_allowed'), FloatField()) +
-    Cast(F('hits_allowed'), FloatField())
+    Cast(F('walks_allowed'), FloatField())
+    + Cast(F('hits_allowed'), FloatField())
     ) /
     (
     Cast(F('innings_pitched'), FloatField())
     ))
+
+
+differential = (
+            Cast(F("runs_for"), FloatField())
+            - Cast(F("runs_against"),FloatField())
+            )
 
 
 
