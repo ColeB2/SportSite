@@ -7,7 +7,7 @@ from django_tables2.views import SingleTableMixin
 from league.models import League, SeasonStage
 from ..decorators import user_owns_game
 from ..filters import HittingSimpleFilter, PitchingSimpleFilter
-from ..get_stats import (get_all_season_hitting_stats,
+from ..get_stats import (get_stats, get_all_season_hitting_stats,
     get_all_season_pitching_stats, get_all_season_standings_stats,
     get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
 from ..models import (PlayerHittingGameStats, PlayerPitchingGameStats,
@@ -81,6 +81,7 @@ class StatsView(SingleTableMixin, FilterView):
         super().get_queryset()
         league = League.objects.get(url=self.league_slug)
         season_stage = self.request.GET.get("season", None)
+        hitting_stats = get_stats(league, season_stage, "all_season_hitting")
         hitting_stats = get_all_season_hitting_stats(
             league,
             season_stage=season_stage)

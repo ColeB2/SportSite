@@ -97,6 +97,35 @@ def aggregate_ratios(aggregated_dict):
 
     return aggregated_dict
 
+def get_stats(league, stage, stats_to_retrieve):
+    stats_choice = {}
+    stats = stats_choice["stats_to_retrieve"]
+
+    return_stats = _get_stats(
+        queryset=stats["qs"],
+        filters=stats["filters"],
+        initial=stats["initial"],
+        default_stats=stats["default_stats"],
+        annotation_value=stats["annotation_value"])
+
+    return return_stats
+    pass
+
+
+def _get_stats(queryset, filters, initial, default_stats, annotation_value):
+    """
+    Params:
+        queryset - Queryset of stats object we are going to process.
+        filters - Filters to pass to the queryset
+    """
+
+    stats = queryset.objects.filter(**filters)
+
+    annotate_dict = stats_dict(initial, default_stats[0], default_stats[1])
+    return_stats = annotate_stats(stats, annotate_dict, annotation_value)
+
+    return return_stats
+
 
 def get_league_leaders(league, featured_stage):
     """

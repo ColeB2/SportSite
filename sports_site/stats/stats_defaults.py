@@ -1,5 +1,7 @@
 from django.db.models import  F, FloatField, CharField, Sum, Count, Case, When, Value
 from django.db.models.functions import Cast
+from stats.get_stats import get_league_leaders, get_stats
+from stats.models import PlayerHittingGameStats
 
 
 basic_stat_defaults = {
@@ -77,7 +79,10 @@ loss = Count(Case(When(loss=True, then=1)))
 tie = Count(Case(When(tie=True, then=1)))
 
 
-
+stats_page_defaults = {
+    "qs": PlayerHittingGameStats,
+    "filters": "player__player__league"
+    }
 
 
 #Note --> Ratio stats must include the stats that create the ratio.
