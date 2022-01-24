@@ -112,7 +112,7 @@ def get_league_leaders(league, featured_stage):
     Views - news/views.py - home function
     Template - news/home.html
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+    hitting_stats = PlayerHittingGameStats.objects.filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
 
@@ -136,7 +136,7 @@ def get_team_hitting_stats(league, featured_stage):
     Gets all hittings stats and totals them for each team, and
     returns them in a usable fashion for main stats page/Team.
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+    hitting_stats = PlayerHittingGameStats.objects.filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
 
@@ -163,7 +163,7 @@ def get_all_season_hitting_stats(league, **kwargs):
     Template - stats/stats_page.html
 
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+    hitting_stats = PlayerHittingGameStats.objects.filter(
                                                 player__player__league=league)
 
     season_stage = kwargs.pop("season_stage", None)
@@ -186,7 +186,7 @@ def get_team_pitching_stats(league, featured_stage):
     Gets all piatching stats and totals them for each team, and
     returns them in a usable fashion for main stats page/Team.
     """
-    pitching_stats = PlayerPitchingGameStats.objects.all().filter(
+    pitching_stats = PlayerPitchingGameStats.objects.filter(
                                                 player__player__league=league,
                                                 season=featured_stage)
 
@@ -202,7 +202,7 @@ def get_team_pitching_stats(league, featured_stage):
 
     ##Future Fix: Combine bottom code with top, probably by
     ##Converting to model-to-dict and adding in game counter.
-    # test = TeamGameStats.objects.all().filter(
+    # test = TeamGameStats.objects.filter(
     #     season=featured_stage,
     #     team__team__league=league)
     # x = test.values("team").annotate(
@@ -230,7 +230,7 @@ def get_all_season_pitching_stats(league, **kwargs):
     View - stats/views.py - stats_display_view
     Template - stats/pitching_stats_page.html
     """
-    pitching_stats = PlayerPitchingGameStats.objects.all().filter(
+    pitching_stats = PlayerPitchingGameStats.objects.filter(
                                                 player__player__league=league)
 
     season_stage = kwargs.pop("season_stage", None)
@@ -266,7 +266,7 @@ def get_player_season_hitting_stats(player, league, featured_stage):
     currently deprecated -- note? Already filter by player, do we need to
     annotate by player, or can we aggregate.
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+    hitting_stats = PlayerHittingGameStats.objects.filter(
                                                 player__player=player,
                                                 player__player__league=league,
                                                 season=featured_stage)
@@ -319,7 +319,7 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
             most recent, up until the nth number of game described by this int.
 
     View - league/views.py player_page_view"""
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+    hitting_stats = PlayerHittingGameStats.objects.filter(
                                     player__player=player,
                                     player__player__league=league,
                                     season__featured=True).order_by(
@@ -343,7 +343,7 @@ def get_all_player_season_hitting_stats(player, league,
     Retrieves the hittings stats for each season participated
     in for given stage type.
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+    hitting_stats = PlayerHittingGameStats.objects.filter(
                                                 player__player=player,
                                                 player__player__league=league,
                                                 season__stage=stage_type)
@@ -374,7 +374,7 @@ def get_player_career_hitting_stats(player,
     Views: league/views.py - player_page_view.
 
     """
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+    hitting_stats = PlayerHittingGameStats.objects.filter(
                                                 player__player=player,
                                                 player__player__league=league,
                                                 season__stage=stage_type)
@@ -441,7 +441,7 @@ def _get_extra_stat_totals(player):
     TODO: Remove hard coded date.
     """
     game = player.team_stats.game
-    hitting_stats = PlayerHittingGameStats.objects.all().filter(
+    hitting_stats = PlayerHittingGameStats.objects.filter(
                         player__player=player.player.player,
                         season=game.season,
                         team_stats__game__date__range=["2021-05-14",game.date])
@@ -612,7 +612,7 @@ def get_all_season_standings_stats(league, featured_stage):
     Views - stats/views.py - standings_display_view
     Template Featured - stats/standings_page.html
     """
-    game_stats = TeamGameStats.objects.all().filter(season=featured_stage)
+    game_stats = TeamGameStats.objects.filter(season=featured_stage)
 
     initial = {"team_name": F("team__team__name")}
     annotate_dict = stats_dict(initial, basic_team_sums, basic_team_ratios)
