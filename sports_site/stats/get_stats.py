@@ -7,7 +7,8 @@ from league.models import SeasonStage
 
 from .stats_defaults import (basic_stat_sums, ratio_stats,
     default_league_leader_ratios, default_league_leader_sums,
-    basic_pitching_ratios, basic_pitching_sums_team, basic_pitching_sums_league)
+    basic_pitching_ratios, basic_pitching_sums_team, basic_pitching_sums_league,
+    basic_team_sums, basic_team_ratios)
 
 
 
@@ -612,27 +613,11 @@ def get_all_season_standings_stats(league, featured_stage):
     Template Featured - stats/standings_page.html
     """
     game_stats = TeamGameStats.objects.all().filter(season=featured_stage)
-    standings_stats = game_stats.values("team").annotate(
-        team_name = F("team__team__name"),
-        win = Count(Case(When(win=True, then=1))),
-        loss = Count(Case(When(loss=True, then=1))),
-        tie = Count(Case(When(tie=True, then=1))),
-        pct =  (
-            Cast(F("win"), FloatField()) +
-            (Cast(F("tie"), FloatField()) * 0.5)
-            ) /
-            (
-            Cast(F('win'), FloatField()) +
-            Cast(F('loss'), FloatField()) +
-            Cast(F('tie'), FloatField())
-            ),
-        runs_for = Sum("runs_for"),
-        runs_against = Sum("runs_against"),
-        differential = (
-            Cast(F("runs_for"), FloatField()) -
-            Cast(F("runs_against"),FloatField())
-            ),
-        )
-    return standings_stats
+
+    initial = {"team_name": F("team__team__name")}
+    annotate_dict = stats_dict(initial, basic_team_sums, basic_team_ratios)
+    return_stats = annotate_stats(game_stats, annotate_dict, "team")
+
+    return return_stats
 
 

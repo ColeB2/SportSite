@@ -54,10 +54,27 @@ whip = (
     ))
 
 
+#Team Options
 differential = (
-            Cast(F("runs_for"), FloatField())
-            - Cast(F("runs_against"),FloatField())
-            )
+    Cast(F("runs_for"), FloatField())
+    - Cast(F("runs_against"),FloatField())
+    )
+
+pct =  (
+    (
+    Cast(F("win"), FloatField())
+    + (Cast(F("tie"), FloatField()) * 0.5)
+    ) /
+    (
+    Cast(F('win'), FloatField())
+    + Cast(F('loss'), FloatField())
+    + Cast(F('tie'), FloatField())
+    )
+    )
+
+win = Count(Case(When(win=True, then=1)))
+loss = Count(Case(When(loss=True, then=1)))
+tie = Count(Case(When(tie=True, then=1)))
 
 
 
@@ -91,3 +108,8 @@ basic_pitching_sums_league = [
     ("innings_pitched", "_innings")]
 #Need to fix to add earned runs, innings pitched, walk, hits for league leader pages
 basic_pitching_ratios = {"era": era, "whip": whip}
+
+
+#Team Record/Stast default
+basic_team_sums = ["runs_for", "runs_against"]
+basic_team_ratios = {"win": win, "loss": loss, "tie": tie, "pct": pct, "differential": differential}
