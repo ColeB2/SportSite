@@ -180,42 +180,6 @@ def get_league_leaders(league, featured_stage):
     return return_stats
 
 
-def get_team_pitching_stats(league, featured_stage):
-    """
-    Gets all piatching stats and totals them for each team, and
-    returns them in a usable fashion for main stats page/Team.
-    """
-    pitching_stats = PlayerPitchingGameStats.objects.filter(
-                                                player__player__league=league,
-                                                season=featured_stage)
-
-
-    initial = {"team": F("team_stats__team__team__name")}
-    annotate_dict = stats_dict(initial, basic_pitching_sums_team,
-        basic_pitching_ratios)
-
-    return_stats = annotate_stats(pitching_stats, annotate_dict,
-        "team_stats__team")
-
-
-
-    ##Future Fix: Combine bottom code with top, probably by
-    ##Converting to model-to-dict and adding in game counter.
-    # test = TeamGameStats.objects.filter(
-    #     season=featured_stage,
-    #     team__team__league=league)
-    # x = test.values("team").annotate(
-    #     game = Count(
-    #         Case(
-    #             When(win=True, then=Value(1)),
-    #             When(loss=True, then=Value(1)),
-    #             When(tie=True, then=Value(1))
-    #             ) )
-    #     )
-
-    return return_stats
-
-
 """Player Page Stats Functions"""
 def get_player_season_hitting_stats(player, league, featured_stage):
     """

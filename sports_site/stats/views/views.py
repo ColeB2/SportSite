@@ -8,7 +8,7 @@ from league.models import League, SeasonStage
 from ..decorators import user_owns_game
 from ..filters import HittingSimpleFilter, PitchingSimpleFilter
 from ..get_stats import (get_stats, get_all_season_standings_stats,
-    get_extra_innings, get_team_pitching_stats)
+    get_extra_innings)
 from ..models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore, TeamGameStats)
 from ..tables import (ASPlayerHittingGameStatsTable,
@@ -175,23 +175,6 @@ class TeamPitchingStatsView(SingleTableMixin, FilterView):
         season_stage = self.request.GET.get("season", None)
         pitching_stats = get_stats(league, "team_season_pitching", season_stage)
         return pitching_stats
-
-
-def team_pitching_stats_display_view(request):
-    league_slug = request.GET.get('league', None)
-    league = League.objects.get(url=league_slug)
-    featured_stage = SeasonStage.objects.get(season__league=league,
-                                             featured=True)
-    pitching_stats = get_team_pitching_stats(league, featured_stage)
-    table = TeamPitchingStatsTable(pitching_stats)
-    RequestConfig(request).configure(table)
-
-    context = {
-        "league": league,
-        "table": table,
-        "featured_stage": featured_stage,
-        }
-    return render(request, "stats/team_pitching_stats_page.html", context)
 
 
 """Standings Display View"""
