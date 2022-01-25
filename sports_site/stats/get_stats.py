@@ -149,39 +149,6 @@ def _get_stats(queryset, filters, initial, default_stats, annotation_value):
     return return_stats
 
 
-def get_league_leaders(league, featured_stage):
-    """
-    Returns league leaders in Avg, HomeRuns, RBI, SB and Runs in use for the
-    main home page widget.
-
-    Params:
-        league - League model object pulled from url GET.get function.
-        featured_stage - The SeasonStage model object to be used for the
-            gathering of stats.
-
-
-    Views - news/views.py - home function
-    Template - news/home.html
-    """
-    hitting_stats = PlayerHittingGameStats.objects.filter(
-                                                player__player__league=league,
-                                                season=featured_stage)
-
-
-    initial = {
-        "player_id": F("player__player__pk"),
-        "first": F("player__player__first_name"),
-        "last": F("player__player__last_name"),
-        "team": F("player__team__team__team__name"),
-        }
-
-    annotate_dict = stats_dict(initial, default_league_leader_sums,
-        default_league_leader_ratios)
-    return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
-
-    return return_stats
-
-
 """Player Page Stats Functions"""
 def get_player_season_hitting_stats(player, league, featured_stage):
     """

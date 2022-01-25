@@ -160,9 +160,25 @@ team_stats_page_pitching_defaults = {
     "annotation_value": "team_stats__team"
     }
 
+hitting_league_leaders_defaults = {
+    "qs": PlayerHittingGameStats,
+    "league_key": "player__player__league",
+    "stage_key": "season",
+    "filters": {},
+    "initial": {
+        "player_id": F("player__player__pk"),
+        "first": F("player__player__first_name"),
+        "last": F("player__player__last_name"),
+        "team": F("player__team__team__team__name")
+        },
+    "default_stats": [default_league_leader_sums, default_league_leader_ratios],
+    "annotation_value": "player"
+    }
+
 stats_dict_choices = {
     "all_season_hitting": stats_page_hitting_defaults,
     "all_season_pitching": stats_page_pitching_defaults,
     "team_season_hitting": team_stats_page_hitting_defaults,
     "team_season_pitching": team_stats_page_pitching_defaults,
+    "hitting_league_leaders": hitting_league_leaders_defaults,
     }

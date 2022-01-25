@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 from league.models import Game, League, SeasonStage
-from stats.get_stats import get_league_leaders
+from stats.get_stats import get_stats
 from stats.stat_calc import _convert_to_str
 from .decorators import user_owns_article
 from .forms import ArticleCreateForm
@@ -22,7 +22,7 @@ def home(request):
     """Leaders"""
     featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
-    stats = get_league_leaders(league, featured_stage)
+    stats = get_stats(league, "hitting_league_leaders", featured_stage)
     if stats:
         avg = stats.order_by('-average')[0]
         avg["average"] = _convert_to_str(avg["average"])
