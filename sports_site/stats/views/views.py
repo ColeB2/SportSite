@@ -120,7 +120,7 @@ class TeamHittingStatsView(SingleTableMixin, FilterView):
     table_class = TeamHittingStatsTable
     template_name = "stats/team_stats_page.html"
 
-    # filterset_class = HittingSimpleFilter
+    filterset_class = HittingSimpleFilter
     paginate_by = 25
 
 
