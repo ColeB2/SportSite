@@ -1,6 +1,6 @@
 from django.db.models import  F, FloatField, CharField, Sum, Count, Case, When, Value
 from django.db.models.functions import Cast
-from stats.models import PlayerHittingGameStats
+from stats.models import PlayerHittingGameStats, PlayerPitchingGameStats
 
 
 basic_stat_defaults = {
@@ -126,5 +126,19 @@ stats_page_hitting_defaults = {
     "annotation_value": "player"
     }
 
+stats_page_pitching_defaults = {
+    "qs": PlayerPitchingGameStats,
+    "league_key": "player__player__league",
+    "stage_key": "season",
+    "filters": {},
+    "initial": {
+        'first': F("player__player__first_name"),
+        'last': F("player__player__last_name")},
+    "default_stats": [basic_pitching_sums_league, basic_pitching_ratios],
+    "annotation_value": "player"
+    }
+
 stats_dict_choices = {
-    "all_season_hitting": stats_page_hitting_defaults}
+    "all_season_hitting": stats_page_hitting_defaults,
+    "all_season_pitching": stats_page_pitching_defaults,
+    }
