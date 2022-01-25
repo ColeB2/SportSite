@@ -8,7 +8,7 @@ from league.models import League, SeasonStage
 from ..decorators import user_owns_game
 from ..filters import HittingSimpleFilter, PitchingSimpleFilter
 from ..get_stats import (get_stats, get_all_season_standings_stats,
-    get_extra_innings, get_team_hitting_stats, get_team_pitching_stats)
+    get_extra_innings, get_team_pitching_stats)
 from ..models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore, TeamGameStats)
 from ..tables import (ASPlayerHittingGameStatsTable,
@@ -149,7 +149,7 @@ class TeamHittingStatsView(SingleTableMixin, FilterView):
 class TeamPitchingStatsView(SingleTableMixin, FilterView):
     model = PlayerPitchingGameStats
     table_class = TeamPitchingStatsTable
-    template_name = "stats/team_stats_page.html"
+    template_name = "stats/team_pitching_stats_page.html"
 
     filterset_class = PitchingSimpleFilter
     paginate_by = 25

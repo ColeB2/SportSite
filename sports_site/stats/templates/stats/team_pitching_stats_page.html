@@ -1,5 +1,7 @@
 {% extends "news/base.html" %}
 {% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load stats_tags %}
 {% block content %}
     <div class="container-fluid">
         <div class="content-section">
@@ -25,10 +27,23 @@
             <br><br>
 
 
+            <form method="get">
+                {{filter.form|crispy}}
+                <input type="submit" value="Submit" class="btn btn-primary">
+                <input type="hidden" id="?league" name="league" value="{{request.GET.league}}">
+            </form>
+
+            <h3 class="text-center">
+            {% if request.GET.season %}
+                {{request.GET.season|get_stage}}
+            {% else %}
+                {{stage}}
+            {% endif %}
+            </h3>
+
             <div class="table-responsive">
                 {% render_table table %}
             </div>
-
         </div>
     </div>
 {% endblock content %}
