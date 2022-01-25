@@ -119,8 +119,10 @@ def get_stats(league, stats_to_retrieve, season_stage=None):
 
     filters = {
         stats["league_key"]: league,
-        stats["stage_key"]: stage
+        stats["stage_key"]: stage,
+        **stats["filters"],
         }
+
 
     return_stats = _get_stats(
         queryset=stats["qs"],
