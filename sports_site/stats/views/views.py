@@ -146,6 +146,37 @@ class TeamHittingStatsView(SingleTableMixin, FilterView):
         return hitting_stats
 
 
+class TeamPitchingStatsView(SingleTableMixin, FilterView):
+    model = PlayerPitchingGameStats
+    table_class = TeamPitchingStatsTable
+    template_name = "stats/team_stats_page.html"
+
+    filterset_class = PitchingSimpleFilter
+    paginate_by = 25
+
+
+    def dispatch(self, request, *args, **kwargs):
+        self.league_slug = self.request.GET.get('league', None)
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['league'] = League.objects.get(url=self.league_slug)
+        data['stage'] = SeasonStage.objects.get(season__league__url=self.league_slug,
+            featured=True)
+        return data
+
+
+    def get_queryset(self):
+        super().get_queryset()
+        league = League.objects.get(url=self.league_slug)
+        season_stage = self.request.GET.get("season", None)
+        pitching_stats = get_stats(league, "team_season_pitching", season_stage)
+        return pitching_stats
+
+
 def team_pitching_stats_display_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
