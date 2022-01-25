@@ -97,8 +97,21 @@ def aggregate_ratios(aggregated_dict):
 
     return aggregated_dict
 
-def get_stats(league, season_stage, stats_to_retrieve):
-    ##todo: Fleshout how to make this all work and abstract
+def get_stats(league, stats_to_retrieve, season_stage=None):
+    """
+    Gets stats, and returns them in a usable fashion for any
+    stats page needing stats.
+
+    Params:
+        league - League model object
+        stats_to_retrieve = str value to call proper defaults on a dict
+            Dict kept in stats_defaults.py
+        season_stage = SeasonStage model_obj, defaults to None, which
+            then defaults to featured stage.
+
+    View - stats/views.py - StatsView
+    Template - stats/stats_page.html
+    """
     stats = stats_dict_choices[str(stats_to_retrieve)]
 
     stage = (season_stage if season_stage
@@ -178,41 +191,6 @@ def get_team_hitting_stats(league, featured_stage):
 
     annotate_dict = stats_dict({"team" : F("team_stats__team__team__name")})
     return_stats = annotate_stats(hitting_stats, annotate_dict, "team_stats__team")
-
-    return return_stats
-
-
-def get_all_season_hitting_stats(league, **kwargs):
-    """
-    Gets all hitting stats for all player, and returns them
-    in a usable fashion for the main stats page. Currently used
-    for the simple stats filter.
-
-    Params:
-        league - League model object
-
-    Kwargs:
-        season_stage: season stage object to pass to
-        filter by, typically featured stage.
-
-    View - stats/views.py - StatsView
-    Template - stats/stats_page.html
-
-    """
-    hitting_stats = PlayerHittingGameStats.objects.filter(
-                                                player__player__league=league)
-
-    season_stage = kwargs.pop("season_stage", None)
-    stage = (season_stage if season_stage
-             else SeasonStage.objects.get(season__league=league, featured=True))
-
-    hitting_stats = hitting_stats.filter(season=stage)
-
-    initial = {'first': F("player__player__first_name"),
-               'last': F("player__player__last_name")
-        }
-    annotate_dict = stats_dict(initial)
-    return_stats = annotate_stats(hitting_stats, annotate_dict, "player")
 
     return return_stats
 
