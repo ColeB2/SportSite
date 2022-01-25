@@ -146,7 +146,7 @@ team_stats_page_hitting_defaults = {
     "initial": {
         "team" : F("team_stats__team__team__name")},
     "default_stats": [basic_stat_sums, ratio_stats],
-    "annotation_value": "team__stats__team"
+    "annotation_value": "team_stats__team"
     }
 
 stats_dict_choices = {
