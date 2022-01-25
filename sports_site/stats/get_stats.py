@@ -8,7 +8,7 @@ from league.models import SeasonStage
 from .stats_defaults import (basic_stat_sums, ratio_stats,
     default_league_leader_ratios, default_league_leader_sums,
     basic_pitching_ratios, basic_pitching_sums_team, basic_pitching_sums_league,
-    basic_team_sums, basic_team_ratios)
+    basic_team_sums, basic_team_ratios, stats_dict_choices)
 
 
 
@@ -97,20 +97,26 @@ def aggregate_ratios(aggregated_dict):
 
     return aggregated_dict
 
-def get_stats(league, stage, stats_to_retrieve):
+def get_stats(league, season_stage, stats_to_retrieve):
     ##todo: Fleshout how to make this all work and abstract
-    stats_choice = {}
-    stats = stats_choice["stats_to_retrieve"]
+    stats = stats_dict_choices[str(stats_to_retrieve)]
+
+    stage = (season_stage if season_stage
+             else SeasonStage.objects.get(season__league=league, featured=True))
+
+    filters = {
+        stats["league_key"]: league,
+        stats["stage_key"]: stage
+        }
 
     return_stats = _get_stats(
         queryset=stats["qs"],
-        filters=stats["filters"],
+        filters=filters,
         initial=stats["initial"],
         default_stats=stats["default_stats"],
         annotation_value=stats["annotation_value"])
 
     return return_stats
-    pass
 
 
 def _get_stats(queryset, filters, initial, default_stats, annotation_value):

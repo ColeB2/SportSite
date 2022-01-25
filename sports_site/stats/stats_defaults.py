@@ -1,6 +1,5 @@
 from django.db.models import  F, FloatField, CharField, Sum, Count, Case, When, Value
 from django.db.models.functions import Cast
-from stats.get_stats import get_league_leaders, get_stats
 from stats.models import PlayerHittingGameStats
 
 
@@ -78,14 +77,6 @@ win = Count(Case(When(win=True, then=1)))
 loss = Count(Case(When(loss=True, then=1)))
 tie = Count(Case(When(tie=True, then=1)))
 
-#OO 746 JJ 8 AA 13 LL 7 TT 24
-stats_page_defaults = {
-    "qs": PlayerHittingGameStats,
-    "league": "player__player__league",
-    "stage": "season",
-    }
-
-
 #Note --> Ratio stats must include the stats that create the ratio.
 #Hitting Defaults
 default_league_leader_sums = [
@@ -119,3 +110,21 @@ basic_pitching_ratios = {"era": era, "whip": whip}
 #Team Record/Stast default
 basic_team_sums = ["runs_for", "runs_against"]
 basic_team_ratios = {"win": win, "loss": loss, "tie": tie, "pct": pct, "differential": differential}
+
+
+##Default dict
+#OO 746 JJ 8 AA 13 LL 7 TT 24
+stats_page_hitting_defaults = {
+    "qs": PlayerHittingGameStats,
+    "league_key": "player__player__league",
+    "stage_key": "season",
+    "filters": {},
+    "initial": {
+        'first': F("player__player__first_name"),
+        'last': F("player__player__last_name")},
+    "default_stats": [basic_stat_sums, ratio_stats],
+    "annotation_value": "player"
+    }
+
+stats_dict_choices = {
+    "all_season_hitting": stats_page_hitting_defaults}

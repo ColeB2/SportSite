@@ -82,9 +82,9 @@ class StatsView(SingleTableMixin, FilterView):
         league = League.objects.get(url=self.league_slug)
         season_stage = self.request.GET.get("season", None)
         hitting_stats = get_stats(league, season_stage, "all_season_hitting")
-        hitting_stats = get_all_season_hitting_stats(
-            league,
-            season_stage=season_stage)
+        # hitting_stats = get_all_season_hitting_stats(
+        #     league,
+        #     season_stage=season_stage)
         return hitting_stats
 
 
