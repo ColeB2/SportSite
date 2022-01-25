@@ -5,7 +5,6 @@ from .views import StatsView, PitchingStatsView, TeamHittingStatsView
 urlpatterns = [
     path('', StatsView.as_view(), name='stats-page'),
     path('pitching/', PitchingStatsView.as_view(), name='pitching-stats-page'),
-    # path('team/hitting/', views.team_stats_display_view, name='team-stats-page'),
     path('team/hitting/', TeamHittingStatsView.as_view(), name='team-stats-page'),
     path('team/pitching/', views.team_pitching_stats_display_view, name='team-pitching-stats-page'),
     path('standings/', views.standings_display_view, name="standings-page"),

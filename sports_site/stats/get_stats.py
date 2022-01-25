@@ -180,21 +180,6 @@ def get_league_leaders(league, featured_stage):
     return return_stats
 
 
-def get_team_hitting_stats(league, featured_stage):
-    """
-    Gets all hittings stats and totals them for each team, and
-    returns them in a usable fashion for main stats page/Team.
-    """
-    hitting_stats = PlayerHittingGameStats.objects.filter(
-                                                player__player__league=league,
-                                                season=featured_stage)
-
-    annotate_dict = stats_dict({"team" : F("team_stats__team__team__name")})
-    return_stats = annotate_stats(hitting_stats, annotate_dict, "team_stats__team")
-
-    return return_stats
-
-
 def get_team_pitching_stats(league, featured_stage):
     """
     Gets all piatching stats and totals them for each team, and
