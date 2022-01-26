@@ -124,11 +124,15 @@ def get_stats(queryset, stats_to_retrieve, **filters):
     return return_stats
 
 
-def _get_stats(queryset, filters, initial, default_stats, annotation_value):
+def _get_stats(queryset, filters, initial, default_stats, annotation_value, order_value=None):
     """
     Params:
         queryset - Queryset of stats object we are going to process.
         filters - Filters to pass to the queryset
+        default_stats - Default stats, which are either default, or
+            to be chosen by the user ot pass on.
+        annotation_valute - the value to be annotated on
+        order_value - The value to by ordered on
     """
     stats = queryset.filter(**filters)
 

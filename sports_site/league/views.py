@@ -28,7 +28,7 @@ def player_page_view(request, player_pk):
 
     all_stats = get_all_player_season_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
     career_stats = get_player_career_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
-    player_splits = get_stats(qs[:num_games], "last_x_hitting_date")
+    player_splits = get_stats(qs[:num_games],"last_x_hitting_date")
     last_x = [3,5,7]
     last_x_splits = []
     for val in last_x:
