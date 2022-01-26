@@ -1,10 +1,10 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, render
-from stats.get_stats import (format_stats, get_all_player_season_hitting_stats,
-    get_extra_innings, get_player_career_hitting_stats,
-    get_player_last_x_hitting_stats, get_player_last_x_hitting_stats_totals,
+from stats.get_stats import (format_stats, get_stats,
+    get_all_player_season_hitting_stats, get_extra_innings,
+    get_player_career_hitting_stats, get_player_last_x_hitting_stats_totals,
     get_stats_info)
-from stats.models import TeamGameStats
+from stats.models import TeamGameStats, PlayerHittingGameStats
 from stats.tables import (BattingOrderTable, PitchingOrderTable,
     PlayerHittingGameStatsTable, PlayerPageGameHittingStatsSplitsTable,
     PlayerPageHittingStatsTable, PlayerPageHittingStatsSplitsTable,
@@ -20,9 +20,18 @@ def player_page_view(request, player_pk):
     player = get_object_or_404(Player, pk=player_pk, league=league)
     player_seasons = PlayerSeason.objects.all().filter(player=player)
 
+    num_games = 5
+    qs = PlayerHittingGameStats.objects.filter(
+                                    player__player=player,
+                                    player__player__league=league,
+                                    season__featured=True).order_by(
+                                        "-team_stats__game__date"
+                                        )[:num_games]
+
     all_stats = get_all_player_season_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
     career_stats = get_player_career_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
-    player_splits = get_player_last_x_hitting_stats(player=player, league=league, num_games=5)
+    player_splits = get_stats(qs, "last_x_hitting_date")
+    # player_splits = get_player_last_x_hitting_stats(player=player, league=league, num_games=5)
     last_x = [3,5,7]
     last_x_splits = []
     for val in last_x:

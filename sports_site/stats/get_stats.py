@@ -139,35 +139,6 @@ def _get_stats(queryset, filters, initial, default_stats, annotation_value):
 
 
 """Player Page Stats Functions"""
-def get_player_last_x_hitting_stats(player, league, num_games):
-    """
-    Gets last x games played for a hitter to use in display last
-    X games table. Does so for the featured stage.
-
-    Params:
-        Params:
-        player - Player Model Object
-        league - League model object
-        num_games - Int, number of games wanting to be displayed. Starting from
-            most recent, up until the nth number of game described by this int.
-
-    View - league/views.py player_page_view
-    """
-
-    hitting_stats = PlayerHittingGameStats.objects.filter(
-                                    player__player=player,
-                                    player__player__league=league,
-                                    season__featured=True).order_by(
-                                        "-team_stats__game__date"
-                                        )[:num_games]
-
-    initial = {"date": F("team_stats__game__date")}
-    annotate_dict = stats_dict(initial)
-    return_stats = annotate_stats(hitting_stats, annotate_dict, "team_stats__game__date")
-
-    return return_stats
-
-
 def get_player_last_x_hitting_stats_totals(player, league, num_games):
     """
     Gets last x games played totals for a hitter to use in display
