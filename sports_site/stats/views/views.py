@@ -80,7 +80,12 @@ class StatsView(SingleTableMixin, FilterView):
         super().get_queryset()
         league = League.objects.get(url=self.league_slug)
         season_stage = self.request.GET.get("season", None)
-        hitting_stats = get_stats(league, "all_season_hitting", season_stage)
+        stage = (season_stage if season_stage
+             else SeasonStage.objects.get(season__league=league, featured=True))
+        qs = PlayerHittingGameStats.objects.filter(
+            player__player__league=league,
+            season=stage)
+        hitting_stats = get_stats(qs, "all_season_hitting")
         return hitting_stats
 
 
@@ -111,7 +116,12 @@ class PitchingStatsView(SingleTableMixin, FilterView):
         super().get_queryset()
         league = League.objects.get(url=self.league_slug)
         season_stage = self.request.GET.get("season", None)
-        pitching_stats = get_stats(league, "all_season_pitching", season_stage)
+        stage = (season_stage if season_stage
+             else SeasonStage.objects.get(season__league=league, featured=True))
+        qs = PlayerPitchingGameStats.objects.filter(
+            player__player__league=league,
+            season=stage)
+        pitching_stats = get_stats(qs, "all_season_pitching")
         return pitching_stats
 
 

@@ -115,10 +115,6 @@ basic_team_ratios = {"win": win, "loss": loss, "tie": tie, "pct": pct, "differen
 ##Default dict
 #OO 746 JJ 8 AA 13 LL 7 TT 24
 stats_page_hitting_defaults = {
-    "qs": PlayerHittingGameStats,
-    "league_key": "player__player__league",
-    "stage_key": "season",
-    "filters": {},
     "initial": {
         'first': F("player__player__first_name"),
         'last': F("player__player__last_name")},
@@ -127,10 +123,6 @@ stats_page_hitting_defaults = {
     }
 
 stats_page_pitching_defaults = {
-    "qs": PlayerPitchingGameStats,
-    "league_key": "player__player__league",
-    "stage_key": "season",
-    "filters": {},
     "initial": {
         'first': F("player__player__first_name"),
         'last': F("player__player__last_name")},
