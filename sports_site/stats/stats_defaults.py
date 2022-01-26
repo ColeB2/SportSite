@@ -138,10 +138,6 @@ team_stats_page_hitting_defaults = {
     }
 
 team_stats_page_pitching_defaults = {
-    "qs": PlayerPitchingGameStats,
-    "league_key": "player__player__league",
-    "stage_key": "season",
-    "filters": {},
     "initial": {
         "team" : F("team_stats__team__team__name")},
     "default_stats": [basic_pitching_sums_team, basic_pitching_ratios],

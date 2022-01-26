@@ -188,7 +188,12 @@ class TeamPitchingStatsView(SingleTableMixin, FilterView):
         super().get_queryset()
         league = League.objects.get(url=self.league_slug)
         season_stage = self.request.GET.get("season", None)
-        pitching_stats = get_stats(league, "team_season_pitching", season_stage)
+        stage = (season_stage if season_stage
+             else SeasonStage.objects.get(season__league=league, featured=True))
+        qs = PlayerPitchingGameStats.objects.filter(
+            player__player__league=league,
+            season=stage)
+        pitching_stats = get_stats(qs, "team_season_pitching")
         return pitching_stats
 
 
