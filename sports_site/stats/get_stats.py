@@ -123,7 +123,6 @@ def get_stats(league, stats_to_retrieve, season_stage=None):
         **stats["filters"],
         }
 
-
     return_stats = _get_stats(
         queryset=stats["qs"],
         filters=filters,
@@ -150,31 +149,6 @@ def _get_stats(queryset, filters, initial, default_stats, annotation_value):
 
 
 """Player Page Stats Functions"""
-def get_player_season_hitting_stats(player, league, featured_stage):
-    """
-    Gets hitting stats for a given player, and a given stage.
-
-    Params:
-        player - Player Model Object
-        league - League model object
-        featured_stage - The SeasonStage model object to be used for the
-            gathering of stats.
-
-    View - league/views.py player_page_view
-    currently deprecated -- note? Already filter by player, do we need to
-    annotate by player, or can we aggregate.
-    """
-    hitting_stats = PlayerHittingGameStats.objects.filter(
-                                                player__player=player,
-                                                player__player__league=league,
-                                                season=featured_stage)
-
-    initial = {"year" : F("season__season__year")}
-    return_stats = annotate_stats(hitting_stats, initial, "player")
-
-    return return_stats
-
-
 def get_player_last_x_hitting_stats(player, league, num_games):
     """
     Gets last x games played for a hitter to use in display last
