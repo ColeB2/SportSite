@@ -196,39 +196,6 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
     return return_stats
 
 
-def get_player_career_hitting_stats(player,
-                                    league,
-                                    stage_type=SeasonStage.REGULAR):
-    """
-    Retrieves the career hittings stats for given player during given
-    stage_type. Defaults to regular season.
-
-    Params:
-        player - Player model object from league.models Player.
-        league - League model object from league.models League.
-            Retrieved from request.GET.get('league') url.
-        stage_type - stage field from SeasonStage model object.
-            Defaults to SeasonStage.REGULAR
-
-    Returns dictionary of totals for various player hitting stats.
-
-    Views: league/views.py - player_page_view.
-
-    """
-    hitting_stats = PlayerHittingGameStats.objects.filter(
-                                                player__player=player,
-                                                player__player__league=league,
-                                                season__stage=stage_type)
-
-    aggregate_dict = stats_dict({}, basic_stat_sums, ratio_stat_dict={})
-    return_stats = aggregate_stats(hitting_stats, aggregate_dict)
-
-    return_stats["year"] = "Career"
-    aggregate_ratios(return_stats)
-
-    return return_stats
-
-
 def get_extra_innings(linescore_obj):
     """
     Takes linescore object turns it into a dictionary, removes the
