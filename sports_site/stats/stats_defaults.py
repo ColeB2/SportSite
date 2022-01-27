@@ -114,6 +114,7 @@ basic_team_ratios = {"win": win, "loss": loss, "tie": tie, "pct": pct, "differen
 
 ##Default dict
 #OO 746 JJ 8 AA 13 LL 7 TT 24
+"""Main Stats Page Defaults"""
 stats_page_hitting_defaults = {
     "initial": {
         'first': F("player__player__first_name"),
@@ -144,6 +145,7 @@ team_stats_page_pitching_defaults = {
     "annotation_value": "team_stats__team"
     }
 
+"""Home Page Leaders Defaults"""
 hitting_league_leaders_defaults = {
     "initial": {
         "player_id": F("player__player__pk"),
@@ -155,12 +157,16 @@ hitting_league_leaders_defaults = {
     "annotation_value": "player"
     }
 
+"""Player Stats Page Defaults"""
 last_x_hitting_stats_defaults = {
     "initial": {
         "date": F("team_stats__game__date")
         },
     "default_stats": [basic_stat_sums, ratio_stats],
     "annotation_value": "team_stats__game__date"
+    }
+
+player_hitting_stats_by_season_defaults = {
     }
 
 stats_dict_choices = {
