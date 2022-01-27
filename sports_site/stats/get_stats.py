@@ -168,36 +168,6 @@ def add_additional_keys(dictionary, kv_pairs):
     return dictionary
 
 
-"""Player Page Stats Functions"""
-def get_player_last_x_hitting_stats_totals(player, league, num_games):
-    """
-    Gets last x games played totals for a hitter to use in display
-    last X games totals table. Does so for the featured stage.
-
-    Params:
-        Params:
-        player - Player Model Object
-        league - League model object
-        num_games - Int, number of games wanting to be displayed. Starting from
-            most recent, up until the nth number of game described by this int.
-
-    View - league/views.py player_page_view"""
-    hitting_stats = PlayerHittingGameStats.objects.filter(
-                                    player__player=player,
-                                    player__player__league=league,
-                                    season__featured=True).order_by(
-                                        "-team_stats__game__date")[:num_games]
-
-    aggregate_dict = stats_dict({}, basic_stat_sums, ratio_stat_dict={})
-    return_stats = aggregate_stats(hitting_stats, aggregate_dict)
-
-    return_stats["duration"] = f"Last {num_games} Games"
-    aggregate_ratios(return_stats)
-
-
-    return return_stats
-
-
 def get_extra_innings(linescore_obj):
     """
     Takes linescore object turns it into a dictionary, removes the

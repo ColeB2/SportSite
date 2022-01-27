@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, render
 from stats.get_stats import (format_stats, get_stats, get_stats_aggregate,
-    get_extra_innings, get_player_last_x_hitting_stats_totals, get_stats_info)
+    get_extra_innings, get_stats_info)
 from stats.models import TeamGameStats, PlayerHittingGameStats
 from stats.tables import (BattingOrderTable, PitchingOrderTable,
     PlayerHittingGameStatsTable, PlayerPageGameHittingStatsSplitsTable,
@@ -37,7 +37,6 @@ def player_page_view(request, player_pk):
         extra_keys = {"duration": f"Last {val} Games"}
         last_x_splits.append(
             get_stats_aggregate(player_splits_qs[:val], "last_x_hitting_stats_totals", extra_keys=extra_keys)
-            # get_player_last_x_hitting_stats_totals(player=player,league=league, num_games=val)
             )
 
     table_data = []
