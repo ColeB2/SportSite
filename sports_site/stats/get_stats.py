@@ -158,6 +158,13 @@ def get_stats_aggregate(queryset, stats_to_retrieve, extra_keys={}, filters={}):
     return return_stats
 
 
+def add_additional_keys(dictionary, kv_pairs):
+    for k,v in kv_pairs.items():
+        dictionary[k] = v
+
+    return dictionary
+
+
 """Player Page Stats Functions"""
 def get_player_last_x_hitting_stats_totals(player, league, num_games):
     """
