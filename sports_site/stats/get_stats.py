@@ -98,7 +98,7 @@ def aggregate_ratios(aggregated_dict):
     return aggregated_dict
 
 
-def get_stats(queryset, stats_to_retrieve, **filters):
+def get_stats(queryset, stats_to_retrieve, filters={}):
     """
     Gets stats, and returns them in a usable fashion for any
     stats page needing stats.

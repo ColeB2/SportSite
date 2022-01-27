@@ -28,9 +28,9 @@ def player_page_view(request, player_pk):
     player_splits_qs = qs.filter(
         season__featured=True).order_by("-team_stats__game__date")[:num_games]
 
-    all_stats_qs = qs.filter(season__stage=SeasonStage.REGULAR)
 
-    all_stats = get_stats(all_stats_qs, "player_career_hitting_stats")
+    all_stats_filters = {"season__stage": SeasonStage.REGULAR}
+    all_stats = get_stats(qs, "player_career_hitting_stats", filters=all_stats_filters)
     player_splits = get_stats(player_splits_qs, "last_x_hitting_date")
     career_stats = get_player_career_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
 
