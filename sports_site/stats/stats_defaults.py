@@ -194,6 +194,7 @@ stats_dict_choices = {
     "team_season_pitching": team_stats_page_pitching_defaults,
     "hitting_league_leaders": hitting_league_leaders_defaults,
     "last_x_hitting_date": last_x_hitting_stats_defaults,
+    "last_x_hitting_stats_totals": last_x_hitting_stats_totals_defaults,
     "player_career_hitting_stats": player_career_hitting_stats,
     "player_career_hitting_stats_totals": player_career_hitting_stats_totals,
     }

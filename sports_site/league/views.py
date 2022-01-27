@@ -24,17 +24,21 @@ def player_page_view(request, player_pk):
                                             player__player__league=league)
 
     player_splits_qs = qs.filter(
-        season__featured=True).order_by("-team_stats__game__date")[:num_games]
+        season__featured=True).order_by("-team_stats__game__date")
 
 
     all_stats_filters = {"season__stage": SeasonStage.REGULAR}
     all_stats = get_stats(qs, "player_career_hitting_stats", filters=all_stats_filters)
-    player_splits = get_stats(player_splits_qs, "last_x_hitting_date")
+    player_splits = get_stats(player_splits_qs[:num_games], "last_x_hitting_date")
     career_stats = get_stats_aggregate(qs, "player_career_hitting_stats_totals", filters=all_stats_filters)
     last_x = [3,5,7]
     last_x_splits = []
     for val in last_x:
-        last_x_splits.append(get_player_last_x_hitting_stats_totals(player=player,league=league, num_games=val))
+        extra_keys = {"duration": f"Last {val} Games"}
+        last_x_splits.append(
+            get_stats_aggregate(player_splits_qs[:val], "last_x_hitting_stats_totals", extra_keys=extra_keys)
+            # get_player_last_x_hitting_stats_totals(player=player,league=league, num_games=val)
+            )
 
     table_data = []
     for statline in all_stats:
