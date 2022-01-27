@@ -1,13 +1,9 @@
-from django.db.models import  F, FloatField, Sum, Count, Case, When
-from django.db.models.functions import Cast
+from django.db.models import  F, Sum
 from django.forms.models import model_to_dict
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameStats)
-from league.models import SeasonStage
 
 from .stats_defaults import (basic_stat_sums, ratio_stats,
-    default_league_leader_ratios, default_league_leader_sums,
-    basic_pitching_ratios, basic_pitching_sums_team, basic_pitching_sums_league,
     basic_team_sums, basic_team_ratios, stats_dict_choices)
 
 
