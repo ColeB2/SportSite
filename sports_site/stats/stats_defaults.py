@@ -166,7 +166,12 @@ last_x_hitting_stats_defaults = {
     "annotation_value": "team_stats__game__date"
     }
 
-player_hitting_stats_by_season_defaults = {
+player_career_hitting_stats = {
+    "initial": {
+        "year": F("season__season__year")
+        },
+    "default_stats": [basic_stat_sums, ratio_stats],
+    "annotation_value": "season__season__year"
     }
 
 stats_dict_choices = {
@@ -176,4 +181,5 @@ stats_dict_choices = {
     "team_season_pitching": team_stats_page_pitching_defaults,
     "hitting_league_leaders": hitting_league_leaders_defaults,
     "last_x_hitting_date": last_x_hitting_stats_defaults,
+    "player_career_hitting_stats": player_career_hitting_stats
     }
