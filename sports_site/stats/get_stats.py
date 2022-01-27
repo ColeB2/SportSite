@@ -125,7 +125,7 @@ def get_stats(queryset, stats_to_retrieve, filters={}):
     return return_stats
 
 
-def _get_stats(queryset, filters, initial, default_stats, annotation_value, order_value=None):
+def _get_stats(queryset, filters, initial, default_stats, annotation_value):
     """
     Params:
         queryset - Queryset of stats object we are going to process.
@@ -143,15 +143,17 @@ def _get_stats(queryset, filters, initial, default_stats, annotation_value, orde
     return return_stats
 
 
-def get_stats_agg(queryset, stats_to_retrieve, **filters):
+def get_stats_aggregate(queryset, stats_to_retrieve, extra_keys={}, filters={}):
     stats = stats_dict_choices[str(stats_to_retrieve)]
+
+    stats = queryset.filter(**filters)
 
 
     default_stats = stats["default_stats"]
     aggregate_dict = stats_dict(stats["initial"], default_stats[0], default_stats[1])
     return_stats = aggregate_stats(queryset, aggregate_dict)
 
-    add_additional_keys(return_stats, stats["additional_keys"])
+    add_additional_keys(return_stats, extra_keys)
     aggregate_ratios(return_stats)
     return return_stats
 
