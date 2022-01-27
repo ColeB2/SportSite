@@ -172,26 +172,6 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
     return return_stats
 
 
-
-
-def get_all_player_season_hitting_stats(player, league,
-                                        stage_type=SeasonStage.REGULAR):
-    """
-    Retrieves the hittings stats for each season participated
-    in for given stage type.
-    """
-    hitting_stats = PlayerHittingGameStats.objects.filter(
-                                                player__player=player,
-                                                player__player__league=league,
-                                                season__stage=stage_type)
-
-    initial = {"year": F("season__season__year")}
-    annotate_dict = stats_dict(initial, basic_stat_sums, ratio_stats)
-    return_stats = annotate_stats(hitting_stats, annotate_dict, "season__season__year")
-
-    return return_stats
-
-
 def get_player_career_hitting_stats(player,
                                     league,
                                     stage_type=SeasonStage.REGULAR):
