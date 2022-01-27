@@ -174,6 +174,13 @@ player_career_hitting_stats = {
     "annotation_value": "season__season__year"
     }
 
+##Player Page --> uses aggregate instead
+last_x_hitting_stats_totals_defaults = {
+    "initial": {},
+    "default_stats": [basic_stat_sums, {}],
+    #"additional_keys": {"duration": f"Last {arg} Games"},
+    }
+
 stats_dict_choices = {
     "all_season_hitting": stats_page_hitting_defaults,
     "all_season_pitching": stats_page_pitching_defaults,
@@ -183,3 +190,5 @@ stats_dict_choices = {
     "last_x_hitting_date": last_x_hitting_stats_defaults,
     "player_career_hitting_stats": player_career_hitting_stats
     }
+
+

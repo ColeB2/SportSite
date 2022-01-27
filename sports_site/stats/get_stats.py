@@ -97,6 +97,7 @@ def aggregate_ratios(aggregated_dict):
 
     return aggregated_dict
 
+
 def get_stats(queryset, stats_to_retrieve, **filters):
     """
     Gets stats, and returns them in a usable fashion for any
@@ -142,6 +143,19 @@ def _get_stats(queryset, filters, initial, default_stats, annotation_value, orde
     return return_stats
 
 
+def get_stats_agg(queryset, stats_to_retrieve, **filters):
+    stats = stats_dict_choices[str(stats_to_retrieve)]
+
+
+    default_stats = stats["default_stats"]
+    aggregate_dict = stats_dict(stats["initial"], default_stats[0], default_stats[1])
+    return_stats = aggregate_stats(queryset, aggregate_dict)
+
+    add_additional_keys(return_stats, stats["additional_keys"])
+    aggregate_ratios(return_stats)
+    return return_stats
+
+
 """Player Page Stats Functions"""
 def get_player_last_x_hitting_stats_totals(player, league, num_games):
     """
@@ -162,7 +176,7 @@ def get_player_last_x_hitting_stats_totals(player, league, num_games):
                                     season__featured=True).order_by(
                                         "-team_stats__game__date")[:num_games]
 
-    aggregate_dict = stats_dict({}, ratio_stat_dict={})
+    aggregate_dict = stats_dict({}, basic_stat_sums, ratio_stat_dict={})
     return_stats = aggregate_stats(hitting_stats, aggregate_dict)
 
     return_stats["duration"] = f"Last {num_games} Games"
@@ -196,7 +210,7 @@ def get_player_career_hitting_stats(player,
                                                 player__player__league=league,
                                                 season__stage=stage_type)
 
-    aggregate_dict = stats_dict({}, ratio_stat_dict={})
+    aggregate_dict = stats_dict({}, basic_stat_sums, ratio_stat_dict={})
     return_stats = aggregate_stats(hitting_stats, aggregate_dict)
 
     return_stats["year"] = "Career"
