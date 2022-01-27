@@ -1,6 +1,6 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, render
-from stats.get_stats import (format_stats, get_stats,
+from stats.get_stats import (format_stats, get_stats, get_stats_aggregate,
     get_extra_innings,
     get_player_career_hitting_stats, get_player_last_x_hitting_stats_totals,
     get_stats_info)
@@ -32,8 +32,7 @@ def player_page_view(request, player_pk):
     all_stats_filters = {"season__stage": SeasonStage.REGULAR}
     all_stats = get_stats(qs, "player_career_hitting_stats", filters=all_stats_filters)
     player_splits = get_stats(player_splits_qs, "last_x_hitting_date")
-    career_stats = get_player_career_hitting_stats(player=player, league=league, stage_type=SeasonStage.REGULAR)
-
+    career_stats = get_stats_aggregate(qs, "player_career_hitting_stats_totals", filters=all_stats_filters)
     last_x = [3,5,7]
     last_x_splits = []
     for val in last_x:

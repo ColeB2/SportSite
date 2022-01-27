@@ -178,7 +178,13 @@ player_career_hitting_stats = {
 last_x_hitting_stats_totals_defaults = {
     "initial": {},
     "default_stats": [basic_stat_sums, {}],
-    #"additional_keys": {"duration": f"Last {arg} Games"},
+    "additional_keys": {},
+    }
+
+player_career_hitting_stats_totals = {
+    "initial": {},
+    "default_stats": [basic_stat_sums, {}],
+    "additional_keys": {"year": "Career"},
     }
 
 stats_dict_choices = {
@@ -188,7 +194,8 @@ stats_dict_choices = {
     "team_season_pitching": team_stats_page_pitching_defaults,
     "hitting_league_leaders": hitting_league_leaders_defaults,
     "last_x_hitting_date": last_x_hitting_stats_defaults,
-    "player_career_hitting_stats": player_career_hitting_stats
+    "player_career_hitting_stats": player_career_hitting_stats,
+    "player_career_hitting_stats_totals": player_career_hitting_stats_totals,
     }
 
 

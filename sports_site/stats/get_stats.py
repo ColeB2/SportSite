@@ -146,14 +146,15 @@ def _get_stats(queryset, filters, initial, default_stats, annotation_value):
 def get_stats_aggregate(queryset, stats_to_retrieve, extra_keys={}, filters={}):
     stats = stats_dict_choices[str(stats_to_retrieve)]
 
-    stats = queryset.filter(**filters)
+    qs = queryset.filter(**filters)
 
 
     default_stats = stats["default_stats"]
     aggregate_dict = stats_dict(stats["initial"], default_stats[0], default_stats[1])
-    return_stats = aggregate_stats(queryset, aggregate_dict)
+    return_stats = aggregate_stats(qs, aggregate_dict)
 
-    add_additional_keys(return_stats, extra_keys)
+    stats["additional_keys"].update(extra_keys)
+    add_additional_keys(return_stats, stats["additional_keys"])
     aggregate_ratios(return_stats)
     return return_stats
 
