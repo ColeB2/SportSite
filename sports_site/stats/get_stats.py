@@ -1,17 +1,14 @@
-from django.db.models import  F, Sum
+from django.db.models import Sum
 from django.forms.models import model_to_dict
 from .models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameStats)
 
-from .stats_defaults import (basic_stat_sums, ratio_stats,
-    basic_team_sums, basic_team_ratios, stats_dict_choices)
-
+from .stats_defaults import (basic_stat_sums, ratio_stats, stats_dict_choices)
 
 
 
 def stats_dict(initial_dict, sum_stat_list=basic_stat_sums,
                                                    ratio_stat_dict=ratio_stats):
-
     """
     Uses a list/dict combo to populate an initial dictionary of stats,
     to be passed to annotate_stats to annotate on.
@@ -362,8 +359,5 @@ def get_pitching_stats_info(stats_queryset):
                 (player, player.batters_faced, None))
 
     return (balks, hit_batters, batters_faced)
-
-
-
 
 
