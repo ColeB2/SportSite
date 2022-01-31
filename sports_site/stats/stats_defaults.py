@@ -110,6 +110,10 @@ basic_pitching_ratios = {"era": era, "whip": whip}
 basic_team_sums = ["runs_for", "runs_against"]
 basic_team_ratios = {"win": win, "loss": loss, "tie": tie, "pct": pct, "differential": differential}
 
+## Extra stats below boxscore defaults:
+below_boxscore_sums = ["doubles", "triples", "homeruns", "runs_batted_in",
+    "two_out_runs_batted_in", "stolen_bases", "caught_stealing"]
+
 
 ##Default dict
 """Main Stats Page Defaults"""
@@ -183,6 +187,12 @@ player_career_hitting_stats_totals = {
     "initial": {},
     "default_stats": [basic_stat_sums, {}],
     "additional_keys": {"year": "Career"},
+    }
+
+below_boxscore_totals = {
+    "initial": {},
+    "default_stats": [below_boxscore_sums, {}],
+    "additional_keys": {},
     }
 
 stats_dict_choices = {
