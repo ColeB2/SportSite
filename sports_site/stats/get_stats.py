@@ -148,7 +148,6 @@ def get_stats_aggregate(queryset, stats_to_retrieve, extra_keys={}, filters={}):
     default_stats = stats["default_stats"]
     aggregate_dict = stats_dict(stats["initial"], default_stats[0], default_stats[1])
     return_stats = aggregate_stats(qs, aggregate_dict)
-
     stats["additional_keys"].update(extra_keys)
     add_additional_keys(return_stats, stats["additional_keys"])
     aggregate_ratios(return_stats)
@@ -220,15 +219,8 @@ def _get_extra_stat_totals(player):
                         season=game.season,
                         team_stats__game__date__range=["2021-05-14",game.date])
 
-    return_stats = hitting_stats.values("player").aggregate(
-        doubles = Sum('doubles'),
-        triples = Sum('triples'),
-        homeruns = Sum('homeruns'),
-        runs_batted_in = Sum('runs_batted_in'),
-        two_out_runs_batted_in = Sum('two_out_runs_batted_in'),
-        stolen_bases = Sum('stolen_bases'),
-        caught_stealing = Sum('caught_stealing'),
-        )
+    return_stats = get_stats_aggregate(hitting_stats, "below_boxscore_totals")
+
     return return_stats
 
 

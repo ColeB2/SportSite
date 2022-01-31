@@ -205,6 +205,7 @@ stats_dict_choices = {
     "last_x_hitting_stats_totals": last_x_hitting_stats_totals_defaults,
     "player_career_hitting_stats": player_career_hitting_stats,
     "player_career_hitting_stats_totals": player_career_hitting_stats_totals,
+    "below_boxscore_totals": below_boxscore_totals,
     }
 
 
