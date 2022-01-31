@@ -203,7 +203,9 @@ def standings_display_view(request):
     league = League.objects.get(url=league_slug)
     featured_stage = SeasonStage.objects.get(season__league=league,
                                              featured=True)
-    standings_stats = get_all_season_standings_stats(league, featured_stage)
+
+    qs = TeamGameStats.objects.filter(season=featured_stage)
+    standings_stats = get_stats(qs, "league_standings")
     table = StandingsTable(standings_stats)
     RequestConfig(request).configure(table)
 

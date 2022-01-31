@@ -54,7 +54,7 @@ whip = (
     ))
 
 
-#Team Options
+#Team Options -- Standings
 differential = (
     Cast(F("runs_for"), FloatField())
     - Cast(F("runs_against"),FloatField())
@@ -106,7 +106,7 @@ basic_pitching_sums_league = [
 basic_pitching_ratios = {"era": era, "whip": whip}
 
 
-#Team Record/Stast default
+#Team Record/Stast default --> Standings
 basic_team_sums = ["runs_for", "runs_against"]
 basic_team_ratios = {"win": win, "loss": loss, "tie": tie, "pct": pct, "differential": differential}
 
@@ -195,6 +195,12 @@ below_boxscore_totals = {
     "additional_keys": {},
     }
 
+league_standings = {
+    "initial": {'team_name': F("team__team__name")},
+    "default_stats": [basic_team_sums, basic_team_ratios],
+    "annotation_value": "team"
+    }
+
 stats_dict_choices = {
     "all_season_hitting": stats_page_hitting_defaults,
     "all_season_pitching": stats_page_pitching_defaults,
@@ -206,6 +212,7 @@ stats_dict_choices = {
     "player_career_hitting_stats": player_career_hitting_stats,
     "player_career_hitting_stats_totals": player_career_hitting_stats_totals,
     "below_boxscore_totals": below_boxscore_totals,
+    "league_standings": league_standings,
     }
 
 

@@ -364,26 +364,6 @@ def get_pitching_stats_info(stats_queryset):
     return (balks, hit_batters, batters_faced)
 
 
-"""Stadings Page"""
-def get_all_season_standings_stats(league, featured_stage):
-    """
-    Gets all the standings data for the featured stage, and returns
-    them in usable fashion for a django-tables2 standings page.
 
-    Params:
-        league - League model object
-        featured_stage - The SeasonStage model object to be used for the
-            gathering of stats.
-
-    Views - stats/views.py - standings_display_view
-    Template Featured - stats/standings_page.html
-    """
-    game_stats = TeamGameStats.objects.filter(season=featured_stage)
-
-    initial = {"team_name": F("team__team__name")}
-    annotate_dict = stats_dict(initial, basic_team_sums, basic_team_ratios)
-    return_stats = annotate_stats(game_stats, annotate_dict, "team")
-
-    return return_stats
 
 
