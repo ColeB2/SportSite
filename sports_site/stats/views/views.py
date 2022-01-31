@@ -6,9 +6,8 @@ from django_tables2 import RequestConfig
 from django_tables2.views import SingleTableMixin
 from league.models import League, SeasonStage
 from ..decorators import user_owns_game
-from ..filters import HittingSimpleFilter, PitchingSimpleFilter
-from ..get_stats import (get_stats, get_all_season_standings_stats,
-    get_extra_innings)
+from ..filters import HittingSimpleFilter, PitchingSimpleFilter, StandingsSimpleFilter
+from ..get_stats import (get_stats, get_extra_innings)
 from ..models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameLineScore, TeamGameStats)
 from ..tables import (ASPlayerHittingGameStatsTable,
@@ -215,3 +214,38 @@ def standings_display_view(request):
         "featured_stage": featured_stage,
     }
     return render(request, "stats/standings_page.html", context)
+
+class StandingsView(SingleTableMixin, FilterView):
+    model = TeamGameStats
+    table_class = StandingsTable
+    template_name = "stats/standings_page.html"
+
+    filterset_class = StandingsSimpleFilter
+    paginate_by = 25
+
+
+    def dispatch(self, request, *args, **kwargs):
+        self.league_slug = self.request.GET.get('league', None)
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['league'] = League.objects.get(url=self.league_slug)
+        data['stage'] = SeasonStage.objects.get(season__league__url=self.league_slug,
+            featured=True)
+        return data
+
+
+    def get_queryset(self):
+        super().get_queryset()
+        league = League.objects.get(url=self.league_slug)
+        season_stage = self.request.GET.get("season", None)
+        stage = (season_stage if season_stage
+             else SeasonStage.objects.get(season__league=league, featured=True))
+        qs = TeamGameStats.objects.filter(
+            team__team__league=league,
+            season=stage)
+        standings_stats = get_stats(qs, "league_standings")
+        return standings_stats

@@ -1,6 +1,6 @@
 import django_filters
 from league.models import Season, SeasonStage
-from .models import PlayerHittingGameStats, PlayerPitchingGameStats
+from .models import PlayerHittingGameStats, PlayerPitchingGameStats, TeamGameStats
 
 
 def LeagueSeason(request):
@@ -80,4 +80,23 @@ class PitchingSimpleFilter(django_filters.FilterSet):
     class Meta:
         model = PlayerPitchingGameStats
         fields = ["season",]
+
+
+class StandingsSimpleFilter(django_filters.FilterSet):
+    """
+    Used stats/views/views.py
+        StatsView()
+    """
+    season = django_filters.ModelChoiceFilter(
+        field_name="season",
+        label=False,
+        empty_label="Stage",
+        queryset = _league_stage
+            )
+
+    class Meta:
+        model = TeamGameStats
+        fields = ["season",]
+
+
 
