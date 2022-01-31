@@ -197,24 +197,6 @@ class TeamPitchingStatsView(SingleTableMixin, FilterView):
 
 
 """Standings Display View"""
-def standings_display_view(request):
-    league_slug = request.GET.get('league', None)
-    league = League.objects.get(url=league_slug)
-    featured_stage = SeasonStage.objects.get(season__league=league,
-                                             featured=True)
-
-    qs = TeamGameStats.objects.filter(season=featured_stage)
-    standings_stats = get_stats(qs, "league_standings")
-    table = StandingsTable(standings_stats)
-    RequestConfig(request).configure(table)
-
-    context = {
-        "league": league,
-        "table": table,
-        "featured_stage": featured_stage,
-    }
-    return render(request, "stats/standings_page.html", context)
-
 class StandingsView(SingleTableMixin, FilterView):
     model = TeamGameStats
     table_class = StandingsTable
