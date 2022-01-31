@@ -39,6 +39,15 @@ on_base_percentage = (
     + Cast(F('sacrifice_flies'), FloatField())
     ))
 
+slugging_percentage = (
+    (
+        (Cast(F('singles'), FloatField()) * 1)
+        + (Cast(F('doubles'), FloatField()) * 2)
+        + (Cast(F('triples'), FloatField()) * 3)
+        + (Cast(F('homeruns'), FloatField()) * 4)
+    ) / Cast(F('at_bats'), FloatField())
+    )
+
 
 era = (
             Cast(F('earned_runs'),FloatField()) * 9 /
