@@ -149,9 +149,7 @@ def get_stats_aggregate(queryset, stats_to_retrieve, extra_keys={}, filters={}):
     aggregate_dict = stats_dict(stats["initial"], default_stats[0], default_stats[1])
     return_stats = aggregate_stats(qs, aggregate_dict)
 
-    print(extra_keys)
     stats["additional_keys"].update(extra_keys)
-    print(stats["additional_keys"])
     add_additional_keys(return_stats, stats["additional_keys"])
     aggregate_ratios(return_stats)
     return return_stats

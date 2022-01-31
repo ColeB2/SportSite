@@ -1,6 +1,5 @@
-from django.db.models import  F, FloatField, CharField, Sum, Count, Case, When, Value
+from django.db.models import  F, FloatField, Sum, Count, Case, When
 from django.db.models.functions import Cast
-from stats.models import PlayerHittingGameStats, PlayerPitchingGameStats
 
 
 basic_stat_defaults = {
@@ -113,7 +112,6 @@ basic_team_ratios = {"win": win, "loss": loss, "tie": tie, "pct": pct, "differen
 
 
 ##Default dict
-#OO 746 JJ 8 AA 13 LL 7 TT 24
 """Main Stats Page Defaults"""
 stats_page_hitting_defaults = {
     "initial": {
