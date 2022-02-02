@@ -11,9 +11,14 @@ class MyMixinRunner(object):
         user = User.objects.create(username="Test", email="test@email.com", password="test")
         league = League.objects.create(name="Test League", admin=user, url="TL")
         season = Season.objects.create(year="2022", league=league)
+
         stageO = SeasonStage.objects.create(stage=SeasonStage.OTHER, season=season, stage_name="Preseason", featured=True)
         stageP = SeasonStage.objects.create(stage=SeasonStage.POST, season=season, featured=True)
         stageR = SeasonStage.objects.create(stage=SeasonStage.REGULAR, season=season, featured=True)
+
+        team1 = Team.objects.create(owner=user, league=league, name="Team One", place="Town One", abbreviation="TTO")
+        team2 = Team.objects.create(owner=user, league=league, name="Team Two", place="Town Two", abbreviation="TTT")
+
         return temp_return
 
     def teardown_databases(self, *args, **kwargs):
@@ -96,7 +101,7 @@ class SeasonStageTestCase(TestCase):
 
     def test_stage_name_label(self):
         field_label = self.other._meta.get_field('stage_name').verbose_name
-        self.assertEqual(field_label, 'stage_name')
+        self.assertEqual(field_label, 'stage name')
 
     def test_stage_name_max_length(self):
         max_length = self.other._meta.get_field('stage_name').max_length
@@ -124,5 +129,54 @@ class SeasonStageTestCase(TestCase):
         self.assertEqual(str(self.regular), "2022 Regular Season")
         self.assertEqual(str(self.post), "2022 Postseason")
         self.assertEqual(str(self.other), "2022 Preseason")
+
+
+class TeamTestCase(TestCase):
+    def setUp(self):
+        self.league = League.objects.get(id=1)
+        self.team1 = Team.objects.get(name="Team One")
+        self.team2 = Team.objects.get(name="Team Two")
+
+
+    def test_created_properly(self):
+        self.assertEqual(self.team1.name, "Team One")
+        self.assertEqual(self.team2.name, "Team Two")
+        self.assertEqual(self.team1.place, "Town One")
+        self.assertEqual(self.team2.place, "Town Two")
+        self.assertEqual(self.team1.abbreviation, "TTO")
+        self.assertEqual(self.team2.abbreviation, "TTT")
+
+    def test_points_to_proper_league(self):
+        self.assertEqual(self.team1.league, self.league)
+        self.assertEqual(self.team2.league, self.league)
+
+    def test_name_label(self):
+        field_label = self.team1._meta.get_field('name').verbose_name
+        self.assertEqual(field_label, 'name')
+
+    def test_place_label(self):
+        field_label = self.team1._meta.get_field('place').verbose_name
+        self.assertEqual(field_label, 'place')
+
+    def test_abbreviation_label(self):
+        field_label = self.team1._meta.get_field('abbreviation').verbose_name
+        self.assertEqual(field_label, 'abbreviation')
+
+    def test_name_max_length(self):
+        max_length = self.team1._meta.get_field('name').max_length
+        self.assertEqual(max_length, 30)
+
+    def test_place_max_length(self):
+        max_length = self.team1._meta.get_field('place').max_length
+        self.assertEqual(max_length, 30)
+
+    def test_abbreviation_max_length(self):
+        max_length = self.team1._meta.get_field('abbreviation').max_length
+        self.assertEqual(max_length, 3)
+
+    def test_expected_name(self):
+        self.assertEqual(str(self.team1), "Town One Team One")
+        self.assertEqual(str(self.team2), "Town Two Team Two")
+
 
 
