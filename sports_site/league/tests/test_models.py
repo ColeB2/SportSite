@@ -22,6 +22,9 @@ class MyMixinRunner(object):
         team1r = TeamSeason.objects.create(season=stageR, team=team1)
         team2r = TeamSeason.objects.create(season=stageR, team=team2)
 
+        player11 = Player.objects.create(league=league, first_name="Player", last_name="One")
+        player21 = Player.objects.create(league=league, first_name="Player", last_name="Two")
+
 
         return temp_return
 
@@ -222,6 +225,10 @@ class RosterTestCase(TestCase):
 
     def test_expected_name(self):
         self.assertEqual(str(self.roster1), "Town One Team One 2022 Regular Season")
+
+
+
+
 
 
 
