@@ -145,12 +145,12 @@ class SeasonStageTestCase(TestCase):
 
 
 class TeamTestCase(TestCase):
-    def setUp(self):
-        self.league = League.objects.get(id=1)
-        self.team1 = Team.objects.get(name="Team One")
-        self.team2 = Team.objects.get(name="Team Two")
-        self.teamtest = Team.objects.create(name="Team Onee", place="Town One")
-
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.team1 = Team.objects.get(name="Team One")
+        cls.team2 = Team.objects.get(name="Team Two")
+        cls.teamtest = Team.objects.create(name="Team Onee", place="Town One")
 
     def test_created_properly(self):
         self.assertEqual(self.team1.name, "Team One")
