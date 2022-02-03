@@ -235,10 +235,11 @@ class RosterTestCase(TestCase):
 
 
 class PlayerTestCase(TestCase):
-    def setUp(self):
-        self.league = League.objects.get(id=1)
-        self.player1 = Player.objects.get(league=self.league, last_name="One")
-        self.player2 = Player.objects.get(league=self.league, last_name="Two")
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.player1 = Player.objects.get(league=cls.league, last_name="One")
+        cls.player2 = Player.objects.get(league=cls.league, last_name="Two")
 
     def test_points_proper_league(self):
         self.assertEqual(self.player1.league, self.league)
