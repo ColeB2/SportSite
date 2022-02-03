@@ -290,6 +290,7 @@ class PlayerTestCase(TestCase):
 
 
 class PlayerSeasonTestCase(TestCase):
+    @classmethod
     def setUpTestData(cls):
         cls.league = League.objects.get(id=1)
         cls.player = Player.objects.get(league=cls.league, first_name="Player", last_name="One")
@@ -316,7 +317,7 @@ class PlayerSeasonTestCase(TestCase):
 
 
     def test_expected_name(self):
-        self.assertEqual(str(self.pseason), "One, Player 2022 Regular Season"
+        self.assertEqual(str(self.pseason), "One, Player 2022 Regular Season")
 
 
 
