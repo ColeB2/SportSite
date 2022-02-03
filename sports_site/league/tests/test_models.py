@@ -277,6 +277,18 @@ class PlayerTestCase(TestCase):
         self.assertEqual(self.player1.full_name, "Player One")
         self.assertEqual(self.player2.full_name, "Player Two")
 
+    def test_first_name_max_length(self):
+        max_length = self.player1._meta.get_field('first_name').max_length
+        self.assertEqual(max_length, 35)
+
+    def test_last_name_max_length(self):
+        max_length = self.player1._meta.get_field('last_name').max_length
+        self.assertEqual(max_length, 35)
+
+
+class PlayerSeasonTestCase(TestCase):
+    pass
+
 
 
 
