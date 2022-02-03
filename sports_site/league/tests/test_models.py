@@ -94,12 +94,13 @@ class SeasonTestCase(TestCase):
 
 
 class SeasonStageTestCase(TestCase):
-    def setUp(self):
-        self.league = League.objects.get(id=1)
-        self.season = Season.objects.get(id=1)
-        self.regular = SeasonStage.objects.get(stage=SeasonStage.REGULAR)
-        self.post = SeasonStage.objects.get(stage=SeasonStage.POST)
-        self.other = SeasonStage.objects.get(stage=SeasonStage.OTHER)
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.season = Season.objects.get(id=1)
+        cls.regular = SeasonStage.objects.get(stage=SeasonStage.REGULAR)
+        cls.post = SeasonStage.objects.get(stage=SeasonStage.POST)
+        cls.other = SeasonStage.objects.get(stage=SeasonStage.OTHER)
 
     def test_created_properly(self):
         self.assertEqual(self.regular.stage, SeasonStage.REGULAR)
