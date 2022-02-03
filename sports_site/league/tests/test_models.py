@@ -198,14 +198,14 @@ class TeamTestCase(TestCase):
 
 
 class TeamSeasonTestCase(TestCase):
-    def setUp(self):
-        self.league = League.objects.get(id=1)
-        self.stage = SeasonStage.objects.get(stage=SeasonStage.REGULAR, featured=True)
-        self.team1 = Team.objects.get(name="Team One")
-        self.team2 = Team.objects.get(name="Team Two")
-        self.team1r = TeamSeason.objects.get(team=self.team1)
-        self.team2r = TeamSeason.objects.get(team=self.team2)
-
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.stage = SeasonStage.objects.get(stage=SeasonStage.REGULAR, featured=True)
+        cls.team1 = Team.objects.get(name="Team One")
+        cls.team2 = Team.objects.get(name="Team Two")
+        cls.team1r = TeamSeason.objects.get(team=cls.team1)
+        cls.team2r = TeamSeason.objects.get(team=cls.team2)
 
     def test_points_proper_team_and_stage(self):
         self.assertEqual(self.team1r.team, self.team1)
