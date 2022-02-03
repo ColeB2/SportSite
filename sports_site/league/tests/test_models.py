@@ -172,7 +172,7 @@ class TeamTestCase(TestCase):
 
     def test_unique_abbreviation(self):
         #check test
-        self.assertEqual(self.teamtest.abbreviation, "TTE")
+        self.assertEqual(self.teamtest.abbreviation, "TOW")
 
     def test_name_max_length(self):
         max_length = self.team1._meta.get_field('name').max_length
@@ -201,8 +201,8 @@ class TeamSeasonTestCase(TestCase):
         self.team2r = TeamSeason.objects.get(team=self.team2)
 
 
-    def test_points_proper_league_and_stage(self):
-        self.assertEqual(self.team1r.league, self.league)
+    def test_points_proper_team_and_stage(self):
+        self.assertEqual(self.team1r.team, self.team1)
         self.assertEqual(self.team1r.season, self.stage)
 
     def test_expected_name(self):
@@ -210,7 +210,7 @@ class TeamSeasonTestCase(TestCase):
         self.assertEqual(str(self.team2r), "Town Two Team Two 2022 Regular Season")
 
     def test_roster_created(self):
-        roster1 = self.team1r.roster_set.all()
+        roster1 = self.team1r.roster_set.all()[0]
         self.assertEqual(roster1.team, self.team1r)
 
 class RosterTestCase(TestCase):
@@ -239,7 +239,11 @@ class PlayerTestCase(TestCase):
 
     def test_first_name_label(self):
         field_label = self.player1._meta.get_field('first_name').verbose_name
-        self.assertEqual(field_label, 'first_name')
+        self.assertEqual(field_label, 'first name')
+
+    def test_last_name_label(self):
+        field_label = self.player1._meta.get_field('last_name').verbose_name
+        self.assertEqual(field_label, 'last name')
 
     def test_birthdate_label(self):
         field_label = self.player1._meta.get_field('birthdate').verbose_name
@@ -249,25 +253,25 @@ class PlayerTestCase(TestCase):
         field_label = self.player1._meta.get_field('bats').verbose_name
         self.assertEqual(field_label, 'bats')
 
-    def test_throws_label(self):
-        field_label = self.player1._meta.get_field('throws').verbose_name
-        self.assertEqual(field_label, 'throws')
+    def test_throw_label(self):
+        field_label = self.player1._meta.get_field('throw').verbose_name
+        self.assertEqual(field_label, 'throw')
 
     def test_height_feet_label(self):
         field_label = self.player1._meta.get_field('height_feet').verbose_name
-        self.assertEqual(field_label, 'height_feet')
+        self.assertEqual(field_label, 'height feet')
 
     def test_height_inches_label(self):
         field_label = self.player1._meta.get_field('height_inches').verbose_name
-        self.assertEqual(field_label, 'height_inches')
+        self.assertEqual(field_label, 'height inches')
 
     def test_weight_label(self):
         field_label = self.player1._meta.get_field('weight').verbose_name
         self.assertEqual(field_label, 'weight')
 
     def test_expected_name(self):
-        self.assertEqual(str(self.player1), "One Player")
-        self.assertEqual(str(self.player2), "Two Player")
+        self.assertEqual(str(self.player1), "One, Player")
+        self.assertEqual(str(self.player2), "Two, Player")
 
     def test_full_name(self):
         self.assertEqual(self.player1.full_name, "Player One")
