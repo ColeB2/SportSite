@@ -20,10 +20,13 @@ class MyMixinRunner(object):
         team2 = Team.objects.create(owner=user, league=league, name="Team Two", place="Town Two", abbreviation="TTT")
 
         team1r = TeamSeason.objects.create(season=stageR, team=team1)
+        roster1 = Roster.objects.get(team=team1r)
         team2r = TeamSeason.objects.create(season=stageR, team=team2)
 
         player11 = Player.objects.create(league=league, first_name="Player", last_name="One")
         player21 = Player.objects.create(league=league, first_name="Player", last_name="Two")
+
+        playerseason11 = PlayerSeason.objects.create(player=player11, team=roster1, season=stageR, number=99, position="CF")
 
 
         return temp_return
@@ -287,7 +290,34 @@ class PlayerTestCase(TestCase):
 
 
 class PlayerSeasonTestCase(TestCase):
-    pass
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.player = Player.objects.get(league=cls.league, first_name="Player", last_name="One")
+        cls.pseason = PlayerSeason.objects.get(player=cls.player)
+        cls.stage = SeasonStage.objects.get(stage=SeasonStage.REGULAR, featured=True)
+        cls.roster = Roster.objects.get(team__team__name="Team One", team__season=cls.stage)
+
+    def test_fk_point_proper_place(self):
+        self.assertEqual(self.pseason.player, self.player)
+        self.assertEqual(self.pseason.team, self.roster)
+        self.assertEqual(self.pseason.season, self.stage)
+
+    def test_labels(self):
+        player_label = self.pseason._meta.get_field('player').verbose_name
+        team_label = self.pseason._meta.get_field('team').verbose_name
+        season_label = self.pseason._meta.get_field('season').verbose_name
+        num_label = self.pseason._meta.get_field('number').verbose_name
+        pos_label = self.pseason._meta.get_field('position').verbose_name
+        self.assertEqual(player_label, 'player')
+        self.assertEqual(team_label, 'team')
+        self.assertEqual(season_label, 'season')
+        self.assertEqual(num_label, 'number')
+        self.assertEqual(pos_label, 'position')
+
+
+    def test_expected_name(self):
+        self.assertEqual(str(self.pseason), "One, Player 2022 Regular Season"
+
 
 
 
