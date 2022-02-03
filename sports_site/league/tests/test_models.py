@@ -227,7 +227,51 @@ class RosterTestCase(TestCase):
         self.assertEqual(str(self.roster1), "Town One Team One 2022 Regular Season")
 
 
+class PlayerTestCase(TestCase):
+    def setUp(self):
+        self.league = League.objects.get(id=1)
+        self.player1 = Player.objects.get(league=self.league, last_name="One")
+        self.player2 = Player.objects.get(league=self.league, last_name="Two")
 
+    def test_points_proper_league(self):
+        self.assertEqual(self.player1.league, self.league)
+        self.assertEqual(self.player2.league, self.league)
+
+    def test_first_name_label(self):
+        field_label = self.player1._meta.get_field('first_name').verbose_name
+        self.assertEqual(field_label, 'first_name')
+
+    def test_birthdate_label(self):
+        field_label = self.player1._meta.get_field('birthdate').verbose_name
+        self.assertEqual(field_label, 'birthdate')
+
+    def test_bats_label(self):
+        field_label = self.player1._meta.get_field('bats').verbose_name
+        self.assertEqual(field_label, 'bats')
+
+    def test_throws_label(self):
+        field_label = self.player1._meta.get_field('throws').verbose_name
+        self.assertEqual(field_label, 'throws')
+
+    def test_height_feet_label(self):
+        field_label = self.player1._meta.get_field('height_feet').verbose_name
+        self.assertEqual(field_label, 'height_feet')
+
+    def test_height_inches_label(self):
+        field_label = self.player1._meta.get_field('height_inches').verbose_name
+        self.assertEqual(field_label, 'height_inches')
+
+    def test_weight_label(self):
+        field_label = self.player1._meta.get_field('weight').verbose_name
+        self.assertEqual(field_label, 'weight')
+
+    def test_expected_name(self):
+        self.assertEqual(str(self.player1), "One Player")
+        self.assertEqual(str(self.player2), "Two Player")
+
+    def test_full_name(self):
+        self.assertEqual(self.player1.full_name, "Player One")
+        self.assertEqual(self.player2.full_name, "Player Two")
 
 
 
