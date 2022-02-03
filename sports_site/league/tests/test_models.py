@@ -19,6 +19,10 @@ class MyMixinRunner(object):
         team1 = Team.objects.create(owner=user, league=league, name="Team One", place="Town One", abbreviation="TTO")
         team2 = Team.objects.create(owner=user, league=league, name="Team Two", place="Town Two", abbreviation="TTT")
 
+        team1r = TeamSeason.objects.create(season=stageR, team=team1)
+        team2r = TeamSeason.objects.create(season=stageR, team=team2)
+
+
         return temp_return
 
     def teardown_databases(self, *args, **kwargs):
@@ -136,6 +140,7 @@ class TeamTestCase(TestCase):
         self.league = League.objects.get(id=1)
         self.team1 = Team.objects.get(name="Team One")
         self.team2 = Team.objects.get(name="Team Two")
+        self.teamtest = Team.objects.create(name="Team Onee", place="Town One")
 
 
     def test_created_properly(self):
@@ -162,6 +167,10 @@ class TeamTestCase(TestCase):
         field_label = self.team1._meta.get_field('abbreviation').verbose_name
         self.assertEqual(field_label, 'abbreviation')
 
+    def test_unique_abbreviation(self):
+        #check test
+        self.assertEqual(self.teamtest.abbreviation, "TTE")
+
     def test_name_max_length(self):
         max_length = self.team1._meta.get_field('name').max_length
         self.assertEqual(max_length, 30)
@@ -177,6 +186,42 @@ class TeamTestCase(TestCase):
     def test_expected_name(self):
         self.assertEqual(str(self.team1), "Town One Team One")
         self.assertEqual(str(self.team2), "Town Two Team Two")
+
+
+class TeamSeasonTestCase(TestCase):
+    def setUp(self):
+        self.league = League.objects.get(id=1)
+        self.stage = SeasonStage.objects.get(stage=SeasonStage.REGULAR, featured=True)
+        self.team1 = Team.objects.get(name="Team One")
+        self.team2 = Team.objects.get(name="Team Two")
+        self.team1r = TeamSeason.objects.get(team=self.team1)
+        self.team2r = TeamSeason.objects.get(team=self.team2)
+
+
+    def test_points_proper_league_and_stage(self):
+        self.assertEqual(self.team1r.league, self.league)
+        self.assertEqual(self.team1r.season, self.stage)
+
+    def test_expected_name(self):
+        self.assertEqual(str(self.team1r), "Town One Team One 2022 Regular Season")
+        self.assertEqual(str(self.team2r), "Town Two Team Two 2022 Regular Season")
+
+    def test_roster_created(self):
+        roster1 = self.team1r.roster_set.all()
+        self.assertEqual(roster1.team, self.team1r)
+
+class RosterTestCase(TestCase):
+    def setUp(self):
+        self.league = League.objects.get(id=1)
+        self.team1 = Team.objects.get(name="Team One")
+        self.team1r = TeamSeason.objects.get(team=self.team1)
+        self.roster1 = Roster.objects.get(team__team__name="Team One")
+
+    def test_points_proper_teamseason(self):
+        self.assertEqual(self.roster1.team, self.team1r)
+
+    def test_expected_name(self):
+        self.assertEqual(str(self.roster1), "Town One Team One 2022 Regular Season")
 
 
 
