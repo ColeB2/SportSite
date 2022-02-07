@@ -197,7 +197,7 @@ class Game(models.Model):
     away_team = models.ForeignKey(TeamSeason, on_delete=models.CASCADE, null=True, related_name="AwayTeam", verbose_name="Visitor")
     date = models.DateField()
     start_time = models.TimeField(default=datetime.time(hour=19,minute=00), null=True, blank=True, verbose_name="Time")
-    location = models.CharField(max_length=20, null=True, blank=True, help_text="Defaults to home team.")
+    location = models.CharField(max_length=50, null=True, blank=True, help_text="Defaults to home team.")
     stats_entered = models.BooleanField(null=True, default=False, verbose_name="Stats Entered")
 
     home_stats_entered = models.BooleanField(null=True, default=False, verbose_name="Stats Entered")

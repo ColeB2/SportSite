@@ -377,6 +377,10 @@ class GameTestCase(TestCase):
         self.assertEqual(self.game.home_score, 0)
         self.assertEqual(self.game.away_score, 0)
 
+    def test_location_max_length(self):
+        max_length = self.game._meta.get_field('location').max_length
+        self.assertEqual(max_length, 50)
+
     def test_expected_name(self):
         self.assertEqual(str(self.game), "2020-05-18 - Team Two @ Team One")
 
