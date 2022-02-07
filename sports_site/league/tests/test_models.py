@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 from django.test import TestCase
 from league.models import (Game, League, Player, PlayerSeason, Roster, Season,
     SeasonStage, Team, TeamSeason)
@@ -371,8 +371,11 @@ class GameTestCase(TestCase):
         self.assert_Equal(away_score_label, 'away score')
 
 
-    def test_default_place(self):
+    def test_defaults(self):
         self.assertEqual(self.game.location, "Town One")
+        self.assertEqual(self.game.start_time, time(hour=19, minute=00))
+        self.assertEqual(self.game.home_score, 0)
+        self.assertEqual(self.game.away_score, 0)
 
     def test_expected_name(self):
         self.assertEqual(str(self.game), "2020-05-18 - Team Two @ Team One")
