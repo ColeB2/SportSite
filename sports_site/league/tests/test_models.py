@@ -3,7 +3,6 @@ from django.test import TestCase
 from league.models import (Game, League, Player, PlayerSeason, Roster, Season,
     SeasonStage, Team, TeamSeason)
 from django.contrib.auth.models import User
-
 from django.test.runner import DiscoverRunner as BaseRunner
 
 class MyMixinRunner(object):
