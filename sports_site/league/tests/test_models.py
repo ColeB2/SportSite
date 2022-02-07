@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.test import TestCase
 from league.models import (Game, League, Player, PlayerSeason, Roster, Season,
     SeasonStage, Team, TeamSeason)
@@ -28,6 +29,10 @@ class MyMixinRunner(object):
 
         playerseason11 = PlayerSeason.objects.create(player=player11, team=roster1, season=stageR, number=99, position="CF")
 
+        gdate = datetime(2020, 5, 18)
+        gdate2 = datetime(2020, 5, 20)
+        game1 = Game.objects.create(season=stageR, home_team=team1r, away_team=team2r, date=gdate)
+        game2 = Game.objects.create(season=stageR, home_team=team1r, away_team=team2r, date=gdate2, stats_entered=True, home_stats_entered=True, away_stats_entered=False, home_score=10, away_score=0)
 
         return temp_return
 
@@ -324,6 +329,46 @@ class PlayerSeasonTestCase(TestCase):
     def test_expected_name(self):
         self.assertEqual(str(self.pseason), "One, Player 2022 Regular Season")
 
+
+class GameTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        gdate = datetime(2020, 5, 18)
+        cls.stage = SeasonStage.objects.get(stage=SeasonStage.REGULAR, featured=True)
+        cls.team1 = Team.objects.get(name="Team One")
+        cls.team2 = Team.objects.get(name="Team Two")
+        cls.team1r = TeamSeason.objects.get(team=cls.team1)
+        cls.team2r = TeamSeason.objects.get(team=cls.team2)
+        cls.game = Game.objects.get(season=cls.stage, home_team=cls.team1r, away_team=cls.team2r, date=gdate)
+
+    def test_fk_points_properly(self):
+        self.assertEqual(self.game.home_team, self.team1r)
+        self.assertEqual(self.game_away_team, self.team2r)
+        self.asserTEqual(self.game.season, self.stage)
+
+    def test_labels(self):
+        season_label = self.game._meta.get_field('season').verbose_name
+        home_team_label = self.game._meta.get_field('home_team').verbose_name
+        away_team_label = self.game._meta.get_field('away_team').verbose_name
+        date_label = self.game._meta.get_field('date').verbose_name
+        start_time_label = self.game._meta.get_field('start_time').verbose_name
+        location_label = self.game._meta.get_field('location').verbose_name
+        stats_entered_label = self.game._meta.get_field('stats_entered').verbose_name
+        home_stats_entered_label = self.game._meta.get_field('home_stats_entered').verbose_name
+        away_stats_entered_label = self.game._meta.get_field('away_stats_entered').verbose_name
+        home_score_label = self.game._meta.get_field('home_score').verbose_name
+        away_score_label = self.game._meta.get_field('away_score').verbose_name
+        self.assert_Equal(season_label, 'season')
+        self.assert_Equal(home_team_label, 'Home')
+        self.assert_Equal(away_team_label, 'Visitor')
+        self.assert_Equal(date_label, 'date')
+        self.assert_Equal(start_time_label, 'Time')
+        self.assert_Equal(location_label, 'location')
+        self.assert_Equal(stats_entered_label, 'Stats Entered')
+        self.assert_Equal(home_stats_entered_label, 'Stats Entered')
+        self.assert_Equal(away_stats_entered_label, 'Stats Entered')
+        self.assert_Equal(home_score_label, 'home score')
+        self.assert_Equal(away_score_label, 'away score')
 
 
 
