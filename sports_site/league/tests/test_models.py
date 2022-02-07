@@ -342,8 +342,8 @@ class GameTestCase(TestCase):
 
     def test_fk_points_properly(self):
         self.assertEqual(self.game.home_team, self.team1r)
-        self.assertEqual(self.game_away_team, self.team2r)
-        self.asserTEqual(self.game.season, self.stage)
+        self.assertEqual(self.game.away_team, self.team2r)
+        self.assertEqual(self.game.season, self.stage)
 
     def test_labels(self):
         season_label = self.game._meta.get_field('season').verbose_name
@@ -357,17 +357,17 @@ class GameTestCase(TestCase):
         away_stats_entered_label = self.game._meta.get_field('away_stats_entered').verbose_name
         home_score_label = self.game._meta.get_field('home_score').verbose_name
         away_score_label = self.game._meta.get_field('away_score').verbose_name
-        self.assert_Equal(season_label, 'season')
-        self.assert_Equal(home_team_label, 'Home')
-        self.assert_Equal(away_team_label, 'Visitor')
-        self.assert_Equal(date_label, 'date')
-        self.assert_Equal(start_time_label, 'Time')
-        self.assert_Equal(location_label, 'location')
-        self.assert_Equal(stats_entered_label, 'Stats Entered')
-        self.assert_Equal(home_stats_entered_label, 'Stats Entered')
-        self.assert_Equal(away_stats_entered_label, 'Stats Entered')
-        self.assert_Equal(home_score_label, 'home score')
-        self.assert_Equal(away_score_label, 'away score')
+        self.assertEqual(season_label, 'season')
+        self.assertEqual(home_team_label, 'Home')
+        self.assertEqual(away_team_label, 'Visitor')
+        self.assertEqual(date_label, 'date')
+        self.assertEqual(start_time_label, 'Time')
+        self.assertEqual(location_label, 'location')
+        self.assertEqual(stats_entered_label, 'Stats Entered')
+        self.assertEqual(home_stats_entered_label, 'Stats Entered')
+        self.assertEqual(away_stats_entered_label, 'Stats Entered')
+        self.assertEqual(home_score_label, 'home score')
+        self.assertEqual(away_score_label, 'away score')
 
 
     def test_defaults(self):

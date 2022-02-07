@@ -209,7 +209,7 @@ class Game(models.Model):
         return f"{self.date} - {self.away_team.team.name} @ {self.home_team.team.name}"
 
     def save(self, *args, **kwargs):
-        if self.location == False:
+        if not self.location:
             self.location = f"{self.home_team.team.place}"
         super(Game, self).save(*args, **kwargs)
 
