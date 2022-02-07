@@ -371,5 +371,12 @@ class GameTestCase(TestCase):
         self.assert_Equal(away_score_label, 'away score')
 
 
+    def test_default_place(self):
+        self.assertEqual(self.game.location, "Town One")
+
+    def test_expected_name(self):
+        self.assertEqual(str(self.game), "2020-05-18 - Team Two @ Team One")
+
+
 
 
