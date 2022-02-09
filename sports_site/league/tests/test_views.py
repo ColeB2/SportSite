@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from league.models import League, Player, SeasonStage, Team, TeamSeason
+from league.models import Game, League, Player, SeasonStage, Team, TeamSeason
 
 from stats.tables import (BattingOrderTable, PitchingOrderTable,
     PlayerHittingGameStatsTable, PlayerPageGameHittingStatsSplitsTable,
@@ -37,6 +37,39 @@ class PlayerPageViewTest(TestCase):
         self.assertEqual(response.context["table"], type(PlayerPageHittingStatsTable))
         self.assertEqual(response.context["split_table"], type(PlayerPageGameHittingStatsSplitsTable))
         self.assertEqual(response.context["last_x_table"], type(PlayerPageHittingStatsSplitsTable))
+
+
+class SchedulePageViewTest(TestCase):
+    """
+    Tests schedule_page_view from league/views.py
+    """
+
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/league/schedule/?league=SBBL')
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_accessible_by_name(self):
+        response = self.client.get(reverse('schedule-page')+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('schedule-page')+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'league/schedule_page.html')
+
+    def test_context(self):
+        league = League.objects.get(id=1)
+        stage = SeasonStage.objects.get(stage=SeasonStage.REGULAR, featured=True)
+        games = Game.objects.filter(season=stage)
+
+        response = self.client.get(reverse('schedule-page')+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(league, response.context["league"])
+        self.assertEqual(stage, response.context["featured_stage"])
+
+        for game in games:
+            self.assertTrue(game in response.context["schedule"])
 
 
 class TeamPageViewTest(TestCase):
