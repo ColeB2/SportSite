@@ -18,19 +18,19 @@
                     <tr>
                         <td>
                             <h6>
-                                <a href="{% url 'game-boxscore-page' game.pk %}">{{game.date}}</a>
+                                <a href="{% url 'game-boxscore-page' game.pk %}?league={{request.GET.league}}">{{game.date}}</a>
                             </h6>
                         </td>
                         <td>
                             <h6>
-                                <a href="{% url 'team-page' game.home_team.team.pk %}">
+                                <a href="{% url 'team-page' game.home_team.team.pk %}?league={{request.GET.league}}">
                                     {{game.home_team.team}}
                                 </a>
                             </h6>
                        </td>
                         <td>
                             <h6>
-                                <a href="{% url 'team-page' game.home_team.team.pk %}">
+                                <a href="{% url 'team-page' game.home_team.team.pk %}?league={{request.GET.league}}">
                                     {{game.away_team.team}}
                                 </a>
                             </h6>

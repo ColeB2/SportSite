@@ -8,7 +8,7 @@
 
                 {% for team in teams %}
                 <h4>
-                    <a href="{% url 'team-page' team.pk %}">{{team}}</a>
+                    <a href="{% url 'team-page' team.pk %}?league={{request.GET.league}}">{{team}}</a>
                 </h4>
                 {% endfor %}
             </div>
