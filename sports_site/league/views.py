@@ -16,7 +16,7 @@ def player_page_view(request, player_pk):
     league = League.objects.get(url=league_slug)
 
     player = get_object_or_404(Player, pk=player_pk, league=league)
-    player_seasons = PlayerSeason.objects.all().filter(player=player)
+    player_seasons = PlayerSeason.objects.filter(player=player)
 
     num_games = 5
     qs = PlayerHittingGameStats.objects.filter(
@@ -64,7 +64,7 @@ def schedule_page_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
     featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
-    schedule = Game.objects.all().filter(season=featured_stage)
+    schedule = Game.objects.filter(season=featured_stage)
 
     context = {
         "league": league,
@@ -93,7 +93,7 @@ def team_page_view(request, team_pk):
 def team_select_page_view(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
-    teams = Team.objects.all().filter(league=league)
+    teams = Team.objects.filter(league=league)
 
     context = {
         "league": league,
