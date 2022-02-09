@@ -75,8 +75,9 @@ def schedule_page_view(request):
 
 
 def team_page_view(request, team_pk):
+    league_slug = request.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
     team = Team.objects.get(pk=team_pk)
-    league = team.league
     featured_stage = SeasonStage.objects.get(season__league=league, featured=True)
 
     team_season = team.teamseason_set.all()
@@ -104,8 +105,9 @@ def team_select_page_view(request):
 
 def game_boxscore_page_view(request, game_pk):
     """Page that shows all the stats for a given game, the boxscore etc."""
+    league_slug = request.GET.get('league', None)
+    league = League.objects.get(url=league_slug)
     game = Game.objects.get(pk=game_pk)
-    league = game.season.season.league
 
     home_game_stats = TeamGameStats.objects.get(game=game, team=game.home_team)
     home_stats = home_game_stats.playerhittinggamestats_set.all()
