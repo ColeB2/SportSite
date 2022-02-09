@@ -134,3 +134,23 @@ class TeamSelectPageViewTest(TestCase):
         self.assertTrue(team in response.context["teams"])
         self.assertTrue(team2 in response.context["teams"])
         self.assertEqual(league, response.context["league"])
+
+
+class GameBoxscorePageViewTest(TestCase):
+    """
+    Tests game_boxscore_page_view from league/views.py
+    """
+
+    # def test_view_url_exists_at_desired_location(self):
+    #     response = self.client.get('/league/team/?league=TL')
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_view_accessible_by_name(self):
+    #     response = self.client.get(reverse('team-select-page')+"?league=TL")
+    #     self.assertEqual(response.status_code, 200)
+
+    # def test_view_uses_correct_template(self):
+    #     response = self.client.get(reverse('team-select-page')+"?league=TL")
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertTemplateUsed(response, 'league/team_select_page.html')
+    pass
