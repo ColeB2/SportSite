@@ -165,7 +165,8 @@ class GameBoxscorePageViewTest(TestCase):
         team2r = TeamSeason.objects.get(team=team2)
 
         game = Game.objects.get(season=stage, home_team=team1r, away_team=team2r, date=gdate)
-        # hgs = TeamGameStats.objects.get(game=game, team=game.home_team)
+        hgs = TeamGameStats.objects.get(season=stage, game=game, team=game.home_team)
+        hgls = TeamGameLineScore.objects.get(game=hgs)
         # agw = TeamGameStats.objects.get(game=game, team=game.away_team)
 
         response = self.client.get(reverse('game-boxscore-page', args=str(game.id))+"?league=TL")
@@ -182,6 +183,8 @@ class GameBoxscorePageViewTest(TestCase):
         self.assertEqual(response.context["boxscore_table"], type(TeamGameLineScoreTable))
 
         #Need to test, home/away game stats, home/awaystats,
+        self.assertEqual(hgs, response.context["home_game_stats"])
+        self.assertEqual(hgls, response.context["home_team_line_score"])
         #homeaway boxscore, homeaway pitching,
         #home away exxtra, home away linescore
 

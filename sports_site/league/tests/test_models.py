@@ -1,9 +1,11 @@
 from datetime import datetime, time
 from django.test import TestCase
-from league.models import (Game, League, Player, PlayerSeason, Roster, Season,
-    SeasonStage, Team, TeamSeason)
 from django.contrib.auth.models import User
 from django.test.runner import DiscoverRunner as BaseRunner
+from league.models import (Game, League, Player, PlayerSeason, Roster, Season,
+    SeasonStage, Team, TeamSeason)
+from stats.models import (PlayerHittingGameStats, PlayerPitchingGameStats,
+    TeamGameStats, TeamGameLineScore)
 
 class MyMixinRunner(object):
     def setup_databases(self, *args, **kwargs):
@@ -32,6 +34,15 @@ class MyMixinRunner(object):
         gdate2 = datetime(2020, 5, 20)
         game1 = Game.objects.create(season=stageR, home_team=team1r, away_team=team2r, date=gdate)
         game2 = Game.objects.create(season=stageR, home_team=team1r, away_team=team2r, date=gdate2, stats_entered=True, home_stats_entered=True, away_stats_entered=False, home_score=10, away_score=0)
+
+        ##Game 1 Stats
+        tgs11 = TeamGameStats.objects.create(season=stageR, team=team1r, game=game1)
+        tgs21 = TeamGameStats.objects.create(season=stageR, team=team2r, game=game1)
+
+        tgl11 = TeamGameLineScore.objects.create(game=tgs11)
+        tgl21 = TeamGameLineScore.objects.create(game=tgs21)
+
+        p11hgs11 = PlayerHittingGameStats.objects.create(team_stats=tgs11, season=stageR, player=playerseason11)
 
         return temp_return
 
