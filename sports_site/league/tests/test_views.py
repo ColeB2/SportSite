@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.test import TestCase
 from django.urls import reverse
 from league.models import Game, League, Player, SeasonStage, Team, TeamSeason
@@ -141,16 +142,46 @@ class GameBoxscorePageViewTest(TestCase):
     Tests game_boxscore_page_view from league/views.py
     """
 
-    # def test_view_url_exists_at_desired_location(self):
-    #     response = self.client.get('/league/team/?league=TL')
-    #     self.assertEqual(response.status_code, 200)
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/league/game/1/stats?league=TL')
+        self.assertEqual(response.status_code, 200)
 
-    # def test_view_accessible_by_name(self):
-    #     response = self.client.get(reverse('team-select-page')+"?league=TL")
-    #     self.assertEqual(response.status_code, 200)
+    def test_view_accessible_by_name(self):
+        response = self.client.get(reverse('game-boxscore-page', args="1")+"?league=TL")
+        self.assertEqual(response.status_code, 200)
 
-    # def test_view_uses_correct_template(self):
-    #     response = self.client.get(reverse('team-select-page')+"?league=TL")
-    #     self.assertEqual(response.status_code, 200)
-    #     self.assertTemplateUsed(response, 'league/team_select_page.html')
-    pass
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('game-boxscore-page', args="1")+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'league/game_boxscore_page.html')
+
+    def test_context(self):
+        league = League.objects.get(id=1)
+        team = Team.objects.get(name="Team One")
+        team2 = Team.objects.get(name="Team Two")
+        gdate = datetime(2020, 5, 18)
+        stage = SeasonStage.objects.get(stage=SeasonStage.REGULAR, featured=True)
+        team1r = TeamSeason.objects.get(team=team)
+        team2r = TeamSeason.objects.get(team=team2)
+
+        game = Game.objects.get(season=stage, home_team=team1r, away_team=team2r, date=gdate)
+        # hgs = TeamGameStats.objects.get(game=game, team=game.home_team)
+        # agw = TeamGameStats.objects.get(game=game, team=game.away_team)
+
+        response = self.client.get(reverse('game-boxscore-page', args=str(game.id))+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(game, response.context["game"])
+        self.assertEqual(league, response.context["league"])
+
+        ##Table Checks
+        self.assertEqual(response.context["home_stats_table"], type(PlayerHittingGameStatsTable))
+        self.assertEqual(response.context["away_stats_table"], type(PlayerHittingGameStatsTable))
+        self.assertEqual(response.context["home_pitching_stats_table"], type(PlayerPitchingGameStatsTable))
+        self.assertEqual(response.context["away_pitching_stats_table"], type(PlayerPitchingGameStatsTable))
+        self.assertEqual(response.context["boxscore_table"], type(TeamGameLineScoreTable))
+
+        #Need to test, home/away game stats, home/awaystats,
+        #homeaway boxscore, homeaway pitching,
+        #home away exxtra, home away linescore
+
