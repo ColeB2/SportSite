@@ -49,7 +49,7 @@ class Article(models.Model):
         return self.title
 
     def get_abosulte_url(self):
-        return reverse('article-detail', kwargs={'slug': self.slug})
+        return reverse('news-detail', kwargs={'slug': self.slug})
 
 
     def save(self, *args, **kwargs):
