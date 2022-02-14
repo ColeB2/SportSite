@@ -2,7 +2,7 @@ from datetime import datetime
 from django.test import TestCase
 from django.urls import reverse
 from league.models import Game, League, Player, SeasonStage, Team, TeamSeason
-from stats.models import TeamGameStats, TeamGameLineScore
+from stats.models import PlayerHittingGameStats, TeamGameStats, TeamGameLineScore
 
 from stats.tables import (BattingOrderTable, PitchingOrderTable,
     PlayerHittingGameStatsTable, PlayerPageGameHittingStatsSplitsTable,
@@ -157,6 +157,15 @@ class GameBoxscorePageViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'league/game_boxscore_page.html')
 
+    def test_tables(self):
+        response = self.client.get(reverse('game-boxscore-page', args="1")+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(type(response.context["home_stats_table"]), PlayerHittingGameStatsTable)
+        self.assertEqual(type(response.context["away_stats_table"]), PlayerHittingGameStatsTable)
+        self.assertEqual(type(response.context["home_pitching_stats_table"]), PlayerPitchingGameStatsTable)
+        self.assertEqual(type(response.context["away_pitching_stats_table"]), PlayerPitchingGameStatsTable)
+        self.assertEqual(type(response.context["boxscore_table"]), TeamGameLineScoreTable)
+
     def test_context(self):
         league = League.objects.get(id=1)
         team = Team.objects.get(name="Team One")
@@ -177,16 +186,18 @@ class GameBoxscorePageViewTest(TestCase):
         self.assertEqual(game, response.context["game"])
         self.assertEqual(league, response.context["league"])
 
-        ##Table Checks
-        self.assertEqual(type(response.context["home_stats_table"]), PlayerHittingGameStatsTable)
-        self.assertEqual(type(response.context["away_stats_table"]), PlayerHittingGameStatsTable)
-        self.assertEqual(type(response.context["home_pitching_stats_table"]), PlayerPitchingGameStatsTable)
-        self.assertEqual(type(response.context["away_pitching_stats_table"]), PlayerPitchingGameStatsTable)
-        self.assertEqual(type(response.context["boxscore_table"]), TeamGameLineScoreTable)
 
         #Need to test, home/away game stats, home/awaystats,
         self.assertEqual(hgs, response.context["home_game_stats"])
-        self.assertEqual(hgls, response.context["home_team_line_score"])
+        self.assertEqual(hgls, response.context["home_linescore"])
+        self.assertQuerysetEqual(hgs.playerhittinggamestats_set.all(), response.context["home_stats"])
+        #Currently doesn't get used, or passed.
+        # self.assertQuerysetEqual(hgs.playerpitchinggamestats_set.all(), response.context["home_pitching"])
+        #Currently no stats to test against, test that its a list?
+        # print(response.context["home_extra"])
         #homeaway boxscore, homeaway pitching,
+        phgs1, phgs2 = PlayerHittingGameStats.objects.all()
+        self.assertTrue(phgs1 in response.context["home_stats"])
+        self.assertFalse(phgs2 in response.context["home_stats"])
         #home away exxtra, home away linescore
 

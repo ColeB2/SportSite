@@ -24,11 +24,13 @@ class MyMixinRunner(object):
         team1r = TeamSeason.objects.create(season=stageR, team=team1)
         roster1 = Roster.objects.get(team=team1r)
         team2r = TeamSeason.objects.create(season=stageR, team=team2)
+        roster2 = Roster.objects.get(team=team2r)
 
         player11 = Player.objects.create(league=league, first_name="Player", last_name="One")
         player21 = Player.objects.create(league=league, first_name="Player", last_name="Two")
 
         playerseason11 = PlayerSeason.objects.create(player=player11, team=roster1, season=stageR, number=99, position="CF")
+        playerseason21 = PlayerSeason.objects.create(player=player21, team=roster2, season=stageR, number=89, position="CF")
 
         gdate = datetime(2020, 5, 18)
         gdate2 = datetime(2020, 5, 20)
@@ -43,7 +45,10 @@ class MyMixinRunner(object):
         tgl21 = TeamGameLineScore.objects.create(game=tgs21)
 
         p11hgs11 = PlayerHittingGameStats.objects.create(team_stats=tgs11, season=stageR, player=playerseason11)
+        p11pgs11 = PlayerPitchingGameStats.objects.create(team_stats=tgs11, season=stageR, player=playerseason11)
 
+        p21hgs21 = PlayerHittingGameStats.objects.create(team_stats=tgs21, season=stageR, player=playerseason21)
+        p21pgs21 = PlayerPitchingGameStats.objects.create(team_stats=tgs21, season=stageR, player=playerseason21)
         return temp_return
 
     def teardown_databases(self, *args, **kwargs):
