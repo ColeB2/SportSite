@@ -41,7 +41,7 @@ class Article(models.Model):
     image = models.ImageField(upload_to='article_images', default='article_images/baseballplaceholder2.png')
     image_description = models.CharField(max_length=200, null=True, blank=True)
     date_posted = models.DateField(default=now)
-    author = models.CharField(max_length=30, null=True, blank=True)
+    author = models.CharField(max_length=50, null=True, blank=True)
     slug = models.SlugField(null=True, blank=True, unique=True)
     tags = TaggableManager(blank=True)
 
