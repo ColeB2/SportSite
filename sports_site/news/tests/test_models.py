@@ -57,4 +57,4 @@ class ArticleTestCase(TestCase):
         self.assertEqual(str(self.article), "Article Title")
 
     def test_get_absolute_url(self):
-        self.assertEqual(self.article.get_absolute_url(), '/news/article-title')
+        self.assertEqual(self.article.get_absolute_url(), '/league/news/article-title')
