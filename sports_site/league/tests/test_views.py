@@ -37,9 +37,9 @@ class PlayerPageViewTest(TestCase):
         self.assertEqual(player, response.context["player"])
         self.assertFalse(player2 == response.context["player"])
         #type on table changed?
-        #self.assertEqual(response.context["table"], type(PlayerPageHittingStatsTable))
-        #self.assertEqual(response.context["split_table"], type(PlayerPageGameHittingStatsSplitsTable))
-        #self.assertEqual(response.context["last_x_table"], type(PlayerPageHittingStatsSplitsTable))
+        self.assertEqual(type(response.context["table"]), PlayerPageHittingStatsTable)
+        self.assertEqual(type(response.context["split_table"]), PlayerPageGameHittingStatsSplitsTable)
+        self.assertEqual(type(response.context["last_x_table"]), PlayerPageHittingStatsSplitsTable)
 
 
 class SchedulePageViewTest(TestCase):
@@ -178,11 +178,11 @@ class GameBoxscorePageViewTest(TestCase):
         self.assertEqual(league, response.context["league"])
 
         ##Table Checks
-        self.assertEqual(response.context["home_stats_table"], type(PlayerHittingGameStatsTable))
-        self.assertEqual(response.context["away_stats_table"], type(PlayerHittingGameStatsTable))
-        self.assertEqual(response.context["home_pitching_stats_table"], type(PlayerPitchingGameStatsTable))
-        self.assertEqual(response.context["away_pitching_stats_table"], type(PlayerPitchingGameStatsTable))
-        self.assertEqual(response.context["boxscore_table"], type(TeamGameLineScoreTable))
+        self.assertEqual(type(response.context["home_stats_table"]), PlayerHittingGameStatsTable)
+        self.assertEqual(type(response.context["away_stats_table"]), PlayerHittingGameStatsTable)
+        self.assertEqual(type(response.context["home_pitching_stats_table"]), PlayerPitchingGameStatsTable)
+        self.assertEqual(type(response.context["away_pitching_stats_table"]), PlayerPitchingGameStatsTable)
+        self.assertEqual(type(response.context["boxscore_table"]), TeamGameLineScoreTable)
 
         #Need to test, home/away game stats, home/awaystats,
         self.assertEqual(hgs, response.context["home_game_stats"])
