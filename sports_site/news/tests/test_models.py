@@ -58,3 +58,7 @@ class ArticleTestCase(TestCase):
 
     def test_get_absolute_url(self):
         self.assertEqual(self.article.get_absolute_url(), '/league/news/article-title')
+
+    def test_article_unique_slug(self):
+        a = Article.objects.create(league=self.League, title="Article Title")
+        self.assertFalse(a.slug != self.article.slug)
