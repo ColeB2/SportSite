@@ -1,6 +1,7 @@
+from django.db.models.query import QuerySet
 from django.test import TestCase
 from django.urls import reverse
-from league.models import League
+from league.models import Game, League, SeasonStage
 from news.models import Article
 
 
@@ -29,9 +30,15 @@ class HomeViewTest(TestCase):
 
     def test_context(self):
         league_articles = Article.objects.filter(league__url=self.league.slug).order_by('-id')[:10]
+        fs = SeasonStage.objectsget(season__league=self.league, featured=True)
+        schedule = QuerySet(
+            query=Game.objects.filter(season=fs).query.group_by["date"],
+            model=Game)
 
         response = self.client.get(reverse('news-home')+"?league=TL")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.league, response.context["league"])
         self.assertEqual(league_articles, response.context["articles"])
+        self.assertEqual(schedule, response.context["schedule"])
         #TodoStats:
+        print(response.context["stats"])
