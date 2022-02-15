@@ -29,7 +29,7 @@ class HomeViewTest(TestCase):
         self.assertTemplateUsed(response, 'news/home.html')
 
     def test_context(self):
-        league_articles = Article.objects.filter(league__url=self.league.slug).order_by('-id')[:10]
+        league_articles = Article.objects.filter(league=self.league).order_by('-id')[:10]
         fs = SeasonStage.objectsget(season__league=self.league, featured=True)
         schedule = QuerySet(
             query=Game.objects.filter(season=fs).query.group_by["date"],

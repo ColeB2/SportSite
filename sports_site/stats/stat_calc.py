@@ -18,6 +18,8 @@ def _normalize_str_length(str_value, req_length):
 
 
 def _convert_to_str(float_val):
+    if float_val == type(None):
+        return ".000"
     if float_val == 0:
         return ".000"
 
@@ -32,6 +34,8 @@ def _convert_to_str(float_val):
 
 
 def _convert_to_str_pitching(float_val):
+    if float_val == type(None):
+        return ".000"
     if float_val == 0:
         return "0.00"
 
@@ -46,6 +50,8 @@ def _convert_to_str_pitching(float_val):
 
 
 def _convert_to_str_ip(float_val):
+    if float_val == type(None):
+        return ".000"
     if float_val == 0:
         return "0.0"
 
