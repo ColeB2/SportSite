@@ -17,7 +17,7 @@ from .models import Article
 def home(request):
     league_slug = request.GET.get('league', None)
     league = League.objects.get(url=league_slug)
-    Article_data = Article.objects.all().filter(
+    Article_data = Article.objects.filter(
         league__url=league_slug).order_by('-id')[:10]
 
     """Leaders"""
@@ -42,7 +42,7 @@ def home(request):
         stolen_bases = None
 
     """Games"""
-    schedule_query = Game.objects.all().filter(season=featured_stage).query
+    schedule_query = Game.objects.filter(season=featured_stage).query
     schedule_query.group_by = ["date"]
     schedule = QuerySet(query=schedule_query, model=Game)
 
@@ -145,7 +145,7 @@ class ArticlesView(ListView):
 
     def get_queryset(self):
         league_slug = self.request.GET.get('league', None)
-        queryset = Article.objects.all().filter(league__url=league_slug).order_by('-id')
+        queryset = Article.objects.filter(league__url=league_slug).order_by('-id')
         return queryset
 
     def get_context_data(self, **kwargs):
