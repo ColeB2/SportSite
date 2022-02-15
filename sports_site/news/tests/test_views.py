@@ -58,16 +58,17 @@ class NewsDetailTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_accessible_by_name(self):
-        response = self.client.get(reverse('news-detail', args="article-title")+"?league=TL")
+        response = self.client.get(reverse('news-detail', args=str("article-title"))+"?league=TL")
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        response = self.client.get(reverse('news-detail', args="article-title")+"?league=TL")
+        response = self.client.get(reverse('news-detail', args=str(self.article.slug))+"?league=TL")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'news_detail/home.html')
 
     def test_context(self):
-        response = self.client.get(reverse('news-detail', args="article-title")+"?league=TL")
+        print(self.article.slug)
+        response = self.client.get(reverse('news-detail', args=str(self.article.slug))+"?league=TL")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["league"], self.league)
         self.assertEqual(response.context["article"], self.article)

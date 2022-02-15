@@ -61,4 +61,4 @@ class ArticleTestCase(TestCase):
 
     def test_article_unique_slug(self):
         a = Article.objects.create(league=self.league, title="Article Title")
-        self.assertFalse(a.slug != self.article.slug)
+        self.assertTrue(a.slug != self.article.slug)
