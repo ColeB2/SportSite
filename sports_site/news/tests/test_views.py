@@ -42,3 +42,6 @@ class HomeViewTest(TestCase):
         self.assertEqual(schedule, response.context["schedule"])
         #TodoStats:
         print(response.context["stats"])
+
+class NewsDetailTest(TestCase):
+    pass

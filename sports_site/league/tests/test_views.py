@@ -36,7 +36,6 @@ class PlayerPageViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(player, response.context["player"])
         self.assertFalse(player2 == response.context["player"])
-        #type on table changed?
         self.assertEqual(type(response.context["table"]), PlayerPageHittingStatsTable)
         self.assertEqual(type(response.context["split_table"]), PlayerPageGameHittingStatsSplitsTable)
         self.assertEqual(type(response.context["last_x_table"]), PlayerPageHittingStatsSplitsTable)
