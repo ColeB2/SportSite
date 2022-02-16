@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
 from django.test import TestCase
 from django.urls import reverse
@@ -30,16 +31,16 @@ class HomeViewTest(TestCase):
 
     def test_context(self):
         league_articles = Article.objects.filter(league=self.league).order_by('-id')[:10]
-        fs = SeasonStage.objectsget(season__league=self.league, featured=True)
-        schedule = QuerySet(
-            query=Game.objects.filter(season=fs).query.group_by["date"],
-            model=Game)
+        fs = SeasonStage.objects.get(season__league=self.league, featured=True)
+        sc_query = Game.objects.filter(season=fs).query
+        sc_query.group_by = ["date"]
+        schedule = QuerySet(query=sc_query, model=Game)
 
         response = self.client.get(reverse('news-home')+"?league=TL")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.league, response.context["league"])
         self.assertEqual(league_articles, response.context["articles"])
-        self.assertEqual(schedule, response.context["schedule"])
+        self.assertQuerysetEqual(schedule, response.context["schedule"])
         #TodoStats:
         print(response.context["stats"])
 
@@ -58,17 +59,16 @@ class NewsDetailTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_view_accessible_by_name(self):
-        response = self.client.get(reverse('news-detail', args=str("article-title"))+"?league=TL")
+        response = self.client.get(reverse('news-detail', kwargs={"slug":"article-title"})+"?league=TL")
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        response = self.client.get(reverse('news-detail', args=str(self.article.slug))+"?league=TL")
+        response = self.client.get(reverse('news-detail', kwargs={"slug":str(self.article.slug)})+"?league=TL")
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'news_detail/home.html')
+        self.assertTemplateUsed(response, 'news/news_detail.html')
 
     def test_context(self):
-        print(self.article.slug)
-        response = self.client.get(reverse('news-detail', args=str(self.article.slug))+"?league=TL")
+        response = self.client.get(reverse('news-detail', kwargs={"slug":str(self.article.slug)})+"?league=TL")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["league"], self.league)
         self.assertEqual(response.context["article"], self.article)
@@ -78,11 +78,20 @@ class ArticleCreateViewTest(TestCase):
     """
     Tests ArticleCreateView from news/views.py
     """
+    @classmethod
+    def setUpTestData(cls):
+        pass
 
 
     def test_view_url_exists_at_desired_location(self):
+        login = self.client.login(username="Test", password="test")
+        print(f"login {login}")
         response = self.client.get('/league/news/create/article')
         self.assertEqual(response.status_code, 200)
+
+    def test_viewing_without_perm(self):
+        response = self.client.get('/league/news/create/article')
+        self.assertEqual(response.status_code, 302)
 
     def test_view_accessible_by_name(self):
         response = self.client.get(reverse('news-create'))

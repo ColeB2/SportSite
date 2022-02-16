@@ -1,6 +1,6 @@
 from datetime import datetime, time
 from django.test import TestCase
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.test.runner import DiscoverRunner as BaseRunner
 from league.models import (Game, League, Player, PlayerSeason, Roster, Season,
     SeasonStage, Team, TeamSeason)
@@ -10,7 +10,12 @@ from stats.models import (PlayerHittingGameStats, PlayerPitchingGameStats,
 class MyMixinRunner(object):
     def setup_databases(self, *args, **kwargs):
         temp_return = super(MyMixinRunner, self).setup_databases(*args, **kwargs)
-        user = User.objects.create(username="Test", email="test@email.com", password="test")
+        user = User.objects.create(username="Test", email="test@email.com")
+        permission = Permission.objects.get(name="Has League Admin Permissions")
+        user.set_password("test")
+        user.user_permissions.add(permission)
+        user.save()
+
         league = League.objects.create(name="Test League", admin=user, url="TL")
         season = Season.objects.create(year="2022", league=league)
 
