@@ -103,6 +103,17 @@ class ArticleCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'news/new_article.html')
 
+    def test_success_url(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('news-create'))
+        self.assertEqual(response.status_code, 200)
+
+        post = {"title": "TitleOne",
+                "body": "Lorem ipsum"}
+
+        reponse = self.client.post('league/news/create/article', post)
+        self.assertRedirects(response, "/league/?league=TL")
+
 
 class ArticleEditViewTest(TestCase):
     """
