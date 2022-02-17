@@ -11,7 +11,7 @@ class MyMixinRunner(object):
     def setup_databases(self, *args, **kwargs):
         temp_return = super(MyMixinRunner, self).setup_databases(*args, **kwargs)
         user = User.objects.create(username="Test", email="test@email.com")
-        permission = Permission.objects.get(name="Has League Admin Permissions")
+        permission = Permission.objects.get(name="Has league admin permissions")
         user.set_password("test")
         user.user_permissions.add(permission)
         user.save()

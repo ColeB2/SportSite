@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -165,4 +166,30 @@ EMAIL_HOST_PASSWORD = str(os.getenv('EMAIL_PASSWORD'))
 #DEFAULT AUTO FIELD
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+#TEST RUNNER
 TEST_RUNNER = 'league.tests.test_models.MyTestRunner'
+
+
+##Testing Migrations Test
+TESTING = 'test' in sys.argv[1:]
+if TESTING:
+    print('=========================')
+    print('In TEST Mode - Disableling Migrations')
+    print('=========================')
+
+    class DisableMigrations(object):
+
+        def __contains__(self, item):
+            return True
+
+        def __getitem__(self, item):
+            return None
+
+    MIGRATION_MODULES = DisableMigrations()
+
+
+
+
+
+
+

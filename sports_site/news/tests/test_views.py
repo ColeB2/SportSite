@@ -39,8 +39,8 @@ class HomeViewTest(TestCase):
         response = self.client.get(reverse('news-home')+"?league=TL")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.league, response.context["league"])
-        self.assertEqual(league_articles, response.context["articles"])
-        self.assertQuerysetEqual(schedule, response.context["schedule"])
+        self.assertQuerysetEqual(league_articles, response.context["articles"])
+        self.assertQuerysetEqual(schedule, response.context["schedule"], ordered=False)
         #TodoStats:
         print(response.context["stats"])
 
@@ -85,7 +85,6 @@ class ArticleCreateViewTest(TestCase):
 
     def test_view_url_exists_at_desired_location(self):
         login = self.client.login(username="Test", password="test")
-        print(f"login {login}")
         response = self.client.get('/league/news/create/article')
         self.assertEqual(response.status_code, 200)
 
@@ -94,11 +93,13 @@ class ArticleCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_view_accessible_by_name(self):
+        login = self.client.login(username="Test", password="test")
         response = self.client.get(reverse('news-create'))
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
+        login = self.client.login(username="Test", password="test")
         response = self.client.get(reverse('news-create'))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'news_detail/home.html')
+        self.assertTemplateUsed(response, 'news/new_article.html')
 
