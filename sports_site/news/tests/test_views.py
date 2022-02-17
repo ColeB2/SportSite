@@ -103,3 +103,33 @@ class ArticleCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'news/new_article.html')
 
+
+class ArticleEditViewTest(TestCase):
+    """
+    Tests ArticleEditView from news/views.py
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.article = Article.objects.create(league=cls.league, title="Article Title", body="lorem ipsum", author="Me")
+
+
+    def test_view_url_exists_at_desired_location(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get('/league/news/article-title/edit')
+        self.assertEqual(response.status_code, 200)
+
+    def test_viewing_without_perm(self):
+        response = self.client.get('/league/news/article-title/edit')
+        self.assertEqual(response.status_code, 302)
+
+    def test_view_accessible_by_name(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'news/article_edit.html')
