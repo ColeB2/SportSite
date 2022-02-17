@@ -116,11 +116,11 @@ class ArticleEditViewTest(TestCase):
 
     def test_view_url_exists_at_desired_location(self):
         login = self.client.login(username="Test", password="test")
-        response = self.client.get('/league/news/article-title/edit')
+        response = self.client.get('/league/news/article-title/edit?league=TL')
         self.assertEqual(response.status_code, 200)
 
     def test_viewing_without_perm(self):
-        response = self.client.get('/league/news/article-title/edit')
+        response = self.client.get(reverse('news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
         self.assertEqual(response.status_code, 302)
 
     def test_view_accessible_by_name(self):
