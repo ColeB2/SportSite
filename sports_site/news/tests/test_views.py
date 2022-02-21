@@ -165,3 +165,6 @@ class ArticlesView(TestCase):
         response = self.client.get(reverse('news-detail')+"?league=TL")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'news/news_page.html')
+
+    def test_pagination_is_ten(self):
+        pass

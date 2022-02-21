@@ -139,7 +139,7 @@ class ArticleDeleteView(PermissionRequiredMixin, DeleteView):
 
 class ArticlesView(ListView):
     template_name = 'news/news_page.html'
-    paginate_by=5
+    paginate_by=10
     model = Article
     context_object_name= 'articles'
 
