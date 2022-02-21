@@ -112,6 +112,7 @@ class ArticleCreateViewTest(TestCase):
                 "body": "Lorem ipsum"}
 
         reponse = self.client.post('league/news/create/article', post)
+        self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, "/league/?league=TL")
 
 
@@ -144,3 +145,23 @@ class ArticleEditViewTest(TestCase):
         response = self.client.get(reverse('news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'news/article_edit.html')
+
+
+class ArticlesView(TestCase):
+    """
+    Tests ArticlesView from news/views.py
+    """
+    def test_view_url_exists_at_desired_location(self):
+        response = self.client.get('/league/news/?league=TL')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        response = self.client.get(reverse('news-detail')+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        response = self.client.get(reverse('news-detail')+"?league=TL")
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'news/news_page.html')

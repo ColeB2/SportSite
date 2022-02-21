@@ -11,12 +11,15 @@ class MyMixinRunner(object):
     def setup_databases(self, *args, **kwargs):
         temp_return = super(MyMixinRunner, self).setup_databases(*args, **kwargs)
         user = User.objects.create(username="Test", email="test@email.com")
+
+        league = League.objects.create(name="Test League", admin=user, url="TL")
+
         permission = Permission.objects.get(name="Has league admin permissions")
         user.set_password("test")
         user.user_permissions.add(permission)
+        user.userprofile.league = league
         user.save()
 
-        league = League.objects.create(name="Test League", admin=user, url="TL")
         season = Season.objects.create(year="2022", league=league)
 
         stageO = SeasonStage.objects.create(stage=SeasonStage.OTHER, season=season, stage_name="Preseason", featured=True)
