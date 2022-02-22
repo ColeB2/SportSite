@@ -227,4 +227,9 @@ class ArticleDeleteViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         response = self.client.delete(reverse('news-delete', kwargs={"slug": self.article.slug})+"?league=TL")
-        print(response.status_code)
+        self.assertEqual(response.status_code, 302)
+
+
+        # response = self.client.get(reverse('news-delete', kwargs={"slug": self.article.slug})+"?league=TL")
+        # self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.context, None)
