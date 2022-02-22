@@ -111,9 +111,15 @@ class ArticleCreateViewTest(TestCase):
         post = {"title": "TitleOne",
                 "body": "Lorem ipsum"}
 
-        reponse = self.client.post('league/news/create/article', post)
+        reponse = self.client.post('/league/news/create/article', post)
+        response2 = self.client.get(reverse('news-detail', kwargs={"slug":"titleone"})+"?league=TL")
+        self.assertEqual(response2.status_code, 200)
+
         self.assertEqual(response.status_code, 200)
+        print(response.__dict__)
         self.assertRedirects(response, "/league/?league=TL")
+
+
 
 
 class ArticleEditViewTest(TestCase):
