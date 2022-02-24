@@ -175,6 +175,9 @@ class ArticleEditViewTest(TestCase):
         response2 = self.client.get(reverse('news-detail', kwargs={"slug":"article-title"})+"?league=TL")
         self.assertEqual(response2.status_code, 200)
 
+        edited_article = Article.objects.All()[0]
+        self.assertEqual(edited_article.title = "TitleOne")
+
         print(self.article.title)
         #self.assertRedirects(response, "/league/?league=TL")
 
