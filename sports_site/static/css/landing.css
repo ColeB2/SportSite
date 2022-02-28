@@ -8,6 +8,28 @@ body {
     /*overflow-y: hidden;*/
 }
 
+.bgimg-top {
+    background-image: url("../img/baseballstock11.jpg");
+
+    min-height: 1000px;
+
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-bottom:150px;
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  top: 66%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 50px;
+}
+
 
 /*LANDING CONTAINERS*/
 .container-one {
