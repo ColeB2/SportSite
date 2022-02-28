@@ -29,6 +29,14 @@ body {
   color: white;
   font-size: 50px;
 }
+.top-btn {
+  position: absolute;
+  left: 0;
+  top: 90%;
+  width: 100%;
+  text-align: center;
+  color:white;
+}
 
 
 /*LANDING CONTAINERS*/
