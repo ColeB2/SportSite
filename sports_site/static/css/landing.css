@@ -17,7 +17,7 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    margin-bottom:150px;
+    margin-bottom: 50px;
 }
 
 .caption {
@@ -40,6 +40,10 @@ body {
 
 
 /*LANDING CONTAINERS*/
+.container-title {
+    padding-top: 25px;
+    padding-bottom: 150px;
+}
 .container-one {
     padding-top: 150px;
     background-color: rgb(255,255,255);
@@ -53,10 +57,21 @@ body {
     /*position: absolute;*/
     /*left: 0;*/
     /*margin: 0;*/
-    margin-top: 350px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding-bottom: 150px;
+    padding-top: 50px;
+}
 
+.container-three {
+    width: 100vw;
+    /*padding-top: 350px;*/
+    background-color: rgb(255,255,255);
+    /*position: absolute;*/
+    /*left: 0;*/
+    /*margin: 0;*/
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .navbar {
