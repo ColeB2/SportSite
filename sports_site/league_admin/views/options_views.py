@@ -53,6 +53,7 @@ class HittingOptionsUpdateView(PermissionRequiredMixin, UpdateView):
     model = LeagueHittingOptions
     success_url = reverse_lazy("league-admin-options")
 
+
 """hitting stat options"""
 class HittingStatsOptionsUpdateView(PermissionRequiredMixin, UpdateView):
     """

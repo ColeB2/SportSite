@@ -1,5 +1,5 @@
 from .games_views import *
-from .option_views import *
+from .options_views import *
 from .player_views import *
 from .schedule_views import *
 from .season_views import *

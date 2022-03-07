@@ -161,13 +161,5 @@ class LANewsSelectTest(TestCase):
         self.assertEqual(len(response.context['paginator'].page(2)), 3)
 
 
-class LAOptionsViewTest(TestCase):
-    """
-    Tests league_admin_news_select from league_admin/views/views.py
-    """
-    @classmethod
-    def setUpTestData(cls):
-        cls.league = League.objects.get(id=1)
-        for i in range(13):
-            article = Article.objects.create(league=cls.league, title="Title", body="lorem ipsum")
+
 
