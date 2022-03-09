@@ -58,3 +58,21 @@ class LeagueHittingStatsOptionsTestCase(TestCase):
         for k,v in label_dict.items():
             label = self.lhso._meta.get_field(k).verbose_name
             self.assertEqual(label, v)
+
+    def test_defaults(self):
+        defaults_true = ["at_bats", "plate_appearances",
+        "hits", "runs", "strikeouts", "walks",
+        "singles", "doubles", "triples", "homeruns",
+        "stolen_bases", "caught_stealing", "runs_batted_in",
+        "hit_by_pitch", "sacrifice_flies", "sacrifice_bunts",
+        "average", "on_base_percentage", "slugging_percentage",
+        "on_base_plus_slugging", "reached_on_error",
+        "fielders_choice", "intentional_walks", "left_on_base",
+        "picked_off", "ground_into_double_play",
+        "two_out_runs_batted_in"
+        ]
+        self.assertEqual(self.lhso.ordered_lineup, False)
+        for stat_name in defaults_true:
+            stat = self.lhso._meta.get_field(stat_name)
+            self.assertEqual(stat.default, True)
+
