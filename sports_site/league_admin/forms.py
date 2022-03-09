@@ -194,6 +194,7 @@ class EditGameForm(forms.ModelForm):
 
 class EditUserRosterPermissionsForm(forms.Form):
     """
+    CURRENTLY DEPRECATED
     Used to edit a League's team admins roster permissions
 
     Used: league_admin/views/user_views.py
