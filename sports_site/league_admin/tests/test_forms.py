@@ -29,3 +29,16 @@ class CreateGameFormTest(TestCase):
 
         form = CreateGameForm(data=form_data, team_queryset=ts_query)
         self.assertTrue(form.is_valid())
+
+
+class EditGameFormTest(TestCase):
+    def test_create_game_form_labels(self):
+        form = EditGameForm()
+        form_labels = {"home_team": "Home", "away_team": "Visitor",
+            "location": "Location", "date": "Date",
+            "start_time": "Time", "home_score": "Home score",
+            "away_score": "Away score"}
+
+        for k,v in form_labels.items():
+            label = form.fields[k].label
+            self.assertTrue(label is None or label == v)
