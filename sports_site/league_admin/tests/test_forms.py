@@ -122,7 +122,16 @@ class TeamCreateFormTest(TestCase):
 
         for k,v in form_labels.items():
             label = form.fields[k].label
+            # print(label, v)
             self.assertTrue(label is None or label == v)
+
+
+    def test_forms(self):
+        form_data = {"name": "NameOne", "place": "PlaceOne",
+            "abbreviation": "NOP"}
+
+        form = TeamCreateForm(data=form_data)
+        self.assertTrue(form.is_valid())
 
 
 
