@@ -17,7 +17,8 @@ def league_admin_team_create_view(request):
 
     if request.method == 'POST':
         form = TeamCreateForm(data=request.POST)
-        form.fields['owner'].queryset=league_users
+        #Deprecated owner for now
+        # form.fields['owner'].queryset=league_users
         if form.is_valid():
             new_team = form.process(league=league)
             messages.success(request, f"{new_team} created.")
@@ -26,7 +27,7 @@ def league_admin_team_create_view(request):
 
     else:
         form = TeamCreateForm()
-        form.fields['owner'].queryset=league_users
+        # form.fields['owner'].queryset=league_users
 
     context = {
         "form": form,
