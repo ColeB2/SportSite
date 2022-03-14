@@ -114,6 +114,17 @@ class SeasonStageCreateFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
 
+class TeamCreateFormTest(TestCase):
+    def test_team_create_form_labels(self):
+        form = TeamCreateForm()
+        form_labels = {"name": "Name", "place": "Place",
+            "abbreviation": "Abbreviation"}
+
+        for k,v in form_labels.items():
+            label = form.fields[k].label
+            self.assertTrue(label is None or label == v)
+
+
 
 
 

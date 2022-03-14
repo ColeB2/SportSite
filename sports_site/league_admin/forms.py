@@ -347,7 +347,7 @@ class TeamCreateForm(forms.ModelForm):
     """
     class Meta:
         model = Team
-        fields = ['owner', 'name', 'place', 'abbreviation']
+        fields = ['name', 'place', 'abbreviation']
 
     def __init__(self, *args, **kwargs):
         super(TeamCreateForm, self).__init__(*args, **kwargs)
