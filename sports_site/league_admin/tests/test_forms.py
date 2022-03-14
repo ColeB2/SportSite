@@ -1,6 +1,6 @@
 import datetime
 from django.test import TestCase
-from league.models import Game, TeamSeason
+from league.models import Game, SeasonStage, TeamSeason
 from league_admin.forms import (CreateGameForm, EditGameForm,
     LeagueHittingOptionsForm, LeagueHittingStatsOptionsForm,
     PlayerCreateForm, SeasonForm, SeasonStageCreateForm, TeamCreateForm,
@@ -43,7 +43,7 @@ class EditGameFormTest(TestCase):
             label = form.fields[k].label
             self.assertTrue(label is None or label == v)
 
-        print(form.meta)
+        print(EditGameForm)
 
     def test_forms(self):
         t1 = TeamSeason.objects.get(id="1")
@@ -69,6 +69,7 @@ class PlayerCreateFormTest(TestCase):
 
         for k,v in form_labels.items():
             label = form.fields[k].label
+            print(label, v)
             self.assertTrue(label is None or label == v)
 
     def test_forms(self):
@@ -94,6 +95,25 @@ class SeasonFormTest(TestCase):
         form = SeasonForm(data = form_data)
 
         self.assertTrue(form.is_valid())
+
+
+class SeasonStageCreateFormTest(TestCase):
+    def test_season_stage_create_labels(self):
+        form = SeasonStageCreateForm()
+        form_labels = {"stage": "Stage", "stage_name": "Stage name",
+            "featured": "Featured"}
+
+        for k,v in form_labels.items():
+            label = form.fields[k].label
+            self.assertTrue(label is None or label == v)
+
+    def test_forms(self):
+        form_data = {"stage": SeasonStage.REGULAR, "stage_name": "",
+            "featured": True}
+        form = SeasonStageCreateForm(data=form_data)
+
+        self.assertTrue(form.is_valid())
+
 
 
 
