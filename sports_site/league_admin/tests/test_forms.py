@@ -57,6 +57,16 @@ class EditGameFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
 
+
+class LeagueHittingOptionsFormTest(TestCase):
+    pass
+
+
+
+class LeagueHittingStatsOptionsFormTest(TestCase):
+    pass
+
+
 class PlayerCreateFormTest(TestCase):
     def test_player_create_form_labels(self):
         form = PlayerCreateForm()
