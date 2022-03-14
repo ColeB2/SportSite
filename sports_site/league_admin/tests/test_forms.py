@@ -134,6 +134,18 @@ class TeamCreateFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
 
+class TeamSelectFormTest(TestCase):
+    #No Labels...
+    def test_forms(self):
+        t1 = TeamSeason.objects.get(id="1")
+        t2 = TeamSeason.objects.get(id="2")
+        ts_query = TeamSeason.objects.all()
+
+        form_data = {"teams": t1}
+        form = TeamSelectForm(data=form_data, team_queryset=ts_query)
+        self.assertTrue(form.is_valid())
+
+
 
 
 
