@@ -80,4 +80,8 @@ class PlayerCreateFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
 
+class SeasonFormTest(TestCase):
+    pass
+
+
 
