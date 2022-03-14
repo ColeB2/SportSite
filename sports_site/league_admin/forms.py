@@ -351,17 +351,18 @@ class TeamCreateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(TeamCreateForm, self).__init__(*args, **kwargs)
-        self.fields['owner'].required = False
-        self.fields['owner'].label = "Owner/Team Admin Account"
+        #Currently Deprecated Field  --> Removed all references to owner
+        # self.fields['owner'].required = False
+        # self.fields['owner'].label = "Owner/Team Admin Account"
         self.fields['place'].required = False
 
     def process(self, league):
-        owner = self.cleaned_data.get('owner')
+        #owner = self.cleaned_data.get('owner')
         name = self.cleaned_data.get('name')
         place = self.cleaned_data.get('place')
         abbreviation = self.cleaned_data.get('abbreviation')
 
-        new_team = Team(owner=owner, name=name, place=place, league=league,
+        new_team = Team(name=name, place=place, league=league,
             abbreviation=abbreviation)
         new_team.save()
 
