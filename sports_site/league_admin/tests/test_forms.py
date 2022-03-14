@@ -43,7 +43,6 @@ class EditGameFormTest(TestCase):
             label = form.fields[k].label
             self.assertTrue(label is None or label == v)
 
-        print(EditGameForm)
 
     def test_forms(self):
         t1 = TeamSeason.objects.get(id="1")
@@ -63,13 +62,13 @@ class PlayerCreateFormTest(TestCase):
         form = PlayerCreateForm()
         form_labels = {"first_name": "First name", "last_name": "Last name",
             "birthdate": "Birthdate - YYYY-MM-DD format", "bats": "Bats",
-            "throw": "Throw", "height_feet": "Height, feet ie, 5,6, etc.",
-            "height_inches": "Height, inches ie 1,2,3... etc.",
+            "throw": "Throw", "height_feet": "Height, feet, ie 5,6, etc.",
+            "height_inches": "Height, inches, ie 1,2,3... etc.",
             "weight": "Weight, lbs"}
 
         for k,v in form_labels.items():
             label = form.fields[k].label
-            print(label, v)
+            #print(label, v)
             self.assertTrue(label is None or label == v)
 
     def test_forms(self):
