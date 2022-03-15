@@ -1,6 +1,7 @@
 import datetime
 from django.test import TestCase
-from league.models import Game, SeasonStage, TeamSeason
+from league.models import Game, League, SeasonStage, TeamSeason
+from league_admin.models import LeagueHittingOptions
 from league_admin.forms import (CreateGameForm, EditGameForm,
     LeagueHittingOptionsForm, LeagueHittingStatsOptionsForm,
     PlayerCreateForm, SeasonForm, SeasonStageCreateForm, TeamCreateForm,
@@ -59,12 +60,50 @@ class EditGameFormTest(TestCase):
 
 
 class LeagueHittingOptionsFormTest(TestCase):
-    pass
+    def test_league_hitting_options_form_labels(self):
+        form = LeagueHittingOptionsForm()
+        form_labels = {"stat_options": "Stat options"}
+
+        for k,v in form_labels.items():
+            label = form.fields[k].label
+            self.assertTrue(label is None or label == v)
+
+    def test_forms(self):
+        form_data = {"stat_options": LeagueHittingOptions.ADVANCED}
+        form = LeagueHittingOptionsForm(data=form_data)
+
+        self.assertTrue(form.is_valid())
 
 
 
 class LeagueHittingStatsOptionsFormTest(TestCase):
-    pass
+    def test_league_hitting_stats_options_form_labels(self):
+        #WIP as we implemented actual options
+        form = LeagueHittingStatsOptionsForm()
+        form_labels = {
+        "ordered_lineup": "Ordered", "at_bats": "AB", "plate_appearances": "PA",
+        "hits": "H", "runs": "R", "strikeouts": "SO", "walks": "BB",
+        "singles": "1B", "doubles": "2B", "triples": "3B", "homeruns": "HR",
+        "stolen_bases": "SB", "caught_stealing": "CS", "runs_batted_in": "RBI",
+        "hit_by_pitch": "HBP", "sacrifice_flies": "SF", "sacrifice_bunts": "SAC",
+        "average": "AVG", "on_base_percentage": "OBP", "slugging_percentage": "SLG",
+        "on_base_plus_slugging": "OPS", "reached_on_error": "ROE",
+        "fielders_choice": "FC", "intentional_walks": "IBB", "left_on_base": "LOB",
+        "picked_off": "PO", "ground_into_double_play": "GIDP",
+        "two_out_runs_batted_in": "2-out-RBI"
+        }
+
+        for k,v in form_labels.items():
+            label = form.fields[k].label
+            self.assertTrue(label is None or label == v)
+
+    def test_forms(self):
+        #WIP
+        league = League.objects.get(id="1")
+        lho = LeagueHittingOptions.objects.create(league=league, stat_options=LeagueHittingOptions.ADVANCED)
+        form_data = {"league": league, "league_options": lho}
+        form = LeagueHittingStatsOptionsForm(data=form_data)
+        self.assertTrue(form.is_valid())
 
 
 class PlayerCreateFormTest(TestCase):
