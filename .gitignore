@@ -105,3 +105,6 @@ db.sqlite3
 .vimrc
 .viminfo
 README.txt
+
+#DEV
+settings_dev.py
