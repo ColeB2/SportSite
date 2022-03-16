@@ -171,7 +171,7 @@ class EditGameForm(forms.ModelForm):
             Row(
                 Column("home_score", css_class="form-group col-md-4"),
                 Column("away_score", css_class="form-group col-md-4"),
-                Column("stats_enetered", css_class="form-group col-md-4"),
+                Column("stats_entered", css_class="form-group col-md-4"),
                 css_class='form-row'
                 ),
             )
