@@ -104,6 +104,7 @@ db.sqlite3
 .pythonstartup.py
 .vimrc
 .viminfo
+.python_history
 README.txt
 
 #Extra
@@ -112,3 +113,5 @@ notes.txt
 .sportvenv
 /sportsvenv
 .sportsvenv
+#DEV
+settings_dev.py
