@@ -105,3 +105,10 @@ db.sqlite3
 .vimrc
 .viminfo
 README.txt
+
+#Extra
+notes.txt
+/sportvenv
+.sportvenv
+/sportsvenv
+.sportsvenv
