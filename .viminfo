@@ -11,6 +11,8 @@
 # hlsearch on (H) or off (h):
 ~h
 # Command Line History (newest to oldest):
+:qa!
+|2,0,1647456891,,"qa!"
 :wq
 |2,0,1615562281,,"wq"
 :q
@@ -25,18 +27,35 @@
 # Debug Line History (newest to oldest):
 
 # Registers:
+"a	CHAR	0
+	!
+|3,0,10,0,1,0,1647456879,"!"
 
 # File marks:
-'0  7  0  ~/.git/COMMIT_EDITMSG
-|4,48,7,0,1615562281,"~/.git/COMMIT_EDITMSG"
+'0  7  0  ~/.git/MERGE_MSG
+|4,48,7,0,1647456891,"~/.git/MERGE_MSG"
+'1  7  0  ~/.git/COMMIT_EDITMSG
+|4,49,7,0,1615562281,"~/.git/COMMIT_EDITMSG"
 
 # Jumplist (newest first):
+-'  7  0  ~/.git/MERGE_MSG
+|4,39,7,0,1647456891,"~/.git/MERGE_MSG"
+-'  1  0  ~/.git/MERGE_MSG
+|4,39,1,0,1647456844,"~/.git/MERGE_MSG"
+-'  7  0  ~/.git/COMMIT_EDITMSG
+|4,39,7,0,1615562281,"~/.git/COMMIT_EDITMSG"
 -'  7  0  ~/.git/COMMIT_EDITMSG
 |4,39,7,0,1615562281,"~/.git/COMMIT_EDITMSG"
 -'  1  0  ~/.git/COMMIT_EDITMSG
 |4,39,1,0,1615561823,"~/.git/COMMIT_EDITMSG"
+-'  1  0  ~/.git/COMMIT_EDITMSG
+|4,39,1,0,1615561823,"~/.git/COMMIT_EDITMSG"
 
 # History of marks within files (newest to oldest):
+
+> ~/.git/MERGE_MSG
+	*	1647456887	0
+	"	7	0
 
 > ~/.git/COMMIT_EDITMSG
 	*	1615562273	0
