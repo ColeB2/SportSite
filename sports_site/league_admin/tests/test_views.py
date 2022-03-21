@@ -74,9 +74,6 @@ class LARosterSelectTest(TestCase):
         self.assertEqual(response.status_code, 200)
         # Len of empty context --> 2
         self.assertEqual(len(response.context), 18)
-        print(response.context["filter"])
-        print(response.context["paginator"])
-        print(response.context["all_rosters"])
         self.assertTrue(response.context["filter"] is not None)
         self.assertTrue(response.context["paginator"] is not None)
         self.assertTrue(response.context["all_rosters"] is not None)
