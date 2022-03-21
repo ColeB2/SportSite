@@ -121,3 +121,31 @@ class LAPlayerSelectViewTest(TestCase):
         self.assertEqual(response.context["league"], league)
         self.assertTrue(response.context["filter"] is not None)
         self.assertTrue(response.context["paginator"] is not None)
+        self.assertTrue(response.context["all_players"] is not None)
+
+
+class LAPlayerEditViewTest(TestCase):
+    """
+    Test league_admin_player_edit_view from league_admin/views/player_views.py
+    
+    'players/<player_pk>/edit',
+    views.league_admin_player_edit_view,
+    name='league-admin-player-edit')
+    """
+    def test_view_without_logging_in(self):
+        response = self.client.get('/league/admin/players/1/edit')
+        self.assertEqual(response.status_code, 302)
+
+    
+    def test_view_url_exists_at_desired_location(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get('/league/admin/players/1/edit')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-edit",
+            kwargs={"player_pk": 1}))
+        self.assertEqual(response.status_code, 200)
+
