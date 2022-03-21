@@ -149,3 +149,46 @@ class LAPlayerEditViewTest(TestCase):
             kwargs={"player_pk": 1}))
         self.assertEqual(response.status_code, 200)
 
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-edit",
+            kwargs={"player_pk": 1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/player_templates/player_edit.html")
+
+
+    def test_context(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-edit",
+            kwargs={"player_pk": 1}))
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTrue(response.context["form"] is not None)
+        self.assertTrue(response.context["player_instance"].pk == 1)
+
+
+    def test_redirect(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-edit",
+            kwargs={"player_pk": 1}))
+        self.assertEqual(response.status_code, 200)
+
+        l = League.objects.get(id=1)
+        player_ed = Player.objects.create(
+            league= l, first_name="Last",last_name="Lasty")
+        player_ed.save()
+        post = {"first_name": "Last", "last_name": "McLasterson"}
+        resp = self.client.post(reverse("league-admin-player-edit",
+            kwargs={"player_pk": str(player_ed.pk)} ),
+            post,
+            follow=True)
+
+
+        self.assertEqual(resp.status_code, 200)
+        edited_player = Player.objects.get(pk=player_ed.pk)
+        self.assertTrue(edited_player.first_name == "Last")
+        self.assertTrue(edited_player.last_name == "McLasterson")
+
+
