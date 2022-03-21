@@ -48,7 +48,8 @@ class HomeViewTest(TestCase):
         self.assertQuerysetEqual(
             schedule, response.context["schedule"], ordered=False)
         #TodoStats:
-        print(response.context["stats"])
+        # print(response.context["stats"])
+        print(f"ToDo: news, test_views stats context")
 
 
 class NewsDetailTest(TestCase):
