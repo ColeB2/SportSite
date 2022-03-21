@@ -192,3 +192,70 @@ class LAPlayerEditViewTest(TestCase):
         self.assertTrue(edited_player.last_name == "McLasterson")
 
 
+class LAPlayerDeleteInfoViewTest(TestCase):
+    """
+    Test league_admin_player_delete_info_view from
+        league_admin/views/player_views.py
+    
+    'players/<player_pk>/delete',
+    views.league_admin_player_delete_info_view,
+    name='league-admin-player-delete'
+    """
+    def test_view_without_logging_in(self):
+        response = self.client.get('/league/admin/players/1/delete')
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get('/league/admin/players/1/delete')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-delete",
+            kwargs={"player_pk": 1}))
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-delete",
+            kwargs={"player_pk": 1}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/player_templates/player_delete.html")
+
+
+    def test_context(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-delete",
+            kwargs={"player_pk": 1}))
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTrue(response.context["nested_object"] is not None)
+        self.assertTrue(response.context["player"].pk == 1)
+
+
+    def test_player_delete(self):
+        l = League.objects.get(id=1)
+        player = Player.objects.create(
+            league= l, first_name="Last",last_name="Lasty")
+        player.save()
+
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-delete",
+            kwargs={"player_pk": player.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        resp = self.client.delete(reverse("league-admin-player-delete",
+            kwargs={"player_pk": player.pk}))
+
+        self.assertEqual(resp.status_code, 200)
+
+        print(player)
+
+
+
+
