@@ -37,7 +37,7 @@ def league_admin_player_create_view(request):
 @permission_required('league.league_admin')
 def league_admin_player_select_view(request):
     league = League.objects.get(admin=request.user)
-    players = Player.objects.all().filter(league=league)
+    players = Player.objects.filter(league=league)
     f = PlayerFilter(request.GET, queryset=players)
     players_list = f.qs
 
