@@ -242,20 +242,21 @@ class LAPlayerDeleteInfoViewTest(TestCase):
         l = League.objects.get(id=1)
         player = Player.objects.create(
             league= l, first_name="Last",last_name="Lasty")
-        player.save()
+
+        len_player = len(Player.objects.all())
+        
 
         login = self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-delete",
             kwargs={"player_pk": player.pk}))
         self.assertEqual(response.status_code, 200)
 
-        resp = self.client.delete(reverse("league-admin-player-delete",
-            kwargs={"player_pk": player.pk}))
+        resp = self.client.post(reverse("league-admin-player-delete",
+            kwargs={"player_pk": player.pk}), follow=True)
 
         self.assertEqual(resp.status_code, 200)
-
-        print(player)
-
+        len_player2 = len(Player.objects.all())
+        self.assertTrue(len_player - len_player2 == 1)
 
 
 
