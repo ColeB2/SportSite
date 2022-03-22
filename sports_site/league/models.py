@@ -207,6 +207,9 @@ class Game(models.Model):
     home_score = models.IntegerField(null=True, blank=True, default=0)
     away_score = models.IntegerField(null=True, blank=True, default=0)
 
+    class Meta:
+        ordering = ['date', 'start_time']
+
     def __str__(self):
         return f"{self.date} - {self.away_team.team.name} @ {self.home_team.team.name}"
 
