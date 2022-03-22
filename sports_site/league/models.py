@@ -138,6 +138,9 @@ class Roster(models.Model):
             ("user_roster_create_players", "User can create new players to add to roster"),
             )
 
+    class Meta:
+        ordering = ["-team__season", "team__team",]
+
 
     def __str__(self):
         return f"{self.team}"
