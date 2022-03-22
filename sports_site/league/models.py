@@ -161,6 +161,8 @@ class Player(models.Model):
     height_inches = models.PositiveIntegerField(null=True, blank=True, default=None)
     weight = models.PositiveIntegerField(null=True, blank=True, default=None)
 
+    class Meta:
+        ordering = ['last_name', 'first_name']
 
 
     def __str__(self):
