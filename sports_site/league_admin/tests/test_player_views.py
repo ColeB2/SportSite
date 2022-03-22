@@ -98,7 +98,8 @@ class LAPlayerSelectViewTest(TestCase):
         # self.assertTrue("is_paginated" in response.context)
         # self.assertTrue(response.context["is_paginated"] == True)
         self.assertTrue(response.context["paginator"] is not None)
-        self.assertEqual(len(response.context['all_players']), 25)
+        context_len = len(response.context["all_players"])
+        self.assertEqual(context_len, 25)
 
 
     def test_pagination_page_2(self):
