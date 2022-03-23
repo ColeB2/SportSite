@@ -38,7 +38,7 @@ urlpatterns = [
     path('schedule/<int:season_year>/stages/<season_stage_pk>',
         views.league_admin_schedule_view,
         name='league-admin-schedule'),
-    path('schedule/<int:season_year>/stages/<season_stage_pk>/edit',
+    path('schedule/<int:season_year>/stages/<season_stage_pk>/create',
         views.league_admin_schedule_create_view,
         name='league-admin-schedule-create'),
     path('schedule/<int:season_year>/stages/<season_stage_pk>/delete',
