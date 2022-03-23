@@ -179,3 +179,62 @@ class LAScheduleCreateViewTest(TestCase):
         # )
         ##ToDo Figure out success url redirects.
 
+
+class LAScheduleDeleteInfoViewTest(TestCase):
+    """
+    Tests league_admin_schedule_delete_info_view
+        from league_admin/views/schedule_views.py
+
+    'schedule/<int:season_year>/stages/<season_stage_pk>/delete',
+    views.league_admin_schedule_delete_info_view,
+    name='league-admin-schedule-delete-info')
+    """
+    def test_view_without_logging_in(self):
+        response = self.client.get('/league/admin/schedule/2022/stages/3/delete')
+        self.assertEqual(response.status_code, 302)
+
+    
+    def test_view_url_exists_at_desired_location(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get('/league/admin/schedule/2022/stages/3/delete')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            "league-admin-schedule-delete-info",
+            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            "league-admin-schedule-delete-info",
+            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/schedule_templates/schedule_delete.html")
+
+    
+    def test_context(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            "league-admin-schedule-delete-info",
+            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+        self.assertEqual(response.status_code, 200)
+
+        stage = SeasonStage.objects.get(pk=3)
+        schedule = Game.objects.filter(season__pk="3")
+        games = stage.game_set.all()
+
+        self.assertEqual(response.context["season_year"], 2022)
+        self.assertEqual(response.context["season_stage_pk"],"3")
+        self.assertEqual(response.context["stage"],stage)
+        self.assertQuerysetEqual(
+            response.context["games"],
+            games,
+            ordered=False)
+        self.assertTrue(response.context["nested_games"] is not None)
+
