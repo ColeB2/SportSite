@@ -14,7 +14,7 @@ from ..decorators import user_owns_season, user_owns_season_stage
 @user_owns_season
 def league_admin_season_stage_select_view(request, season_year, season_pk):
     season = Season.objects.get(pk=season_pk)
-    stages = SeasonStage.objects.all().filter(season=season)
+    stages = SeasonStage.objects.filter(season=season)
 
     context = {
         'season':season,
@@ -32,8 +32,8 @@ def league_admin_season_stage_select_view(request, season_year, season_pk):
 def league_admin_create_season_stage_view(request, season_year, season_pk):
     season = Season.objects.get(pk=season_pk)
     league = League.objects.get(admin=request.user)
-    stages = SeasonStage.objects.all().filter(season__pk=season_pk)
-    teams = Team.objects.all().filter(league=league)
+    stages = SeasonStage.objects.filter(season__pk=season_pk)
+    teams = Team.objects.filter(league=league)
     TeamFormset = formset_factory(TeamSelectForm, extra=len(teams))
 
     if request.method == 'POST':
@@ -83,12 +83,12 @@ def league_admin_create_season_stage_view(request, season_year, season_pk):
 @permission_required('league.league_admin')
 @user_owns_season_stage
 def league_admin_season_stage_info_view(request, season_year, season_pk,
-                                                               season_stage_pk):
+                                        season_stage_pk):
 
     league = League.objects.get(admin=request.user)
     stage = SeasonStage.objects.get(pk=season_stage_pk)
-    teams = TeamSeason.objects.all().filter(team__league=league,
-                                            season__pk=season_stage_pk)
+    teams = TeamSeason.objects.filter(team__league=league,
+                                      season__pk=season_stage_pk)
 
     context = {
         'stage': stage,
@@ -103,7 +103,7 @@ def league_admin_season_stage_info_view(request, season_year, season_pk,
 @permission_required('league.league_admin')
 @user_owns_season_stage
 def league_admin_season_stage_delete_info_view(request, season_year, season_pk,
-                                                               season_stage_pk):
+                                               season_stage_pk):
 
     stage = SeasonStage.objects.get(pk=season_stage_pk)
 
@@ -130,13 +130,13 @@ def league_admin_season_stage_delete_info_view(request, season_year, season_pk,
 @permission_required('league.league_admin')
 @user_owns_season_stage
 def league_admin_season_stage_add_teams_view(request, season_year, season_pk,
-                                                               season_stage_pk):
+                                             season_stage_pk):
     season = Season.objects.get(pk=season_pk)
     stage = SeasonStage.objects.get(pk=season_stage_pk)
 
     league = League.objects.get(pk = request.user.userprofile.league.pk)
-    teams = Team.objects.all().filter(league=league)
-    existing_teams = TeamSeason.objects.all().filter(season=stage)
+    teams = Team.objects.filter(league=league)
+    existing_teams = TeamSeason.objects.filter(season=stage)
 
     TeamFormset = formset_factory(TeamSelectForm, extra=len(teams))
 
@@ -177,7 +177,7 @@ def league_admin_season_stage_add_teams_view(request, season_year, season_pk,
 @permission_required('league.league_admin')
 @user_owns_season_stage
 def league_admin_season_stage_set_featured_view(request,season_year, season_pk,
-                                                               season_stage_pk):
+                                                season_stage_pk):
 
     stage = SeasonStage.objects.get(pk=season_stage_pk)
     stage.featured = True
