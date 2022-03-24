@@ -171,8 +171,10 @@ class LAScheduleCreateViewTest(TestCase):
                 "league-admin-schedule-create",
                 kwargs={"season_year": 2022, "season_stage_pk": "3"}),
             {},
-            follow=True)
+            follow=True,
+            extra={"create":"create"})
         self.assertEqual(resp.status_code,200)
+        # print(resp)
         # self.assertRedirects(resp, reverse(
         #     "league-admin-schedule",
         #     kwargs={"season_year": 2022, "season_stage_pk": "3"})
@@ -237,4 +239,21 @@ class LAScheduleDeleteInfoViewTest(TestCase):
             games,
             ordered=False)
         self.assertTrue(response.context["nested_games"] is not None)
+
+
+    def test_delete(self):
+        self.assertTrue(Game.objects.all().count() != 0)
+        login = self.client.login(username="Test", password="test")
+        response = self.client.post(reverse(
+            "league-admin-schedule-delete-info",
+            kwargs={"season_year": 2022, "season_stage_pk": "3"}), follow=True)
+        self.assertRedirects(response,
+            reverse(
+            "league-admin-schedule",
+            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Game.objects.all().count() == 0)
+
+    def test_post_delete(self):
+        self.assertTrue(Game.objects.all().count() != 0)
 

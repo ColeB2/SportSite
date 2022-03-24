@@ -186,7 +186,7 @@ class LAPlayerEditViewTest(TestCase):
             post,
             follow=True)
 
-
+        self.assertRedirects(resp, reverse("league-admin-player-select"))
         self.assertEqual(resp.status_code, 200)
         edited_player = Player.objects.get(pk=player_ed.pk)
         self.assertTrue(edited_player.first_name == "Last")
