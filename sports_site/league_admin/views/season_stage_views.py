@@ -29,7 +29,7 @@ def league_admin_season_stage_select_view(request, season_year, season_pk):
 
 @permission_required('league.league_admin')
 @user_owns_season
-def league_admin_create_season_stage_view(request, season_year, season_pk):
+def league_admin_season_stage_create_view(request, season_year, season_pk):
     season = Season.objects.get(pk=season_pk)
     league = League.objects.get(admin=request.user)
     stages = SeasonStage.objects.filter(season__pk=season_pk)

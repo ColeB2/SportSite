@@ -70,7 +70,7 @@ urlpatterns = [
 
 
     path('season/<int:season_year>/<season_pk>/add/new',
-        views.league_admin_create_season_stage_view,
+        views.league_admin_season_stage_create_view,
         name='league-admin-season-stage-create'),
     path('season/<int:season_year>/<season_pk>/<season_stage_pk>',
         views.league_admin_season_stage_info_view,
