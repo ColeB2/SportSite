@@ -141,19 +141,20 @@ class LASeasonStageCreateViewTest(TestCase):
             "form-1-teams": t1,
             "form-2-teams": t2
         }
-        print(SeasonStage.objects.all().count())
-        t = SeasonStage.objects.get(id=3).teamseason_set.all()
-        print(t)
+        # print(SeasonStage.objects.all().count())
+        # t = SeasonStage.objects.get(id=3).teamseason_set.all()
+        # print(t)
         resp = self.client.post(reverse("league-admin-season-stage-create",
             kwargs={"season_year": season_year, "season_pk": season_pk}),
             stage_data,
             follow=True
             )
 
-        print(SeasonStage.objects.all().count())
-        print(SeasonStage.objects.get(id=4))
-        t = SeasonStage.objects.get(id=4).teamseason_set.all()
-        print(t)
+        # print(SeasonStage.objects.all().count())
+        # print(SeasonStage.objects.get(id=4))
+        # t = SeasonStage.objects.get(id=4).teamseason_set.all()
+        # print(t)
+        print("ToDo: Figure how to pass data to formsets")
         self.assertRedirects(resp, reverse("league-admin-season-stage",
             kwargs={"season_year": season_year, "season_pk": season_pk}))
 
