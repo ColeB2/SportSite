@@ -1,13 +1,13 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from league.models import Season, SeasonStage, Team, TeamSeason
+from league.models import League, Season, SeasonStage, Team, TeamSeason
 
 
 class LASeasonStageSelectViewTest(TestCase):
     """
     Tests league_admin_season_stage_select_view
-        from league_admin/views/schedule_views.py
+        from league_admin/views/season_stage_views.py
 
     'season/<int:season_year>/<season_pk>',
     views.league_admin_season_stage_select_view,
@@ -60,8 +60,8 @@ class LASeasonStageSelectViewTest(TestCase):
 
 class LASeasonStageCreateViewTest(TestCase):
     """
-    Tests league_admin_season_stage_createt_view
-        from league_admin/views/schedule_views.py
+    Tests league_admin_season_stage_create_view
+        from league_admin/views/season_stage_views.py
 
     'season/<int:season_year>/<season_pk>/add/new',
     views.league_admin_season_stage_create_view,
@@ -158,5 +158,63 @@ class LASeasonStageCreateViewTest(TestCase):
         self.assertRedirects(resp, reverse("league-admin-season-stage",
             kwargs={"season_year": season_year, "season_pk": season_pk}))
 
+
+
+class LASeasonStageInfoViewTest(TestCase):
+    """
+    Tests league_admin_season_stage_info_view
+        from league_admin/views/season_stage_views.py
+
+    'season/<int:season_year>/<season_pk>/<season_stage_pk>',
+    views.league_admin_season_stage_info_view,
+    name='league-admin-season-stage-info')
+    """
+    def test_view_without_logging_in(self):
+        response = self.client.get('/league/admin/season/2022/1/3')
+        self.assertEqual(response.status_code, 302)
+
+    
+    def test_view_url_exists_at_desired_location(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get('/league/admin/season/2022/1/3')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-stage-info",
+            kwargs={"season_year": 2022, "season_pk": "1",
+                "season_stage_pk": "1"}))
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-stage-info",
+            kwargs={"season_year": 2022, "season_pk": "1",
+                "season_stage_pk": "1"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/season_stage_templates/season_stage_page.html")
+
+
+    
+    def test_context(self):
+        season_year = 2022
+        season_pk = 1
+        season_stage_pk = 3
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-stage-info",
+            kwargs={"season_year": season_year, "season_pk": season_pk,
+                "season_stage_pk": season_stage_pk}))
+        self.assertEqual(response.status_code, 200)
+
+        stage = SeasonStage.objects.get(pk=season_stage_pk)
+        teams = TeamSeason.objects.filter(team__league=League.objects.get(id=1),
+                                          season__pk=season_stage_pk)
+
+        self.assertEqual(response.context["stage"], stage)
+        self.assertQuerysetEqual(
+            response.context["teams"], teams, ordered=False)
 
 
