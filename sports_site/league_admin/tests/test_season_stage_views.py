@@ -378,7 +378,11 @@ class LASeasonStageSetFeaturedViewTests(TestCase):
 
     def test_view_url_exists_at_desired_location(self):
         login = self.client.login(username="Test", password="test")
-        response = self.client.get('/league/admin/season/2022/1/3/make-featured')
+        response = self.client.get('/league/admin/season/2022/1/3/make-featured',
+            follow=True)
+        self.assertRedirects(response, reverse(
+            "league-admin-season-stage-info",
+            kwargs={"season_year":2022, "season_pk":1, "season_stage_pk":3}))
         self.assertEqual(response.status_code, 200)
 
 
@@ -386,18 +390,43 @@ class LASeasonStageSetFeaturedViewTests(TestCase):
         login = self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-featured",
             kwargs={"season_year": 2022, "season_pk": "1",
-                "season_stage_pk": "1"}))
+                "season_stage_pk": "3"}),
+                follow=True)
+        self.assertRedirects(response, reverse(
+            "league-admin-season-stage-info",
+            kwargs={"season_year":2022, "season_pk":1, "season_stage_pk":3}))
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_uses_correct_template(self):
+        """Redirect only view, so tests template after redirect"""
         login = self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-featured",
             kwargs={"season_year": 2022, "season_pk": "1",
-                "season_stage_pk": "1"}))
+                "season_stage_pk": "3"}),
+                follow=True)
+        self.assertRedirects(response, reverse(
+            "league-admin-season-stage-info",
+            kwargs={"season_year":2022, "season_pk":1, "season_stage_pk":3}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
-            "league_admin/season_stage_templates/season_stage_add_teams.html")
+            "league_admin/season_stage_templates/season_stage_page.html")
+
+
+    def test_makes_featured(self):
+        season_year = 2022
+        season_pk = 1
+        season_stage_pk = 1
+        stage = SeasonStage.objects.get(pk=season_stage_pk)
+        self.assertEqual(stage.featured, False)
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-stage-featured",
+            kwargs={"season_year": 2022, "season_pk": season_pk,
+                "season_stage_pk": season_stage_pk}),
+                follow=True)
+
+        stage = SeasonStage.objects.get(pk=season_stage_pk)
+        self.assertEqual(stage.featured, True)
 
         
 
