@@ -154,7 +154,7 @@ class LASeasonStageCreateViewTest(TestCase):
         # print(SeasonStage.objects.get(id=4))
         # t = SeasonStage.objects.get(id=4).teamseason_set.all()
         # print(t)
-        print("ToDo: Figure how to pass data to formsets")
+        print("ToDo: season_stage_tests: Figure how to pass data to formsets")
         self.assertRedirects(resp, reverse("league-admin-season-stage",
             kwargs={"season_year": season_year, "season_pk": season_pk}))
 
@@ -276,8 +276,32 @@ class LASeasonStageDeleteInfoViewTest(TestCase):
         self.assertTrue(response.context["nested_object"] is not None)
 
 
-    def test_delete(self):
-        pass
+    def test_season_stage_delete(self):
+        sslen = len(SeasonStage.objects.all())
+        s = Season.objects.get(id=1)
+        ss = SeasonStage.objects.create(season=s, stage=SeasonStage.REGULAR)
+        self.assertEqual(len(SeasonStage.objects.all()), sslen+1)
+
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-stage-delete",
+            kwargs={"season_year": ss.season.year, "season_pk": s.pk,
+                "season_stage_pk": ss.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        resp = self.client.post(reverse("league-admin-season-stage-delete",
+            kwargs={"season_year": ss.season.year, "season_pk": s.pk,
+                "season_stage_pk": ss.pk}), follow=True)
+
+        self.assertRedirects(resp, reverse(
+            "league-admin-season-stage",
+            kwargs={"season_year":s.year, "season_pk": s.pk}))
+        len_season_stage = len(SeasonStage.objects.all())
+        self.assertEqual(len_season_stage, sslen)
+
+        
+
+
+        
 
 
 
