@@ -301,7 +301,7 @@ class LASeasonStageDeleteInfoViewTest(TestCase):
 
 class LASeasonStageAddTeamsViewTests(TestCase):
     """
-    Tests league_admin_season_stage_delete_info_view
+    Tests league_admin_season_stage_add_teams_view
         from league_admin/views/season_stage_views.py
 
     'season/<int:season_year>/<season_pk>/<season_stage_pk>/add/teams',
@@ -359,6 +359,45 @@ class LASeasonStageAddTeamsViewTests(TestCase):
         self.assertQuerysetEqual(
             response.context["teams"], exist_teams, ordered=False)
         self.assertTrue(response.context["formset"] is not None)
+
+
+
+class LASeasonStageSetFeaturedViewTests(TestCase):
+    """
+    Tests league_admin_season_stage_set_featured_view
+        from league_admin/views/season_stage_views.py
+
+    'season/<int:season_year>/<season_pk>/<season_stage_pk>/make-featured',
+    views.league_admin_season_stage_set_featured_view,
+    name='league-admin-season-stage-featured'
+    """
+    def test_view_without_logging_in(self):
+        response = self.client.get('/league/admin/season/2022/1/3/make-featured')
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get('/league/admin/season/2022/1/3/make-featured')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-stage-featured",
+            kwargs={"season_year": 2022, "season_pk": "1",
+                "season_stage_pk": "1"}))
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        login = self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-stage-featured",
+            kwargs={"season_year": 2022, "season_pk": "1",
+                "season_stage_pk": "1"}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/season_stage_templates/season_stage_add_teams.html")
 
         
 
