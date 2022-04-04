@@ -15,7 +15,7 @@ class LASeasonViewTest(TestCase):
     """
     def test_view_without_logging_in(self):
         response = self.client.get('/league/admin/season/')
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 404)
         
 
     def test_view_url_exists_at_desired_location(self):

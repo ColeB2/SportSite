@@ -54,7 +54,7 @@ urlpatterns = [
 
     path('season/',
         SeasonView.as_view(),
-        name='league-admin-season1'),
+        name='league-admin-season'),
     path('season/add/new',
         views.league_admin_create_season_view,
         name='league-admin-season-create'),
