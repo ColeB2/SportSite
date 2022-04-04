@@ -15,8 +15,8 @@ from ..decorators import user_owns_season
 
 @permission_required('league.league_admin')
 def league_admin_season_view(request):
-    seasons = Season.objects.all().filter(league__admin=request.user)
-    stages = SeasonStage.objects.all().filter(
+    seasons = Season.objects.filter(league__admin=request.user)
+    stages = SeasonStage.objects.filter(
         season__league__admin=request.user)
 
     context = {
@@ -29,7 +29,7 @@ def league_admin_season_view(request):
 
 @permission_required('league.league_admin')
 def league_admin_create_season_view(request):
-    seasons = Season.objects.all().filter(league__admin=request.user)
+    seasons = Season.objects.filter(league__admin=request.user)
 
     if request.method == 'POST':
         form = SeasonForm(data = request.POST)
@@ -48,7 +48,7 @@ def league_admin_create_season_view(request):
 
     context = {
         'seasons':seasons,
-        "form": form
+        'form': form
     }
     return render(request, "league_admin/season_templates/season_create.html",
                   context)
