@@ -8,7 +8,7 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views.generic import UpdateView
 from ..forms import SeasonForm
-from league.models import Season, SeasonStage
+from league.models import Season
 from ..decorators import user_owns_season
 
 
