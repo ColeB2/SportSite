@@ -116,3 +116,9 @@ todo.txt
 .sportsvenv
 #DEV
 settings_dev.py
+
+##
+.vscode
+./vscode
+/vscode
+vscode
