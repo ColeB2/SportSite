@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import (SeasonEditView, OptionsView, HittingOptionsUpdateView,
+from .views import (SeasonView, SeasonEditView, OptionsView, HittingOptionsUpdateView,
     HittingStatsOptionsUpdateView)
 
 urlpatterns = [
@@ -53,8 +53,8 @@ urlpatterns = [
 
 
     path('season/',
-        views.league_admin_season_view,
-        name='league-admin-season'),
+        SeasonView.as_view(),
+        name='league-admin-season1'),
     path('season/add/new',
         views.league_admin_create_season_view,
         name='league-admin-season-create'),

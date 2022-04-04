@@ -48,3 +48,14 @@ class LASeasonViewTest(TestCase):
 
         self.assertQuerysetEqual(
             response.context["seasons"], seasons, ordered=False)
+
+
+class LACreateSeasonViewTest(TestCase):
+    """
+    Tests league_admin_create_season_view
+        from league_admin/views/season_views.py
+
+    'season/',
+    views.league_admin_season_view,
+    name='league-admin-season')
+    """
