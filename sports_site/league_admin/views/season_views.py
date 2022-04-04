@@ -13,16 +13,6 @@ from ..decorators import user_owns_season
 
 
 
-@permission_required('league.league_admin')
-def league_admin_season_view(request):
-    seasons = Season.objects.filter(league__admin=request.user)
-
-    context = {
-        'seasons':seasons,
-        }
-    return render(request, "league_admin/season_templates/season_page.html",
-                  context)
-
 class SeasonView(PermissionRequiredMixin, ListView):
     permission_required = "league.league_admin"
     template_name = "league_admin/season_templates/season_page.html"
@@ -32,33 +22,10 @@ class SeasonView(PermissionRequiredMixin, ListView):
         self.league = League.objects.get(admin=self.request.user)
         return super().dispatch(request, *args, **kwargs)
 
-    # def get_queryset(self):
-    #     queryset = Season.objects.filter(league=self.league).order_by('-id')
-    #     return queryset
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['seasons'] = Season.objects.filter(league=self.league).order_by('-id')
         return context
-
-
-
-class SeasonEditView(PermissionRequiredMixin, UpdateView):
-    permission_required = 'league.league_admin'
-    template_name = 'league_admin/season_templates/season_edit.html'
-    model = Season
-    form_class = SeasonForm
-
-
-    @method_decorator(user_owns_season)
-    def dispatch(self, *args, **kwargs):
-        return super(SeasonEditView, self).dispatch(*args, **kwargs)
-
-
-    def get_success_url(self):
-        url = reverse('league-admin-season-stage',
-                      args=[self.object.year, self.object.pk])
-        return url
 
 
 @permission_required('league.league_admin')
