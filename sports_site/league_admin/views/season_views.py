@@ -16,12 +16,9 @@ from ..decorators import user_owns_season
 @permission_required('league.league_admin')
 def league_admin_season_view(request):
     seasons = Season.objects.filter(league__admin=request.user)
-    stages = SeasonStage.objects.filter(
-        season__league__admin=request.user)
 
     context = {
         'seasons':seasons,
-        'stages':stages,
         }
     return render(request, "league_admin/season_templates/season_page.html",
                   context)
