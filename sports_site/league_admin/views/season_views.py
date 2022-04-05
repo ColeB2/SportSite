@@ -3,7 +3,7 @@ from django.contrib.admin.utils import NestedObjects
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.db import router
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.views.generic import ListView, UpdateView
@@ -18,13 +18,11 @@ class SeasonView(PermissionRequiredMixin, ListView):
     template_name = "league_admin/season_templates/season_page.html"
     model = Season
 
-    def dispatch(self, request, *args, **kwargs):
-        self.league = get_object_or_404(League, admin=self.request.user)
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['seasons'] = Season.objects.filter(league=self.league).order_by('-id')
+        league = League.objects.get(admin=self.request.user)
+        context['seasons'] = Season.objects.filter(league=league).order_by('-id')
         return context
 
 
