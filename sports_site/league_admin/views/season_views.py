@@ -28,7 +28,7 @@ class SeasonView(PermissionRequiredMixin, ListView):
 
 @permission_required('league.league_admin')
 def league_admin_create_season_view(request):
-    seasons = Season.objects.filter(league__admin=request.user)
+    seasons = Season.objects.filter(league__admin=request.user).order_by('-id')
 
     if request.method == 'POST':
         form = SeasonForm(data = request.POST)

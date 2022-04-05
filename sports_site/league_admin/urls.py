@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
-from .views import (SeasonView, SeasonEditView, OptionsView, HittingOptionsUpdateView,
-    HittingStatsOptionsUpdateView)
+from .views import (SeasonView, SeasonEditView, OptionsView,
+    HittingOptionsUpdateView, HittingStatsOptionsUpdateView)
 
 urlpatterns = [
     path('', views.league_admin_dashboard_view, name='league-admin-dashboard'),
