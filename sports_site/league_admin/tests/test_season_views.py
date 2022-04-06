@@ -228,3 +228,51 @@ class LASeasonDeleteInfoViewTest(TestCase):
 
         seasons2 = Season.objects.filter(league=league).count()
         self.assertTrue(seasons2 + 1  == seasons)
+
+
+class LASeasonEditViewTest(TestCase):
+    """
+    Tests SeasonEditView
+        from league_admin/views/season_views.py
+
+    'season/<int:season_year>/<season_pk>/<int:pk>/edit/season',
+    SeasonEditView.as_view(),
+    name='league-admin-season-edit'
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.season = Season.objects.create(league=cls.league, year="2030")
+
+
+    def test_view_without_logging_in(self):
+        response = self.client.get(
+            f'/league/admin/season/'
+            + f'{self.season.year}/{self.season.pk}/{self.season.pk}'
+            + f'/edit/season')
+        self.assertEqual(response.status_code, 403)
+        
+
+    def test_view_url_exists_at_desired_location(self):
+        ##TODO HERE and ABOVE
+        self.client.login(username="Test", password="test")
+        response = self.client.get(
+            f'/league/admin/season/'
+            + f'{self.season.year}/{self.season.pk}/{self.season.pk}'
+            + f'/edit/season'))
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season"))
+        self.assertEqual(response.status_code, 200)
+        
+
+    
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/season_templates/season_page.html")
