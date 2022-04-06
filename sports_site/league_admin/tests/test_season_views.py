@@ -97,17 +97,50 @@ class LACreateSeasonViewTest(TestCase):
         self.assertTrue(response.context["form"] is not None)
 
     
-    def test_creation(self):
+    def test_create_seasons(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-create"))
         self.assertEqual(response.status_code, 200)
 
         league = League.objects.get(id=1)
-        seasons = Season.objects.filter(league=league)
+        seasons = Season.objects.filter(league=league).count()
 
         data = {"year": 3000}
+
 
         response = self.client.post(reverse("league-admin-season-create"),
             data, follow=True)
 
         self.assertRedirects(response, reverse("league-admin-season"))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), f'{data["year"]} created.')
+
+        seasons2 = Season.objects.filter(league=league).count()
+        self.assertTrue(seasons2 -1 == seasons)
+
+    
+    def test_creates_objects_already_exists(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-create"))
+        self.assertEqual(response.status_code, 200)
+
+        league = League.objects.get(id=1)
+        Season.objects.create(league=league, year="3000")
+        seasons = Season.objects.filter(league=league).count()
+        
+
+        data = {"year": 3000}
+
+
+        response = self.client.post(reverse("league-admin-season-create"),
+            data, follow=True)
+
+        self.assertRedirects(response, reverse("league-admin-season"))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]), f'{data["year"]} already exists.')
+
+        seasons2 = Season.objects.filter(league=league).count()
+        self.assertTrue(seasons2 == seasons)
+
