@@ -144,3 +144,87 @@ class LACreateSeasonViewTest(TestCase):
         seasons2 = Season.objects.filter(league=league).count()
         self.assertTrue(seasons2 == seasons)
 
+
+
+class LASeasonDeleteInfoViewTest(TestCase):
+    """
+    Tests league_admin_season_delete_info_view
+        from league_admin/views/season_views.py
+
+    'season/<int:season_year>/<season_pk>/delete',
+    views.league_admin_season_delete_info_view,
+    name='league-admin-season-delete'
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.season = Season.objects.create(league=cls.league, year="2030")
+
+
+    def test_view_without_logging_in(self):
+        response = self.client.get(
+            f'/league/admin/season/{self.season.year}/{self.season.pk}/delete')
+        self.assertEqual(response.status_code, 302)
+
+    
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(
+            f'/league/admin/season/{self.season.year}/{self.season.pk}/delete')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-delete",
+            kwargs={"season_year": self.season.year,
+                    "season_pk": self.season.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-delete",
+            kwargs={"season_year": self.season.year,
+                    "season_pk": self.season.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/season_templates/season_delete.html")
+
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-delete",
+            kwargs={"season_year": self.season.year,
+                    "season_pk": self.season.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        season = Season.objects.get(pk=self.season.pk)
+
+        self.assertEqual(season, self.season)
+        self.assertTrue(response.context["nested_object"] is not None)
+
+    
+    def test_deletes_seasons(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-delete",
+            kwargs={"season_year": self.season.year,
+                    "season_pk": self.season.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        league = League.objects.get(id=1)
+        seasons = Season.objects.filter(league=league).count()
+
+        response = self.client.post(reverse("league-admin-season-delete",
+            kwargs={"season_year": self.season.year,
+                    "season_pk": self.season.pk}), 
+            follow=True)
+
+        self.assertRedirects(response, reverse("league-admin-season"))
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{self.season} and all related objects were deleted.')
+
+        seasons2 = Season.objects.filter(league=league).count()
+        self.assertTrue(seasons2 + 1  == seasons)
