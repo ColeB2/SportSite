@@ -259,7 +259,7 @@ class LASeasonEditViewTest(TestCase):
         response = self.client.get(
             f'/league/admin/season/'
             + f'{self.season.year}/{self.season.pk}/{self.season.pk}'
-            + f'/edit/season'))
+            + f'/edit/season')
         self.assertEqual(response.status_code, 200)
 
     
