@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from league.models import League, Season, SeasonStage
+from league.models import League, Season
 
 
 class LASeasonViewTest(TestCase):
