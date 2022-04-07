@@ -254,7 +254,6 @@ class LASeasonEditViewTest(TestCase):
         
 
     def test_view_url_exists_at_desired_location(self):
-        ##TODO HERE and ABOVE
         self.client.login(username="Test", password="test")
         response = self.client.get(
             f'/league/admin/season/'
@@ -265,14 +264,62 @@ class LASeasonEditViewTest(TestCase):
     
     def test_view_accessible_by_name(self):
         self.client.login(username="Test", password="test")
-        response = self.client.get(reverse("league-admin-season"))
+        response = self.client.get(reverse("league-admin-season-edit",
+            kwargs={
+                "season_year":self.season.year,
+                "season_pk": self.season.pk,
+                "pk":self.season.pk}))
         self.assertEqual(response.status_code, 200)
         
 
-    
     def test_view_uses_correct_template(self):
         self.client.login(username="Test", password="test")
-        response = self.client.get(reverse("league-admin-season"))
+        response = self.client.get(reverse("league-admin-season-edit",
+            kwargs={
+                "season_year":self.season.year,
+                "season_pk": self.season.pk,
+                "pk":self.season.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
-            "league_admin/season_templates/season_page.html")
+            "league_admin/season_templates/season_edit.html")
+
+    
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-edit",
+            kwargs={
+                "season_year":self.season.year,
+                "season_pk": self.season.pk,
+                "pk":self.season.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        self.assertTrue(response.context["form"] is not None)
+        self.assertEqual(response.context["season"], self.season)
+
+    
+    def test_edit_season(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-season-edit",
+            kwargs={
+                "season_year":self.season.year,
+                "season_pk": self.season.pk,
+                "pk":self.season.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        year = "2050"
+        data = {"year": year}
+
+        response = self.client.post(reverse("league-admin-season-edit",
+            kwargs={
+                "season_year":self.season.year,
+                "season_pk": self.season.pk,
+                "pk":self.season.pk}),
+                data,
+                follow=True)
+
+        self.assertRedirects(response, reverse("league-admin-season-stage",
+            args=[year, self.season.pk]))
+
+        season = Season.objects.get(pk=self.season.pk)
+        self.assertTrue(season.year != self.season.year)
+        self.assertEqual(season.year, year)
