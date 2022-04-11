@@ -171,7 +171,7 @@ class LATeamSeasonInfoViewTest(TestCase):
                 follow=True)
         
         self.assertRedirects(response,
-            reverse("league-admin-season-stage"
+            reverse("league-admin-season-stage",
                 kwargs={
                     "season_year": context["season_year"],
                     "season_pk": context["season_pk"] } ) )
