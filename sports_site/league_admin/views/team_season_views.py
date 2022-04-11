@@ -11,7 +11,8 @@ from ..decorators import user_owns_season_stage, user_owns_team_season
 @permission_required('league.league_admin')
 @user_owns_team_season
 def league_admin_team_season_info_view(request, season_year, season_pk,
-                                    season_stage_pk, team_name, team_season_pk):
+                                       season_stage_pk, team_name,
+                                       team_season_pk):
 
     team = TeamSeason.objects.get(pk=team_season_pk)
     roster = team.roster_set.get(team__pk=team_season_pk)
@@ -35,7 +36,8 @@ def league_admin_team_season_info_view(request, season_year, season_pk,
 @permission_required('league.league_admin')
 @user_owns_season_stage
 def league_admin_team_season_delete_info_view(request, season_year, season_pk,
-                                    season_stage_pk, team_name, team_season_pk):
+                                              season_stage_pk, team_name,
+                                              team_season_pk):
 
     teamseason = TeamSeason.objects.get(pk=team_season_pk)
 
