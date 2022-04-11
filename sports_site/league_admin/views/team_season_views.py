@@ -48,7 +48,7 @@ def league_admin_team_season_delete_info_view(request, season_year, season_pk,
     if request.method == 'POST':
         teamseason.delete()
         messages.success(request,
-                         f"{teamseason} and all releated object were deleted")
+                         f"{teamseason} and all related objects were deleted.")
 
         return redirect('league-admin-season-stage', season_year, season_pk)
 
