@@ -4,7 +4,7 @@ from django.urls import reverse
 from league.models import League, Team
 
 
-class LATeamSeasonInfoViewTest(TestCase):
+class LATeamCreateViewTest(TestCase):
     """
     Tests league_admin_team_create_view
         from league_admin/views/team_views.py
@@ -74,5 +74,49 @@ class LATeamSeasonInfoViewTest(TestCase):
             follow=True)
 
         self.assertRedirects(response, reverse("league-admin-dashboard"))
+
+
+class LATeamEditViewTest(TestCase):
+    """
+    Tests league_admin_team_edit_view
+        from league_admin/views/team_views.py
+
+    'teams/team/<team_pk>/edit',
+        views.league_admin_team_edit_view,
+        name="league-admin-team-edit"
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.league = League.objects.get(id=1)
+        cls.team = Team.objects.create(league=cls.league, name="TName",
+            place="TPlace",
+            abbreviation="TNTP")
+        return super().setUpTestData()
+
+    def test_view_without_logging_in(self):
+        response = self.client.get(f'/league/admin/teams/team/{self.team.pk}/edit')
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(f'/league/admin/teams/team/{self.team.pk}/edit')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-edit",
+            kwargs = {"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-edit",
+            kwargs = {"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/team_templates/team_edit.html")
 
         
