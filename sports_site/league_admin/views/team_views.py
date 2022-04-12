@@ -13,7 +13,7 @@ from league.models import (Team, TeamSeason)
 @permission_required('league.league_admin')
 def league_admin_team_create_view(request):
     league = request.user.userprofile.league
-    league_users = User.objects.all().filter(userprofile__league=league)
+    league_users = User.objects.filter(userprofile__league=league)
 
     if request.method == 'POST':
         form = TeamCreateForm(data=request.POST)
@@ -41,7 +41,7 @@ def league_admin_team_create_view(request):
 def league_admin_team_edit_view(request, team_pk):
     team_instance = Team.objects.get(pk=team_pk)
     league = team_instance.league
-    league_users = User.objects.all().filter(userprofile__league=league)
+    league_users = User.objects.filter(userprofile__league=league)
 
 
     if request.method == 'POST':
@@ -71,7 +71,7 @@ def league_admin_team_edit_view(request, team_pk):
 @permission_required('league.league_admin')
 def league_admin_team_select_view(request):
     league = request.user.userprofile.league
-    teams = Team.objects.all().filter(league=league)
+    teams = Team.objects.filter(league=league)
 
     context = {
         "teams":teams
@@ -84,7 +84,7 @@ def league_admin_team_select_view(request):
 @user_owns_team
 def league_admin_team_info_view(request, team_pk):
     team = Team.objects.get(pk=team_pk)
-    team_seasons = TeamSeason.objects.all().filter(team=team)
+    team_seasons = TeamSeason.objects.filter(team=team)
 
     context = {
         "team":team,
