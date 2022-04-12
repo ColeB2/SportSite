@@ -143,7 +143,7 @@ class LATeamSeasonInfoViewTest(TestCase):
         self.assertTrue(response.context["nested_object"] is not None)
 
 
-    def test_delete_team_season(self):
+    def test_redirects(self):
         ss = SeasonStage.objects.get(id=1)
         team = Team.objects.get(id=1)
         ts = TeamSeason.objects.create(season=ss, team=team)
@@ -152,15 +152,6 @@ class LATeamSeasonInfoViewTest(TestCase):
                 "team_name": "TeamOne", "team_season_pk": 3}
 
         self.client.login(username="Test", password="test")
-        response = self.client.get(reverse("league-admin-team-season-delete",
-            kwargs={
-                "season_year": context["season_year"],
-                "season_pk": context["season_pk"],
-                "season_stage_pk": context["season_stage_pk"], 
-                "team_name": context["team_name"],
-                "team_season_pk": context["team_season_pk"]}))
-        self.assertEqual(response.status_code, 200)
-
         response = self.client.post(reverse("league-admin-team-season-delete",
             kwargs={
                 "season_year": context["season_year"],
@@ -175,9 +166,30 @@ class LATeamSeasonInfoViewTest(TestCase):
                 kwargs={
                     "season_year": context["season_year"],
                     "season_pk": context["season_pk"] } ) )
+
+
+    def test_delete_team_season(self):
+        ss = SeasonStage.objects.get(id=1)
+        team = Team.objects.get(id=1)
+        ts = TeamSeason.objects.create(season=ss, team=team)
+        ts_len = TeamSeason.objects.filter(season=ss).count()
+        context = {"season_year": 2022, "season_pk": 1, "season_stage_pk":1,
+                "team_name": "TeamOne", "team_season_pk": 3}
+
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse("league-admin-team-season-delete",
+            kwargs={
+                "season_year": context["season_year"],
+                "season_pk": context["season_pk"],
+                "season_stage_pk": context["season_stage_pk"], 
+                "team_name": context["team_name"],
+                "team_season_pk": context["team_season_pk"]}),
+                follow=True)
         
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]),
             f'{ts} and all related objects were deleted.')
-        self.assertEqual()
+        
+        ts_len_del = TeamSeason.objects.filter(season=ss).count()
+        self.assertEqual(ts_len-1, ts_len_del)
