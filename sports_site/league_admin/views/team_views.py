@@ -47,7 +47,7 @@ def league_admin_team_edit_view(request, team_pk):
     if request.method == 'POST':
         form = TeamCreateForm(data=request.POST, files=request.FILES,
                               instance=team_instance)
-        form.fields['owner'].queryset=league_users
+        # form.fields['owner'].queryset=league_users
         if form.is_valid():
             team = form.process_edit()
             messages.success(request, f"{team} edited.")
@@ -56,7 +56,7 @@ def league_admin_team_edit_view(request, team_pk):
 
     else:
         form = TeamCreateForm(instance=team_instance)
-        form.fields['owner'].queryset=league_users
+        # form.fields['owner'].queryset=league_users
 
     context = {
         "form": form,
