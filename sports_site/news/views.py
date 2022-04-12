@@ -16,9 +16,9 @@ from .models import Article
 
 def home(request):
     league_slug = request.GET.get('league', None)
-    league = League.objects.get(url=league_slug)
+    league = League.objects.get(url=str(league_slug))
     Article_data = Article.objects.filter(
-        league__url=league_slug).order_by('-id')[:10]
+        league=league).order_by('-id')[:10]
 
     """Leaders"""
     featured_stage = SeasonStage.objects.get(season__league=league,
