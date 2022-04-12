@@ -13,7 +13,7 @@ from league.models import (Team, TeamSeason)
 @permission_required('league.league_admin')
 def league_admin_team_create_view(request):
     league = request.user.userprofile.league
-    league_users = User.objects.filter(userprofile__league=league)
+    # league_users = User.objects.filter(userprofile__league=league)
 
     if request.method == 'POST':
         form = TeamCreateForm(data=request.POST)
@@ -31,7 +31,7 @@ def league_admin_team_create_view(request):
 
     context = {
         "form": form,
-        "lu":league_users
+        # "lu":league_users
     }
     return render(request, "league_admin/team_templates/team_create.html",
                   context)
