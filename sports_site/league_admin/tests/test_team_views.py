@@ -90,7 +90,7 @@ class LATeamEditViewTest(TestCase):
         cls.league = League.objects.get(id=1)
         cls.team = Team.objects.create(league=cls.league, name="TName",
             place="TPlace",
-            abbreviation="TNTP")
+            abbreviation="TNT")
         return super().setUpTestData()
 
     def test_view_without_logging_in(self):
@@ -118,5 +118,59 @@ class LATeamEditViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             "league_admin/team_templates/team_edit.html")
+
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-edit",
+            kwargs = {"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+
+
+        self.assertTrue(response.context["form"] is not None)
+        self.assertEqual(response.context["team_instance"], self.team)
+        self.assertEqual(response.context["league"], self.league)
+
+
+    def test_edit_team(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-edit",
+            kwargs = {"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        name="New Name"
+        place="New Place"
+        abbr = "NNN"
+
+        post = {"name": name, "place": place, "abbreviation": abbr}
+        self.assertEqual(self.team.name, "TName")
+
+        response = self.client.post(reverse("league-admin-team-edit",
+            kwargs = {"team_pk": self.team.pk}),
+            post,
+            follow=True)
+
+
+        team_edit = Team.objects.get(id=self.team.id)
+        self.assertEqual(team_edit.name, name)
+        self.assertEqual(team_edit.place, place)
+        self.assertEqual(team_edit.abbreviation, abbr)
+
+
+    
+    def test_redirects(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-create"))
+        self.assertEqual(response.status_code, 200)
+        
+        post = {"name": "Team Name", "place": "Place Name", "abbreviation": "ABR"}
+
+        response = self.client.post(reverse("league-admin-team-edit",
+            kwargs = {"team_pk": self.team.pk}),
+            post,
+            follow=True)
+
+        self.assertRedirects(response, reverse("league-admin-team-info",
+            kwargs={"team_pk": self.team.pk}))
 
         
