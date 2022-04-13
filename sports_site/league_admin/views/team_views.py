@@ -41,7 +41,7 @@ def league_admin_team_create_view(request):
 def league_admin_team_edit_view(request, team_pk):
     team_instance = Team.objects.get(pk=team_pk)
     league = team_instance.league
-    league_users = User.objects.filter(userprofile__league=league)
+    # league_users = User.objects.filter(userprofile__league=league)
 
 
     if request.method == 'POST':
@@ -60,7 +60,7 @@ def league_admin_team_edit_view(request, team_pk):
 
     context = {
         "form": form,
-        "lu":league_users,
+        # "lu":league_users,
         "team_instance": team_instance,
         "league": league,
     }
