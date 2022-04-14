@@ -105,7 +105,7 @@ urlpatterns = [
     path('teams/team/<int:team_pk>/edit',
         views.league_admin_team_edit_view,
         name="league-admin-team-edit"),
-    path('teams/<int:team_pk>/delete',
+    path('teams/team/<int:team_pk>/delete',
         views.league_admin_team_delete_info_view,
         name='league-admin-team-delete'),
 
