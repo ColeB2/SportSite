@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from league.models import League, Team
+from league.models import League, Team, TeamSeason
 
 
 class LATeamCreateViewTest(TestCase):
@@ -218,3 +218,64 @@ class LATeamSelectViewTest(TestCase):
         league = League.objects.get(id=1)
         teams = Team.objects.filter(league=league)
         self.assertQuerysetEqual(response.context["teams"], teams, ordered=False)
+
+
+
+class LATeamSelectViewTest(TestCase):
+    """
+    Tests league_admin_team_info_view
+        from league_admin/views/team_views.py
+
+    'teams/team/<int:team_pk>',
+    views.league_admin_team_info_view,
+    name="league-admin-team-info"
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.league = League.objects.get(id=1)
+        cls.team = Team.objects.create(league=cls.league, name="TName",
+            place="TPlace",
+            abbreviation="TNT")
+        return super().setUpTestData()
+
+
+    def test_view_without_logging_in(self):
+        response = self.client.get(f'/league/admin/teams/team/{self.team.pk}')
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(f'/league/admin/teams/team/{self.team.pk}')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-info", 
+            kwargs={"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-info", 
+            kwargs={"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/team_templates/team_page.html")
+
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-info", 
+            kwargs={"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+
+
+        team_seasons = TeamSeason.objects.filter(team=self.team)
+        self.assertEqual(response.context["team"], self.team)
+        self.assertQuerysetEqual(
+            response.context["team_seasons"],
+            team_seasons,
+            ordered=False)
