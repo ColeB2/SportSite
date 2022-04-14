@@ -279,3 +279,93 @@ class LATeamSelectViewTest(TestCase):
             response.context["team_seasons"],
             team_seasons,
             ordered=False)
+
+
+class LATeamSelectViewTest(TestCase):
+    """
+    Tests league_admin_team_delete_info_view
+        from league_admin/views/team_views.py
+
+    'teams/team/<int:team_pk>/delete',
+    views.league_admin_team_delete_info_view,
+    name='league-admin-team-delete'
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.league = League.objects.get(id=1)
+        cls.team = Team.objects.create(league=cls.league, name="TName",
+            place="TPlace",
+            abbreviation="TNT")
+        return super().setUpTestData()
+
+
+    def test_view_without_logging_in(self):
+        response = self.client.get(
+            f'/league/admin/teams/team/{self.team.pk}/delete')
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(
+            f'/league/admin/teams/team/{self.team.pk}/delete')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-delete", 
+            kwargs={"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-delete", 
+            kwargs={"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/team_templates/team_delete.html")
+
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-delete", 
+            kwargs={"team_pk": self.team.pk}))
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context["team"], self.team)
+        self.assertTrue(response.context["nested_object"] is not None)
+
+
+    def test_delete(self):
+        teams_count = Team.objects.filter(league=self.league).count()
+        print(teams_count)
+
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse("league-admin-team-delete", 
+            kwargs={"team_pk": self.team.pk}),
+            follow=True)
+
+        self.assertRedirects(response,
+            reverse("league-admin-team-select"))
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{self.team} and all related objects were deleted.')
+
+        teams_count_del = Team.objects.filter(league=self.league).count()
+        print(teams_count_del)
+
+        self.assertEqual(teams_count - 1, teams_count_del)
+
+
+    def test_redirects(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse("league-admin-team-delete", 
+            kwargs={"team_pk": self.team.pk}),
+            follow=True)
+
+        self.assertRedirects(response,
+            reverse("league-admin-team-select"))
