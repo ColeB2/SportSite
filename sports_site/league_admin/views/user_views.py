@@ -6,7 +6,7 @@ from ..forms import (EditUserRosterPermissionsForm)
 from league.models import (League, Team, Roster)
 
 
-
+"""Currently DEPRECATED"""
 
 @permission_required('league.league_admin')
 def league_admin_users_view(request):

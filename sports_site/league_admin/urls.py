@@ -109,6 +109,7 @@ urlpatterns = [
         views.league_admin_team_delete_info_view,
         name='league-admin-team-delete'),
 
+
     path('users/',
         views.league_admin_users_view,
         name='league-admin-users'),
@@ -119,4 +120,5 @@ urlpatterns = [
         views.league_admin_user_edit_perms_view,
         name='league-admin-user-edit-perms'),
     ]
+#Currently Deprecated --> all users/ views
 
