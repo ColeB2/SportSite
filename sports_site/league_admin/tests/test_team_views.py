@@ -174,3 +174,47 @@ class LATeamEditViewTest(TestCase):
             kwargs={"team_pk": self.team.pk}))
 
         
+
+class LATeamSelectViewTest(TestCase):
+    """
+    Tests league_admin_team_select_view
+        from league_admin/views/team_views.py
+
+    'teams/',
+    views.league_admin_team_select_view,
+    name='league-admin-team-select'
+    """
+    def test_view_without_logging_in(self):
+        response = self.client.get(f'/league/admin/teams/')
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(f'/league/admin/teams/')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-select"))
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-select"))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "league_admin/team_templates/team_select.html")
+
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-team-select"))
+        self.assertEqual(response.status_code, 200)
+
+
+        league = League.objects.get(id=1)
+        teams = Team.objects.filter(league=league)
+        self.assertQuerysetEqual(response.context["teams"], teams, ordered=False)
