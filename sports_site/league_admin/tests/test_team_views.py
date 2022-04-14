@@ -340,7 +340,6 @@ class LATeamSelectViewTest(TestCase):
 
     def test_delete(self):
         teams_count = Team.objects.filter(league=self.league).count()
-        print(teams_count)
 
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse("league-admin-team-delete", 
@@ -356,7 +355,6 @@ class LATeamSelectViewTest(TestCase):
             f'{self.team} and all related objects were deleted.')
 
         teams_count_del = Team.objects.filter(league=self.league).count()
-        print(teams_count_del)
 
         self.assertEqual(teams_count - 1, teams_count_del)
 
