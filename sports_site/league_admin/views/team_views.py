@@ -106,7 +106,7 @@ def league_admin_team_delete_info_view(request, team_pk):
     if request.method == 'POST':
         team.delete()
         messages.success(request,
-                         f"{team} and all releated object were deleted")
+                         f"{team} and all related objects were deleted.")
         return redirect('league-admin-team-select')
     else:
         pass
