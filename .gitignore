@@ -122,3 +122,7 @@ settings_dev.py
 ./vscode
 /vscode
 vscode
+
+##coverage
+/htmlcov
+.coverage
