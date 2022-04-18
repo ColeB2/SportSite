@@ -48,3 +48,5 @@ class LAUsersViewTest(TestCase):
 
         self.assertEqual(response.context["league"], league)
         self.assertQuerysetEqual(response.context["teams"], teams, ordered=False)
+
+    """Testing Complete Until Views Stop Being Deprecated"""
