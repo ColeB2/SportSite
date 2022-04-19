@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
 from django.test import TestCase
 from django.urls import reverse
@@ -286,17 +285,15 @@ class ArticleDeleteViewTest(TestCase):
 
 
     def test_article_delete(self):
+        article_count = Article.objects.filter(league=self.league).count()
+
         self.client.login(username="Test", password="test")
-
-        response = self.client.get(reverse(
-            'news-delete', kwargs={"slug": self.article.slug})+"?league=TL")
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.delete(reverse(
-            'news-delete', kwargs={"slug": self.article.slug})+"?league=TL")
-        self.assertEqual(response.status_code, 302)
+        response = self.client.post(reverse(
+            'news-delete', 
+            kwargs={"slug": self.article.slug})+"?league=TL", follow=True)
+        
+        self.assertRedirects(response, reverse('news-home')+"?league=TL")
 
 
-        # response = self.client.get(reverse('news-delete', kwargs={"slug": self.article.slug})+"?league=TL")
-        self.assertEqual(len(Article.objects.all()), 0)
-        self.assertEqual(response.context, None)
+        article_count_del = Article.objects.filter(league=self.league).count()
+        self.assertEqual(article_count-1, article_count_del)
