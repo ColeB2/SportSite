@@ -164,6 +164,10 @@ class GameBoxscorePageViewTest(TestCase):
         self.assertEqual(type(response.context["home_pitching_stats_table"]), PlayerPitchingGameStatsTable)
         self.assertEqual(type(response.context["away_pitching_stats_table"]), PlayerPitchingGameStatsTable)
         self.assertEqual(type(response.context["boxscore_table"]), TeamGameLineScoreTable)
+        self.assertEqual(type(response.context["home_boxscore"]), BattingOrderTable)
+        self.assertEqual(type(response.context["away_boxscore"]), BattingOrderTable)
+        self.assertEqual(type(response.context["home_pitching"]), PitchingOrderTable)
+        self.assertEqual(type(response.context["away_pitching"]), PitchingOrderTable)
 
     def test_context(self):
         league = League.objects.get(id=1)
@@ -191,8 +195,7 @@ class GameBoxscorePageViewTest(TestCase):
         self.assertEqual(hgls, response.context["home_linescore"])
         self.assertQuerysetEqual(hgs.playerhittinggamestats_set.all(), response.context["home_stats"])
         #Currently doesn't get used, or passed.
-        # self.assertQuerysetEqual(hgs.playerpitchinggamestats_set.all(), response.context["home_pitching"])
-        #Currently no stats to test against, test that its a list?
+        ##Currently no stats to test against, test that its a list?
         # print(response.context["home_extra"])
         #homeaway boxscore, homeaway pitching,
         phgs1, phgs2 = PlayerHittingGameStats.objects.all()
