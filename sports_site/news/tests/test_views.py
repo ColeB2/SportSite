@@ -291,9 +291,24 @@ class ArticleDeleteViewTest(TestCase):
         response = self.client.post(reverse(
             'news-delete', 
             kwargs={"slug": self.article.slug})+"?league=TL", follow=True)
-        
         self.assertRedirects(response, reverse('news-home')+"?league=TL")
-
 
         article_count_del = Article.objects.filter(league=self.league).count()
         self.assertEqual(article_count-1, article_count_del)
+
+    def test_article_delete_redirects(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse(
+            'news-delete', 
+            kwargs={"slug": self.article.slug})+"?league=TL", follow=True)
+        
+        self.assertRedirects(response, reverse('news-home')+"?league=TL")
+
+    def test_article_delete_redirects2(self):
+        """Test redirect without provided league queryset"""
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse(
+            'news-delete', 
+            kwargs={"slug": self.article.slug}), follow=True)
+        
+        self.assertRedirects(response, reverse('news-home')+"?league=TL")
