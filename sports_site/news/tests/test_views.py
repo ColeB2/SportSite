@@ -98,7 +98,7 @@ class ArticleCreateViewTest(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/news/create/article')
         self.assertEqual(response.status_code, 200)
 
@@ -107,18 +107,18 @@ class ArticleCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('news-create'))
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('news-create'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'news/new_article.html')
 
     def test_success_url(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('news-create'))
         self.assertEqual(response.status_code, 200)
 
@@ -155,7 +155,7 @@ class ArticleEditViewTest(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/news/article-title/edit?league=TL')
         self.assertEqual(response.status_code, 200)
 
@@ -165,13 +165,13 @@ class ArticleEditViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
         self.assertEqual(response.status_code, 200)
@@ -179,7 +179,7 @@ class ArticleEditViewTest(TestCase):
 
 
     def test_success_url(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
         self.assertEqual(response.status_code, 200)
@@ -259,13 +259,13 @@ class ArticleDeleteViewTest(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/news/article-title/delete?league=TL')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             'news-delete', kwargs={"slug":"article-title"})+"?league=TL")
         self.assertEqual(response.status_code, 200)
@@ -278,7 +278,7 @@ class ArticleDeleteViewTest(TestCase):
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             'news-delete', kwargs={"slug": self.article.slug})+"?league=TL")
         self.assertEqual(response.status_code, 200)
@@ -286,7 +286,7 @@ class ArticleDeleteViewTest(TestCase):
 
 
     def test_article_delete(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
 
         response = self.client.get(reverse(
             'news-delete', kwargs={"slug": self.article.slug})+"?league=TL")
