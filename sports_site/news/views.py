@@ -111,7 +111,6 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
         if league_slug:
             url = f"/league/?league={league_slug}"
         else:
-            print("league slug not")
             url = f"/league/?league={self.request.user.userprofile.league.url}"
 
         return url
@@ -131,7 +130,6 @@ class ArticleDeleteView(PermissionRequiredMixin, DeleteView):
         if league_slug:
             url = f"/league/?league={league_slug}"
         else:
-            print("league slug not")
             url = f"/league/?league={self.request.user.userprofile.league.url}"
 
         return url
