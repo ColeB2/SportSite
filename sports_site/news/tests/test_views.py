@@ -93,7 +93,7 @@ class ArticleCreateViewTest(TestCase):
     """
     @classmethod
     def setUpTestData(cls):
-        pass
+        cls.league = League.objects.get(id=1)
 
 
     def test_view_url_exists_at_desired_location(self):
@@ -116,25 +116,58 @@ class ArticleCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'news/new_article.html')
 
+    def test_article_create(self):
+        self.client.login(username="Test", password="test")
+        article_len = Article.objects.filter(league=self.league).count()
+
+        post = {
+            "league": self.league,
+            "title": "TitleOne",
+            "body": "Lorem ipsum",
+            "author": "Me"
+            }
+
+        response = self.client.post(reverse("news-create"), 
+            post,
+            follow=True)
+
+        article = Article.objects.get(league=self.league, title=post["title"])
+        self.assertEqual(article.league, self.league)
+        self.assertEqual(article.title, post["title"])
+        self.assertEqual(article.body, post["body"])
+        self.assertEqual(article.author, post["author"])
+
+        article_len_create = Article.objects.filter(league=self.league).count()
+        self.assertEqual(article_len + 1, article_len_create)
+        self.assertRedirects(response, reverse('news-home')+"?league=TL")
+
+
     def test_success_url(self):
         self.client.login(username="Test", password="test")
-        response = self.client.get(reverse('news-create'))
-        self.assertEqual(response.status_code, 200)
 
         post = {"title": "TitleOne",
-                "body": "Lorem ipsum"}
+                "body": "Lorem ipsum",
+                "author": "You"}
 
+        response = self.client.post(reverse('news-create')+"?league=TL",
+            post,
+            follow=True)
 
-        response = self.client.post(
-            '/league/news/create/article', post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        response2 = self.client.get(reverse(
-            'news-detail', kwargs={"slug":"titleone"})+"?league=TL")
-        self.assertEqual(response2.status_code, 200)
+        self.assertRedirects(response, reverse('news-home')+"?league=TL")
 
-        # response = self.client.get(reverse('news-home')+"?league=TL")
-        # self.assertEqual(response.status_code, 200)
-        #self.assertRedirects(response, "/league/?league=TL")
+    def test_success_url2(self):
+        """Tests get_success_url without provided league queryset"""
+        self.client.login(username="Test", password="test")
+
+        post = {"title": "TitleOne",
+                "body": "Lorem ipsum",
+                "author": "You"}
+
+        response = self.client.post(reverse('news-create'),
+            post,
+            follow=True)
+        
+        self.assertRedirects(response, reverse('news-home')+"?league=TL")
 
 
 
