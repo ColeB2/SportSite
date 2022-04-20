@@ -177,7 +177,7 @@ class ArticleEditViewTest(TestCase):
         self.assertTemplateUsed(response, 'news/article_edit.html')
 
 
-    def test_success_url(self):
+    def test_article_edit(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
@@ -197,7 +197,37 @@ class ArticleEditViewTest(TestCase):
         edited_article = Article.objects.all()[0]
         self.assertEqual(edited_article.title, "TitleOne")
 
-        #self.assertRedirects(response, "/league/?league=TL")
+
+    def test_success_url(self):
+        self.client.login(username="Test", password="test")
+
+        post = {"title": "TitleOne",
+                "body": "Lorem ipsum",
+                "author": "You"}
+
+        response = self.client.post(reverse(
+            'news-edit',
+            kwargs={"slug": self.article.slug})+"?league=TL",
+            post,
+            follow=True)
+
+        self.assertRedirects(response, reverse('news-home')+"?league=TL")
+
+    def test_success_url2(self):
+        """Tests get_success_url without provided league queryset"""
+        self.client.login(username="Test", password="test")
+
+        post = {"title": "TitleOne",
+                "body": "Lorem ipsum",
+                "author": "You"}
+
+        response = self.client.post(reverse(
+            'news-edit',
+            kwargs={"slug": self.article.slug})+"?league=TL",
+            post,
+            follow=True)
+        
+        self.assertRedirects(response, reverse('news-home')+"?league=TL")
 
 
 class ArticlesView(TestCase):
@@ -296,7 +326,7 @@ class ArticleDeleteViewTest(TestCase):
         article_count_del = Article.objects.filter(league=self.league).count()
         self.assertEqual(article_count-1, article_count_del)
 
-    def test_article_delete_redirects(self):
+    def test_success_url(self):
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse(
             'news-delete', 
@@ -304,7 +334,7 @@ class ArticleDeleteViewTest(TestCase):
         
         self.assertRedirects(response, reverse('news-home')+"?league=TL")
 
-    def test_article_delete_redirects2(self):
+    def test_success_url2(self):
         """Test redirect without provided league queryset"""
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse(
