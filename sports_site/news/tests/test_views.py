@@ -223,7 +223,7 @@ class ArticleEditViewTest(TestCase):
 
         response = self.client.post(reverse(
             'news-edit',
-            kwargs={"slug": self.article.slug})+"?league=TL",
+            kwargs={"slug": self.article.slug}),
             post,
             follow=True)
         
