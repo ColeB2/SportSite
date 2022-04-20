@@ -21,6 +21,8 @@ def home(request):
         league=league).order_by('-id')[:10]
 
     """Leaders"""
+    #.first() --> bandaid fix for objects.get returning none.
+    #Should only be 1 featuerd season anyways, so currently works.
     featured_stage = SeasonStage.objects.filter(season__league=league,
                                              featured=True).first()
     qs = PlayerHittingGameStats.objects.filter(
