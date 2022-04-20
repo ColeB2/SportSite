@@ -51,6 +51,13 @@ class HomeViewTest(TestCase):
         print(f"ToDo: news, test_views stats context")
 
 
+    def test_league_no_stats(self):
+        """Tests what happens for a leagues homepage with nothing created"""
+        League.objects.create(name="T", url="TT")
+        response = self.client.get(reverse('news-home')+"?league=TT")
+        self.assertEqual(response.status_code, 200)
+
+
 class NewsDetailTest(TestCase):
     """
     Tests news_detail from news/views.py

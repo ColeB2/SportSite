@@ -21,11 +21,12 @@ def home(request):
         league=league).order_by('-id')[:10]
 
     """Leaders"""
-    featured_stage = SeasonStage.objects.get(season__league=league,
-                                             featured=True)
+    featured_stage = SeasonStage.objects.filter(season__league=league,
+                                             featured=True).first()
     qs = PlayerHittingGameStats.objects.filter(
             player__player__league=league,
             season=featured_stage)
+
     stats = get_stats(qs, "hitting_league_leaders")
     if stats:
         avg = stats.order_by('-average')[0]
