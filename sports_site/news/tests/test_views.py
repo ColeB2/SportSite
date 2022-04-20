@@ -46,7 +46,7 @@ class HomeViewTest(TestCase):
         self.assertQuerysetEqual(league_articles, response.context["articles"])
         self.assertQuerysetEqual(
             schedule, response.context["schedule"], ordered=False)
-        #TodoStats:
+        #Todo Stats:
         # print(response.context["stats"])
         print(f"ToDo: news, test_views stats context")
 
