@@ -9,6 +9,7 @@ from stats.models import (PlayerHittingGameStats, PlayerPitchingGameStats,
 
 class MyMixinRunner(object):
     def setup_databases(self, *args, **kwargs):
+        print(f"=======SETTING UP DB=======")
         temp_return = super(MyMixinRunner, self).setup_databases(*args, **kwargs)
         user = User.objects.create(username="Test", email="test@email.com")
 
