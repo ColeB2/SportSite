@@ -45,10 +45,10 @@ urlpatterns = [
         views.league_admin_schedule_delete_info_view,
         name='league-admin-schedule-delete-info'),
     
-    path('schedule/<int:season_year>/stages/<season_stage_pk>/<game_pk>/edit',
+    path('schedule/<int:season_year>/stages/<int:season_stage_pk>/<int:game_pk>/edit',
         views.league_admin_edit_game_view,
         name='league-admin-game-edit'),
-    path('schedule/<int:season_year>/stages/<season_stage_pk>/<game_pk>/delete',
+    path('schedule/<int:season_year>/stages/<int:season_stage_pk>/<int:game_pk>/delete',
         views.league_admin_delete_game_info_view,
         name='league-admin-game-delete'),
 
