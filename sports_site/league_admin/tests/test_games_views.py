@@ -26,39 +26,44 @@ class LAEditGameViewTest(TestCase):
     def test_view_accessible_by_name(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-game-edit',
-            kwargs={"season_year": 2022, "season_stage_pk": 1, "game_pk":1}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3, "game_pk":1}))
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-game-edit',
-            kwargs={"season_year": 2022, "season_stage_pk": 1, "game_pk":1}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3, "game_pk":1}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "league_admin/game_templates/game_edit.html")
 
     def test_context(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-game-edit',
-            kwargs={"season_year": 2022, "season_stage_pk": 1, "game_pk":1}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3, "game_pk":1}))
         self.assertEqual(response.status_code, 200)
 
         game = Game.objects.get(id=1)
         self.assertEqual(response.context["game_instance"], game)
         self.assertEqual(response.context["season_year"], 2022)
-        self.assertEqual(response.context["season_stage_pk"], "1")
+        self.assertEqual(response.context["season_stage_pk"], 3)
         self.assertTrue(response.context["form"] is not None)
         #More Form Tests context?
 
     def test_game_edit(self):
-        game_data = {"year": 2022, "season_stage_pk": 1, "game_pk": 1}
+        game_data = {"year": 2022, "season_stage_pk": 3, "game_pk": 1}
         game = Game.objects.get(pk=game_data["game_pk"])
         print(game)
         print(Game.objects.all())
+        print(game.home_team, game.date, game.location, game.start_time)
+        print(game.date.year)
+        print(game.season)
+        print(game.home_team.season)
 
         post = {"home_team": game.home_team, "away_team":game.away_team,
-            "location": game.location, "date": game.date,
-            "start_time":game.start_time, "stats_entered": True,
-            "home_score":10, "away_score": 0}
+            "location": game.location, 
+            "start_time": game.start_time, 
+            "home_score":9}
+
 
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse(
@@ -69,33 +74,37 @@ class LAEditGameViewTest(TestCase):
                 "game_pk": game_data["game_pk"]}),
             post,
             follow=True)
+        
+        game1, game2 = Game.objects.all()
+        print(game1.home_score, game2.home_score)
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{game} changed.')
 
         game = Game.objects.get(pk=1)
         print(game.home_score)
         print(Game.objects.all())
 
-        self.assertRedirects(response, reverse("league-admin-schedule",
-            kwargs={"season_year": 2022, "season_stage_pk": 1}))
-
-        self.assertTrue(False == True)
-
 
     def test_redirects(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-game-edit',
-            kwargs={"season_year": 2022, "season_stage_pk": 1, "game_pk":1}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3, "game_pk":1}))
         self.assertEqual(response.status_code, 200)
 
         post = {"home_score":10, "away_score": 0}
 
         response = self.client.post(reverse(
             'league-admin-game-edit',
-            kwargs={"season_year": 2022, "season_stage_pk": 1, "game_pk":1}),
+            kwargs={"season_year": 2022, "season_stage_pk": 3, "game_pk":1}),
             post,
             follow=True)
 
+
         self.assertRedirects(response, reverse("league-admin-schedule",
-            kwargs={"season_year": 2022, "season_stage_pk": 1}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
 
 
 
@@ -150,7 +159,7 @@ class LADeleteGameInfoViewTest(TestCase):
         # game = Game.objects.get(id=1)
         self.assertEqual(response.context["game"], self.game)
         self.assertEqual(response.context["season_year"], int(self.stage.season.year))
-        self.assertEqual(response.context["season_stage_pk"], str(self.stage.pk))
+        self.assertEqual(response.context["season_stage_pk"], self.stage.pk)
         self.assertTrue(response.context["nested_object"] is not None)
         #More nested_obj Tests?
 
