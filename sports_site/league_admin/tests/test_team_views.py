@@ -221,7 +221,7 @@ class LATeamSelectViewTest(TestCase):
 
 
 
-class LATeamSelectViewTest(TestCase):
+class LATeamTeamInfoTest(TestCase):
     """
     Tests league_admin_team_info_view
         from league_admin/views/team_views.py
@@ -281,7 +281,7 @@ class LATeamSelectViewTest(TestCase):
             ordered=False)
 
 
-class LATeamSelectViewTest(TestCase):
+class LATeamDeleteInfoViewTest(TestCase):
     """
     Tests league_admin_team_delete_info_view
         from league_admin/views/team_views.py
