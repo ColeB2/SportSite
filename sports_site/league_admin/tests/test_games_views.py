@@ -131,7 +131,8 @@ class LAEditGameViewTest(TestCase):
 
 class LADeleteGameInfoViewTest(TestCase):
     """
-    Tests league_admin_delete_game_info_view from league_admin/views/game_views.py
+    Tests league_admin_delete_game_info_view 
+        from league_admin/views/game_views.py
 
     'schedule/<int:season_year>/stages/<season_stage_pk>/<game_pk>/delete'
     'league-admin-game-delete'
@@ -144,42 +145,56 @@ class LADeleteGameInfoViewTest(TestCase):
         cls.home = TeamSeason.objects.get(id=1)
         cls.away = TeamSeason.objects.get(id=2)
         gdate = datetime.date(2022, 3, 15)
-        cls.game = Game.objects.create(season=cls.stage, home_team=cls.home, away_team=cls.away, date=gdate)
+        cls.game = Game.objects.create(
+            season=cls.stage,
+            home_team=cls.home,
+            away_team=cls.away,
+            date=gdate)
 
     def test_view_without_logging_in(self):
-        response = self.client.get('/league/admin/schedule/2022/stages/1/1/delete')
+        response = self.client.get(
+            '/league/admin/schedule/2022/stages/1/1/delete')
         self.assertEqual(response.status_code, 302)
 
     def test_view_url_exists_at_desired_location(self):
         self.client.login(username="Test", password="test")
-        response = self.client.get('/league/admin/schedule/2022/stages/1/1/delete')
+        response = self.client.get(
+            '/league/admin/schedule/2022/stages/1/1/delete')
         self.assertEqual(response.status_code, 200)
 
     def test_view_accessible_by_name(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-game-delete',
-            kwargs={"season_year": self.stage.season.year,
-                    "season_stage_pk": self.stage.pk, "game_pk": self.game.pk}))
+            kwargs={
+                "season_year": self.stage.season.year,
+                "season_stage_pk": self.stage.pk,
+                "game_pk": self.game.pk}))
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-game-delete',
-            kwargs={"season_year": self.stage.season.year,
-                    "season_stage_pk": self.stage.pk, "game_pk": self.game.pk}))
+            kwargs={
+                "season_year": self.stage.season.year,
+                "season_stage_pk": self.stage.pk,
+                "game_pk": self.game.pk}))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "league_admin/game_templates/game_delete.html")
+        self.assertTemplateUsed(response,
+            "league_admin/game_templates/game_delete.html")
 
     def test_context(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-game-delete',
-            kwargs={"season_year": self.stage.season.year,
-                    "season_stage_pk": self.stage.pk, "game_pk": self.game.pk}))
+            kwargs={
+                "season_year": self.stage.season.year,
+                "season_stage_pk": self.stage.pk,
+                "game_pk": self.game.pk}))
         self.assertEqual(response.status_code, 200)
 
         # game = Game.objects.get(id=1)
         self.assertEqual(response.context["game"], self.game)
-        self.assertEqual(response.context["season_year"], int(self.stage.season.year))
+        self.assertEqual(response.context["season_year"],
+            int(self.stage.season.year))
         self.assertEqual(response.context["season_stage_pk"], self.stage.pk)
         self.assertTrue(response.context["nested_object"] is not None)
         #More nested_obj Tests?
@@ -189,8 +204,10 @@ class LADeleteGameInfoViewTest(TestCase):
 
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse('league-admin-game-delete',
-            kwargs={"season_year": self.stage.season.year,
-                    "season_stage_pk": self.stage.pk, "game_pk": self.game.pk}),
+            kwargs={
+                "season_year": self.stage.season.year,
+                "season_stage_pk": self.stage.pk,
+                "game_pk": self.game.pk}),
             follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -208,8 +225,10 @@ class LADeleteGameInfoViewTest(TestCase):
     def test_redirects(self):
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse('league-admin-game-delete',
-            kwargs={"season_year": self.stage.season.year,
-                    "season_stage_pk": self.stage.pk, "game_pk": self.game.pk}),
+            kwargs={
+                "season_year": self.stage.season.year,
+                "season_stage_pk": self.stage.pk,
+                "game_pk": self.game.pk}),
             follow=True)
         self.assertEqual(response.status_code, 200)
 
