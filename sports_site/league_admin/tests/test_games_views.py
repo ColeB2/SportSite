@@ -143,7 +143,7 @@ class LADeleteGameInfoViewTest(TestCase):
         cls.stage = SeasonStage.objects.get(id=1)
         cls.home = TeamSeason.objects.get(id=1)
         cls.away = TeamSeason.objects.get(id=2)
-        gdate = datetime.datetime(2022, 3, 15)
+        gdate = datetime.date(2022, 3, 15)
         cls.game = Game.objects.create(season=cls.stage, home_team=cls.home, away_team=cls.away, date=gdate)
 
     def test_view_without_logging_in(self):
@@ -183,4 +183,38 @@ class LADeleteGameInfoViewTest(TestCase):
         self.assertEqual(response.context["season_stage_pk"], self.stage.pk)
         self.assertTrue(response.context["nested_object"] is not None)
         #More nested_obj Tests?
+
+    def test_delete(self):
+        games_count = Game.objects.filter(season=self.stage).count()
+
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('league-admin-game-delete',
+            kwargs={"season_year": self.stage.season.year,
+                    "season_stage_pk": self.stage.pk, "game_pk": self.game.pk}),
+            follow=True)
+        self.assertEqual(response.status_code, 200)
+
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{self.game} and all related objects were deleted.')
+
+        games_count_del = Game.objects.filter(season=self.stage).count()
+
+        self.assertEqual(games_count-1, games_count_del)
+
+
+    def test_redirects(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('league-admin-game-delete',
+            kwargs={"season_year": self.stage.season.year,
+                    "season_stage_pk": self.stage.pk, "game_pk": self.game.pk}),
+            follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertRedirects(response, reverse("league-admin-schedule", 
+            kwargs={
+                "season_year": self.game.date.year,
+                "season_stage_pk": self.stage.pk}))
 
