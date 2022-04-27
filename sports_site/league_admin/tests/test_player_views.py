@@ -19,19 +19,19 @@ class LAPlayerCreateView(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/players/add')
         self.assertEqual(response.status_code, 200)
 
     
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-create"))
         self.assertEqual(response.status_code, 200)
 
     
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-create"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
@@ -39,7 +39,7 @@ class LAPlayerCreateView(TestCase):
 
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-create"))
         self.assertEqual(response.status_code, 200)
 
@@ -72,19 +72,19 @@ class LAPlayerSelectViewTest(TestCase):
 
     
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/players/')
         self.assertEqual(response.status_code, 200)
     
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-select"))
         self.assertEqual(response.status_code, 200)
 
     
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-select"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
@@ -92,7 +92,7 @@ class LAPlayerSelectViewTest(TestCase):
 
     
     def test_pagination_is_ten(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-select"))
         self.assertEqual(response.status_code, 200)
         # self.assertTrue("is_paginated" in response.context)
@@ -103,7 +103,7 @@ class LAPlayerSelectViewTest(TestCase):
 
 
     def test_pagination_page_2(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-select")+"?page=2")
         self.assertEqual(response.status_code, 200)
         # self.assertTrue("paginator" in response.context)
@@ -113,7 +113,7 @@ class LAPlayerSelectViewTest(TestCase):
         self.assertEqual(len(response.context['all_players']), 5)
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-select"))
         self.assertEqual(response.status_code, 200)
         
@@ -139,20 +139,20 @@ class LAPlayerEditViewTest(TestCase):
 
     
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/players/1/edit')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-edit",
             kwargs={"player_pk": 1}))
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-edit",
             kwargs={"player_pk": 1}))
         self.assertEqual(response.status_code, 200)
@@ -161,7 +161,7 @@ class LAPlayerEditViewTest(TestCase):
 
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-edit",
             kwargs={"player_pk": 1}))
         self.assertEqual(response.status_code, 200)
@@ -171,7 +171,7 @@ class LAPlayerEditViewTest(TestCase):
 
 
     def test_redirect(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-edit",
             kwargs={"player_pk": 1}))
         self.assertEqual(response.status_code, 200)
@@ -208,20 +208,20 @@ class LAPlayerDeleteInfoViewTest(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/players/1/delete')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-delete",
             kwargs={"player_pk": 1}))
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-delete",
             kwargs={"player_pk": 1}))
         self.assertEqual(response.status_code, 200)
@@ -230,7 +230,7 @@ class LAPlayerDeleteInfoViewTest(TestCase):
 
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-delete",
             kwargs={"player_pk": 1}))
         self.assertEqual(response.status_code, 200)
@@ -247,7 +247,7 @@ class LAPlayerDeleteInfoViewTest(TestCase):
         len_player = len(Player.objects.all())
         
 
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-delete",
             kwargs={"player_pk": player.pk}))
         self.assertEqual(response.status_code, 200)
