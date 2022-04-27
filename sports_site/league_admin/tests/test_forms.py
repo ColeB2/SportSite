@@ -46,15 +46,20 @@ class EditGameFormTest(TestCase):
 
 
     def test_forms(self):
-        t1 = TeamSeason.objects.get(id="1")
-        t2 = TeamSeason.objects.get(id="2")
+        t1 = TeamSeason.objects.get(id=1)
+        t2 = TeamSeason.objects.get(id=2)
         date = datetime.datetime(2022, 5, 11)
         time = datetime.time(17, 00)
+
+        # game = Game.objects.create(
+        #     season=t1.season, home_team=t1, away_team=t2, date=date
+        # )
+        game=Game.objects.get(id=1)
 
         form_data = {"home_team": t1, "away_team": t2,
             "date": date, "start_time": time, "home_score": 99, "away_score": 0}
 
-        form = EditGameForm(data=form_data)
+        form = EditGameForm(data=form_data, instance=game)
         self.assertTrue(form.is_valid())
 
 

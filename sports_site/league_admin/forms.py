@@ -152,6 +152,7 @@ class EditGameForm(forms.ModelForm):
         super(EditGameForm, self).__init__(*args, **kwargs)
 
         self.helper = FormHelper()
+        self.helper.form_tag = False
         self.helper.layout = Layout(
             Row(
                 Column("home_team", css_class="form-group col-md-4"),
@@ -176,14 +177,14 @@ class EditGameForm(forms.ModelForm):
                 ),
             )
 
-        self.helper.form_method = 'post'
-        self.helper.layout.append(HTML("""
-            <input type="submit" value="Save" class="btn btn-primary">
+        # self.helper.form_method = 'post'
+        # self.helper.layout.append(HTML("""
+        #     <input type="submit" value="Save" class="btn btn-primary">
 
-            <a class="btn btn-danger"
-                href="{% url 'league-admin-game-delete' season_year season_stage_pk game_instance.pk  %}">
-                Delete {{game_instance}}
-            </a>"""))
+        #     <a class="btn btn-danger"
+        #         href="{% url 'league-admin-game-delete' season_year season_stage_pk game_instance.pk  %}">
+        #         Delete {{game_instance}}
+        #     </a>"""))
 
 
     def process(self):
