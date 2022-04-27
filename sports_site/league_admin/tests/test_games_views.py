@@ -53,16 +53,16 @@ class LAEditGameViewTest(TestCase):
         """Current Ssetup un testable? --> Works for use, not for automated
         testing"""
         
-        """
-        game_data = {"year": 2022, "season_stage_pk": 3, "game_pk": 1}
+        
+        """game_data = {"year": 2022, "season_stage_pk": 3, "game_pk": 1}
         game = Game.objects.get(pk=game_data["game_pk"])
 
-        post = {"home_team": game.home_team, "away_team":game.away_team,
-            "location": game.location, 
-            "date_year": game.date.year,
-            "date_month": game.date.month,
-            "date_day": game.date.day,
-            "home_score":9, "away_score": 3}
+        # post = {"home_team": game.home_team, "away_team":game.away_team,
+        #     "location": game.location, 
+        #     "date_year": game.date.year,
+        #     "date_month": game.date.month,
+        #     "date_day": game.date.day,
+        #     "home_score":9, "away_score": 3}
 
         # post = {"home_team": game.home_team, "away_team":game.away_team,
         #     "location": game.location, 
@@ -70,31 +70,24 @@ class LAEditGameViewTest(TestCase):
         #     "start_time": game.start_time, 
         #     "home_score":9, "away_score": 3}
         
-        # t1 = TeamSeason.objects.get(id="1")
-        # t2 = TeamSeason.objects.get(id="2")
+        t1 = TeamSeason.objects.get(id="1")
+        t2 = TeamSeason.objects.get(id="2")
         # time = datetime.time(17, 00, 00)
 
         # date = datetime.date(2022, 5,18)
-        # # post = {"home_team": t1, "away_team":t2,
-        # #     "location": game.location, 
-        # #     "date": date,
-        # #     "start_time": game.start_time, 
-        # #     "home_score":9, "away_score": 3}
+        post = {"home_team": t1, "away_team":t2,
+            "location": game.location, 
+            "date_year": 2022,
+            "date_month": 4,
+            "date_day": 27,
+            "start_time": game.start_time, 
+            "home_score":9, "away_score": 3}
 
         # post = {"home_team": t1, "away_team": t2, "date_year": date.year,
         #     "date_month": date.month, "date_day": date.day,
         #     "start_time": time, "home_score": 99, "away_score": 0}
 
 
-        self.client.login(username="Test", password="test")
-        # response = self.client.post(reverse(
-        #     'league-admin-game-edit',
-        #     kwargs={
-        #         "season_year": game_data["year"], 
-        #         "season_stage_pk": game_data["season_stage_pk"], 
-        #         "game_pk": game_data["game_pk"]}),
-        #     post,
-        #     follow=True)
 
         response = self.client.post(reverse('league-admin-game-edit',
             kwargs={
@@ -103,11 +96,9 @@ class LAEditGameViewTest(TestCase):
                 "game_pk": game.pk}),
                 post, follow=True)
 
-        print(response.request)
 
-        print(response.context["stage"])
         game1, game2 = Game.objects.all()
-        print(game1.home_score, game2.home_score)
+        print(game1.home_score, game1.away_score)
 
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
@@ -116,8 +107,8 @@ class LAEditGameViewTest(TestCase):
 
         game = Game.objects.get(pk=1)
         print(game.home_score)
-        print(Game.objects.all())
-        """
+        print(Game.objects.all())"""
+        
         
 
 
