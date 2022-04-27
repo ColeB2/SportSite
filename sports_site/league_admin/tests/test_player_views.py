@@ -47,6 +47,37 @@ class LAPlayerCreateView(TestCase):
         self.assertEqual(response.context["league"], league)
         self.assertTrue(response.context["form"] is not None)
 
+    def test_create_player(self):
+        first = "Firsty"
+        last = "McLasty"
+        post = {"first_name": first, "last_name": last}
+        league = League.objects.get(id=1)
+        player_len1 = Player.objects.filter(league=league).count()
+
+        self.client.login(username="Test", password="test")
+        self.client.post(reverse("league-admin-player-create"),
+            data=post,
+            follow=True)
+
+        player_len2 = Player.objects.filter(league=league).count()
+        self.assertEqual(player_len2-1, player_len1)
+
+        player = Player.objects.get(first_name="Firsty")
+        self.assertEqual(player.first_name, first)
+        self.assertEqual(player.last_name, last)
+
+    
+    def test_redirects(self):
+        post = {"first_name": "Firsty", "last_name": "McLasty"}
+        
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse("league-admin-player-create"),
+            data=post,
+            follow=True)
+
+        self.assertRedirects(response, reverse("league-admin-dashboard"))
+
+
 
 class LAPlayerSelectViewTest(TestCase):
     """
