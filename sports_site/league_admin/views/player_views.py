@@ -30,8 +30,10 @@ def league_admin_player_create_view(request):
         "form": form,
         "league": league,
     }
-    return render(request, "league_admin/player_templates/player_create.html",
-                  context)
+    return render(
+        request,
+        "league_admin/player_templates/player_create.html",
+        context)
 
 
 @permission_required('league.league_admin')
@@ -58,8 +60,10 @@ def league_admin_player_select_view(request):
         "league": league,
         }
 
-    return render(request, "league_admin/player_templates/player_select.html",
-                  context)
+    return render(
+        request,
+        "league_admin/player_templates/player_select.html",
+        context)
 
 
 @permission_required('league.league_admin')
@@ -81,8 +85,10 @@ def league_admin_player_edit_view(request, player_pk):
         "form":form,
         "player_instance":player_instance,
         }
-    return render(request, "league_admin/player_templates/player_edit.html",
-                  context)
+    return render(
+        request,
+        "league_admin/player_templates/player_edit.html",
+        context)
 
 
 @permission_required('league.league_admin')
@@ -97,12 +103,14 @@ def league_admin_player_delete_info_view(request, player_pk):
     if request.method == 'POST':
         player.delete()
         messages.success(request,
-                         f"{player} and all releated object were deleted")
+                         f"{player} and all related objects were deleted.")
         return redirect('league-admin-player-select')
 
     context = {
         'player':player,
         'nested_object':nested_object,
     }
-    return render(request, "league_admin/player_templates/player_delete.html",
-                  context)
+    return render(
+        request,
+        "league_admin/player_templates/player_delete.html",
+        context)
