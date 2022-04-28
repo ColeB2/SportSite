@@ -127,8 +127,6 @@ class LAPlayerSelectViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-select"))
         self.assertEqual(response.status_code, 200)
-        # self.assertTrue("is_paginated" in response.context)
-        # self.assertTrue(response.context["is_paginated"] == True)
         self.assertTrue(response.context["paginator"] is not None)
         context_len = len(response.context["all_players"])
         self.assertEqual(context_len, 25)
@@ -138,8 +136,6 @@ class LAPlayerSelectViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-select")+"?page=2")
         self.assertEqual(response.status_code, 200)
-        # self.assertTrue("paginator" in response.context)
-        # self.assertTrue(response.context["paginator"] == True)
         #Initially created 2 players, 3 + 2 left for 2nd page
         self.assertTrue(response.context["paginator"] is not None)
         page_2 = self.num_players + 2 - 25
