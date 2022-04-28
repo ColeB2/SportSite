@@ -189,14 +189,14 @@ class LAPlayerEditViewTest(TestCase):
     def test_view_accessible_by_name(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-edit",
-            kwargs={"player_pk": 1}))
+            kwargs={"player_pk": self.player.pk}))
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_uses_correct_template(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-edit",
-            kwargs={"player_pk": 1}))
+            kwargs={"player_pk": self.player.pk}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             "league_admin/player_templates/player_edit.html")
@@ -205,11 +205,11 @@ class LAPlayerEditViewTest(TestCase):
     def test_context(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-player-edit",
-            kwargs={"player_pk": 1}))
+            kwargs={"player_pk": self.player.pk}))
         self.assertEqual(response.status_code, 200)
 
         self.assertTrue(response.context["form"] is not None)
-        self.assertTrue(response.context["player_instance"].pk == 1)
+        self.assertTrue(response.context["player_instance"].pk == self.player.pk)
 
 
     def test_edit_player(self):
