@@ -2,7 +2,7 @@ from datetime import datetime
 from django.test import TestCase
 from django.urls import reverse
 
-from league.models import Game, League, SeasonStage, TeamSeason
+from league.models import Game, League, SeasonStage
 
 
 class LAScheduleSelectViewTest(TestCase):
@@ -20,19 +20,19 @@ class LAScheduleSelectViewTest(TestCase):
 
     
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/schedule/')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-schedule-select"))
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-schedule-select"))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
@@ -40,7 +40,7 @@ class LAScheduleSelectViewTest(TestCase):
 
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-schedule-select"))
         self.assertEqual(response.status_code, 200)
 
@@ -66,13 +66,13 @@ class LAScheduleViewTest(TestCase):
 
     
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/schedule/2022/stages/3')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -80,7 +80,7 @@ class LAScheduleViewTest(TestCase):
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -90,7 +90,7 @@ class LAScheduleViewTest(TestCase):
 
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -123,13 +123,13 @@ class LAScheduleCreateViewTest(TestCase):
 
     
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/schedule/2022/stages/3/create')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-create",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -137,7 +137,7 @@ class LAScheduleCreateViewTest(TestCase):
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-create",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -147,7 +147,7 @@ class LAScheduleCreateViewTest(TestCase):
 
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-create",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -161,7 +161,7 @@ class LAScheduleCreateViewTest(TestCase):
 
 
     def test_success_url(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-create",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -197,13 +197,13 @@ class LAScheduleDeleteInfoViewTest(TestCase):
 
     
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/schedule/2022/stages/3/delete')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-delete-info",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -211,7 +211,7 @@ class LAScheduleDeleteInfoViewTest(TestCase):
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-delete-info",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -221,7 +221,7 @@ class LAScheduleDeleteInfoViewTest(TestCase):
 
     
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-delete-info",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}))
@@ -243,7 +243,7 @@ class LAScheduleDeleteInfoViewTest(TestCase):
 
     def test_delete(self):
         self.assertTrue(Game.objects.all().count() != 0)
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.post(reverse(
             "league-admin-schedule-delete-info",
             kwargs={"season_year": 2022, "season_stage_pk": "3"}), follow=True)
