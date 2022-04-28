@@ -160,10 +160,21 @@ class LAPlayerEditViewTest(TestCase):
     """
     Test league_admin_player_edit_view from league_admin/views/player_views.py
     
-    'players/<player_pk>/edit',
+    'players/<int:player_pk>/edit',
     views.league_admin_player_edit_view,
     name='league-admin-player-edit')
     """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.league = League.objects.get(id = 1)
+        cls.player = Player.objects.create(
+            league=cls.league,
+            first_name="Last",
+            last_name="Lasty")
+        
+        return super().setUpTestData()
+    
+    
     def test_view_without_logging_in(self):
         response = self.client.get('/league/admin/players/1/edit')
         self.assertEqual(response.status_code, 302)
@@ -201,27 +212,30 @@ class LAPlayerEditViewTest(TestCase):
         self.assertTrue(response.context["player_instance"].pk == 1)
 
 
+    def test_edit_player(self):
+        post = {"first_name": "Last", "last_name": "McLasterson"}
+
+        self.client.login(username="Test", password="test")
+        self.client.post(reverse("league-admin-player-edit",
+            kwargs={"player_pk": self.player.pk}),
+            post,
+            follow=True)
+
+        edited_player = Player.objects.get(pk=self.player.pk)
+        self.assertTrue(edited_player.first_name == "Last")
+        self.assertTrue(edited_player.last_name == "McLasterson")
+
+
+
     def test_redirect(self):
         self.client.login(username="Test", password="test")
-        response = self.client.get(reverse("league-admin-player-edit",
-            kwargs={"player_pk": 1}))
-        self.assertEqual(response.status_code, 200)
-
-        l = League.objects.get(id=1)
-        player_ed = Player.objects.create(
-            league= l, first_name="Last",last_name="Lasty")
-        player_ed.save()
         post = {"first_name": "Last", "last_name": "McLasterson"}
         resp = self.client.post(reverse("league-admin-player-edit",
-            kwargs={"player_pk": str(player_ed.pk)} ),
+            kwargs={"player_pk": self.player.pk} ),
             post,
             follow=True)
 
         self.assertRedirects(resp, reverse("league-admin-player-select"))
-        self.assertEqual(resp.status_code, 200)
-        edited_player = Player.objects.get(pk=player_ed.pk)
-        self.assertTrue(edited_player.first_name == "Last")
-        self.assertTrue(edited_player.last_name == "McLasterson")
 
 
 class LAPlayerDeleteInfoViewTest(TestCase):
