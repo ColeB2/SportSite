@@ -90,8 +90,9 @@ class LAPlayerSelectViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.league = League.objects.get(id=1)
-        for i in range(28):
-            player = Player.objects.create(
+        cls.num_players = 28
+        for _ in range(cls.num_players):
+            Player.objects.create(
                 league=cls.league,
                 first_name="Firsty",
                 last_name="McFirsterson")
@@ -141,7 +142,29 @@ class LAPlayerSelectViewTest(TestCase):
         # self.assertTrue(response.context["paginator"] == True)
         #Initially created 2 players, 3 + 2 left for 2nd page
         self.assertTrue(response.context["paginator"] is not None)
-        self.assertEqual(len(response.context['all_players']), 5)
+        page_2 = self.num_players + 2 - 25
+        self.assertEqual(len(response.context['all_players']), page_2)
+
+
+    def test_pagination_page_not_integer(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-select")+"?page=X")
+        self.assertEqual(response.status_code, 200)
+        #should land us on page 1 if pass non integer query param.
+        self.assertTrue(response.context["paginator"] is not None)
+        context_len = len(response.context["all_players"])
+        self.assertEqual(context_len, 25)
+
+
+    def test_pagination_empty_page(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse("league-admin-player-select")+"?page=9")
+        self.assertEqual(response.status_code, 200)
+        
+        #should land us on last page if pass number that holds no data
+        self.assertTrue(response.context["paginator"] is not None)
+        page_2 = self.num_players + 2 - 25
+        self.assertEqual(len(response.context['all_players']), page_2)
 
     def test_context(self):
         self.client.login(username="Test", password="test")
