@@ -75,7 +75,7 @@ class LAScheduleViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
 
 
@@ -83,7 +83,7 @@ class LAScheduleViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             "league_admin/schedule_templates/schedule_view.html")
@@ -93,14 +93,14 @@ class LAScheduleViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
 
         stage = SeasonStage.objects.get(pk=3)
-        schedule = Game.objects.filter(season__pk="3")
+        schedule = Game.objects.filter(season__pk=3)
 
         self.assertEqual(response.context["season_year"], 2022)
-        self.assertEqual(response.context["season_stage_pk"],"3")
+        self.assertEqual(response.context["season_stage_pk"], 3)
         self.assertEqual(response.context["stage"],stage)
         self.assertQuerysetEqual(
             response.context["schedule"],
@@ -132,7 +132,7 @@ class LAScheduleCreateViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-create",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
 
 
@@ -140,7 +140,7 @@ class LAScheduleCreateViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-create",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             "league_admin/schedule_templates/schedule_create.html")
@@ -150,26 +150,30 @@ class LAScheduleCreateViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-create",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
 
         stage = SeasonStage.objects.get(pk=3)
-        schedule = Game.objects.filter(season__pk="3")
+        schedule = Game.objects.filter(season__pk= 3)
 
         self.assertTrue(response.context["formset"] is not None)
         self.assertEqual(response.context["current_stage"], stage)
 
 
-    def test_success_url(self):
+    def test_create_games(self):
+        pass
+
+
+    def test_redirects(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-create",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
 
         resp = self.client.post(reverse(
                 "league-admin-schedule-create",
-                kwargs={"season_year": 2022, "season_stage_pk": "3"}),
+                kwargs={"season_year": 2022, "season_stage_pk": 3}),
             {},
             follow=True,
             extra={"create":"create"})
@@ -177,9 +181,12 @@ class LAScheduleCreateViewTest(TestCase):
         # print(resp)
         # self.assertRedirects(resp, reverse(
         #     "league-admin-schedule",
-        #     kwargs={"season_year": 2022, "season_stage_pk": "3"})
+        #     kwargs={"season_year": 2022, "season_stage_pk": 3})
         # )
         ##ToDo Figure out success url redirects.
+
+
+    
 
 
 class LAScheduleDeleteInfoViewTest(TestCase):
@@ -206,7 +213,7 @@ class LAScheduleDeleteInfoViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-delete-info",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
 
 
@@ -214,7 +221,7 @@ class LAScheduleDeleteInfoViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-delete-info",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             "league_admin/schedule_templates/schedule_delete.html")
@@ -224,15 +231,15 @@ class LAScheduleDeleteInfoViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
             "league-admin-schedule-delete-info",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
 
         stage = SeasonStage.objects.get(pk=3)
-        schedule = Game.objects.filter(season__pk="3")
+        schedule = Game.objects.filter(season__pk=3)
         games = stage.game_set.all()
 
         self.assertEqual(response.context["season_year"], 2022)
-        self.assertEqual(response.context["season_stage_pk"],"3")
+        self.assertEqual(response.context["season_stage_pk"],3)
         self.assertEqual(response.context["stage"],stage)
         self.assertQuerysetEqual(
             response.context["games"],
@@ -246,11 +253,11 @@ class LAScheduleDeleteInfoViewTest(TestCase):
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse(
             "league-admin-schedule-delete-info",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}), follow=True)
+            kwargs={"season_year": 2022, "season_stage_pk": 3}), follow=True)
         self.assertRedirects(response,
             reverse(
             "league-admin-schedule",
-            kwargs={"season_year": 2022, "season_stage_pk": "3"}))
+            kwargs={"season_year": 2022, "season_stage_pk": 3}))
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Game.objects.all().count() == 0)
 
