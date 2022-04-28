@@ -209,7 +209,7 @@ class LAPlayerEditViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertTrue(response.context["form"] is not None)
-        self.assertTrue(response.context["player_instance"].pk == self.player.pk)
+        self.assertEqual(response.context["player_instance"].pk, self.player.pk)
 
 
     def test_edit_player(self):
