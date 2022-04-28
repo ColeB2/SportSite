@@ -102,7 +102,7 @@ def league_admin_schedule_delete_info_view(request, season_year,
         for game in games:
             game.delete()
             messages.success(request,
-                             f"{game} and all releated object were deleted")
+                             f"{game} and all related objects were deleted.")
         return redirect('league-admin-schedule', season_year, season_stage_pk)
 
     context = {
