@@ -75,7 +75,7 @@ class LAPlayerCreateView(TestCase):
             data=post,
             follow=True)
 
-        self.assertRedirects(response, reverse("league-admin-dashboard"))
+        self.assertRedirects(response, reverse("league-admin-player-select"))
 
 
 

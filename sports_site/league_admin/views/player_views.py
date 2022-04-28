@@ -21,7 +21,7 @@ def league_admin_player_create_view(request):
             new_player = form.process(league=league)
             messages.success(request, f"{new_player} created.")
 
-        return redirect('league-admin-dashboard')
+        return redirect('league-admin-player-select')
 
     else:
         form = PlayerCreateForm()
