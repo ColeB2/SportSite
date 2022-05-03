@@ -114,7 +114,7 @@ def league_admin_season_stage_delete_info_view(request, season_year, season_pk,
     if request.method == 'POST':
         stage.delete()
         messages.success(request,
-                         f"{stage} and all releated object were deleted")
+                         f"{stage} and all related objects were deleted.")
         return redirect('league-admin-season-stage', season_year, season_pk)
 
     context = {
@@ -149,10 +149,10 @@ def league_admin_season_stage_add_teams_view(request, season_year, season_pk,
 
                 if new_teamseason:
                     if created:
-                        messages.success(request, f"{new_teamseason} created")
+                        messages.success(request, f"{new_teamseason} created.")
                     else:
                         messages.info(request,
-                                      f"{new_teamseason} already exists")
+                                      f"{new_teamseason} already exists.")
 
 
         return redirect('league-admin-season-stage-info', season_year,
