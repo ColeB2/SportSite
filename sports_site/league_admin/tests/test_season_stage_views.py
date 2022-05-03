@@ -114,42 +114,99 @@ class LASeasonStageCreateViewTest(TestCase):
         self.assertTrue(response.context["formset"] is not None)
 
 
+    def test_create_stage(self):
+        season_year = 2022
+        season_pk = 1
+        
+        data = {
+            "stage": "O",
+            "stage_name": "Tournament",
+
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": 2,
+            "form-MAX_NUM_FORMS": "",
+
+            "form-0-teams": 1,
+            "form-1-teams": 2,
+        }
+
+        stage_len = SeasonStage.objects.filter(season=season_pk).count()
+
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse("league-admin-season-stage-create",
+            kwargs={"season_year": season_year, "season_pk": season_pk}),
+            data,
+            follow=True
+            )
+        self.assertRedirects(response, reverse("league-admin-season-stage",
+            kwargs={"season_year": season_year, "season_pk": season_pk}))
+
+        stage = SeasonStage.objects.get(season=season_pk, stage_name="Tournament")
+        t1, t2 = stage.teamseason_set.all()
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 3)
+        self.assertEqual(str(messages[0]), f"{stage} created.")
+        self.assertEqual(str(messages[1]), f"{t1} created.")
+        self.assertEqual(str(messages[2]), f"{t2} created.")
+
+        stage_len2 = SeasonStage.objects.filter(season=season_pk).count()
+        self.assertEqual(stage_len2-1, stage_len)
+
+        
+
+        self.assertEqual(stage.season.pk, season_pk)
+        self.assertEqual(stage.season.year, str(season_year))
+        self.assertTrue(stage.teamseason_set.all() is not None)
+
+
+    def test_create_stage_already_exists(self):
+        season_year = 2022
+        season_pk = 1
+        data = {
+            "stage": "R",
+
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": 2,
+            "form-MAX_NUM_FORMS": "",
+
+            "form-0-teams": 1,
+            "form-1-teams": 2,
+        }
+
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse("league-admin-season-stage-create",
+            kwargs={"season_year": season_year, "season_pk": season_pk}),
+            data,
+            follow=True
+            )
+        self.assertRedirects(response, reverse("league-admin-season-stage",
+            kwargs={"season_year": season_year, "season_pk": season_pk}))
+
+
     def test_redirects(self):
         season_year = 2022
         season_pk = 1
-        self.client.login(username="Test", password="test")
-        response = self.client.get(reverse("league-admin-season-stage-create",
-            kwargs={"season_year": season_year, "season_pk": season_pk}))
-        self.assertEqual(response.status_code, 200)
+        
+        data = {
+            "stage": "O",
+            "stage_name": "Tournament",
 
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": 2,
+            "form-MAX_NUM_FORMS": "",
 
-        season = Season.objects.get(pk=season_pk)
-        stages = SeasonStage.objects.filter(season=season)
-        t1 = Team.objects.get(id=1)
-        t2 = Team.objects.get(id=2)
-
-        stage_data = {
-            "stage": SeasonStage.REGULAR,
-            "id_form-0-teams": t1,
-            "id_form-1-teams": 2,
-            "id_form-2-teams": {"value": 2},
-            "form-0-teams": t1,
+            "form-0-teams": 1,
             "form-1-teams": 2,
-            "form-2-teams": {"value": 2},
-        }
-        team_data = {
-            "form-1-teams": t1,
-            "form-2-teams": t2
         }
 
-        resp = self.client.post(reverse("league-admin-season-stage-create",
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse("league-admin-season-stage-create",
             kwargs={"season_year": season_year, "season_pk": season_pk}),
-            stage_data,
+            data,
             follow=True
             )
-
-        print("ToDo: season_stage_tests: Figure how to pass data to formsets")
-        self.assertRedirects(resp, reverse("league-admin-season-stage",
+        self.assertRedirects(response, reverse("league-admin-season-stage",
             kwargs={"season_year": season_year, "season_pk": season_pk}))
 
 
