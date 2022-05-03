@@ -53,10 +53,10 @@ def league_admin_season_stage_create_view(request, season_year, season_pk):
                         if new_teamseason:
                             if created:
                                 messages.success(request,
-                                                 f"{new_teamseason} created")
+                                                 f"{new_teamseason} created.")
                             else:
                                 messages.info(request,
-                                    f"{new_teamseason} already exists")
+                                    f"{new_teamseason} already exists.")
             else:
                 messages.info(request, f"{new_stage} already exists.")
 
