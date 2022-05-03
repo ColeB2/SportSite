@@ -19,20 +19,20 @@ class LASeasonStageSelectViewTest(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/season/2022/1')
         self.assertEqual(response.status_code, 200)
 
     
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage",
             kwargs={"season_year": 2022, "season_pk": "1"}))
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage",
             kwargs={"season_year": 2022, "season_pk": "1"}))
         self.assertEqual(response.status_code, 200)
@@ -43,7 +43,7 @@ class LASeasonStageSelectViewTest(TestCase):
     def test_context(self):
         season_year = 2022
         season_pk = 1
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage",
             kwargs={"season_year": season_year, "season_pk": season_pk}))
         self.assertEqual(response.status_code, 200)
@@ -73,20 +73,20 @@ class LASeasonStageCreateViewTest(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/season/2022/1/add/new')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-create",
             kwargs={"season_year": 2022, "season_pk": "1"}))
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-create",
             kwargs={"season_year": 2022, "season_pk": "1"}))
         self.assertEqual(response.status_code, 200)
@@ -98,7 +98,7 @@ class LASeasonStageCreateViewTest(TestCase):
     def test_context(self):
         season_year = 2022
         season_pk = 1
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-create",
             kwargs={"season_year": season_year, "season_pk": season_pk}))
         self.assertEqual(response.status_code, 200)
@@ -117,7 +117,7 @@ class LASeasonStageCreateViewTest(TestCase):
     def test_redirects(self):
         season_year = 2022
         season_pk = 1
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-create",
             kwargs={"season_year": season_year, "season_pk": season_pk}))
         self.assertEqual(response.status_code, 200)
@@ -141,19 +141,13 @@ class LASeasonStageCreateViewTest(TestCase):
             "form-1-teams": t1,
             "form-2-teams": t2
         }
-        # print(SeasonStage.objects.all().count())
-        # t = SeasonStage.objects.get(id=3).teamseason_set.all()
-        # print(t)
+
         resp = self.client.post(reverse("league-admin-season-stage-create",
             kwargs={"season_year": season_year, "season_pk": season_pk}),
             stage_data,
             follow=True
             )
 
-        # print(SeasonStage.objects.all().count())
-        # print(SeasonStage.objects.get(id=4))
-        # t = SeasonStage.objects.get(id=4).teamseason_set.all()
-        # print(t)
         print("ToDo: season_stage_tests: Figure how to pass data to formsets")
         self.assertRedirects(resp, reverse("league-admin-season-stage",
             kwargs={"season_year": season_year, "season_pk": season_pk}))
@@ -175,13 +169,13 @@ class LASeasonStageInfoViewTest(TestCase):
 
     
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/season/2022/1/3')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-info",
             kwargs={"season_year": 2022, "season_pk": "1",
                 "season_stage_pk": "1"}))
@@ -189,7 +183,7 @@ class LASeasonStageInfoViewTest(TestCase):
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-info",
             kwargs={"season_year": 2022, "season_pk": "1",
                 "season_stage_pk": "1"}))
@@ -203,7 +197,7 @@ class LASeasonStageInfoViewTest(TestCase):
         season_year = 2022
         season_pk = 1
         season_stage_pk = 3
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-info",
             kwargs={"season_year": season_year, "season_pk": season_pk,
                 "season_stage_pk": season_stage_pk}))
@@ -234,13 +228,13 @@ class LASeasonStageDeleteInfoViewTest(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/season/2022/1/3/delete')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-delete",
             kwargs={"season_year": 2022, "season_pk": "1",
                 "season_stage_pk": "1"}))
@@ -248,7 +242,7 @@ class LASeasonStageDeleteInfoViewTest(TestCase):
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-delete",
             kwargs={"season_year": 2022, "season_pk": "1",
                 "season_stage_pk": "1"}))
@@ -261,7 +255,7 @@ class LASeasonStageDeleteInfoViewTest(TestCase):
         season_year = 2022
         season_pk = 1
         season_stage_pk = 3
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-delete",
             kwargs={"season_year": season_year, "season_pk": season_pk,
                 "season_stage_pk": season_stage_pk}))
@@ -282,7 +276,7 @@ class LASeasonStageDeleteInfoViewTest(TestCase):
         ss = SeasonStage.objects.create(season=s, stage=SeasonStage.REGULAR)
         self.assertEqual(len(SeasonStage.objects.all()), sslen+1)
 
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-delete",
             kwargs={"season_year": ss.season.year, "season_pk": s.pk,
                 "season_stage_pk": ss.pk}))
@@ -314,13 +308,13 @@ class LASeasonStageAddTeamsViewTests(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/season/2022/1/3/add/teams')
         self.assertEqual(response.status_code, 200)
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-add-teams",
             kwargs={"season_year": 2022, "season_pk": "1",
                 "season_stage_pk": "1"}))
@@ -328,7 +322,7 @@ class LASeasonStageAddTeamsViewTests(TestCase):
 
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-add-teams",
             kwargs={"season_year": 2022, "season_pk": "1",
                 "season_stage_pk": "1"}))
@@ -341,7 +335,7 @@ class LASeasonStageAddTeamsViewTests(TestCase):
         season_year = 2022
         season_pk = 1
         season_stage_pk = 3
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-add-teams",
             kwargs={"season_year": season_year, "season_pk": season_pk,
                 "season_stage_pk": season_stage_pk}))
@@ -377,7 +371,7 @@ class LASeasonStageSetFeaturedViewTests(TestCase):
 
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/season/2022/1/3/make-featured',
             follow=True)
         self.assertRedirects(response, reverse(
@@ -387,7 +381,7 @@ class LASeasonStageSetFeaturedViewTests(TestCase):
 
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-featured",
             kwargs={"season_year": 2022, "season_pk": "1",
                 "season_stage_pk": "3"}),
@@ -400,7 +394,7 @@ class LASeasonStageSetFeaturedViewTests(TestCase):
 
     def test_view_uses_correct_template(self):
         """Redirect only view, so tests template after redirect"""
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-featured",
             kwargs={"season_year": 2022, "season_pk": "1",
                 "season_stage_pk": "3"}),
@@ -419,7 +413,7 @@ class LASeasonStageSetFeaturedViewTests(TestCase):
         season_stage_pk = 1
         stage = SeasonStage.objects.get(pk=season_stage_pk)
         self.assertEqual(stage.featured, False)
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-season-stage-featured",
             kwargs={"season_year": 2022, "season_pk": season_pk,
                 "season_stage_pk": season_stage_pk}),
