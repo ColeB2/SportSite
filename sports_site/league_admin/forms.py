@@ -329,10 +329,10 @@ class SeasonStageCreateForm(forms.ModelForm):
         new_stage, created = SeasonStage.objects.get_or_create(
             stage=stage_data,
             season=season,
-            featured=featured_data,
             stage_name=stage_name_data)
 
         if created:
+            new_stage.featured=featured_data
             new_stage.save()
 
         return new_stage, created

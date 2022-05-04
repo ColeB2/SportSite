@@ -168,11 +168,9 @@ class LASeasonStageCreateViewTest(TestCase):
 
             "form-INITIAL_FORMS": 0,
             "form-TOTAL_FORMS": 2,
-            "form-MAX_NUM_FORMS": "",
-
-            "form-0-teams": 1,
-            "form-1-teams": 2,
+            "form-MAX_NUM_FORMS": ""
         }
+        
 
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse("league-admin-season-stage-create",
@@ -180,8 +178,12 @@ class LASeasonStageCreateViewTest(TestCase):
             data,
             follow=True
             )
-        self.assertRedirects(response, reverse("league-admin-season-stage",
-            kwargs={"season_year": season_year, "season_pk": season_pk}))
+        
+        stage = SeasonStage.objects.get(id=3)
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{stage} already exists.')
 
 
     def test_redirects(self):
@@ -400,7 +402,6 @@ class LASeasonStageAddTeamsViewTests(TestCase):
 
         season = Season.objects.get(pk=season_pk)
         stage = SeasonStage.objects.get(pk=season_stage_pk)
-        teams = Team.objects.filter(league=League.objects.get(id=1))
         exist_teams = TeamSeason.objects.filter(season__pk=season_stage_pk)
 
 
@@ -410,6 +411,109 @@ class LASeasonStageAddTeamsViewTests(TestCase):
         self.assertQuerysetEqual(
             response.context["teams"], exist_teams, ordered=False)
         self.assertTrue(response.context["formset"] is not None)
+
+
+    def test_adding_teams(self):
+        season_year = 2022
+        season_pk = 1
+        season_stage_pk = 1
+        data = {
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": 2,
+            "form-MAX_NUM_FORMS": "",
+
+            "form-0-teams": 1,
+        }
+
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse(
+            "league-admin-season-stage-add-teams",
+            kwargs={
+                "season_year": season_year,
+                "season_pk": season_pk,
+                "season_stage_pk": season_stage_pk
+                }),
+            data,
+            follow=True
+            )
+        
+        
+        team = Team.objects.get(id=1)
+        new_teamseason = TeamSeason.objects.get(
+            season__pk=season_stage_pk,
+            team=team)
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{new_teamseason} created.')
+
+
+    def test_adding_teams_already_exist(self):
+        season_year = 2022
+        season_pk = 1
+        season_stage_pk = 3
+        data = {
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": 2,
+            "form-MAX_NUM_FORMS": "",
+
+            "form-0-teams": 1,
+        }
+
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse(
+            "league-admin-season-stage-add-teams",
+            kwargs={
+                "season_year": season_year,
+                "season_pk": season_pk,
+                "season_stage_pk": season_stage_pk
+                }),
+            data,
+            follow=True
+            )
+
+        team = Team.objects.get(id=1)
+        new_teamseason = TeamSeason.objects.get(
+            season__pk=season_stage_pk,
+            team=team)
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{new_teamseason} already exists.')
+        
+
+    def test_redirects(self):
+        season_year = 2022
+        season_pk = 1
+        season_stage_pk = 3
+        data = {
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": 2,
+            "form-MAX_NUM_FORMS": "",
+
+            "form-0-teams": 1,
+            "form-1-teams": 2,
+        }
+
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse(
+            "league-admin-season-stage-add-teams",
+            kwargs={
+                "season_year": season_year,
+                "season_pk": season_pk,
+                "season_stage_pk": season_stage_pk
+                }),
+            data,
+            follow=True
+            )
+        self.assertRedirects(response, reverse("league-admin-season-stage-info",
+            kwargs={
+                "season_year": season_year,
+                "season_pk": season_pk,
+                "season_stage_pk": season_stage_pk
+                }))
 
 
 
