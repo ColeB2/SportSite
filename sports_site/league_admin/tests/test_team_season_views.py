@@ -30,7 +30,7 @@ class LATeamSeasonInfoViewTest(TestCase):
         response = self.client.get(reverse("league-admin-team-season-info",
             kwargs={
                 "season_year": 2022, "season_pk": 1, "season_stage_pk":3,
-                "team_name": "TeamOne", "team_season_pk": 1}))
+                "team_name": "Team One", "team_season_pk": 1}))
         self.assertEqual(response.status_code, 200)
 
 
@@ -39,7 +39,7 @@ class LATeamSeasonInfoViewTest(TestCase):
         response = self.client.get(reverse("league-admin-team-season-info",
             kwargs={
                 "season_year": 2022, "season_pk": 1, "season_stage_pk":3,
-                "team_name": "TeamOne", "team_season_pk": 1}))
+                "team_name": "Team One", "team_season_pk": 1}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             "league_admin/team_season_templates/team_season_info.html")
@@ -47,7 +47,7 @@ class LATeamSeasonInfoViewTest(TestCase):
 
     def test_context(self):
         context = {"season_year": 2022, "season_pk": 1, "season_stage_pk":3,
-                "team_name": "TeamOne", "team_season_pk": 1}
+                "team_name": "Team One", "team_season_pk": 1}
 
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-team-season-info",
@@ -101,7 +101,7 @@ class LATeamSeasonInfoViewTest(TestCase):
         response = self.client.get(reverse("league-admin-team-season-delete",
             kwargs={
                 "season_year": 2022, "season_pk": 1, "season_stage_pk":3,
-                "team_name": "TeamOne", "team_season_pk": 1}))
+                "team_name": "Team One", "team_season_pk": 1}))
         self.assertEqual(response.status_code, 200)
 
 
@@ -110,7 +110,7 @@ class LATeamSeasonInfoViewTest(TestCase):
         response = self.client.get(reverse("league-admin-team-season-delete",
             kwargs={
                 "season_year": 2022, "season_pk": 1, "season_stage_pk":3,
-                "team_name": "TeamOne", "team_season_pk": 1}))
+                "team_name": "Team One", "team_season_pk": 1}))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,
             "league_admin/team_season_templates/team_season_delete.html")
@@ -119,7 +119,7 @@ class LATeamSeasonInfoViewTest(TestCase):
     
     def test_context(self):
         context = {"season_year": 2022, "season_pk": 1, "season_stage_pk":3,
-                "team_name": "TeamOne", "team_season_pk": 1}
+                "team_name": "Team One", "team_season_pk": 1}
 
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse("league-admin-team-season-delete",
@@ -149,7 +149,7 @@ class LATeamSeasonInfoViewTest(TestCase):
         ts = TeamSeason.objects.create(season=ss, team=team)
         ts_len = TeamSeason.objects.filter(season=ss).count()
         context = {"season_year": 2022, "season_pk": 1, "season_stage_pk":1,
-                "team_name": "TeamOne", "team_season_pk": 3}
+                "team_name": "Team One", "team_season_pk": 3}
 
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse("league-admin-team-season-delete",
@@ -174,7 +174,7 @@ class LATeamSeasonInfoViewTest(TestCase):
         ts = TeamSeason.objects.create(season=ss, team=team)
         ts_len = TeamSeason.objects.filter(season=ss).count()
         context = {"season_year": 2022, "season_pk": 1, "season_stage_pk":1,
-                "team_name": "TeamOne", "team_season_pk": 3}
+                "team_name": "Team One", "team_season_pk": 3}
 
         self.client.login(username="Test", password="test")
         response = self.client.post(reverse("league-admin-team-season-delete",
