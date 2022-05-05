@@ -15,23 +15,23 @@ class LADashboardViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/')
         self.assertEqual(response.status_code, 200)
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-dashboard'))
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-dashboard'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'league_admin/dashboard.html')
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-dashboard'))
         self.assertEqual(response.status_code, 200)
         # Len of empty context --> 2
@@ -53,23 +53,23 @@ class LARosterSelectTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/roster/')
         self.assertEqual(response.status_code, 200)
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-roster-select'))
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-roster-select'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'league_admin/roster_select.html')
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-roster-select'))
         self.assertEqual(response.status_code, 200)
         # Len of empty context --> 2
@@ -81,7 +81,7 @@ class LARosterSelectTest(TestCase):
 
 
     def test_pagination_is_ten(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-roster-select'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue("paginator" in response.context)
@@ -89,7 +89,7 @@ class LARosterSelectTest(TestCase):
         self.assertEqual(len(response.context['paginator'].page(1)), 10)
 
     def test_pagination_page_2(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-roster-select')+"?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("paginator" in response.context)
@@ -113,23 +113,23 @@ class LANewsSelectTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_view_url_exists_at_desired_location(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get('/league/admin/news/')
         self.assertEqual(response.status_code, 200)
 
     def test_view_accessible_by_name(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-news-select'))
         self.assertEqual(response.status_code, 200)
 
     def test_view_uses_correct_template(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-news-select'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'league_admin/article_select.html')
 
     def test_context(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-news-select'))
         self.assertEqual(response.status_code, 200)
         # Len of empty context --> 2: Fix tests, len context really makes no sense.
@@ -141,7 +141,7 @@ class LANewsSelectTest(TestCase):
 
 
     def test_pagination_is_ten(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-news-select'))
         self.assertEqual(response.status_code, 200)
         self.assertTrue("paginator" in response.context)
@@ -149,7 +149,7 @@ class LANewsSelectTest(TestCase):
         self.assertEqual(len(response.context['paginator'].page(1)), 10)
 
     def test_pagination_page_2(self):
-        login = self.client.login(username="Test", password="test")
+        self.client.login(username="Test", password="test")
         response = self.client.get(reverse('league-admin-news-select')+"?page=2")
         self.assertEqual(response.status_code, 200)
         self.assertTrue("paginator" in response.context)
