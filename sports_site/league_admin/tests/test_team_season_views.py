@@ -73,7 +73,7 @@ class LATeamSeasonInfoViewTest(TestCase):
             response.context["players"], players, ordered=False)
 
 
-class LATeamSeasonInfoViewTest(TestCase):
+class LATeamSeasonDeleteInfoViewTest(TestCase):
     """
     Tests league_admin_team_season_delete_info_view
         from league_admin/views/team_season_views.py
