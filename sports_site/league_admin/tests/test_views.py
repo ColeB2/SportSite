@@ -45,8 +45,9 @@ class LARosterSelectTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.teamseason = TeamSeason.objects.all()[0]
-        for i in range(13):
-            roster = Roster.objects.create(team=cls.teamseason)
+        cls.num_rosters = 13
+        for _ in range(cls.num_rosters):
+            Roster.objects.create(team=cls.teamseason)
 
     def test_view_without_logging_in(self):
         response = self.client.get('/league/admin/roster/')
@@ -97,6 +98,19 @@ class LARosterSelectTest(TestCase):
         #2 Original rosters plus 13 create --> 15, 10 and 5
         self.assertEqual(len(response.context['paginator'].page(2)), 5)
 
+    def test_pagination_not_an_integer(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('league-admin-roster-select')+"?page=X")
+        self.assertEqual(response.status_code, 200)
+        #Should land us on page 1
+        self.assertEqual(len(response.context['paginator'].page(1)), 10)
+
+    def test_pagination_empty_page(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('league-admin-roster-select')+"?page=50")
+        self.assertEqual(response.status_code, 200)
+        #should land us on last page
+        self.assertEqual(len(response.context['paginator'].page(2)), 5)
 
 class LANewsSelectTest(TestCase):
     """
