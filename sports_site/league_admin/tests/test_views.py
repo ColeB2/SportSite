@@ -172,5 +172,20 @@ class LANewsSelectTest(TestCase):
         self.assertEqual(len(response.context['paginator'].page(2)), 3)
 
 
+    def test_pagination_not_an_integer(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('league-admin-news-select')+"?page=X")
+        self.assertEqual(response.status_code, 200)
+        #Should land us on page 1
+        self.assertEqual(len(response.context['paginator'].page(1)), 10)
+
+    def test_pagination_empty_page(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('league-admin-news-select')+"?page=50")
+        self.assertEqual(response.status_code, 200)
+        #should land us on last page --> page 2.
+        self.assertEqual(len(response.context['paginator'].page(2)), 3)
+
+
 
 
