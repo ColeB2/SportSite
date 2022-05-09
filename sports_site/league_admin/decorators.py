@@ -77,3 +77,14 @@ def user_owns_team(function):
             raise PermissionDenied
 
     return wrap
+
+
+def user_logged_in(function):
+    @wraps(function)
+    def wrap (request, *args, **kwargs):  
+        if request.user.is_authenticated:
+            return function(request, *args, **kwargs)
+        else:
+            raise PermissionDenied
+
+    return wrap
