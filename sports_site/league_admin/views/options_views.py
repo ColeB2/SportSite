@@ -10,20 +10,7 @@ from ..forms import LeagueHittingOptionsForm, LeagueHittingStatsOptionsForm
 from ..models import LeagueHittingOptions, LeagueHittingStatsOptions
 
 
-def league_admin_options_view(request):
-    """Currently Deprecated infavour of CBV"""
-    league = League.objects.get(admin=request.user)
-    options = LeagueHittingOptions.objects.get(league = league)
 
-    context = {
-        "league": league,
-        "options": options,
-        }
-    return render(request, "league_admin/options.html", context)
-
-
-
-"""Options Views --> move own folder in future"""
 class OptionsView(PermissionRequiredMixin, TemplateView):
     permission_required = 'league.league_admin'
     template_name = "league_admin/options.html"
