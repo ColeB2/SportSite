@@ -174,6 +174,7 @@ class LAScheduleCreateViewTest(TestCase):
 
     def test_create_games(self):
         date = datetime.date(2022, 3, 11)
+        time = datetime.time(18, 30)
         data = {
             "create": True,
             "form-INITIAL_FORMS": 0,
@@ -183,7 +184,9 @@ class LAScheduleCreateViewTest(TestCase):
             #form 1
             "form-0-home_team": self.t2.id,
             "form-0-away_team": self.t1.id,
-            "form-0-date": date
+            "form-0-date": date,
+            "form-0-start_time": time,
+            "form-0-location": self.t2.team.place
         }
         game_len = Game.objects.all().count()
         self.client.login(username="Test", password="test")
