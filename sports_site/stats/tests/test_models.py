@@ -54,3 +54,76 @@ class TeamGameStatsTestCase(TestCase):
 
     def test_expected_name(self):
         self.assertEqual(str(self.tgs), f"{self.game} Game Stats")
+
+
+
+class TeamGameLineScoreTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=1)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game,
+        )
+
+        cls.tgls = TeamGameLineScore.objects.create(
+            game=cls.tgs,
+        )
+        return super().setUpTestData()
+
+    
+    def test_created_properly(self):
+        self.assertEqual(self.tgls.first, 0)
+        self.assertEqual(self.tgls.second, 0)
+        self.assertEqual(self.tgls.third, 0)
+        self.assertEqual(self.tgls.fourth, 0)
+        self.assertEqual(self.tgls.fifth, 0)
+        self.assertEqual(self.tgls.sixth, 0)
+        self.assertEqual(self.tgls.seventh, 0)
+        self.assertEqual(self.tgls.eighth, 0)
+        self.assertEqual(self.tgls.ninth, 0)
+        self.assertEqual(self.tgls.extras, "None")
+
+    
+    def test_fk_points_properly(self):
+        self.assertEqual(self.tgls.game, self.tgs)
+
+    
+    def test_labels(self):
+        game_label = self.tgls._meta.get_field("game").verbose_name
+        first_label = self.tgls._meta.get_field("first").verbose_name
+        second_label = self.tgls._meta.get_field("second").verbose_name
+        third_label = self.tgls._meta.get_field("third").verbose_name
+        fourth_label = self.tgls._meta.get_field("fourth").verbose_name
+        fifth_label = self.tgls._meta.get_field("fifth").verbose_name
+        sixth_label = self.tgls._meta.get_field("sixth").verbose_name
+        seventh_label = self.tgls._meta.get_field("seventh").verbose_name
+        eighth_label = self.tgls._meta.get_field("eighth").verbose_name
+        ninth_label = self.tgls._meta.get_field("ninth").verbose_name
+        extras_label = self.tgls._meta.get_field("extras").verbose_name
+        self.assertEqual(game_label, "game")
+        self.assertEqual(first_label, "1")
+        self.assertEqual(second_label, "2")
+        self.assertEqual(third_label, "3")
+        self.assertEqual(fourth_label, "4")
+        self.assertEqual(fifth_label, "5")
+        self.assertEqual(sixth_label, "6")
+        self.assertEqual(seventh_label, "7")
+        self.assertEqual(eighth_label, "8")
+        self.assertEqual(ninth_label, "9")
+        self.assertEqual(extras_label, "extras")
+
+
+    def test_extras_max_length(self):
+        max_length = self.tgls._meta.get_field("extras").max_length
+        self.assertEqual(max_length, 50)
+
+    
+    def test_expected_name(self):
+        self.assertEqual(
+            str(self.tgls),
+            f"{self.tgs.team.team} Linescore for {self.tgs}")
