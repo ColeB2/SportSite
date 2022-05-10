@@ -1,5 +1,6 @@
+from asyncio import staggered
 from django.test import TestCase
-from league.models import Game, SeasonStage, TeamSeason
+from league.models import Game, PlayerSeason, SeasonStage, TeamSeason
 from stats.models import (TeamGameStats, TeamGameLineScore,
     PlayerHittingGameStats, PlayerPitchingGameStats)
 
@@ -127,3 +128,67 @@ class TeamGameLineScoreTestCase(TestCase):
         self.assertEqual(
             str(self.tgls),
             f"{self.tgs.team.team} Linescore for {self.tgs}")
+
+
+class PlayerHittingGameStatsTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=1)
+        cls.player = PlayerSeason.objects.get(id=1)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game,
+        )
+
+        cls.phgs = PlayerHittingGameStats.objects.create(
+            team_stats=cls.tgs,
+            season=cls.stage,
+            player=cls.player
+        )
+
+        return super().setUpTestData()
+
+
+    def test_created_properly(self):
+        #Choices
+        self.assertEqual(self.phgs.starter, True)
+        self.assertEqual(self.phgs.substitute, False)
+        #Stats
+        stats_defaults_zero = ["batting_order_position",
+        "at_bats", "plate_appearances",
+        "hits", "runs", "strikeouts", "walks",
+        "singles", "doubles", "triples", "homeruns",
+        "stolen_bases", "caught_stealing", "runs_batted_in",
+        "hit_by_pitch", "sacrifice_flies", "sacrifice_bunts",
+        "reached_on_error", "fielders_choice", "intentional_walks", 
+        "left_on_base", "picked_off", "ground_into_double_play",
+        "two_out_runs_batted_in"
+        ]
+        for stat_name in stats_defaults_zero:
+            stat = self.phgs._meta.get_field(stat_name)
+            self.assertEqual(stat.default, 0)
+
+        #Float stats --> Average etc, default None
+        self.assertEqual(self.phgs.average, None)
+        self.assertEqual(self.phgs.on_base_percentage, None)
+        self.assertEqual(self.phgs.slugging_percentage, None)
+        self.assertEqual(self.phgs.on_base_plus_slugging, None)
+
+
+    def test_fk_points_properly(self):
+        self.assertEqual(self.phgs.team_stats, self.tgs)
+        self.assertEqual(self.phgs.season, self.stage)
+        self.assertEqual(self.phgs.player, self.player)
+
+    def test_labels(self):
+        pass
+
+    def test_expected_name(self):
+        self.assertEqual(
+            str(self.phgs),
+            f"Player: {self.player.player} Game: {self.tgs}"
+        )
