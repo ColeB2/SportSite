@@ -226,3 +226,79 @@ class PlayerHittingGameStatsTestCase(TestCase):
             str(self.phgs),
             f"Player: {self.player.player} Game: {self.tgs}"
         )
+
+
+class PlayerPitchingGameStatsTestCase(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=1)
+        cls.player = PlayerSeason.objects.get(id=1)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game,
+        )
+
+        cls.ppgs = PlayerPitchingGameStats.objects.create(
+            team_stats=cls.tgs,
+            season=cls.stage,
+            player=cls.player
+        )
+
+        return super().setUpTestData()
+
+
+    def test_created_properly(self):
+        #Stats
+        stats_defaults_zero = ["win", "loss", "game", "game_started",
+            "complete_game", "shutout", "save_converted", "save_op",
+            "hits_allowed", "runs_allowed", "earned_runs", "homeruns_allowed",
+            "hit_batters", "walks_allowed", "strikeouts", "innings_pitched",
+            "_innings", "stolen_bases_allowed", "runners_caught_stealing",
+            "pick_offs", "balk"]
+        for stat_name in stats_defaults_zero:
+            stat = self.ppgs._meta.get_field(stat_name)
+            self.assertEqual(stat.default, 0)
+
+
+    def test_fk_points_properly(self):
+        self.assertEqual(self.ppgs.team_stats, self.tgs)
+        self.assertEqual(self.ppgs.season, self.stage)
+        self.assertEqual(self.ppgs.player, self.player)
+
+    def test_labels(self):
+        ppgs_stat_labels = {
+            "win": "W",
+            "loss": "L",
+            "game": "G",
+            "game_started": "GS",
+            "complete_game": "CG",
+            "shutout": "SHO",
+            "save_converted": "SV",
+            "save_op": "SVO",
+            "hits_allowed": "H",
+            "runs_allowed": "R",
+            "earned_runs": "ER",
+            "homeruns_allowed": "HR",
+            "hit_batters": "HB",
+            "walks_allowed": "BB",
+            "strikeouts": "K",
+            "stolen_bases_allowed": "SB",
+            "runners_caught_stealing": "CS",
+            "pick_offs": "PK",
+            "balk": "Balk",
+            "innings_pitched": "IP",
+            "_innings": "IP"
+        }
+        for key, val in ppgs_stat_labels.items():
+            label = self.ppgs._meta.get_field(key).verbose_name
+            self.assertEqual(label, val)
+
+    def test_expected_name(self):
+        self.assertEqual(
+            str(self.ppgs),
+            f"Player: {self.player.player} Game: {self.tgs}"
+        )
