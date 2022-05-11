@@ -140,6 +140,12 @@ class PlayerPitchingGameStats(models.Model):
         return f"Player: {self.player.player} Game: {self.team_stats}"
 
 
+    def save(self, *args, **kwargs):
+        self.game = self.team_stats.game
+        self.season = self.team_stats.season
+        super(PlayerPitchingGameStats, self).save(*args , **kwargs)
+
+
 
 
 
