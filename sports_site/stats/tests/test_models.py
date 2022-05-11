@@ -185,7 +185,41 @@ class PlayerHittingGameStatsTestCase(TestCase):
         self.assertEqual(self.phgs.player, self.player)
 
     def test_labels(self):
-        pass
+        phgs_stat_labels = {
+            "batting_order_position": "Order Position",
+            "starter": "Starter",
+            "substitute": "Sub",
+            "at_bats": "AB",
+            "plate_appearances": "PA",
+            "hits": "H",
+            "runs": "R",
+            "strikeouts" : "SO",
+            "walks": "BB",
+            "singles": "1B",
+            "doubles": "2B",
+            "triples": "3B",
+            "homeruns": "HR",
+            "stolen_bases": "SB",
+            "caught_stealing": "CS",
+            "runs_batted_in": "RBI",
+            "hit_by_pitch": "HBP",
+            "sacrifice_flies": "SF",
+            "sacrifice_bunts": "SAC",
+            "average": "AVG",
+            "on_base_percentage": "OBP",
+            "slugging_percentage": "SLG",
+            "on_base_plus_slugging": "OPS",
+            "reached_on_error": "ROE",
+            "fielders_choice": "FC",
+            "intentional_walks": "IBB", 
+            "left_on_base": "LOB",
+            "picked_off": "PO",
+            "ground_into_double_play": "GIDP",
+            "two_out_runs_batted_in": "2-out-RBI"
+        }
+        for key, val in phgs_stat_labels.items():
+            label = self.phgs._meta.get_field(key).verbose_name
+            self.assertEqual(label, val)
 
     def test_expected_name(self):
         self.assertEqual(
