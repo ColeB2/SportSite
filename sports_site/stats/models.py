@@ -141,7 +141,7 @@ class PlayerPitchingGameStats(models.Model):
 
 
     def save(self, *args, **kwargs):
-        self.game = self.team_stats.game
+        self._game = self.team_stats.game
         self.season = self.team_stats.season
         super(PlayerPitchingGameStats, self).save(*args , **kwargs)
 
