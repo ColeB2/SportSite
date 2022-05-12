@@ -1,5 +1,5 @@
 from django.test import TestCase
-from league.models import Game, SeasonStage, TeamSeason
+from league.models import Game, PlayerSeason, SeasonStage, TeamSeason
 from stats.models import (PlayerHittingGameStats, PlayerPitchingGameStats,
     TeamGameStats, TeamGameLineScore)
 from stats.forms import (PlayerStatsCreateForm, PlayerPitchingStatsCreateForm,
@@ -35,6 +35,18 @@ class PlayerStatsCreateFormTest(TestCase):
         for k,v in form_labels.items():
             label = form.fields[k].label
             self.assertTrue(label is None or label == v)
+
+
+    def test_field_qs(self):
+        form = PlayerStatsCreateForm(
+            **{
+                "team_season": self.ts,
+                "team_game_stats": self.tgs
+            }
+        )
+        qs = PlayerSeason.objects.filter(team__team=self.ts)
+        self.assertQuerysetEqual(qs, form.player_queryset, ordered=False)
+
 
     def test_forms(self):
         form_data = {"player": 1}   
