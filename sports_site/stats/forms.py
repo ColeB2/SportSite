@@ -16,8 +16,8 @@ class PlayerStatsCreateForm(forms.Form):
        team_game_stats_create_view()
     """
     def __init__(self, *args, **kwargs):
-        self._team_season = kwargs.pop('team_season')
-        self._team_game_stats = kwargs.pop('team_game_stats')
+        self._team_season = kwargs.pop('team_season', None)
+        self._team_game_stats = kwargs.pop('team_game_stats', None)
         super(PlayerStatsCreateForm, self).__init__(*args, **kwargs)
         self.player_queryset = PlayerSeason.objects.all().filter(
             team__team=self._team_season)
