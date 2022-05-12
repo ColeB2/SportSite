@@ -61,6 +61,7 @@ class PlayerStatsCreateFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
 
+
 class PlayerPitchingStatsCreateFormTest(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
@@ -112,5 +113,48 @@ class PlayerPitchingStatsCreateFormTest(TestCase):
             }
         )
         self.assertTrue(form.is_valid())
+
+
+
+class LineScoreEditFormTest(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.ts = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=1, home_team=cls.ts)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.ts,
+            game=cls.game
+        )
+
+        cls.tgls = TeamGameLineScore.objects.create(
+            game=cls.tgs,
+            first=1
+        )
+        # cls.tgs = TeamGameStats.objects.get(season=cls.ts)
+        return super().setUpTestData()
+
+
+    def test_form_labels(self):
+        form = LinescoreEditForm(instance=self.tgls)
+
+        form_labels = {
+            "first": "1", "second": "2", "third": "3", "fourth": "4",
+            "fifth": "5", "sixth": "6", "seventh": "7", "eighth": "8",
+            "ninth": "9", "extras": "Extras"
+            }
+
+        for k,v in form_labels.items():
+            label = form.fields[k].label
+            self.assertTrue(label is None or label == v)
+
+    def test_forms(self):
+        form_data = {"first": 5, "eighth": 3, "extras": "1-0-1"}
+
+        form = LinescoreEditForm(data=form_data, instance=self.tgls)
+        self.assertTrue(form.is_valid())
+
 
         
