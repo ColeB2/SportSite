@@ -19,7 +19,7 @@ class PlayerStatsCreateForm(forms.Form):
         self._team_season = kwargs.pop('team_season', None)
         self._team_game_stats = kwargs.pop('team_game_stats', None)
         super(PlayerStatsCreateForm, self).__init__(*args, **kwargs)
-        self.player_queryset = PlayerSeason.objects.all().filter(
+        self.player_queryset = PlayerSeason.objects.filter(
             team__team=self._team_season)
 
         self.fields["player"] = forms.ModelChoiceField(
@@ -66,7 +66,7 @@ class PlayerPitchingStatsCreateForm(forms.Form):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('team_game_stats')
         super(PlayerPitchingStatsCreateForm, self).__init__(*args, **kwargs)
-        self.player_queryset = PlayerSeason.objects.all().filter(
+        self.player_queryset = PlayerSeason.objects.filter(
             team__team=self._team_season)
 
         self.fields["player"] = forms.ModelChoiceField(
@@ -169,7 +169,7 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('game_stats')
         super(PlayerHittingGameStatsForm, self).__init__(*args, **kwargs)
-        self.fields['player'].queryset = PlayerSeason.objects.all().filter(
+        self.fields['player'].queryset = PlayerSeason.objects.filter(
             team__team=self._team_season)
         self.fields['player'].label = False
 
@@ -237,7 +237,7 @@ class PlayerPitchingGameStatsForm(forms.ModelForm):
         self._team_season = kwargs.pop('team_season')
         self._team_game_stats = kwargs.pop('game_stats')
         super(PlayerPitchingGameStatsForm, self).__init__(*args, **kwargs)
-        self.fields['player'].queryset = PlayerSeason.objects.all().filter(
+        self.fields['player'].queryset = PlayerSeason.objects.filter(
             team__team=self._team_season)
         self.fields['player'].label = False
 
