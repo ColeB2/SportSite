@@ -157,4 +157,105 @@ class LineScoreEditFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
 
+class PlayerHittingGameStatsFormTest(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.ts = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=1, home_team=cls.ts)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.ts,
+            game=cls.game
+        )
+        return super().setUpTestData()
+
+
+    def test_form_labels(self):
+        form = PlayerHittingGameStatsForm(
+            instance=self.tgs,
+            **{
+                "team_season": self.ts,
+                "game_stats": self.tgs
+            }
+         )
+
+        form_labels = {
+            "player": False,
+            "batting_order_position": "Order Position",
+            "starter": "Starter",
+            "substitute": "Sub",
+            "at_bats": "AB",
+            "plate_appearances": "PA",
+            # "hits": "H",
+            "runs": "R",
+            "strikeouts" : "SO",
+            "walks": "BB",
+            "singles": "1B",
+            "doubles": "2B",
+            "triples": "3B",
+            "homeruns": "HR",
+            "stolen_bases": "SB",
+            "caught_stealing": "CS",
+            "runs_batted_in": "RBI",
+            "hit_by_pitch": "HBP",
+            "sacrifice_flies": "SF",
+            "sacrifice_bunts": "SAC",
+            "reached_on_error": "ROE",
+            "fielders_choice": "FC",
+            "intentional_walks": "IBB", 
+            "left_on_base": "LOB",
+            "picked_off": "PO",
+            "ground_into_double_play": "GIDP",
+            "two_out_runs_batted_in": "2-out-RBI"
+        }
+
+        for k,v in form_labels.items():
+            label = form.fields[k].label
+            self.assertTrue(label is None or label == v)
+
+
+    def test_forms(self):
+        form_data = {
+            "player": 1,
+            "batting_order_position": 1,
+            "starter": True,
+            # "substitute": "Sub",
+            "at_bats": 4,
+            "plate_appearances": 4,
+            # "hits": 4,
+            "runs": 4,
+            "strikeouts" : 0,
+            "walks": 0,
+            "singles": 0,
+            "doubles": 0,
+            "triples": 0,
+            "homeruns": 4,
+            "stolen_bases": 0,
+            "caught_stealing": 0,
+            "runs_batted_in": 16,
+            "hit_by_pitch": 0,
+            "sacrifice_flies": 0,
+            "sacrifice_bunts": 0,
+            "reached_on_error": 0,
+            "fielders_choice": 0,
+            "intentional_walks": 0, 
+            "left_on_base": 0,
+            "picked_off": 0,
+            "ground_into_double_play": 0,
+            "two_out_runs_batted_in": 16
+        }
+
+        form = PlayerHittingGameStatsForm(
+            data = form_data,
+            instance=self.tgs,
+            **{
+                "team_season": self.ts,
+                "game_stats": self.tgs
+            }
+         )
+        self.assertTrue(form.is_valid())
+
+
         
