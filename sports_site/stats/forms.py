@@ -166,8 +166,8 @@ class PlayerHittingGameStatsForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        self._team_season = kwargs.pop('team_season')
-        self._team_game_stats = kwargs.pop('game_stats')
+        self._team_season = kwargs.pop('team_season', None)
+        self._team_game_stats = kwargs.pop('game_stats', None)
         super(PlayerHittingGameStatsForm, self).__init__(*args, **kwargs)
         self.fields['player'].queryset = PlayerSeason.objects.filter(
             team__team=self._team_season)
@@ -234,8 +234,8 @@ class PlayerPitchingGameStatsForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        self._team_season = kwargs.pop('team_season')
-        self._team_game_stats = kwargs.pop('game_stats')
+        self._team_season = kwargs.pop('team_season', None)
+        self._team_game_stats = kwargs.pop('game_stats', None)
         super(PlayerPitchingGameStatsForm, self).__init__(*args, **kwargs)
         self.fields['player'].queryset = PlayerSeason.objects.filter(
             team__team=self._team_season)
