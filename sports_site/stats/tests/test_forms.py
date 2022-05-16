@@ -258,4 +258,96 @@ class PlayerHittingGameStatsFormTest(TestCase):
         self.assertTrue(form.is_valid())
 
 
+
+class PlayerPitchingGameStatsFormTest(TestCase):
+    @classmethod
+    def setUpTestData(cls) -> None:
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.ts = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=1, home_team=cls.ts)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.ts,
+            game=cls.game
+        )
+        return super().setUpTestData()
+
+
+    def test_form_labels(self):
+        form = PlayerPitchingGameStatsForm(
+            instance=self.tgs,
+            **{
+                "team_season": self.ts,
+                "game_stats": self.tgs
+            }
+         )
+
+        form_labels = {
+            "player": False,
+            "win": "W",
+            "loss": "L",
+            # "game": "G",
+            "game_started": "GS",
+            "complete_game": "CG",
+            "shutout": "SHO",
+            "save_converted": "SV",
+            "save_op": "SVO",
+            "hits_allowed": "H",
+            "runs_allowed": "R",
+            "earned_runs": "ER",
+            "homeruns_allowed": "HR",
+            "hit_batters": "HB",
+            "walks_allowed": "BB",
+            "strikeouts": "K",
+            "stolen_bases_allowed": "SB",
+            "runners_caught_stealing": "CS",
+            "pick_offs": "PK",
+            "balk": "Balk",
+            "innings_pitched": "IP",
+            "_innings": "IP"
+        }
+
+        for k,v in form_labels.items():
+            label = form.fields[k].label
+            self.assertTrue(label is None or label == v)
+
+
+    def test_forms(self):
+        form_data = {
+            "player": 1,
+            "win": 1,
+            "loss": 0,
+            # "game": "G",
+            "game_started": 1, #Game Starter --> CG --> Booleans or intFields?
+            "complete_game": 1, #
+            "shutout": 1,
+            "save_converted": 0,
+            "save_op": 0,
+            "hits_allowed": 0,
+            "runs_allowed": 0,
+            "earned_runs": 0,
+            "homeruns_allowed": 0,
+            "hit_batters": 0,
+            "walks_allowed": 0,
+            "strikeouts": 27,
+            "stolen_bases_allowed": 0,
+            "runners_caught_stealing": 0,
+            "pick_offs": 0,
+            "balk": 0,
+            "innings_pitched": 9,
+            "_innings": 0
+        }
+
+        form = PlayerHittingGameStatsForm(
+            data = form_data,
+            instance=self.tgs,
+            **{
+                "team_season": self.ts,
+                "game_stats": self.tgs
+            }
+         )
+        self.assertTrue(form.is_valid())
+
+
         
