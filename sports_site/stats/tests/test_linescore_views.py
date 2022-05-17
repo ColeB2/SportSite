@@ -9,7 +9,8 @@ from stats.models import TeamGameLineScore, TeamGameStats
 
 class TeamGameLinescoreCreateViewTest(TestCase):
     """
-    Tests team_game_linescore_create_view from stats/views/tg_linescore_views.py
+    Tests team_game_linescore_create_view
+    from stats/views/tg_linescore_views.py
 
     'game/<int:game_pk>/team/<int:team_season_pk>/linescore/<int:team_game_stats_pk>',
     views.team_game_linescore_create_view,
@@ -31,6 +32,7 @@ class TeamGameLinescoreCreateViewTest(TestCase):
             team=cls.team_season,
             game=cls.game
         )
+
 
     def test_view_without_logging_in(self):
         response = self.client.get('/league/stats/game/2/team/1/linescore/1')
@@ -66,3 +68,139 @@ class TeamGameLinescoreCreateViewTest(TestCase):
                 "game_pk": self.game.pk,
                 "team_season_pk": self.team_season.pk
             }))
+
+
+
+class TeamGameLinescoreEditViewTest(TestCase):
+    """
+    Tests team_game_linescore_edit_view
+    from stats/views/tg_linescore_views.py
+
+    'game/<int:game_pk>/team/<int:team_season_pk>/linescore/
+        <int:team_game_stats_pk>/<int:linescore_pk>/edit',
+    views.team_game_linescore_edit_view,
+    name='stats-linescore-edit'
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.stage = SeasonStage.objects.get(id=1)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=2)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game
+        )
+
+        cls.tgls = TeamGameLineScore.objects.create(
+            game=cls.tgs
+        )
+
+
+    def test_view_without_logging_in(self):
+        url = (
+            f'/league/stats/game/{self.game.pk}/team/{self.team_season.pk}/'
+            f'linescore/{self.tgs.pk}/{self.tgls.pk}/edit'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        url = (
+            f'/league/stats/game/{self.game.pk}/team/{self.team_season.pk}/'
+            f'linescore/{self.tgs.pk}/{self.tgls.pk}/edit'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-linescore-edit',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+                "linescore_pk": self.tgls.pk
+            }))
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-linescore-edit',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+                "linescore_pk": self.tgls.pk
+            }))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,"stats/game_linescore_create.html")
+
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-linescore-edit',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+                "linescore_pk": self.tgls.pk
+            }))
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context["game_pk"], self.game.pk)
+        self.assertEqual(response.context["team_season_pk"],
+            self.team_season.pk)
+        self.assertEqual(response.context["game_stats"], self.tgs)
+        self.assertEqual(response.context["linescore"], self.tgls)
+        self.assertTrue(response.context["form"] is not None)
+
+    
+    def test_edit(self):
+        data= {
+            "first":4,
+            "second":0,
+        }
+        self.client.login(username="Test", password="test")
+        self.client.post(reverse('stats-linescore-edit',
+                kwargs={
+                    "game_pk": self.game.pk,
+                    "team_season_pk": self.team_season.pk,
+                    "team_game_stats_pk": self.tgs.pk,
+                    "linescore_pk": self.tgls.pk
+                }),
+            data=data,
+            follow=True
+        )
+        tgls = TeamGameLineScore.objects.get(pk=self.tgls.pk)
+        self.assertTrue(self.tgls.first != tgls.first)
+        self.assertEqual(tgls.first, 4)
+
+    
+    def test_redirects(self):
+        data= {
+            "first":4,
+            "second":0,
+        }
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-linescore-edit',
+                kwargs={
+                    "game_pk": self.game.pk,
+                    "team_season_pk": self.team_season.pk,
+                    "team_game_stats_pk": self.tgs.pk,
+                    "linescore_pk": self.tgls.pk
+                }),
+            data=data,
+            follow=True
+        )
+        self.assertRedirects(response, reverse("stats-team-game-stats",
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk
+            }))
+
