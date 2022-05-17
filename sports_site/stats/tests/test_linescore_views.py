@@ -204,3 +204,32 @@ class TeamGameLinescoreEditViewTest(TestCase):
                 "team_season_pk": self.team_season.pk
             }))
 
+
+
+class TeamGameLinescoreDeleteViewTest(TestCase):
+    """
+    Tests team_game_linescore_delete_view
+    from stats/views/tg_linescore_views.py
+
+    'game/<int:game_pk>/team/<int:team_season_pk>/linescore/
+        <int:team_game_stats_pk>/<int:linescore_pk>/delete',
+    views.team_game_linescore_delete_info_view,
+    name='stats-linescore-delete'
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.stage = SeasonStage.objects.get(id=1)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=2)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game
+        )
+
+        cls.tgls = TeamGameLineScore.objects.create(
+            game=cls.tgs
+        )
+
