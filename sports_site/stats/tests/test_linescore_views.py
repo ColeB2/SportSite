@@ -204,6 +204,25 @@ class TeamGameLinescoreEditViewTest(TestCase):
                 "team_season_pk": self.team_season.pk
             }))
 
+    def test_does_not_exist(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-linescore-edit',
+                kwargs={
+                    "game_pk": self.game.pk,
+                    "team_season_pk": 9,
+                    "team_game_stats_pk": self.tgs.pk,
+                    "linescore_pk": 9
+                }),
+        )
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context["game_pk"], self.game.pk)
+        self.assertEqual(response.context["team_season_pk"],9)
+        self.assertEqual(response.context["game_stats"], self.tgs)
+        self.assertEqual(response.context["linescore"], None)
+        self.assertTrue(response.context["form"] is not None)
+
+
 
 
 class TeamGameLinescoreDeleteViewTest(TestCase):
