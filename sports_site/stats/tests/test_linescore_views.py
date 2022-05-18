@@ -1,8 +1,7 @@
-from asyncio import staggered
 from django.test import TestCase
 from django.urls import reverse
 
-from league.models import Game, League, Season, SeasonStage, TeamSeason
+from league.models import Game, League, SeasonStage, TeamSeason
 from stats.models import TeamGameLineScore, TeamGameStats
 
 
