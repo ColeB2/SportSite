@@ -77,7 +77,7 @@ def team_game_linescore_delete_info_view(request, game_pk, team_season_pk,
     if request.method == 'POST':
         linescore.delete()
         messages.success(request,
-            f"{linescore} and all releated object were deleted")
+            f"{linescore} and all related objects were deleted.")
 
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
 
