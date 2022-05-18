@@ -233,3 +233,100 @@ class TeamGameLinescoreDeleteViewTest(TestCase):
             game=cls.tgs
         )
 
+    def test_view_without_logging_in(self):
+        url = (
+            f'/league/stats/game/{self.game.pk}/team/{self.team_season.pk}/'
+            f'linescore/{self.tgs.pk}/{self.tgls.pk}/delete'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        url = (
+            f'/league/stats/game/{self.game.pk}/team/{self.team_season.pk}/'
+            f'linescore/{self.tgs.pk}/{self.tgls.pk}/delete'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-linescore-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+                "linescore_pk": self.tgls.pk
+            }))
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-linescore-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+                "linescore_pk": self.tgls.pk
+            }))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,"stats/game_linescore_delete.html")
+
+    
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-linescore-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+                "linescore_pk": self.tgls.pk
+            }))
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context["game_pk"], self.game.pk)
+        self.assertEqual(response.context["team_season_pk"],
+            self.team_season.pk)
+        self.assertEqual(response.context["linescore"], self.tgls)
+        self.assertTrue(response.context["nested_object"] is not None)
+
+
+    def test_delete(self):
+        count = TeamGameLineScore.objects.filter(game=self.tgs).count()
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-linescore-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+                "linescore_pk": self.tgls.pk
+            }), follow=True)
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{self.tgls} and all related objects were deleted.')
+
+        count2 = TeamGameLineScore.objects.filter(game=self.tgs).count()
+        self.assertEqual(count-1, count2)
+
+
+    def test_redirects(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-linescore-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+                "linescore_pk": self.tgls.pk
+            }))
+        self.assertRedirects(response, reverse("stats-team-game-stats",
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk
+            }))
+
+
