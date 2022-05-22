@@ -176,3 +176,7 @@ class TeamGameStatsCreateViewTest(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]),
             f'{phgs.player.player} already has stats for {self.game}.')
+
+
+class TeamGameStatsEditViewTest(TestCase):
+    pass
