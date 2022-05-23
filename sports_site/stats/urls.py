@@ -26,7 +26,7 @@ urlpatterns = [
         views.team_game_stats_edit_view,
         name='stats-game-stats-edit'),
     path(
-        'game/<int:game_pk>/team/<int:team_season_pk>/lineup/<int:team_game_stats_pk>/delete,',
+        'game/<int:game_pk>/team/<int:team_season_pk>/lineup/<int:team_game_stats_pk>/delete',
         views.team_game_stats_delete_info_view,
         name='stats-game-stats-delete'),
     
