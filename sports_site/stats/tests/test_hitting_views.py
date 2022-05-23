@@ -406,12 +406,11 @@ class TeamGameStatsDeleteInfoViewTest(TestCase):
             }),
             follow=True)
 
-        hs = self.tgs.playerhittinggamestats_set.all()
+        # hs = self.tgs.playerhittinggamestats_set.all()
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
-        for stat in hs:
-            self.assertEqual(str(messages[0]),
-                f'{stat} and all related objects were deleted.')
+        self.assertEqual(str(messages[0]),
+            f'{self.phgs} and all related objects were deleted.')
         
         
         count2 = PlayerHittingGameStats.objects.all().count()
