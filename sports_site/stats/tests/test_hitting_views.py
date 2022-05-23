@@ -175,7 +175,6 @@ class TeamGameStatsCreateViewTest(TestCase):
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]),
-<<<<<<< HEAD
             f'{phgs.player.player} already has stats for {self.game}.')
 
 
@@ -254,6 +253,3 @@ class TeamGameStatsEditViewTest(TestCase):
             response.context["players"], self.players, ordered=False)
         self.assertTrue(response.context["formset"] is not None)
         self.assertTrue(response.context["helper"] is not None)
-=======
-            f'{phgs.player.player} already has stats for {self.game}.')
->>>>>>> parent of 7f0b4f7 (EditView Test basic class layout)
