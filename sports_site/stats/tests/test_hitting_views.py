@@ -253,3 +253,64 @@ class TeamGameStatsEditViewTest(TestCase):
             response.context["players"], self.players, ordered=False)
         self.assertTrue(response.context["formset"] is not None)
         self.assertTrue(response.context["helper"] is not None)
+
+    def test_edit(self):
+        data= {
+            "playerhittinggamestats_set-INITIAL_FORMS": 0,
+            "playerhittinggamestats_set-TOTAL_FORMS": len(self.players),
+            "playerhittinggamestats_set-MAX_NUM_FORMS": "",
+
+            #form 0
+            "playerhittinggamestats_set-0-player": self.players[0].id,
+            "playerhittinggamestats_set-0-at_bats": 100,
+        }
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-game-stats-edit',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            data=data,
+            follow=True)
+        
+        player = self.players[0]
+        phgs = player.playerhittinggamestats_set.get(team_stats=self.tgs)
+
+        self.assertEqual(phgs.player, self.players[0])
+        self.assertEqual(phgs.season, self.stage)
+        self.assertEqual(phgs.team_stats, self.tgs)
+        self.assertEqual(phgs.at_bats, 100)
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{phgs} saved.')
+
+
+    def test_redirects(self):
+        data= {
+            "playerhittinggamestats_set-INITIAL_FORMS": 0,
+            "playerhittinggamestats_set-TOTAL_FORMS": len(self.players),
+            "playerhittinggamestats_set-MAX_NUM_FORMS": "",
+
+            #form 0
+            "playerhittinggamestats_set-0-player": self.players[0].id,
+            "playerhittinggamestats_set-0-at_bats": 100,
+        }
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-game-stats-edit',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            data=data,
+            follow=True)
+        
+        self.assertRedirects(response, reverse("stats-team-game-stats",
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk
+            }))
+
