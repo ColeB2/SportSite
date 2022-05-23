@@ -179,4 +179,77 @@ class TeamGameStatsCreateViewTest(TestCase):
 
 
 class TeamGameStatsEditViewTest(TestCase):
-    pass
+    """
+    Tests team_game_stats_edit_view
+    from stats/views/tgs_hitting_views.py
+
+    'game/<int:game_pk>/team/<int:team_season_pk>/lineup/
+        <int:team_game_stats_pk>/edit',
+    views.team_game_stats_edit_view,
+    name='stats-game-stats-edit'
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=2)
+        cls.roster = Roster.objects.get(team=cls.team_season)
+        cls.players = cls.roster.playerseason_set.all()
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game
+        )
+
+
+    def test_view_without_logging_in(self):
+        url = (
+            f"/league/stats/game/{self.game.pk}/team/{self.team_season.pk}/" +
+            f"lineup/{self.tgs.pk}/edit"
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        url = (
+            f"/league/stats/game/{self.game.pk}/team/{self.team_season.pk}/" +
+            f"lineup/{self.tgs.pk}/edit"
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-game-stats-edit',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }))
+        self.assertEqual(response.status_code, 200)
+    
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-game-stats-edit',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }))
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context["game"], self.game)
+        self.assertEqual(response.context["team_season"],self.team_season)
+        
+        self.assertEqual(response.context["roster"], self.roster)
+        
+        self.assertQuerysetEqual(
+            response.context["players"], self.players, ordered=False)
+        self.assertTrue(response.context["formset"] is not None)
+        self.assertTrue(response.context["helper"] is not None)

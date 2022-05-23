@@ -73,7 +73,10 @@ def team_game_stats_edit_view(request, game_pk, team_season_pk,
     players = roster.playerseason_set.all()
 
     team_game_stats, created = TeamGameStats.objects.get_or_create(
-            season=team_season.season, team=team_season, game=game)
+            pk=team_game_stats_pk,
+            season=team_season.season,
+            team=team_season,
+            game=game)
 
     helper = PHGSFHelper()
 
