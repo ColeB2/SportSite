@@ -314,3 +314,125 @@ class TeamGameStatsEditViewTest(TestCase):
                 "team_season_pk": self.team_season.pk
             }))
 
+
+class TeamGameStatsDeleteInfoViewTest(TestCase):
+    """
+    Tests team_game_stats_delete_info_view
+    from stats/views/tgs_hitting_views.py
+
+    'game/<int:game_pk>/team/<int:team_season_pk>/lineup/
+        <int:team_game_stats_pk>/delete,',
+    views.team_game_stats_delete_info_view,
+    name='stats-game-stats-delete'
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=2)
+        cls.roster = Roster.objects.get(team=cls.team_season)
+        cls.players = cls.roster.playerseason_set.all()
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game
+        )
+
+        cls.phgs = PlayerHittingGameStats.objects.create(
+            team_stats=cls.tgs,
+            season=cls.stage,
+            player=cls.players[0]
+        )
+
+    def test_view_without_logging_in(self):
+        url = (
+            f"/league/stats/game/{self.game.pk}/team/{self.team_season.pk}/" +
+            f"lineup/{self.tgs.pk}/delete"
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        url = (
+            f"/league/stats/game/{self.game.pk}/team/{self.team_season.pk}/" +
+            f"lineup/{self.tgs.pk}/delete"
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-game-stats-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }))
+        self.assertEqual(response.status_code, 200)
+    
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-game-stats-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }))
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context["game_pk"], self.game.pk)
+        self.assertEqual(response.context["team_season_pk"],self.team_season.pk)
+        self.assertEqual(response.context["game_stats"], self.tgs)
+        
+        self.assertQuerysetEqual(
+            response.context["hitting_stats"],
+            self.tgs.playerhittinggamestats_set.all(),
+            ordered=False)
+
+    def test_delete(self):
+        count = PlayerHittingGameStats.objects.all().count()
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-game-stats-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            follow=True)
+
+        hs = self.tgs.playerhittinggamestats_set.all()
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        for stat in hs:
+            self.assertEqual(str(messages[0]),
+                f'{stat} and all related objects were deleted.')
+        
+        
+        count2 = PlayerHittingGameStats.objects.all().count()
+        self.assertEqual(count - 1, count2)
+
+
+    def test_redirects(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-game-stats-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            follow=True)
+
+        self.assertRedirects(response, reverse("stats-team-game-stats",
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk
+            }))
+
+
+
