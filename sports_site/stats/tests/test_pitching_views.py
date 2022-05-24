@@ -96,8 +96,6 @@ class TeamGamePitchingStatsCreateViewTest(TestCase):
 
     def test_create(self):
         count = PlayerPitchingGameStats.objects.all().count()
-        print(count)
-        print(self.tgs)
         data= {
             "create": True,
             "form-INITIAL_FORMS": 0,
@@ -115,13 +113,9 @@ class TeamGamePitchingStatsCreateViewTest(TestCase):
             }),
             data=data,
             follow=True)
-
-        print(data)
         
         count2 = PlayerPitchingGameStats.objects.all().count()
-        print(count2)
         ppgs = PlayerPitchingGameStats.objects.get(id=count2)
-        print(ppgs)
         self.assertTrue(count+1 == count2)
         self.assertEqual(ppgs.player, self.players[0])
         self.assertEqual(ppgs.season, self.stage)
@@ -131,3 +125,69 @@ class TeamGamePitchingStatsCreateViewTest(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]),
             f'{ppgs.player.player} pitching stats created for {self.game}.')
+
+
+    def test_redirects(self):
+        data= {
+            "create": True,
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": len(self.players),
+            "form-MAX_NUM_FORMS": "",
+
+            #form 0
+            "form-0-player": self.players[0].id,
+        }
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-game-pitching-stats-create',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            data=data,
+            follow=True)
+
+        self.assertRedirects(response, reverse("stats-team-game-stats",
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk
+            }))
+
+
+    def test_create_already_exists(self):
+        count = PlayerPitchingGameStats.objects.all().count()
+        data= {
+            "create": True,
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": len(self.players),
+            "form-MAX_NUM_FORMS": "",
+
+            #form 0
+            "form-0-player": self.players[0].id,
+        }
+        self.client.login(username="Test", password="test")
+        ##run response twice to create 2.
+        self.client.post(reverse('stats-game-pitching-stats-create',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            data=data,
+            follow=True)
+        response = self.client.post(reverse('stats-game-pitching-stats-create',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            data=data,
+            follow=True)
+        
+        count2 = PlayerPitchingGameStats.objects.all().count()
+        ppgs = PlayerPitchingGameStats.objects.get(id=count2)
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{ppgs.player.player} already has stats for {self.game}.')

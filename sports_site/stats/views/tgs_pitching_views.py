@@ -41,7 +41,7 @@ def team_game_pitching_stats_create_view(request, game_pk, team_season_pk,
                 if created:
                     messages.success(request,
                         f"{pitching_stats.player.player} pitching stats "
-                        f"created for {game}")
+                        f"created for {game}.")
                 else:
                     if pitching_stats:
                         messages.info(request,
@@ -120,7 +120,7 @@ def team_game_pitching_stats_delete_info_view(request, game_pk, team_season_pk,
         for stat_obj in pitching_stats:
             stat_obj.delete()
             messages.success(request,
-                f"{stat_obj} and all releated object were deleted")
+                f"{stat_obj} and all related objects were deleted.")
 
         return redirect('stats-team-game-stats', game_pk, team_season_pk)
     else:
