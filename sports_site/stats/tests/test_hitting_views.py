@@ -115,7 +115,7 @@ class TeamGameStatsCreateViewTest(TestCase):
             follow=True)
         
         count2 = PlayerHittingGameStats.objects.all().count()
-        phgs = PlayerHittingGameStats.objects.get(id=count2)
+        phgs = PlayerHittingGameStats.objects.get(id=3)
         self.assertTrue(count+1 == count2)
         self.assertEqual(phgs.player, self.players[0])
         self.assertEqual(phgs.season, self.stage)
@@ -181,8 +181,7 @@ class TeamGameStatsCreateViewTest(TestCase):
             data=data,
             follow=True)
         
-        count2 = PlayerHittingGameStats.objects.all().count()
-        phgs = PlayerHittingGameStats.objects.get(id=count2)
+        phgs = PlayerHittingGameStats.objects.get(id=3)
 
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
@@ -444,7 +443,6 @@ class TeamGameStatsDeleteInfoViewTest(TestCase):
             }),
             follow=True)
 
-        # hs = self.tgs.playerhittinggamestats_set.all()
         messages = list(response.context['messages'])
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]),
