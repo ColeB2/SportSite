@@ -58,6 +58,19 @@ class TeamGameStatsCreateViewTest(TestCase):
                 "team_game_stats_pk": self.tgs.pk,
             }))
         self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-game-stats-create',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "stats/game_stats_create.html")
     
 
     def test_context(self):
@@ -141,7 +154,6 @@ class TeamGameStatsCreateViewTest(TestCase):
             }))
 
     def test_create_already_exists(self):
-        count = PlayerHittingGameStats.objects.all().count()
         data= {
             "create": True,
             "form-INITIAL_FORMS": 0,
@@ -232,6 +244,19 @@ class TeamGameStatsEditViewTest(TestCase):
                 "team_game_stats_pk": self.tgs.pk,
             }))
         self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-game-stats-edit',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "stats/game_stats_edit.html")
     
 
     def test_context(self):
@@ -374,6 +399,19 @@ class TeamGameStatsDeleteInfoViewTest(TestCase):
                 "team_game_stats_pk": self.tgs.pk,
             }))
         self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('stats-game-stats-delete',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,
+            "stats/game_stats_delete.html")
     
 
     def test_context(self):
