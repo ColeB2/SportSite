@@ -68,45 +68,15 @@ class SeasonStage(models.Model):
 
 
 """Team Related Models"""
-def unique_abbreviation(obj_instance, obj_abbreviation=None, iterations=0):
-    """
-    A function to calculate a unique abbrev. for instance. Works by checking if
-    abbrev is provided, if not, creates one, then checks if it exists.
-    If it does, it check next letter in the place string and tries again..
-    """
-    abbreviation = (
-        obj_abbreviation if obj_abbreviation
-        else obj_instance.place[0:3].upper())
-
-    obj_class = obj_instance.__class__
-    queryset_exists = obj_class.objects.filter(abbreviation=abbreviation).exists()
-
-    if queryset_exists:
-        if obj_class.objects.get(abbreviation=abbreviation) == obj_instance:
-            return abbreviation
-        else:
-            if len(obj_instance.place) >= iterations+4:
-                new_abbreviation = obj_instance.place[0:2].upper() + obj_instance.place[3+iterations:4+iterations].upper()
-                return unique_abbreviation(obj_instance, obj_abbreviation=new_abbreviation, iterations=iterations+1)
-            else:
-                return None
-    return abbreviation
-
-
 class Team(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=30, null=True, blank=True)
     place = models.CharField(max_length=30, null=True, blank=True)
-    abbreviation = models.SlugField(max_length=3, null=True, blank=True)
+    abbreviation = models.SlugField(max_length=4, null=True, blank=True)
 
     def __str__(self):
         return f"{self.place} {self.name}"
-
-    def save(self, *args, **kwargs):
-        if self._state.adding is True:
-            self.abbreviation = unique_abbreviation(self, self.abbreviation)
-        super(Team, self).save(*args, **kwargs)
 
 
 class TeamSeason(models.Model):
