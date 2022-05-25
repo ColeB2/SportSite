@@ -198,16 +198,16 @@ class ArticleEditViewTest(TestCase):
         response = self.client.get('/league/news/article-title/edit?league=TL')
         self.assertEqual(response.status_code, 200)
 
-    def test_viewing_without_perm(self):
+    def test_viewing_anonymous_user(self):
         response = self.client.get(reverse(
             'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
 
     def test_user_viewing_without_perm(self):
         self.client.login(username="BadUser", password="bad")
         response = self.client.get(reverse(
             'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
 
     def test_view_accessible_by_name(self):
         self.client.login(username="Test", password="test")
@@ -346,10 +346,17 @@ class ArticleDeleteViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-    def test_viewing_without_perm(self):
+    def test_viewing_anonymous_user(self):
         response = self.client.get(reverse(
             'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
+
+    
+    def test_user_viewing_without_perm(self):
+        self.client.login(username="BadUser", password="bad")
+        response = self.client.get(reverse(
+            'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
+        self.assertEqual(response.status_code, 403)
 
 
     def test_view_uses_correct_template(self):
