@@ -203,6 +203,12 @@ class ArticleEditViewTest(TestCase):
             'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
         self.assertEqual(response.status_code, 302)
 
+    def test_user_viewing_without_perm(self):
+        self.client.login(username="BadUser", password="bad")
+        response = self.client.get(reverse(
+            'news-edit', kwargs={"slug": self.article.slug})+"?league=TL")
+        self.assertEqual(response.status_code, 302)
+
     def test_view_accessible_by_name(self):
         self.client.login(username="Test", password="test")
         response = self.client.get(reverse(
