@@ -21,6 +21,16 @@ class MyMixinRunner(object):
         user.userprofile.league = league
         user.save()
 
+        
+        user2 = User.objects.create(
+            username="BadUser",
+            email="bad@email.com",
+            password="bad")
+        l = League.objects.create(name="Bad League" admin=user, url="BL")
+        user2.user_permmisions.add(permission)
+        user2.userprofile.league = l
+        user2.save()
+
         season = Season.objects.create(year="2022", league=league)
 
         stageO = SeasonStage.objects.create(stage=SeasonStage.OTHER, season=season, stage_name="Preseason", featured=True)
