@@ -74,10 +74,9 @@ def unique_abbreviation(obj_instance, obj_abbreviation=None, iterations=0):
     abbrev is provided, if not, creates one, then checks if it exists.
     If it does, it check next letter in the place string and tries again..
     """
-    if obj_abbreviation:
-        abbreviation = obj_abbreviation
-    else:
-        abbreviation = obj_instance.place[0:3].upper()
+    abbreviation = (
+        obj_abbreviation if obj_abbreviation
+        else obj_instance.place[0:3].upper())
 
     obj_class = obj_instance.__class__
     queryset_exists = obj_class.objects.filter(abbreviation=abbreviation).exists()
