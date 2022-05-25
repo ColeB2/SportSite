@@ -229,7 +229,7 @@ class TeamTestCase(TestCase):
 
     def test_abbreviation_max_length(self):
         max_length = self.team1._meta.get_field('abbreviation').max_length
-        self.assertEqual(max_length, 3)
+        self.assertEqual(max_length, 4)
 
     def test_expected_name(self):
         self.assertEqual(str(self.team1), "Town One Team One")
