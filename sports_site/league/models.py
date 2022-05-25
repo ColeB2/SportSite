@@ -81,7 +81,7 @@ class Team(models.Model):
     def save(self, *args, **kwargs):
         if self._state.adding is True:
             if not self.abbreviation:
-                self.abbrevation = self.place[0:3].uppser()
+                self.abbrevation = self.place[0:3].upper()
         super(Team, self).save(*args, **kwargs)
 
 
