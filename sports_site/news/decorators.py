@@ -9,11 +9,12 @@ def user_owns_article(function):
     @wraps(function)
     def wrap (request, *args, **kwargs):
         article = Article.objects.get(slug=kwargs['slug'])
+        league=None
         if request.user.is_authenticated:
             league_slug = request.user.userprofile.league.url
-        league = League.objects.get(url=league_slug)
+            league = League.objects.get(url=league_slug)
 
-        if article.league == league:
+        if league and article.league == league:
             return function(request, *args, **kwargs)
         else:
             raise PermissionDenied
