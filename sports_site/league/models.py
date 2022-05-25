@@ -73,10 +73,16 @@ class Team(models.Model):
     league = models.ForeignKey(League, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=30, null=True, blank=True)
     place = models.CharField(max_length=30, null=True, blank=True)
-    abbreviation = models.SlugField(max_length=4, null=True, blank=True)
+    abbreviation = models.SlugField(max_length=3, null=True, blank=True)
 
     def __str__(self):
         return f"{self.place} {self.name}"
+
+    def save(self, *args, **kwargs):
+        if self._state.adding is True:
+            if not self.abbreviation:
+                self.abbrevation = self.place[0:3].uppser()
+        super(Team, self).save(*args, **kwargs)
 
 
 class TeamSeason(models.Model):
