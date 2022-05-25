@@ -24,9 +24,8 @@ class MyMixinRunner(object):
         
         user2 = User.objects.create(
             username="BadUser",
-            email="bad@email.com",
-            password="bad")
-        l = League.objects.create(name="Bad League" admin=user, url="BL")
+            email="bad@email.com", password="bad")
+        l = League.objects.create(name="Bad League", admin=user, url="BL")
         user2.user_permmisions.add(permission)
         user2.userprofile.league = l
         user2.save()
