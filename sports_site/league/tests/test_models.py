@@ -214,11 +214,7 @@ class TeamTestCase(TestCase):
     def test_abbreviation_label(self):
         field_label = self.team1._meta.get_field('abbreviation').verbose_name
         self.assertEqual(field_label, 'abbreviation')
-
-    def test_unique_abbreviation(self):
-        #check test
-        self.assertEqual(self.teamtest.abbreviation, "TOW")
-
+        
     def test_name_max_length(self):
         max_length = self.team1._meta.get_field('name').max_length
         self.assertEqual(max_length, 30)
