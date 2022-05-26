@@ -203,3 +203,21 @@ class GameBoxscorePageViewTest(TestCase):
         self.assertFalse(phgs2 in response.context["home_stats"])
         #home away exxtra, home away linescore
 
+
+    def test_obj_does_not_exist(self):
+        league = League.objects.get(id=1)
+        team = Team.objects.get(name="Team One")
+        team2 = Team.objects.get(name="Team Two")
+        gdate = datetime(2020, 5, 25)
+        stage = SeasonStage.objects.get(stage=SeasonStage.REGULAR, featured=True)
+        team1r = TeamSeason.objects.get(team=team)
+        team2r = TeamSeason.objects.get(team=team2)
+        game = Game.objects.create(season=stage, home_team=team1r, away_team=team2r, date=gdate)
+
+        
+
+
+        response = self.client.get(reverse(
+            'game-boxscore-page', args=str(game.id))+"?league=TL")
+        self.assertEqual(response.status_code, 404)
+
