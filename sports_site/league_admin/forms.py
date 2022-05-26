@@ -363,6 +363,9 @@ class TeamCreateForm(forms.ModelForm):
         place = self.cleaned_data.get('place')
         abbreviation = self.cleaned_data.get('abbreviation')
 
+        if not abbreviation:
+            abbreviation = place[0:3]
+
         new_team = Team(name=name, place=place, league=league,
             abbreviation=abbreviation)
         new_team.save()

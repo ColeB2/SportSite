@@ -78,11 +78,6 @@ class Team(models.Model):
     def __str__(self):
         return f"{self.place} {self.name}"
 
-    def save(self, *args, **kwargs):
-        if self._state.adding is True:
-            if self.abbreviation == None:
-                self.abbrevation = self.place[0:3].upper()
-        super(Team, self).save(*args, **kwargs)
 
 
 class TeamSeason(models.Model):
