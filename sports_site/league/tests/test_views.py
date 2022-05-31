@@ -214,10 +214,10 @@ class GameBoxscorePageViewTest(TestCase):
         team2r = TeamSeason.objects.get(team=team2)
         game = Game.objects.create(season=stage, home_team=team1r, away_team=team2r, date=gdate)
 
+        hgs = TeamGameStats.objects.create(season=stage, game=game, team=game.home_team)
+        ags = TeamGameStats.objects.create(season=stage, game=game, team=game.away_team)
         
-
-
         response = self.client.get(reverse(
             'game-boxscore-page', args=str(game.id))+"?league=TL")
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
 
