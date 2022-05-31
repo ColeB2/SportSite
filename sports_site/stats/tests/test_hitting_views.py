@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse
 
-from league.models import Game, League, Roster, SeasonStage, TeamSeason
+from league.models import (Game, League, Player, PlayerSeason, Roster,
+    SeasonStage, TeamSeason)
 from stats.models import PlayerHittingGameStats, TeamGameStats
 
 
@@ -125,6 +126,57 @@ class TeamGameStatsCreateViewTest(TestCase):
         self.assertEqual(len(messages), 1)
         self.assertEqual(str(messages[0]),
             f'{phgs.player.player} hitting stats created for {self.game}.')
+
+    def test_create_different_slot_post_twice(self):
+        player = Player.objects.create(
+            league=self.league,
+            first_name="Throwaway",
+            last_name="Player")
+        player_season = PlayerSeason.objects.create(
+            player=player, team=self.roster, season=self.stage,
+            number=00, position="LF")
+        
+        players = self.roster.playerseason_set.all()
+        count = PlayerHittingGameStats.objects.all().count()
+        data= {
+            "create": True,
+            "form-INITIAL_FORMS": 0,
+            "form-TOTAL_FORMS": len(self.players),
+            "form-MAX_NUM_FORMS": "",
+
+            #form 0
+            "form-1-player": self.players[0].id,
+        }
+        self.client.login(username="Test", password="test")
+        response = self.client.post(reverse('stats-game-stats-create',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            data=data,
+            follow=True)
+
+        response = self.client.post(reverse('stats-game-stats-create',
+            kwargs={
+                "game_pk": self.game.pk,
+                "team_season_pk": self.team_season.pk,
+                "team_game_stats_pk": self.tgs.pk,
+            }),
+            data=data,
+            follow=True)
+        
+        count2 = PlayerHittingGameStats.objects.all().count()
+        phgs = PlayerHittingGameStats.objects.get(id=3)
+        self.assertTrue(count+1 == count2)
+        self.assertEqual(phgs.player, self.players[0])
+        self.assertEqual(phgs.season, self.stage)
+        self.assertEqual(phgs.team_stats, self.tgs)
+
+        messages = list(response.context['messages'])
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(str(messages[0]),
+            f'{phgs.player.player} already has stats for {self.game}.')
 
     
     def test_redirects(self):
