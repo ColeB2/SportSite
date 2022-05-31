@@ -109,7 +109,6 @@ def game_boxscore_page_view(request, game_pk):
     league = League.objects.get(url=league_slug)
     game = Game.objects.get(pk=game_pk)
 
-    # home_game_stats = TeamGameStats.objects.get(game=game, team=game.home_team)
     home_game_stats = get_object_or_404(TeamGameStats, game=game, team=game.home_team)
     home_stats = home_game_stats.playerhittinggamestats_set.all()
     home_stats_table = PlayerHittingGameStatsTable(home_stats)
@@ -120,8 +119,7 @@ def game_boxscore_page_view(request, game_pk):
     home_pitching = PitchingOrderTable(home_pitching_stats)
     home_extra = format_stats(get_stats_info(home_stats))
 
-
-    away_game_stats = TeamGameStats.objects.get(game=game, team=game.away_team)
+    away_game_stats = get_object_or_404(TeamGameStats, game=game, team=game.away_team)
     away_stats = away_game_stats.playerhittinggamestats_set.all()
     away_stats_table = PlayerHittingGameStatsTable(away_stats)
     away_pitching_stats = away_game_stats.playerpitchinggamestats_set.all()
