@@ -1,15 +1,10 @@
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic.edit import FormView
-from django.views.generic import UpdateView, TemplateView
 from league.models import (League, Roster)
 from news.models import Article
 from ..filters import RosterFilter, ArticleFilter
-from ..forms import LeagueHittingOptionsForm, LeagueHittingStatsOptionsForm
-from ..models import LeagueHittingOptions, LeagueHittingStatsOptions
+
 
 
 
