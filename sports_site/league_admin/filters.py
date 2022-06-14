@@ -5,6 +5,10 @@ from news.models import Article
 
 
 class ArticleFilter(django_filters.FilterSet):
+    """
+    Filter used in league_admin/views.py
+        league_admin_news_select() view
+    """
     #todo - implement date
     #date_posted = django_filters.DateFromToRangeFilter
     class Meta:
@@ -13,6 +17,10 @@ class ArticleFilter(django_filters.FilterSet):
 
 
 class PlayerFilter(django_filters.FilterSet):
+    """
+    Filter used in league_admin/views/player_views.py
+        league_admin_player_select_view() view
+    """
     last_name = django_filters.CharFilter(lookup_expr='icontains')
     first_name = django_filters.CharFilter(lookup_expr='icontains')
     class Meta:
@@ -20,7 +28,7 @@ class PlayerFilter(django_filters.FilterSet):
         fields = ["last_name", "first_name"]
 
 
-def league_seasons(request):
+def _league_seasons(request):
     # if request is None:
     #     return SeasonStage.objects.none()
     league = request.user.userprofile.league
@@ -28,7 +36,11 @@ def league_seasons(request):
 
 
 class RosterFilter(django_filters.FilterSet):
-    team__season = django_filters.ModelChoiceFilter(queryset=league_seasons)
+    """
+    Filter used in league_admin/views.py
+        league_admin_roster_select() view
+    """
+    team__season = django_filters.ModelChoiceFilter(queryset=_league_seasons)
     class Meta:
         model = Roster
         fields = ["team__season",]
