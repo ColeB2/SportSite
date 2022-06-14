@@ -21,8 +21,8 @@ class PlayerFilter(django_filters.FilterSet):
 
 
 def league_seasons(request):
-    if request is None:
-        return SeasonStage.objects.none()
+    # if request is None:
+    #     return SeasonStage.objects.none()
     league = request.user.userprofile.league
     return SeasonStage.objects.filter(season__league=league)
 

@@ -112,6 +112,13 @@ class LARosterSelectTest(TestCase):
         #should land us on last page
         self.assertEqual(len(response.context['paginator'].page(2)), 5)
 
+
+    def test_roster_select_request_none(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse('league-admin-roster-select'))
+        self.assertEqual(response.status_code, 200)
+        
+
 class LANewsSelectTest(TestCase):
     """
     Tests league_admin_news_select from league_admin/views/views.py
