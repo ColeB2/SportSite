@@ -18,6 +18,10 @@ def _normalize_str_length(str_value, req_length):
 
 
 def _convert_to_str(float_val):
+    """
+    Used in news/views.py
+        home view to convert the average to string to display.
+    """
     if float_val == None:
         return ".000"
     if float_val == 0:
