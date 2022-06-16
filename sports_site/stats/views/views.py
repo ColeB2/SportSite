@@ -62,7 +62,7 @@ class StatsView(SingleTableMixin, FilterView):
 
     def dispatch(self, request, *args, **kwargs):
         self.league_slug = self.request.GET.get('league', None)
-
+        
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -82,7 +82,7 @@ class StatsView(SingleTableMixin, FilterView):
              else SeasonStage.objects.get(season__league=league, featured=True))
         qs = PlayerHittingGameStats.objects.filter(
             player__player__league=league,
-            season=stage)
+            season=stage).order_by('-plate_appearances')
         hitting_stats = get_stats(qs, "all_season_hitting")
         return hitting_stats
 
