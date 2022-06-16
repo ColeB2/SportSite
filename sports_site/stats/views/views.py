@@ -2,7 +2,6 @@ from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django_filters.views import FilterView
-from django_tables2 import RequestConfig
 from django_tables2.views import SingleTableMixin
 from league.models import League, SeasonStage
 from ..decorators import user_owns_game
