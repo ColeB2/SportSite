@@ -132,3 +132,68 @@ class TeamGameStatsInfoViewTest(TestCase):
         
         self.assertEqual(response.context["linescore"], ls)
         self.assertEqual(type(response.context["table3"]), type(table))
+        
+
+
+class StatsViewTests(TestCase):
+    """
+    Tests StatsView
+    from stats/views/views.py
+
+    '',
+    StatsView.as_view(),
+    name='stats-page')
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=2)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game
+        )
+
+    def test_view_without_logging_in(self):
+        response = self.client.get(f"/league/stats/?league={self.league.url}")
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(f"/league/stats/?league={self.league.url}")
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            'stats-page') + f'?league={self.league.url}')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            'stats-page')+f'?league={self.league.url}')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "stats/stats_page.html")
+
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            'stats-page')+f'?league={self.league.url}')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "stats/stats_page.html")
+
+        self.assertEqual(response.context["league"], self.league)
+        self.assertEqual(response.context["stage"], self.stage)
+        print(response.context)
+        print("is_paginated" in response.context)
+        print(response.context["is_paginated"] == True)
+        print(response.context["table"])
+        print(response.context["filter"])
