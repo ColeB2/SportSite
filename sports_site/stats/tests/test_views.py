@@ -9,7 +9,7 @@ from stats.get_stats import get_extra_innings
 
 
 
-class TeamGameStatsInfoView(TestCase):
+class TeamGameStatsInfoViewTest(TestCase):
     """
     Tests team_game_stats_info_view
     from stats/views/views.py
