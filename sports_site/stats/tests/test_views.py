@@ -3,7 +3,8 @@ from django.urls import reverse
 
 from league.models import (Game, League, SeasonStage, TeamSeason)
 from stats.models import TeamGameStats, TeamGameLineScore
-from stats.tables import TeamGameLineScoreTable
+from stats.tables import (ASPlayerHittingGameStatsTable,
+    ASPlayerPitchingGameStatsTable, TeamGameLineScoreTable)
 from stats.get_stats import get_extra_innings
 
 
@@ -85,15 +86,20 @@ class TeamGameStatsInfoView(TestCase):
         self.assertEqual(response.context["game_pk"], self.game.pk)
         self.assertEqual(response.context["team_season_pk"],self.team_season.pk)
         self.assertEqual(response.context["game_stats"], self.tgs)
+        player_stats = self.tgs.playerhittinggamestats_set.all()
         self.assertQuerysetEqual(
-            response.context["player_stats"],
-            self.tgs.playerhittinggamestats_set.all(), ordered=False)
+            response.context["player_stats"], player_stats, ordered=False)
+        
+        pitching_stats = self.tgs.playerpitchinggamestats_set.all()
         self.assertQuerysetEqual(
-            response.context["pitching_stats"],
-            self.tgs.playerpitchinggamestats_set.all(), ordered=False)
-
-        #table
-        #table2
+            response.context["pitching_stats"], pitching_stats, ordered=False)
+        
+        #Currently tests table/table2, by recreating table and checking type on
+        #the context and the recreated table.
+        self.assertEqual(type(response.context["table"]),
+            type(ASPlayerHittingGameStatsTable(player_stats)))
+        self.assertEqual(type(response.context["table2"]),
+            type(ASPlayerPitchingGameStatsTable(pitching_stats)))
     
     def test_linescore_does_not_exist_context(self):
         self.client.login(username="Test", password="test")
