@@ -213,3 +213,27 @@ class StatsViewTests(TestCase):
         hs = get_stats(qs, "all_season_hitting") #hitting_stats
         ths = response.context["object_list"]
         self.assertQuerysetEqual(ths, hs, transform=lambda x:x)
+
+
+
+class PitchingStatsViewTests(TestCase):
+    """
+    Tests PitchingStatsView
+    from stats/views/views.py
+
+    'pitching/',
+    PitchingStatsView.as_view(),
+    name='pitching-stats-page')
+    """
+    @classmethod
+    def setUpTestData(cls):
+        cls.league = League.objects.get(id=1)
+        cls.stage = SeasonStage.objects.get(id=3)
+        cls.team_season = TeamSeason.objects.get(id=1)
+        cls.game = Game.objects.get(id=2)
+
+        cls.tgs = TeamGameStats.objects.create(
+            season=cls.stage,
+            team=cls.team_season,
+            game=cls.game
+        )
