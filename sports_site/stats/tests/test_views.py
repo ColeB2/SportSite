@@ -2,10 +2,13 @@ from django.test import TestCase
 from django.urls import reverse
 
 from league.models import (Game, League, SeasonStage, TeamSeason)
-from stats.models import TeamGameStats, TeamGameLineScore
+from stats.filters import HittingSimpleFilter
+from stats.models import (PlayerHittingGameStats, 
+    TeamGameStats, TeamGameLineScore)
 from stats.tables import (ASPlayerHittingGameStatsTable,
-    ASPlayerPitchingGameStatsTable, TeamGameLineScoreTable)
-from stats.get_stats import get_extra_innings
+    ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
+    TeamGameLineScoreTable)
+from stats.get_stats import get_extra_innings, get_stats
 
 
 
@@ -192,8 +195,21 @@ class StatsViewTests(TestCase):
 
         self.assertEqual(response.context["league"], self.league)
         self.assertEqual(response.context["stage"], self.stage)
-        print(response.context)
-        print("is_paginated" in response.context)
-        print(response.context["is_paginated"] == True)
-        print(response.context["table"])
-        print(response.context["filter"])
+
+        self.assertTrue("is_paginated" in response.context)
+        self.assertEqual(response.context["paginator"].per_page, 25)
+        
+        table = PlayerHittingStatsTable({})
+        self.assertTrue(response.context["table"] is not None)
+        self.assertEqual(type(response.context["table"]), type(table))
+        
+        _filter = HittingSimpleFilter()
+        self.assertTrue(response.context["filter"] is not None)
+        self.assertEqual(type(response.context["filter"]), type(_filter))
+
+        qs = PlayerHittingGameStats.objects.filter(
+            player__player__league=self.league,
+            season=self.stage) #queryset --> get hitting_stats
+        hs = get_stats(qs, "all_season_hitting") #hitting_stats
+        ths = response.context["object_list"]
+        self.assertQuerysetEqual(ths, hs, transform=lambda x:x)
