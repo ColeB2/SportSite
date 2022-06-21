@@ -2,12 +2,12 @@ from django.test import TestCase
 from django.urls import reverse
 
 from league.models import (Game, League, SeasonStage, TeamSeason)
-from stats.filters import HittingSimpleFilter
-from stats.models import (PlayerHittingGameStats, 
+from stats.filters import HittingSimpleFilter, PitchingSimpleFilter
+from stats.models import (PlayerHittingGameStats, PlayerPitchingGameStats, 
     TeamGameStats, TeamGameLineScore)
 from stats.tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
-    TeamGameLineScoreTable)
+    PlayerPitchingStatsTable, TeamGameLineScoreTable)
 from stats.get_stats import get_extra_innings, get_stats
 
 
@@ -151,14 +151,7 @@ class StatsViewTests(TestCase):
     def setUpTestData(cls):
         cls.league = League.objects.get(id=1)
         cls.stage = SeasonStage.objects.get(id=3)
-        cls.team_season = TeamSeason.objects.get(id=1)
-        cls.game = Game.objects.get(id=2)
 
-        cls.tgs = TeamGameStats.objects.create(
-            season=cls.stage,
-            team=cls.team_season,
-            game=cls.game
-        )
 
     def test_view_without_logging_in(self):
         response = self.client.get(f"/league/stats/?league={self.league.url}")
@@ -191,7 +184,6 @@ class StatsViewTests(TestCase):
         response = self.client.get(reverse(
             'stats-page')+f'?league={self.league.url}')
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "stats/stats_page.html")
 
         self.assertEqual(response.context["league"], self.league)
         self.assertEqual(response.context["stage"], self.stage)
@@ -229,11 +221,59 @@ class PitchingStatsViewTests(TestCase):
     def setUpTestData(cls):
         cls.league = League.objects.get(id=1)
         cls.stage = SeasonStage.objects.get(id=3)
-        cls.team_season = TeamSeason.objects.get(id=1)
-        cls.game = Game.objects.get(id=2)
 
-        cls.tgs = TeamGameStats.objects.create(
-            season=cls.stage,
-            team=cls.team_season,
-            game=cls.game
-        )
+
+    def test_view_without_logging_in(self):
+        response = self.client.get(
+            f"/league/stats/pitching/?league={self.league.url}")
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_url_exists_at_desired_location(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(
+            f"/league/stats/pitching/?league={self.league.url}")
+        self.assertEqual(response.status_code, 200)
+
+    
+    def test_view_accessible_by_name(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            'pitching-stats-page') + f'?league={self.league.url}')
+        self.assertEqual(response.status_code, 200)
+
+
+    def test_view_uses_correct_template(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            'pitching-stats-page')+f'?league={self.league.url}')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "stats/pitching_stats_page.html")
+
+
+    def test_context(self):
+        self.client.login(username="Test", password="test")
+        response = self.client.get(reverse(
+            'pitching-stats-page')+f'?league={self.league.url}')
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.context["league"], self.league)
+        self.assertEqual(response.context["stage"], self.stage)
+
+        self.assertTrue("is_paginated" in response.context)
+        self.assertEqual(response.context["paginator"].per_page, 25)
+        
+        table = PlayerPitchingStatsTable({})
+        self.assertTrue(response.context["table"] is not None)
+        self.assertEqual(type(response.context["table"]), type(table))
+        
+        _filter = PitchingSimpleFilter()
+        self.assertTrue(response.context["filter"] is not None)
+        self.assertEqual(type(response.context["filter"]), type(_filter))
+
+        qs = PlayerPitchingGameStats.objects.filter(
+            player__player__league=self.league,
+            season=self.stage) #queryset --> get_pitching_stats
+        hs = get_stats(qs, "all_season_pitching") #hitting_stats
+        ths = response.context["object_list"]
+        self.assertQuerysetEqual(ths, hs, transform=lambda x:x)
