@@ -82,7 +82,7 @@ class StatsView(SingleTableMixin, FilterView):
              else SeasonStage.objects.get(season__league=league, featured=True))
         qs = PlayerHittingGameStats.objects.filter(
             player__player__league=league,
-            season=stage).order_by('-plate_appearances')
+            season=stage).order_by('-hits')
         hitting_stats = get_stats(qs, "all_season_hitting")
         return hitting_stats
 
@@ -118,7 +118,7 @@ class PitchingStatsView(SingleTableMixin, FilterView):
              else SeasonStage.objects.get(season__league=league, featured=True))
         qs = PlayerPitchingGameStats.objects.filter(
             player__player__league=league,
-            season=stage)
+            season=stage).order_by("-win")
         pitching_stats = get_stats(qs, "all_season_pitching")
         return pitching_stats
 
@@ -154,7 +154,7 @@ class TeamHittingStatsView(SingleTableMixin, FilterView):
              else SeasonStage.objects.get(season__league=league, featured=True))
         qs = PlayerHittingGameStats.objects.filter(
             player__player__league=league,
-            season=stage)
+            season=stage).order_by("-hits")
         hitting_stats = get_stats(qs, "team_season_hitting")
         return hitting_stats
 
@@ -190,7 +190,7 @@ class TeamPitchingStatsView(SingleTableMixin, FilterView):
              else SeasonStage.objects.get(season__league=league, featured=True))
         qs = PlayerPitchingGameStats.objects.filter(
             player__player__league=league,
-            season=stage)
+            season=stage).order_by("-win")
         pitching_stats = get_stats(qs, "team_season_pitching")
         return pitching_stats
 
@@ -227,6 +227,6 @@ class StandingsView(SingleTableMixin, FilterView):
              else SeasonStage.objects.get(season__league=league, featured=True))
         qs = TeamGameStats.objects.filter(
             team__team__league=league,
-            season=stage)
+            season=stage).order_by('-win')
         standings_stats = get_stats(qs, "league_standings")
         return standings_stats
