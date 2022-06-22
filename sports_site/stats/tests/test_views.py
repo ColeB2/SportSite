@@ -101,9 +101,11 @@ class TeamGameStatsInfoViewTest(TestCase):
         
         #Currently tests table/table2, by recreating table and checking type on
         #the context and the recreated table.
-        self.assertEqual(type(response.context["table"]),
+        table = response.context["table"]
+        self.assertEqual(type(table),
             type(ASPlayerHittingGameStatsTable(player_stats)))
-        self.assertEqual(type(response.context["table2"]),
+        table2 = response.context["table2"]
+        self.assertEqual(type(table2),
             type(ASPlayerPitchingGameStatsTable(pitching_stats)))
     
     def test_linescore_does_not_exist_context(self):
