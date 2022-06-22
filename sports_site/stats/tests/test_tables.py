@@ -345,4 +345,22 @@ class PlayerPageGameHittingStatsSplitsTableTest(TestCase):
         record_obp = _convert_to_str(self.record["on_base_percentage"])
         self.assertEqual(record_obp, obp)
 
+
+class Experiment(TestCase):
+    """
+    Experimental Tests
+    """
+    @classmethod
+    def setUpTestData(cls) -> None:
+        args = [{
+            1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, "R":69
+        },"stuff"]
+        # print(args[0][0])
+        # print(args[0][0].keys())
+        cls.table = TeamGameLineScoreTable(args)
+        return super().setUpTestData()
+
+    def test(self):
+        print(self.table)
+        # self.table.args
     
