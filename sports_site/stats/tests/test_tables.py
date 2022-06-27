@@ -1,14 +1,15 @@
 from django.test import TestCase
-
+from stats.models import TeamGameLineScore
 from stats.tables import (ASPlayerHittingGameStatsTable,
     ASPlayerPitchingGameStatsTable, PlayerHittingStatsTable,
     PlayerHittingStatsTable2, PlayerPageHittingStatsTable,
     PlayerPageHittingStatsSplitsTable, PlayerPageGameHittingStatsSplitsTable,
     PlayerPitchingStatsTable, StandingsTable,
     TeamGameLineScoreTable, TeamHittingStatsTable, TeamPitchingStatsTable)
-
 from stats.stat_calc import (_convert_to_str, _convert_to_str_ip,
     _convert_to_str_pitching,)
+
+
 
 class TableStatObject():
     def __init__(self):
@@ -346,21 +347,29 @@ class PlayerPageGameHittingStatsSplitsTableTest(TestCase):
         self.assertEqual(record_obp, obp)
 
 
-class Experiment(TestCase):
+class TeamGameLineScoreTableTests(TestCase):
     """
-    Experimental Tests
+    Really Basic testing done on TeamGameLineScoreTable from stats/tables.py.
+
+    Tests used to make sure some of the processes occuring inside the __init__
+    run properly.
     """
     @classmethod
     def setUpTestData(cls) -> None:
         args = [{
             1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, "R":69
         },"stuff"]
-        # print(args[0][0])
-        # print(args[0][0].keys())
         cls.table = TeamGameLineScoreTable(args)
         return super().setUpTestData()
 
-    def test(self):
-        print(self.table)
-        # self.table.args
+
+    def test_Meta(self):
+        self.assertEqual(self.table.Meta.model, TeamGameLineScore)
+        self.assertEqual(
+            self.table.Meta.template_name,
+            'django_tables2/bootstrap-responsive.html')
+        fields = [
+            "game","first", "second", "third", "fourth", "fifth", "sixth",
+            "seventh","eighth", "ninth"] 
+        self.assertEqual(self.table.Meta.fields, fields)
     
