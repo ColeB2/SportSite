@@ -353,12 +353,25 @@ class TeamGameLineScoreTableTests(TestCase):
 
     Tests used to make sure some of the processes occuring inside the __init__
     run properly.
+
+    ##used as a bandaid test to hit coverage and make sure the __init__ is ran.
+
+
+    ###Note running this test before stats.tests.test_views,
+    ###TeamGameStatsInfoViewTest appears to break test_linescore_exists_context
+    test unless 
+    "game":None, "first":1, "second":2, "third":3, "fourth": 4,
+            "fifth":5, "sixth":6, "seventh":7,"eighth":8, "ninth":9
+    is inside the args dictionary
     """
     @classmethod
     def setUpTestData(cls) -> None:
         args = [{
-            1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, "R":69
-        },"stuff"]
+            1:1, 2:2, 3:3, 4:4, 5:5, 6:6, 7:7, 8:8, 9:9, 10:10, "R":69,
+            "game":None, "first":1, "second":2, "third":3, "fourth": 4,
+            "fifth":5, "sixth":6, "seventh":7,"eighth":8, "ninth":9
+            
+        }, 'stuff']
         cls.table = TeamGameLineScoreTable(args)
         return super().setUpTestData()
 
