@@ -27,11 +27,11 @@
             </div>
             {% for game in date.list %}
             <div class="swiper-slide">
-                <table class="swiper-table" data-href="{% url 'game-boxscore-page' game.pk %}">
+                <table class="swiper-table" data-href="{% url 'game-boxscore-page' game.pk %}?league={{request.GET.league}}">
                     <tr>
                         {% if game.home_score %}
                         <th colspan="2">
-                            <a href="{% url 'game-boxscore-page' game.pk %}"
+                            <a href="{% url 'game-boxscore-page' game.pk %}?league={{request.GET.league}}"
                                 class="sport-ticker-link">
                                     FINAL
                             </a>
