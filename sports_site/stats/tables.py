@@ -16,7 +16,7 @@ class ASPlayerHittingGameStatsTable(tables.Table):
     """
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("player__player", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
             "walks", "strikeouts", "stolen_bases", "caught_stealing", "average",
@@ -47,7 +47,7 @@ class ASPlayerPitchingGameStatsTable(tables.Table):
     """
     class Meta:
         model = PlayerPitchingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("player__player", "win", "loss", "era", "game", "game_started",
             "complete_game", "shutout", "save_converted", "save_op",
             "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
@@ -76,7 +76,7 @@ class TeamHittingStatsTable(tables.Table):
     """
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("team", "games", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
             "walks", "strikeouts", "stolen_bases",  "caught_stealing",
@@ -94,7 +94,7 @@ class PlayerHittingStatsTable(tables.Table):
     """Table used to display stats for given game"""
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("first", "last", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
             "walks", "strikeouts", "stolen_bases",  "caught_stealing",
@@ -113,7 +113,7 @@ class PlayerHittingStatsTable2(tables.Table):
     """Table used to display stats for given game"""
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap-responsive.html"
+        template_name = "stats/bootstrap-responsive.html"
         fields = ("first", "last", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
             "walks", "strikeouts", "stolen_bases",  "caught_stealing",
@@ -138,7 +138,7 @@ class PlayerPitchingStatsTable(tables.Table):
     whip = tables.Column(verbose_name="WHIP")
     class Meta:
         model = PlayerPitchingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("first", "last", "win", "loss", "era", "game", "game_started",
             "complete_game", "shutout", "save_converted", "save_op",
             "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
@@ -169,7 +169,7 @@ class TeamPitchingStatsTable(tables.Table):
     whip = tables.Column(verbose_name="WHIP")
     class Meta:
         model = PlayerPitchingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("team", "win", "loss", "era", "game", "game_started",
             "complete_game", "shutout", "save_converted", "save_op",
             "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
@@ -246,7 +246,7 @@ class StandingsTable(tables.Table):
     """
     class Meta:
         model = TeamGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ["team_name", "win", "loss", "tie", "pct", "runs_for",
             "runs_against", "differential",]
 
@@ -274,7 +274,7 @@ class PlayerHittingGameStatsTable(tables.Table):
     """
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("player__player", "at_bats", "plate_appearances",
             "runs", "hits", "doubles", "triples", "homeruns", "runs_batted_in",
             "walks", "strikeouts", "stolen_bases",  "caught_stealing",
@@ -285,7 +285,7 @@ class BattingOrderTable(tables.Table):
     """Table used to display stats for given game"""
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("player__player", "at_bats", "runs", "hits", "runs_batted_in",
             "walks", "strikeouts",)
 
@@ -297,7 +297,7 @@ class PitchingOrderTable(tables.Table):
     """
     class Meta:
         model = PlayerPitchingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("player__player", "innings_pitched", "runs_allowed",
         "earned_runs", "walks_allowed", "strikeouts", "homeruns_allowed")
 
@@ -310,7 +310,7 @@ class PlayerPitchingGameStatsTable(tables.Table):
     """
     class Meta:
         model = PlayerPitchingGameStats
-        template_name = "django_tables2/bootstrap4-responsive-custom.html"
+        template_name = "stats/bootstrap4-responsive-custom.html"
         fields = ("player__player", "game_started","save_converted", "save_op",
             "innings_pitched", "hits_allowed", "runs_allowed", "earned_runs",
             "homeruns_allowed", "hit_batters", "walks_allowed", "strikeouts",
@@ -328,7 +328,7 @@ class PlayerPageHittingStatsTable(tables.Table):
     """
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap-responsive-custom.html"
+        template_name = "stats/bootstrap-responsive-custom.html"
         fields = ("year", "at_bats", "plate_appearances", "runs", "hits",
             "doubles", "triples", "homeruns", "runs_batted_in", "walks",
             "strikeouts", "stolen_bases",  "caught_stealing", "hit_by_pitch",
@@ -351,7 +351,7 @@ class PlayerPageHittingStatsSplitsTable(tables.Table):
     """
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap-responsive-custom.html"
+        template_name = "stats/bootstrap-responsive-custom.html"
         fields = ("duration", "at_bats", "plate_appearances", "runs", "hits",
             "doubles", "triples", "homeruns", "runs_batted_in", "walks",
             "strikeouts", "stolen_bases",  "caught_stealing", "hit_by_pitch",
@@ -374,7 +374,7 @@ class PlayerPageGameHittingStatsSplitsTable(tables.Table):
     """
     class Meta:
         model = PlayerHittingGameStats
-        template_name = "django_tables2/bootstrap-responsive-custom.html"
+        template_name = "stats/bootstrap-responsive-custom.html"
         fields = ("date", "at_bats", "plate_appearances", "runs", "hits", "doubles",
             "triples", "homeruns", "runs_batted_in", "walks", "strikeouts",
             "stolen_bases",  "caught_stealing", "hit_by_pitch",
