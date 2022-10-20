@@ -2,7 +2,7 @@
 asgiref==3.4.1
 backports.zoneinfo==0.2.1
 crispy-bootstrap5==0.3.1
-Django==4.0.1
+Django==4.0.8
 django-crispy-forms==1.11.2
 django-filter==2.4.0
 django-smart-selects==1.5.9
